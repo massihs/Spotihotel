@@ -1,0 +1,119 @@
+name: CI — Iran (iran/)
+
+on:
+  push:
+    branches: [main, master]
+    paths: ["iran/**", ".github/workflows/ci-iran.yml"]
+  pull_request:
+    paths: ["iran/**", ".github/workflows/ci-iran.yml"]
+
+concurrency:
+  group: ci-iran-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: spotifood
+          POSTGRES_PASSWORD: spotifood
+          POSTGRES_DB: spotifood_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U spotifood"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      APP_SECRET: ci-only-secret-value-that-is-long-enough-123456
+      DATABASE_URL: postgres://spotifood:spotifood@localhost:5432/spotifood_test
+      TEST_DATABASE_URL: postgres://spotifood:spotifood@localhost:5432/spotifood_test
+      NEXT_TELEMETRY_DISABLED: "1"
+    defaults:
+      run:
+        working-directory: iran
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: iran/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm test
+      - name: Backup + restore test
+        run: scripts/backup-restore-test.sh "$DATABASE_URL"
+      - run: npm run build
+
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: spotifood
+          POSTGRES_PASSWORD: spotifood
+          POSTGRES_DB: spotifood_e2e
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U spotifood"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      APP_SECRET: ci-only-secret-value-that-is-long-enough-123456
+      APP_URL: http://localhost:3000
+      DATABASE_URL: postgres://spotifood:spotifood@localhost:5432/spotifood_e2e
+      NEXT_PUBLIC_EDITION: iran
+      NEXT_TELEMETRY_DISABLED: "1"
+      SEED_DEMO: "true"
+      SEED_SUPERADMIN_EMAIL: admin@spotifood.local
+      SEED_SUPERADMIN_PASSWORD: ci-only-admin-password-123
+      E2E_BASE_URL: http://localhost:3000
+    defaults:
+      run:
+        working-directory: iran
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: iran/package-lock.json
+      - run: npm ci
+      - run: node scripts/migrate.mjs
+      - run: npm run db:seed
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - name: Start the app
+        run: |
+          NODE_ENV=production npx next start -p 3000 > server.log 2>&1 &
+          for i in $(seq 1 60); do curl -fsS http://localhost:3000/api/health > /dev/null && exit 0; sleep 1; done
+          cat server.log; exit 1
+      - run: npx playwright test
+      - name: Server log
+        if: failure()
+        run: tail -200 server.log
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-traces
+          path: iran/test-results
+          retention-days: 7
+
+  docker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: iran
+          push: false
+          cache-from: type=gha,scope=iran
+          cache-to: type=gha,mode=max,scope=iran

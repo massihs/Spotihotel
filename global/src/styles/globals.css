@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+/*
+ * Spotifood design tokens.
+ * Warm neutral "linen" surfaces, deep "ink" text, a "paprika" accent.
+ * All colors are tokens → dark mode and per-restaurant theming swap values, not classes.
+ */
+:root {
+  --bg: oklch(0.985 0.004 80);
+  --surface: oklch(1 0 0);
+  --surface-2: oklch(0.965 0.006 80);
+  --border: oklch(0.91 0.008 80);
+  --border-strong: oklch(0.84 0.01 80);
+  --fg: oklch(0.22 0.015 60);
+  --fg-muted: oklch(0.5 0.015 60);
+  --fg-subtle: oklch(0.64 0.012 60);
+  --accent: oklch(0.62 0.19 38);
+  --accent-hover: oklch(0.57 0.19 38);
+  --accent-fg: oklch(0.99 0.005 80);
+  --accent-soft: oklch(0.95 0.04 45);
+  --success: oklch(0.6 0.13 155);
+  --success-soft: oklch(0.95 0.04 155);
+  --warning: oklch(0.75 0.15 80);
+  --warning-soft: oklch(0.96 0.05 85);
+  --danger: oklch(0.58 0.2 25);
+  --danger-soft: oklch(0.95 0.04 25);
+  --ring: oklch(0.62 0.19 38 / 0.45);
+  --shadow-color: 30 20% 20%;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: oklch(0.17 0.008 60);
+    --surface: oklch(0.205 0.009 60);
+    --surface-2: oklch(0.24 0.01 60);
+    --border: oklch(0.3 0.01 60);
+    --border-strong: oklch(0.38 0.012 60);
+    --fg: oklch(0.95 0.006 80);
+    --fg-muted: oklch(0.72 0.01 70);
+    --fg-subtle: oklch(0.6 0.01 70);
+    --accent: oklch(0.7 0.17 42);
+    --accent-hover: oklch(0.75 0.16 42);
+    --accent-fg: oklch(0.18 0.01 60);
+    --accent-soft: oklch(0.3 0.06 40);
+    --success-soft: oklch(0.3 0.05 155);
+    --warning-soft: oklch(0.32 0.06 80);
+    --danger-soft: oklch(0.3 0.07 25);
+    --shadow-color: 0 0% 0%;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: oklch(0.17 0.008 60);
+  --surface: oklch(0.205 0.009 60);
+  --surface-2: oklch(0.24 0.01 60);
+  --border: oklch(0.3 0.01 60);
+  --border-strong: oklch(0.38 0.012 60);
+  --fg: oklch(0.95 0.006 80);
+  --fg-muted: oklch(0.72 0.01 70);
+  --fg-subtle: oklch(0.6 0.01 70);
+  --accent: oklch(0.7 0.17 42);
+  --accent-hover: oklch(0.75 0.16 42);
+  --accent-fg: oklch(0.18 0.01 60);
+  --accent-soft: oklch(0.3 0.06 40);
+  --success-soft: oklch(0.3 0.05 155);
+  --warning-soft: oklch(0.32 0.06 80);
+  --danger-soft: oklch(0.3 0.07 25);
+  --shadow-color: 0 0% 0%;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --font-sans:
+    var(--font-sans-loaded), var(--font-fa-loaded), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    "Vazirmatn", "Noto Sans Arabic", sans-serif;
+  --font-mono: var(--font-mono-loaded), ui-monospace, monospace;
+  --radius-card: 1rem;
+  --shadow-soft: 0 1px 2px hsl(var(--shadow-color) / 0.06), 0 4px 16px -4px hsl(var(--shadow-color) / 0.08);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Horizontal scrollers (category chips, featured strip) */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

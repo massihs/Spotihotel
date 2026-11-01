@@ -1,0 +1,15 @@
+# Build context of Liara's GitHub deployments (repository root): only iran/ is needed.
+global
+.git
+.github
+**/node_modules
+**/.next
+**/.storage
+**/dist
+**/tests
+**/coverage
+**/*.log
+**/.env
+**/.env.*
+!**/.env.example
+**/tsconfig.tsbuildinfo

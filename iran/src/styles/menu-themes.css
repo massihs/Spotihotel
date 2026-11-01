@@ -1,0 +1,75 @@
+/*
+ * Guest menu themes (`data-menu-theme` on the guest pages' wrapper). Each theme redefines the
+ * design tokens for its subtree, so every guest component follows; structural differences use
+ * the `atelier:` / `nuit:` / `doux:` variants (globals.css).
+ *   atelier — quiet and typographic: white, ink accent, Persian serif, hairlines instead of cards.
+ *   nuit    — dark and warm: graphite, champagne accent, modern Kufi titles.
+ *   doux    — soft and rounded: the restaurant's brand color on light cards.
+ */
+[data-menu-theme] {
+  --menu-display: var(--app-font);
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100dvh;
+}
+
+[data-menu-theme="atelier"] {
+  --bg: oklch(0.992 0.002 90);
+  --surface: oklch(1 0 0);
+  --surface-2: oklch(0.965 0.004 80);
+  --surface-3: oklch(0.925 0.006 80);
+  --border: oklch(0.925 0.006 80);
+  --border-strong: oklch(0.86 0.008 80);
+  --fg: oklch(0.22 0.006 80);
+  --fg-muted: oklch(0.46 0.01 80);
+  --fg-subtle: oklch(0.56 0.01 80);
+  --accent: oklch(0.22 0.006 80);
+  --accent-hover: oklch(0.32 0.006 80);
+  --accent-fg: oklch(0.99 0.002 90);
+  --accent-text: oklch(0.22 0.006 80);
+  --accent-soft: oklch(0.955 0.004 80);
+  --accent-soft-2: oklch(0.9 0.006 80);
+  --ring: oklch(0.22 0.006 80 / 0.18);
+  --shadow-soft: none;
+  --shadow-float: 0 18px 40px -18px oklch(0.2 0.01 80 / 0.25);
+  --menu-display: var(--font-menu-serif), "Vazirmatn", serif;
+  color-scheme: light;
+}
+
+[data-menu-theme="nuit"] {
+  --bg: oklch(0.19 0.008 85);
+  --surface: oklch(0.23 0.009 85);
+  --surface-2: oklch(0.265 0.01 85);
+  --surface-3: oklch(0.31 0.012 85);
+  --border: oklch(0.3 0.012 85);
+  --border-strong: oklch(0.38 0.014 85);
+  --fg: oklch(0.94 0.015 85);
+  --fg-muted: oklch(0.76 0.025 85);
+  --fg-subtle: oklch(0.7 0.022 85);
+  --accent: oklch(0.82 0.075 85);
+  --accent-hover: oklch(0.77 0.075 85);
+  --accent-fg: oklch(0.19 0.008 85);
+  --accent-text: oklch(0.84 0.075 85);
+  --accent-soft: oklch(0.82 0.075 85 / 0.14);
+  --accent-soft-2: oklch(0.82 0.075 85 / 0.24);
+  --ring: oklch(0.82 0.075 85 / 0.35);
+  --success: oklch(0.74 0.14 155);
+  --danger: oklch(0.7 0.17 25);
+  --danger-soft: oklch(0.7 0.17 25 / 0.15);
+  --warning-soft: oklch(0.8 0.12 80 / 0.15);
+  --shadow-soft: none;
+  --shadow-float: 0 20px 50px -20px oklch(0 0 0 / 0.7);
+  --menu-display: var(--font-menu-kufi), "Vazirmatn", sans-serif;
+  color-scheme: dark;
+}
+
+@utility font-menu-display {
+  font-family: var(--menu-display);
+}
+
+/* Small grey text stays readable in a dim dining room (≥ 4.5:1). */
+@media not (prefers-color-scheme: dark) {
+  [data-menu-theme="doux"] {
+    --fg-subtle: oklch(0.54 0.02 266);
+  }
+}

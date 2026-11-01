@@ -1,0 +1,1 @@
+ALTER TABLE "restaurants" ADD COLUMN "menu_short_prices" boolean DEFAULT false NOT NULL;

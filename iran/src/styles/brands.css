@@ -1,0 +1,79 @@
+/* Generated from src/lib/brand-colors.ts: one rule per restaurant brand color. */
+[data-brand="orange"] {
+  --brand-h: 47;
+  --brand-c: 0.19;
+  --brand-l: 0.66;
+  --brand-fg: oklch(1 0 0);
+}
+[data-brand="violet"] {
+  --brand-h: 292;
+  --brand-c: 0.2;
+  --brand-l: 0.55;
+  --brand-fg: oklch(1 0 0);
+}
+[data-brand="indigo"] {
+  --brand-h: 268;
+  --brand-c: 0.19;
+  --brand-l: 0.52;
+  --brand-fg: oklch(1 0 0);
+}
+[data-brand="sky"] {
+  --brand-h: 237;
+  --brand-c: 0.15;
+  --brand-l: 0.58;
+  --brand-fg: oklch(1 0 0);
+}
+[data-brand="teal"] {
+  --brand-h: 192;
+  --brand-c: 0.11;
+  --brand-l: 0.55;
+  --brand-fg: oklch(1 0 0);
+}
+[data-brand="emerald"] {
+  --brand-h: 158;
+  --brand-c: 0.14;
+  --brand-l: 0.56;
+  --brand-fg: oklch(1 0 0);
+}
+[data-brand="olive"] {
+  --brand-h: 128;
+  --brand-c: 0.12;
+  --brand-l: 0.54;
+  --brand-fg: oklch(1 0 0);
+}
+[data-brand="saffron"] {
+  --brand-h: 78;
+  --brand-c: 0.16;
+  --brand-l: 0.74;
+  --brand-fg: oklch(0.22 0.03 78);
+}
+[data-brand="coral"] {
+  --brand-h: 38;
+  --brand-c: 0.18;
+  --brand-l: 0.64;
+  --brand-fg: oklch(1 0 0);
+}
+[data-brand="rose"] {
+  --brand-h: 12;
+  --brand-c: 0.2;
+  --brand-l: 0.58;
+  --brand-fg: oklch(1 0 0);
+}
+[data-brand="fuchsia"] {
+  --brand-h: 338;
+  --brand-c: 0.22;
+  --brand-l: 0.57;
+  --brand-fg: oklch(1 0 0);
+}
+[data-brand="plum"] {
+  --brand-h: 330;
+  --brand-c: 0.12;
+  --brand-l: 0.42;
+  --brand-fg: oklch(1 0 0);
+}
+[data-brand="slate"] {
+  --brand-h: 262;
+  --brand-c: 0.035;
+  --brand-l: 0.34;
+  --brand-fg: oklch(1 0 0);
+}

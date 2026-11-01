@@ -1,0 +1,41 @@
+name: Database backup (nightly)
+
+# Nightly dump of the production database, restored into a scratch database to prove it
+# works, then kept encrypted for 14 days as a workflow artifact.
+# Needs the secrets BACKUP_DATABASE_URL (a URL reachable from GitHub, e.g. Liara's public
+# database address, with a user that can CREATE DATABASE) and BACKUP_PASSPHRASE.
+# Without them the job does nothing. Decrypt: gpg -d spotifood.dump.gpg > spotifood.dump
+on:
+  # Schedule off until Spotihotel has its own site and secrets (copied from Spotifood).
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      DB: ${{ secrets.BACKUP_DATABASE_URL }}
+      PASS: ${{ secrets.BACKUP_PASSPHRASE }}
+    steps:
+      - uses: actions/checkout@v4
+        if: env.DB != ''
+      - name: Postgres client 16
+        if: env.DB != ''
+        run: sudo apt-get install -y -qq postgresql-client-16 > /dev/null || true
+      - name: Dump and restore test
+        if: env.DB != ''
+        run: iran/scripts/backup-restore-test.sh "$DB" spotifood.dump
+      - name: Encrypt
+        if: env.DB != '' && env.PASS != ''
+        run: |
+          gpg --batch --yes --pinentry-mode loopback --passphrase "$PASS" --symmetric --cipher-algo AES256 -o spotifood.dump.gpg spotifood.dump
+          rm spotifood.dump
+      - uses: actions/upload-artifact@v4
+        if: env.DB != '' && env.PASS != ''
+        with:
+          name: spotifood-db-${{ github.run_id }}
+          path: spotifood.dump.gpg
+          retention-days: 14
+      - name: Not configured
+        if: env.DB == ''
+        run: echo "::notice::BACKUP_DATABASE_URL is not set, no backup made"

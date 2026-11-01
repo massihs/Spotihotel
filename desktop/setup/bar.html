@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'" />
+<link rel="stylesheet" href="/app.css" />
+<style>
+  body { background: #14171c; color: #fff; height: 44px; overflow: hidden; }
+  .bar { display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 10px; font-size: 13px; }
+  .logo { display: flex; align-items: center; gap: 8px; font-weight: 800; white-space: nowrap; }
+  .logo i { width: 22px; height: 22px; border-radius: 7px; background: var(--accent); display: inline-block; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px; border-radius: 999px; font-weight: 700; white-space: nowrap; }
+  .pill.on { background: rgb(22 163 74 / 0.18); color: #6ee7a0; }
+  .pill.off { background: var(--danger); color: #fff; }
+  .pill b { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .msg { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; opacity: 0.85; }
+  .msg.toast { opacity: 1; color: #fde68a; font-weight: 700; }
+  .b { height: 30px; padding: 0 12px; border-radius: 999px; border: 0; background: rgb(255 255 255 / 0.1); color: #fff; font-weight: 700; font-size: 13px; white-space: nowrap; }
+  .b[aria-pressed="true"] { background: #fff; color: #14171c; }
+  .b.accent { background: var(--accent); }
+  .code { font-variant-numeric: tabular-nums; letter-spacing: 0.08em; }
+  @media (max-width: 720px) { .wide { display: none; } }
+</style>
+</head>
+<body>
+<div class="bar">
+  <span class="logo"><i></i><span id="name">Spotifood</span></span>
+  <span id="pill" class="pill on"><b></b><span id="pillText"></span></span>
+  <span id="msg" class="msg"></span>
+  <span id="phones" class="wide"></span>
+  <button class="b" id="site"></button>
+  <button class="b" id="local"></button>
+  <button class="b wide" id="sync"></button>
+  <button class="b" id="settings" aria-label="settings">⚙</button>
+</div>
+<script type="module" src="./bar.js"></script>
+</body>
+</html>

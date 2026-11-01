@@ -1,0 +1,18 @@
+{
+  "platform": "docker",
+  "port": 3000,
+  "build": {
+    "dockerfile": "./iran/Dockerfile",
+    "args": [
+      "APP_DIR=iran",
+      "NEXT_PUBLIC_EDITION=iran"
+    ],
+    "location": "germany"
+  },
+  "disks": [
+    {
+      "name": "uploads",
+      "mountTo": "/app/.storage"
+    }
+  ]
+}

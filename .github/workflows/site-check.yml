@@ -1,0 +1,19 @@
+name: Site check (spotifood.ir)
+on:
+  workflow_dispatch:
+    inputs:
+      path:
+        description: "Path to inspect"
+        default: "/"
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inspect the live site
+        run: |
+          for host in https://spotifood.ir https://spotifood.liara.run; do
+            echo "=== $host${{ inputs.path }}"
+            curl -sS -m 30 -o page.html -D headers.txt -L "$host${{ inputs.path }}" -H "Accept-Language: fr-FR,fr;q=0.9,en;q=0.8" || true
+            grep -iE "^(HTTP|location|content-language|set-cookie: NEXT_LOCALE)" headers.txt || true
+            grep -o '<html[^>]*>' page.html | head -1 || true
+          done

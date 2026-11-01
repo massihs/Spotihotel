@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'" />
+<title>Spotifood</title>
+<link rel="stylesheet" href="/app.css" />
+<style>
+  main { max-width: 860px; margin: 0 auto; padding: 24px 16px 60px; display: grid; gap: 16px; }
+  section { padding: 20px; }
+  h1 { font-size: 22px; margin: 0; }
+  h2 { font-size: 16px; margin: 0 0 6px; }
+  p { margin: 0 0 12px; line-height: 1.6; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .code { font-size: 34px; font-weight: 900; letter-spacing: 0.15em; font-variant-numeric: tabular-nums; }
+  .addr { direction: ltr; unicode-bidi: isolate; font-weight: 800; font-size: 18px; }
+  .printer { border: 1px solid var(--border); border-radius: 16px; padding: 14px; display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); align-items: end; }
+  .printer label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="top"><h1 id="title"></h1><button class="btn" id="back"></button></div>
+
+  <section class="card">
+    <h2 id="serverTitle"></h2>
+    <div class="row"><input id="server" class="field" dir="ltr" spellcheck="false" style="max-width: 420px" /><button class="btn dark" id="serverSave"></button></div>
+    <p class="muted" id="serverErr" style="margin-top: 6px"></p>
+  </section>
+
+  <section class="card">
+    <h2 id="pcTitle"></h2>
+    <div class="row"><input id="pcName" class="field" style="max-width: 320px" /><button class="btn dark" id="pcSave"></button></div>
+  </section>
+
+  <section class="card">
+    <h2 id="phonesTitle"></h2>
+    <p class="muted" id="phonesBody"></p>
+    <div class="row" style="gap: 24px">
+      <div id="addrs" style="display: grid; gap: 4px"></div>
+      <div class="code" id="code"></div>
+    </div>
+    <div class="row" style="margin-top: 12px"><button class="btn" id="newCode"></button><button class="btn danger" id="unpairAll"></button></div>
+  </section>
+
+  <section class="card">
+    <h2 id="printersTitle"></h2>
+    <p class="muted" id="printersBody"></p>
+    <div id="printers" style="display: grid; gap: 10px"></div>
+    <div class="row" style="margin-top: 12px"><button class="btn" id="addSystem"></button><button class="btn" id="addNetwork"></button><button class="btn dark" id="savePrinters"></button></div>
+    <p class="muted" id="printerMsg" style="margin-top: 8px"></p>
+  </section>
+
+  <section class="card">
+    <h2 id="syncTitle"></h2>
+    <p class="muted" id="syncInfo"></p>
+    <div class="row"><button class="btn dark" id="syncNow"></button><button class="btn danger" id="unlink"></button></div>
+    <p class="muted" id="version" style="margin-top: 12px; font-size: 12px"></p>
+  </section>
+</main>
+<script type="module" src="./settings.js"></script>
+</body>
+</html>

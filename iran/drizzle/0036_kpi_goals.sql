@@ -1,0 +1,1 @@
+ALTER TABLE "restaurant_settings" ADD COLUMN "kpi_goals" jsonb DEFAULT '{}'::jsonb NOT NULL;

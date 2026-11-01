@@ -1,0 +1,9 @@
+# Local leftovers from before the split into iran/ and global/ (each folder has its own .gitignore)
+/node_modules
+/.next
+/.storage
+/.env
+/.env.*
+/next-env.d.ts
+/tsconfig.tsbuildinfo
+/apercus

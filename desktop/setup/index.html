@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:" />
+<title>Spotifood</title>
+<link rel="stylesheet" href="/app.css" />
+<style>
+  body { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: radial-gradient(circle at 20% 0%, #fde9e1, var(--bg) 55%); }
+  .box { width: min(520px, 100%); padding: 32px; }
+  .logo { width: 56px; height: 56px; border-radius: 18px; background: var(--accent); box-shadow: 0 10px 30px rgb(230 90 43 / 0.35); }
+  h1 { font-size: 26px; margin: 18px 0 8px; }
+  p { line-height: 1.7; }
+  label { display: block; font-weight: 700; font-size: 14px; margin: 22px 0 6px; }
+  .row { display: flex; gap: 8px; }
+  .err { color: var(--danger); font-size: 14px; min-height: 20px; margin-top: 6px; }
+  .feat { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 18px; }
+  .feat div { background: var(--surface-2); border-radius: 14px; padding: 10px; font-size: 12.5px; font-weight: 700; text-align: center; }
+</style>
+</head>
+<body>
+<main class="card box">
+  <div class="logo"></div>
+  <h1 id="title"></h1>
+  <p class="muted" id="body"></p>
+  <div class="feat"><div>🧾 POS</div><div>👨‍🍳 KDS</div><div>🖨️ ESC/POS</div></div>
+  <label for="server" id="serverLabel"></label>
+  <div class="row">
+    <input id="server" class="field" dir="ltr" spellcheck="false" />
+  </div>
+  <div class="err" id="err"></div>
+  <button id="go" class="btn primary lg" style="width: 100%; margin-top: 8px"></button>
+  <p class="muted" id="hint" style="font-size: 13px; margin-top: 14px"></p>
+  <p class="muted" id="version" style="font-size: 12px"></p>
+</main>
+<script type="module" src="./index.js"></script>
+</body>
+</html>

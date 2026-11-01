@@ -1,0 +1,67 @@
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("./fonts/vazirmatn-arabic-wght-normal.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("./fonts/vazirmatn-latin-wght-normal.woff2") format("woff2-variations");
+  font-weight: 100 900;
+}
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #f0f2f5;
+  --border: #e3e6eb;
+  --fg: #14171c;
+  --muted: #646b76;
+  --subtle: #9aa1ab;
+  --accent: #e65a2b;
+  --accent-soft: #fde9e1;
+  --accent-text: #b8401a;
+  --success: #16a34a;
+  --success-soft: #dcf5e4;
+  --warning: #c27803;
+  --warning-soft: #fdf2d8;
+  --danger: #dc2626;
+  --danger-soft: #fde4e4;
+  --shadow: 0 1px 2px rgb(16 24 40 / 0.05), 0 4px 14px rgb(16 24 40 / 0.06);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: "Vazirmatn", system-ui, "Segoe UI", Tahoma, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+.num { font-variant-numeric: tabular-nums; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 40px; padding: 0 16px; border-radius: 999px; border: 0;
+  background: var(--surface-2); font-weight: 700; font-size: 14px; white-space: nowrap;
+}
+.btn:hover:not(:disabled) { filter: brightness(0.97); }
+.btn.primary { background: var(--accent); color: #fff; }
+.btn.dark { background: var(--fg); color: #fff; }
+.btn.danger { background: transparent; color: var(--danger); box-shadow: inset 0 0 0 1px rgb(220 38 38 / 0.35); }
+.btn.lg { height: 52px; font-size: 16px; padding: 0 22px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow); }
+.field {
+  height: 44px; width: 100%; border-radius: 12px; border: 1px solid #cfd4db; background: var(--surface);
+  padding: 0 12px; font-size: 15px; outline: none;
+}
+.field:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgb(230 90 43 / 0.15); }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 999px;
+  background: var(--surface); border: 1px solid var(--border); font-weight: 600; font-size: 14px; white-space: nowrap;
+}
+.chip[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+.muted { color: var(--muted); }
+.hidden { display: none !important; }

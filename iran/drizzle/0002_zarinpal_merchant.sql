@@ -1,0 +1,1 @@
+ALTER TABLE "restaurant_settings" ADD COLUMN "zarinpal_merchant_id" varchar(64);

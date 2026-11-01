@@ -1,0 +1,16 @@
+{
+  "app": "spotifood",
+  "platform": "docker",
+  "port": 3000,
+  "build": {
+    "dockerfile": "./Dockerfile",
+    "args": ["NEXT_PUBLIC_EDITION=iran"],
+    "location": "germany"
+  },
+  "disks": [
+    {
+      "name": "uploads",
+      "mountTo": "/app/.storage"
+    }
+  ]
+}

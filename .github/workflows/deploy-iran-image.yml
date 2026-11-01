@@ -1,0 +1,70 @@
+name: Deploy — Iran via ready image (Liara, iran/)
+
+# Builds the complete Docker image here, publishes it on GitHub's registry (ghcr.io) and asks
+# Liara to run that image: nothing is built on Liara's side (its builder queue/limits are the
+# bottleneck). One-time setup: make the ghcr.io package "spotifood-iran" public (Liara pulls
+# it anonymously).
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-iran
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: iran-production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Image name
+        id: img
+        run: echo "ref=ghcr.io/$(echo '${{ github.repository_owner }}' | tr 'A-Z' 'a-z')/spotifood-iran:${GITHUB_SHA::12}" >> "$GITHUB_OUTPUT"
+      - uses: docker/build-push-action@v6
+        with:
+          context: iran
+          file: iran/Dockerfile
+          build-args: NEXT_PUBLIC_EDITION=iran
+          # Plain single-platform Docker manifest (no attestation index): what Liara can inspect.
+          provenance: false
+          sbom: false
+          outputs: type=registry,oci-mediatypes=false
+          tags: ${{ steps.img.outputs.ref }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Deploy the image on Liara
+        working-directory: iran
+        run: |
+          set +e
+          for attempt in 1 2 3 4 5; do
+            timeout -k 20 1200 npx --yes @liara/cli@9 deploy --api-token "$LIARA_API_TOKEN" \
+              --image "${{ steps.img.outputs.ref }}" --port 3000 --disks uploads:/app/.storage \
+              --no-app-logs --debug > deploy.log 2>&1
+            code=$?
+            cat deploy.log
+            grep -q "Timeout awaiting 'request'" deploy.log || break
+            echo "::warning::Liara API unreachable (attempt $attempt), retrying in 2 min"
+            sleep 120
+          done
+          exit $code
+        env:
+          LIARA_API_TOKEN: ${{ secrets.LIARA_API_TOKEN }}
+      - name: Liara app logs
+        if: always()
+        run: sleep 60 && timeout 90 npx --yes @liara/cli@9 logs --app spotifood --since "10 minutes ago" --timestamps --api-token "$LIARA_API_TOKEN" || true
+        env:
+          LIARA_API_TOKEN: ${{ secrets.LIARA_API_TOKEN }}

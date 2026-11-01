@@ -1,0 +1,1 @@
+ALTER TABLE "restaurant_settings" ADD COLUMN "disabled_modules" text[] DEFAULT ARRAY[]::text[] NOT NULL;

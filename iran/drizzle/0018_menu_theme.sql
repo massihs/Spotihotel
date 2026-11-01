@@ -1,0 +1,1 @@
+ALTER TABLE "restaurants" ADD COLUMN "menu_theme" varchar(16) DEFAULT 'doux' NOT NULL;

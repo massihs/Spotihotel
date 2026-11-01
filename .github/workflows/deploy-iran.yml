@@ -1,0 +1,81 @@
+name: Deploy — Iran (Liara, iran/)
+
+# Manual on purpose: production deploys are a decision, not a side effect of a push.
+# Requires the repository secret LIARA_API_TOKEN (Liara panel → API → token).
+#
+# The app is built here (GitHub runner: fast, cached npm) and uploaded ready to run: a full
+# `next build` on Liara's builder exceeds its 20-minute limit. Liara only installs production
+# dependencies around it (Dockerfile.prebuilt).
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-iran
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    environment: iran-production
+    defaults:
+      run:
+        working-directory: iran
+    env:
+      NEXT_PUBLIC_EDITION: iran
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: iran/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - name: Build
+        env:
+          NODE_ENV: production
+          # Build-time placeholders only: real values are injected by Liara at run time.
+          APP_SECRET: build-time-placeholder-not-used-at-runtime-000000
+          DATABASE_URL: postgres://build:build@127.0.0.1:1/build
+        run: |
+          npm run build
+          node_modules/.bin/esbuild scripts/seed.ts --bundle --platform=node --format=esm --target=node22 \
+            --conditions=react-server --external:pg --external:@node-rs/argon2 --external:sharp \
+            --banner:js="import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);" \
+            --outfile=dist/seed.mjs --log-level=warning
+          rm -rf .next/cache
+          # The Liara CLI always skips a folder named .next: ship it under another name.
+          mv .next next-build
+          # .next/node_modules holds Turbopack's links to external packages (pg, sharp, argon2…);
+          # the CLI also skips every folder named node_modules: ship it as an archive.
+          tar -C next-build -cf next-build/externals.tar node_modules
+          rm -rf next-build/node_modules
+      - name: Package for Liara
+        run: |
+          cp deploy/prebuilt.ignore .liaraignore
+          cp deploy/prebuilt.ignore .dockerignore
+          du -sh next-build dist
+      - name: Deploy to Liara
+        # Streams the (short) Liara build. The CLI may keep waiting once the release is live:
+        # stop after 25 min and judge the deploy by the build result it printed.
+        run: |
+          set +e
+          # Written to a file, not a pipe: a lingering CLI child would keep a pipe open forever.
+          # Liara's API is sometimes unreachable from abroad for a while: retry those attempts.
+          for attempt in 1 2 3 4 5; do
+            timeout -k 20 1500 npx --yes @liara/cli@9 deploy --api-token "$LIARA_API_TOKEN" \
+              --liara-json liara.prebuilt.json --no-app-logs --debug > deploy.log 2>&1
+            cat deploy.log
+            grep -q "Timeout awaiting 'request'" deploy.log || break
+            echo "::warning::Liara API unreachable (attempt $attempt), retrying in 2 min"
+            sleep 120
+          done
+          grep -q "Image pushed" deploy.log || { echo "::error::Liara build failed"; exit 1; }
+        env:
+          LIARA_API_TOKEN: ${{ secrets.LIARA_API_TOKEN }}
+      - name: Liara app logs
+        if: always()
+        run: sleep 90 && timeout 90 npx --yes @liara/cli@9 logs --app spotifood --since "10 minutes ago" --timestamps --api-token "$LIARA_API_TOKEN" || true
+        env:
+          LIARA_API_TOKEN: ${{ secrets.LIARA_API_TOKEN }}

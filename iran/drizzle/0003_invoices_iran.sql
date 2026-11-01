@@ -1,0 +1,2 @@
+ALTER TABLE "restaurant_settings" ADD COLUMN "registration_number" varchar(64);--> statement-breakpoint
+CREATE UNIQUE INDEX "invoices_payment_uq" ON "invoices" USING btree ("payment_id") WHERE "invoices"."payment_id" IS NOT NULL;

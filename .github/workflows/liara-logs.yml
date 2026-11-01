@@ -1,0 +1,22 @@
+name: Liara — app logs (Iran)
+
+# Manual: prints the last runtime logs of the Liara app (errors after a deploy, crashes…).
+on:
+  workflow_dispatch:
+    inputs:
+      since:
+        description: 'How far back (e.g. "30 minutes ago", "2 hours ago")'
+        default: "30 minutes ago"
+
+jobs:
+  logs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: iran-production
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: timeout 240 npx --yes @liara/cli@9 logs --app spotifood --since "${{ inputs.since }}" --timestamps --api-token "$LIARA_API_TOKEN" || true
+        env:
+          LIARA_API_TOKEN: ${{ secrets.LIARA_API_TOKEN }}

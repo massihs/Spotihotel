@@ -1,0 +1,14 @@
+# Upload / Docker context for Dockerfile.prebuilt: the built .next and dist are included.
+node_modules
+.next/cache
+.git
+.storage
+tests
+coverage
+test-results
+playwright-report
+*.log
+.env
+.env.*
+!.env.example
+tsconfig.tsbuildinfo

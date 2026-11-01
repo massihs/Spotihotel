@@ -1,0 +1,39 @@
+# Spotifood — global edition on a single server (VPS): app + PostgreSQL.
+#   cp deploy/.env.production.example deploy/.env   # fill it in (run from global/)
+#   docker compose -f deploy/docker-compose.yml up -d --build
+# Put a TLS reverse proxy (Caddy, Traefik, nginx) in front of port 3000.
+services:
+  app:
+    build:
+      context: ..
+      args:
+        NEXT_PUBLIC_EDITION: global
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://spotifood:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@db:5432/spotifood
+      DATABASE_URL_DIRECT: postgres://spotifood:${POSTGRES_PASSWORD}@db:5432/spotifood
+    ports: ["127.0.0.1:3000:3000"]
+    volumes:
+      - uploads:/app/.storage
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: spotifood
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: spotifood
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U spotifood"]
+      interval: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  uploads:

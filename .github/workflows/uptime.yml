@@ -1,0 +1,61 @@
+name: Uptime (spotifood.ir)
+
+# Every 10 minutes: /api/health must answer {ok:true} (app + database).
+# Down → the run fails (GitHub emails the repo owner) and, when the secrets
+# KAVENEGAR_API_KEY and ALERT_PHONE are set, an SMS is sent when the site goes
+# down and back up (not every 10 minutes).
+on:
+  # Schedule off until Spotihotel has its own site and secrets (copied from Spotifood).
+  workflow_dispatch:
+
+permissions:
+  actions: read
+
+concurrency:
+  group: uptime
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # Secrets are not allowed in step conditions: expose them (empty when unset) at job level.
+    env:
+      KEY: ${{ secrets.KAVENEGAR_API_KEY }}
+      TO: ${{ secrets.ALERT_PHONE }}
+      CRON: ${{ secrets.CRON_SECRET }}
+    steps:
+      - name: Previous result
+        id: prev
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          last=$(gh run list -R "$GITHUB_REPOSITORY" -w uptime.yml -s completed -L 1 --json conclusion -q '.[0].conclusion' || echo "")
+          echo "last=$last" >> "$GITHUB_OUTPUT"
+      - name: Health check
+        id: health
+        run: |
+          for i in 1 2 3; do
+            if curl -fsS -m 20 https://spotifood.ir/api/health | grep -q '"ok":true'; then
+              echo "up=1" >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            sleep 20
+          done
+          echo "up=0" >> "$GITHUB_OUTPUT"
+      - name: Periodic jobs (satisfaction texts)
+        if: steps.health.outputs.up == '1' && env.CRON != ''
+        run: |
+          curl -fsS -m 30 -X POST -H "x-cron-key: $CRON" https://spotifood.ir/api/v1/cron || echo "cron call failed"
+      - name: SMS on change
+        if: env.KEY != '' && env.TO != '' && ((steps.health.outputs.up == '0' && steps.prev.outputs.last != 'failure') || (steps.health.outputs.up == '1' && steps.prev.outputs.last == 'failure'))
+        env:
+          UP: ${{ steps.health.outputs.up }}
+        run: |
+          if [ "$UP" = "1" ]; then msg="Spotifood: spotifood.ir est de nouveau en ligne."; else msg="Spotifood: spotifood.ir ne répond plus (/api/health)."; fi
+          curl -fsS -m 20 -X POST "https://api.kavenegar.com/v1/$KEY/sms/send.json" \
+            --data-urlencode "receptor=$TO" --data-urlencode "message=$msg" > /dev/null || echo "sms failed"
+      - name: Fail when down
+        if: steps.health.outputs.up != '1'
+        run: |
+          echo "::error::spotifood.ir/api/health is down"
+          exit 1

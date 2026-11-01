@@ -1,0 +1,1 @@
+ALTER TABLE "restaurants" ADD COLUMN "brand_color" varchar(16) DEFAULT 'violet' NOT NULL;

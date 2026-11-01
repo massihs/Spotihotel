@@ -1,0 +1,15 @@
+{
+  "app": "spotifood",
+  "platform": "docker",
+  "port": 3000,
+  "build": {
+    "dockerfile": "./Dockerfile.prebuilt",
+    "location": "germany"
+  },
+  "disks": [
+    {
+      "name": "uploads",
+      "mountTo": "/app/.storage"
+    }
+  ]
+}

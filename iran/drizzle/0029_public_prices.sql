@@ -1,0 +1,1 @@
+ALTER TABLE "restaurants" ADD COLUMN "show_public_prices" boolean DEFAULT true NOT NULL;
