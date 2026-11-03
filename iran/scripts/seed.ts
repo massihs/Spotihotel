@@ -861,8 +861,9 @@ async function main() {
   console.log(
     `✓ foods: ${foodsSync.usdaAdded} USDA added, ${foodsSync.catalogue} catalogue entries; nutrition: ${filled.dishes} dishes, ${filled.lines} order lines completed`,
   );
-  // The showcase restaurant: on by default, SEED_BRIELLE=false to skip.
-  if (process.env.SEED_BRIELLE !== "false") await seedBrielle();
+  // Spotifood's showcase restaurant (with a year of fake orders) has no place in a hotel
+  // platform's production database: only on request, SEED_BRIELLE=true.
+  if (process.env.SEED_BRIELLE === "true") await seedBrielle();
   // Production containers run this on every start with SEED_DEMO unset: platform data only.
   const demo = process.env.SEED_DEMO ?? (process.env.NODE_ENV === "production" ? "false" : "true");
   // SEED_PUBLIC_DEMO=true: the demo restaurant behind /demo, in production too (no demo orders).
