@@ -1,5 +1,6 @@
 import { Suspense } from "react";
-import { BedDouble } from "lucide-react";
+import { BedDouble, ChevronRight } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { menuThemeOf } from "@/lib/menu-themes";
 import { NowPlaying } from "@/components/guest/now-playing";
 import { hasActiveMusic, restaurantNowPlaying } from "@/server/modules/music/service";
@@ -90,15 +91,19 @@ async function GuestMenu() {
               <>
                 <GuestHeader guest={guest} orderCount={orders.length} cover={cover} store={store} />
                 {guest.table.kind === "room" ? (
-                  <div className="mx-4 mt-3 flex items-center gap-3 rounded-2xl border border-accent/25 bg-accent-soft px-4 py-3">
+                  <Link
+                    href="/table/stay"
+                    className="mx-4 mt-3 flex items-center gap-3 rounded-2xl border border-accent/25 bg-accent-soft px-4 py-3"
+                  >
                     <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-accent text-accent-fg">
                       <BedDouble className="size-5" aria-hidden="true" />
                     </span>
-                    <div className="min-w-0">
-                      <p className="font-bold text-accent-text">{t("roomService")}</p>
-                      <p className="text-sm text-fg-muted">{t("roomServiceHint")}</p>
+                    <div className="min-w-0 flex-1">
+                      <p className="font-bold text-accent-text">{t("myStay")}</p>
+                      <p className="text-sm text-fg-muted">{t("myStayHint")}</p>
                     </div>
-                  </div>
+                    <ChevronRight className="size-5 text-accent-text rtl:rotate-180" aria-hidden="true" />
+                  </Link>
                 ) : null}
                 {guest.session.confirmed ? null : (
                   <p

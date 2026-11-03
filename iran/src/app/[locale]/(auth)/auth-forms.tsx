@@ -69,7 +69,7 @@ export function SignupForm() {
         defaultValue={state.values?.restaurantName}
         error={err("restaurantName")}
       />
-      <KindPicker defaultValue={isRestaurantKind(state.values?.kind) ? state.values.kind : "restaurant"} />
+      <KindPicker defaultValue={isRestaurantKind(state.values?.kind) ? state.values.kind : "hotel"} />
       <Field
         label={t("fullName")}
         name="fullName"

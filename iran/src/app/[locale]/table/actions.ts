@@ -12,6 +12,7 @@ import { enforceRateLimit } from "@/server/infra/rate-limit";
 import { requireGuest } from "@/server/modules/guest/current";
 import { renameParticipant } from "@/server/modules/guest/sessions";
 import { placeOrder } from "@/server/modules/orders/service";
+import { autoChargeOrder } from "@/server/modules/pms/room-charges";
 import {
   cancelGuestPayment,
   requestPaymentAtTable,
@@ -91,6 +92,14 @@ export async function placeOrderAction(note: string, phone = "", couponCode = ""
     const g = await guest();
     const diner = await getCurrentDiner();
     const order = await placeOrder(db, g, { note, phone, couponCode }, { dinerId: diner?.id });
+    // Hotel room: the order goes on the guest's bill when someone is checked in (setting).
+    if (g.table.kind === "room") {
+      try {
+        await autoChargeOrder(db, g.restaurant, g.table.id, order.id);
+      } catch (e) {
+        console.error("[room-charge] could not charge order to the room", e);
+      }
+    }
     return { number: order.number };
   });
 }

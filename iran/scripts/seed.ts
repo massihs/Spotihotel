@@ -45,6 +45,7 @@ import { storage } from "@/server/infra/storage";
 import { readFile } from "node:fs/promises";
 import { backfillNutrition, syncFoods } from "@/server/modules/nutrition/foods";
 import { BRIELLE_MENU } from "./brielle";
+import { seedDemoHotel } from "./seed-hotel";
 import { assignBrielleJobs, listBrielle, seedBrielleHistory } from "./brielle-history";
 
 const DEMO_OWNER = {
@@ -876,6 +877,8 @@ async function main() {
   await ensureDemoPlan();
   await seedDemoImages();
   await seedDemoOrders();
+  const [owner] = await db.select().from(users).where(eq(users.email, DEMO_OWNER.email));
+  if (owner) await seedDemoHotel(owner.id);
 }
 
 main()

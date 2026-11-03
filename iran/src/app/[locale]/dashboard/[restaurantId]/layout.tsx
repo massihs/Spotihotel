@@ -3,6 +3,13 @@ import { sectionFilterOf } from "@/server/modules/team/sections";
 import { getTranslations } from "next-intl/server";
 import { AppShell, ShellSkeleton } from "@/components/dashboard/app-shell";
 import {
+  BookOpenCheck,
+  CalendarRange,
+  Contact,
+  Flower2,
+  Hotel,
+  KeyRound,
+  NotebookTabs,
   Boxes,
   HeartHandshake,
   ChartColumn,
@@ -144,7 +151,48 @@ async function RestaurantShell({
         exact: true,
         primary: true,
       },
-      // Hotels: the guests' requests from their rooms come first.
+      // Hotels: the front desk (PMS) and the guests' requests from their rooms come first.
+      {
+        show: hotel && can(ctx, "frontdesk.view"),
+        href: `${base}/frontdesk`,
+        label: t("nav.frontdesk"),
+        icon: <KeyRound />,
+        primary: true,
+        groupKey: "hotel",
+        group: g.hotel,
+      },
+      {
+        show: hotel && can(ctx, "frontdesk.view"),
+        href: `${base}/planning`,
+        label: t("nav.planning"),
+        icon: <CalendarRange />,
+        groupKey: "hotel",
+        group: g.hotel,
+      },
+      {
+        show: hotel && can(ctx, "frontdesk.view"),
+        href: `${base}/stays`,
+        label: t("nav.stays"),
+        icon: <NotebookTabs />,
+        groupKey: "hotel",
+        group: g.hotel,
+      },
+      {
+        show: hotel && can(ctx, "frontdesk.view"),
+        href: `${base}/guests`,
+        label: t("nav.hotelGuests"),
+        icon: <Contact />,
+        groupKey: "hotel",
+        group: g.hotel,
+      },
+      {
+        show: hotel && can(ctx, "frontdesk.view"),
+        href: `${base}/wellness`,
+        label: t("nav.wellness"),
+        icon: <Flower2 />,
+        groupKey: "hotel",
+        group: g.hotel,
+      },
       {
         show: hotel && can(ctx, "orders.view"),
         href: `${base}/requests`,
@@ -160,7 +208,6 @@ async function RestaurantShell({
         href: `${base}/rooms`,
         label: t("nav.rooms"),
         icon: <BedDouble />,
-        primary: true,
         groupKey: "hotel",
         group: g.hotel,
       },
@@ -291,6 +338,14 @@ async function RestaurantShell({
       // Finance.
       {
         show: can(ctx, "accounting.manage"),
+        href: `${base}/ledger`,
+        label: t("nav.ledger"),
+        icon: <BookOpenCheck />,
+        groupKey: "finance",
+        group: g.finance,
+      },
+      {
+        show: can(ctx, "accounting.manage"),
         href: `${base}/reports`,
         label: t("nav.reports"),
         icon: <ChartColumn />,
@@ -314,6 +369,14 @@ async function RestaurantShell({
         group: g.finance,
       },
       // Management.
+      {
+        show: hotel && can(ctx, "rates.manage"),
+        href: `${base}/hotel`,
+        label: t("nav.hotelSetup"),
+        icon: <Hotel />,
+        groupKey: "manage",
+        group: g.manage,
+      },
       {
         show: on("branches") && ctx.role !== "staff",
         href: `${base}/branches`,
