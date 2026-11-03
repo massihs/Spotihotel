@@ -38,7 +38,7 @@ export function icsEvent(e: {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Spotifood//Reservations//EN",
+    "PRODID:-//Spotihotel//Reservations//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     "BEGIN:VEVENT",

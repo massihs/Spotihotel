@@ -1,4 +1,4 @@
-# Spotifood — global edition on a single server (VPS): app + PostgreSQL.
+# Spotihotel — global edition on a single server (VPS): app + PostgreSQL.
 #   cp deploy/.env.production.example deploy/.env   # fill it in (run from global/)
 #   docker compose -f deploy/docker-compose.yml up -d --build
 # Put a TLS reverse proxy (Caddy, Traefik, nginx) in front of port 3000.
@@ -10,8 +10,8 @@ services:
         NEXT_PUBLIC_EDITION: global
     env_file: .env
     environment:
-      DATABASE_URL: postgres://spotifood:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@db:5432/spotifood
-      DATABASE_URL_DIRECT: postgres://spotifood:${POSTGRES_PASSWORD}@db:5432/spotifood
+      DATABASE_URL: postgres://spotihotel:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@db:5432/spotihotel
+      DATABASE_URL_DIRECT: postgres://spotihotel:${POSTGRES_PASSWORD}@db:5432/spotihotel
     ports: ["127.0.0.1:3000:3000"]
     volumes:
       - uploads:/app/.storage
@@ -23,13 +23,13 @@ services:
   db:
     image: postgres:16
     environment:
-      POSTGRES_USER: spotifood
+      POSTGRES_USER: spotihotel
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: spotifood
+      POSTGRES_DB: spotihotel
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U spotifood"]
+      test: ["CMD-SHELL", "pg_isready -U spotihotel"]
       interval: 5s
       retries: 10
     restart: unless-stopped

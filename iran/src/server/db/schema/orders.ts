@@ -120,7 +120,7 @@ export const orders = pgTable(
     servedAt: tstz(),
     cancelledAt: tstz(),
     cancelReason: text(),
-    /** The diner's Spotifood account, when they were signed in or gave their verified mobile. */
+    /** The diner's Spotihotel account, when they were signed in or gave their verified mobile. */
     dinerId: uuid(),
     /** Taken on the desktop app while the internet was down: the device's id for it (sync key). */
     offlineRef: uuid(),

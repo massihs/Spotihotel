@@ -3,8 +3,8 @@ import type { MetadataRoute } from "next";
 /** Web app manifest: guests can add the menu to their home screen (no native app needed). */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Spotifood",
-    short_name: "Spotifood",
+    name: "Spotihotel",
+    short_name: "Spotihotel",
     description: "Menu, commande et paiement à table.",
     start_url: "/table",
     scope: "/",

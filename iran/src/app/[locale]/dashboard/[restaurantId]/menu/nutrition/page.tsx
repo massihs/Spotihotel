@@ -43,8 +43,8 @@ async function NutritionDatabase({ params, searchParams }: Props) {
   };
   const SOURCE = {
     usda_sr: { label: "USDA", cls: "bg-tone-sky/12 text-tone-sky" },
-    spotifood_ingredient: { label: t("ingredient"), cls: "bg-tone-emerald/12 text-tone-emerald" },
-    spotifood_recipe: { label: t("recipe"), cls: "bg-accent-soft text-accent-text" },
+    spotihotel_ingredient: { label: t("ingredient"), cls: "bg-tone-emerald/12 text-tone-emerald" },
+    spotihotel_recipe: { label: t("recipe"), cls: "bg-accent-soft text-accent-text" },
   } as Record<string, { label: string; cls: string }>;
 
   return (

@@ -164,7 +164,7 @@ export async function renderInvoicePdf(input: {
   const doc = new PDFDocument({
     size: "A4",
     margin: 40,
-    info: { Title: `صورتحساب ${input.number}`, Author: s.seller.tradeName, Creator: "Spotifood" },
+    info: { Title: `صورتحساب ${input.number}`, Author: s.seller.tradeName, Creator: "Spotihotel" },
   });
   doc.registerFont("regular", FONTS.regular);
   doc.registerFont("bold", FONTS.bold);

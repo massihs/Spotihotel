@@ -57,7 +57,7 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
         </ul>
       </main>
 
-      <footer className="py-8 text-sm text-fg-subtle">© Spotifood</footer>
+      <footer className="py-8 text-sm text-fg-subtle">© Spotihotel</footer>
     </div>
   );
 }

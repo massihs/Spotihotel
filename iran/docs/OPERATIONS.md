@@ -16,15 +16,15 @@ Trois niveaux, du plus simple au plus sûr :
    - `BACKUP_PASSPHRASE` : une longue phrase secrète, à garder aussi hors de GitHub.
 3. **À la main**, depuis n'importe quel poste avec `pg_dump` :
    ```sh
-   iran/scripts/backup-restore-test.sh "postgres://…" spotifood-$(date +%F).dump
+   iran/scripts/backup-restore-test.sh "postgres://…" spotihotel-$(date +%F).dump
    ```
 
 ### Restaurer
 
 ```sh
-gpg -d spotifood.dump.gpg > spotifood.dump          # si chiffrée
-createdb -h HOTE -U UTILISATEUR spotifood_restored
-pg_restore --no-owner --no-privileges -d "postgres://…/spotifood_restored" spotifood.dump
+gpg -d spotihotel.dump.gpg > spotihotel.dump          # si chiffrée
+createdb -h HOTE -U UTILISATEUR spotihotel_restored
+pg_restore --no-owner --no-privileges -d "postgres://…/spotihotel_restored" spotihotel.dump
 ```
 
 Puis pointer `DATABASE_URL` de l'application vers la base restaurée (ou renommer les bases),
@@ -51,23 +51,23 @@ jamais restaurée n'est pas une sauvegarde.
 
 ## Surveillance de disponibilité
 
-`.github/workflows/uptime.yml` interroge `https://spotifood.ir/api/health` toutes les 10 minutes
+`.github/workflows/uptime.yml` interroge `https://spotihotel.ir/api/health` toutes les 10 minutes
 (application + base de données, 3 essais). Si le site ne répond pas :
 
 - l'exécution échoue et GitHub envoie un e-mail au propriétaire du dépôt ;
 - avec les secrets `KAVENEGAR_API_KEY` et `ALERT_PHONE`, un SMS part quand le site tombe, et un
   autre quand il revient (pas toutes les 10 minutes).
 
-## Abonnements payants (Zarinpal de Spotifood)
+## Abonnements payants (Zarinpal de Spotihotel)
 
 Tant que `BILLING_ZARINPAL_MERCHANT_ID` est vide, rien ne change : pas d'essai, pas de paiement,
 chaque restaurant garde son forfait actuel. La page `/pricing` et **Admin → Forfaits** (noms, prix,
 limites) fonctionnent déjà.
 
-Quand Zarinpal confirme le compte marchand de Spotifood :
+Quand Zarinpal confirme le compte marchand de Spotihotel :
 
 1. Mettre l'identifiant marchand dans `BILLING_ZARINPAL_MERCHANT_ID` (variables Liara), redémarrer.
-2. Adresse de retour à déclarer si Zarinpal la demande : `https://spotifood.ir/api/v1/billing/return`.
+2. Adresse de retour à déclarer si Zarinpal la demande : `https://spotihotel.ir/api/v1/billing/return`.
 3. Désormais : chaque **nouveau** restaurant démarre un essai de 14 jours du forfait Professional ;
    le propriétaire paie 1, 3 ou 12 mois (12 mois = prix de 10) dans **Tableau de bord → Abonnement** ;
    une facture numérotée `SF-1405-000001` est créée à chaque paiement.

@@ -1,7 +1,7 @@
 import { isRtl, translator } from "/i18n.js";
 
 const $ = (id) => document.getElementById(id);
-const api = window.spotifood;
+const api = window.spotihotel;
 let s = await api.state();
 const t = translator(s.locale);
 document.documentElement.dir = isRtl(s.locale) ? "rtl" : "ltr";

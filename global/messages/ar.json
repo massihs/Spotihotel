@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Spotifood",
+    "appName": "Spotihotel",
     "loading": "جارٍ التحميل…",
     "save": "حفظ",
     "cancel": "إلغاء",
@@ -28,11 +28,11 @@
     "selectNone": "إلغاء تحديد الكل"
   },
   "landing": {
-    "metaTitle": "Spotifood — الطلب من الطاولة عبر رمز QR للمطاعم",
+    "metaTitle": "Spotihotel — الطلب من الطاولة عبر رمز QR للمطاعم",
     "metaDescription": "حوّل قائمتك وطلباتك إلى رقمية: يمسح الضيوف الرمز ويطلبون ويدفعون من طاولتهم.",
     "badge": "منصة المطاعم",
     "title": "يمسح الضيف. يطلب. يدفع.",
-    "subtitle": "تحوّل Spotifood كل طاولة إلى نقطة طلب. قائمة إلكترونية، طلبات فورية في المطبخ، دفع فردي وفواتير — دون تثبيت أي تطبيق.",
+    "subtitle": "تحوّل Spotihotel كل طاولة إلى نقطة طلب. قائمة إلكترونية، طلبات فورية في المطبخ، دفع فردي وفواتير — دون تثبيت أي تطبيق.",
     "ctaPrimary": "أنشئ مطعمي",
     "ctaSecondary": "تسجيل الدخول",
     "features": {
@@ -117,7 +117,7 @@
     },
     "role": "دورك",
     "suspendedTitle": "المطعم معلّق",
-    "suspendedBody": "هذا المطعم معلّق مؤقتًا. يرجى التواصل مع دعم Spotifood.",
+    "suspendedBody": "هذا المطعم معلّق مؤقتًا. يرجى التواصل مع دعم Spotihotel.",
     "noRestaurantTitle": "لا يوجد مطعم",
     "noRestaurantBody": "حسابك غير مرتبط بأي مطعم نشط.",
     "pickRestaurant": "اختر مطعمًا"
@@ -129,7 +129,7 @@
   },
   "admin": {
     "title": "المنصة",
-    "subtitle": "نظرة شاملة على Spotifood.",
+    "subtitle": "نظرة شاملة على Spotihotel.",
     "stats": {
       "activeRestaurants": "المطاعم النشطة",
       "suspendedRestaurants": "المطاعم المعلّقة",
@@ -310,7 +310,7 @@
     "fullName": "الاسم الكامل",
     "role": "الدور",
     "password": "كلمة المرور الأولية",
-    "passwordHint": "فقط إذا لم يكن لدى الشخص حساب Spotifood. شاركها معه بشكل آمن.",
+    "passwordHint": "فقط إذا لم يكن لدى الشخص حساب Spotihotel. شاركها معه بشكل آمن.",
     "status": "الحالة",
     "lastLogin": "آخر دخول",
     "never": "أبدًا",

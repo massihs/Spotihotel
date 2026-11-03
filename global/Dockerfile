@@ -1,5 +1,5 @@
-# Spotifood International — production image.
-#   docker build -t spotifood-global .
+# Spotihotel International — production image.
+#   docker build -t spotihotel-global .
 ARG NODE_IMAGE=node:22-bookworm-slim
 
 FROM ${NODE_IMAGE} AS deps

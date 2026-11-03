@@ -41,11 +41,11 @@ import { newIdempotencyKey, recordStaffPayment } from "@/server/modules/payments
 import type { OrderStatus } from "@/server/modules/orders/status";
 
 const DEMO_OWNER = {
-  email: "owner@demo.spotifood.local",
+  email: "owner@demo.spotihotel.local",
   password: "DemoOwner!2026",
   fullName: "Alex Martin",
 };
-const DEMO_STAFF = { email: "staff@demo.spotifood.local", password: "DemoStaff!2026", fullName: "Sam Leroy" };
+const DEMO_STAFF = { email: "staff@demo.spotihotel.local", password: "DemoStaff!2026", fullName: "Sam Leroy" };
 
 async function upsertUser(email: string, password: string, fullName: string, isSuperAdmin = false) {
   const [existing] = await db
@@ -277,7 +277,7 @@ async function seedPlatform() {
   for (const [i, key] of DEFAULT_CATEGORY_TEMPLATES.entries()) {
     await db.insert(globalCategoryTemplates).values({ key, sortOrder: i }).onConflictDoNothing();
   }
-  const email = process.env.SEED_SUPERADMIN_EMAIL ?? "admin@spotifood.local";
+  const email = process.env.SEED_SUPERADMIN_EMAIL ?? "admin@spotihotel.local";
   const password = process.env.SEED_SUPERADMIN_PASSWORD;
   if (!password && process.env.NODE_ENV === "production") {
     // Never create a production admin with a well-known password.
@@ -320,7 +320,7 @@ async function seedDemoRestaurant() {
         addressLine1: "12 rue de la Paix",
         city: "Paris",
         postalCode: "75002",
-        email: "contact@demo.spotifood.local",
+        email: "contact@demo.spotihotel.local",
       })
       .where(eq(restaurants.id, restaurant.id));
     await tx

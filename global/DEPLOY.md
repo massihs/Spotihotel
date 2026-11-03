@@ -1,4 +1,4 @@
-# Spotifood International — déploiement
+# Spotihotel International — déploiement
 
 Édition `global` : français par défaut (en, fa, ar), euro, Stripe. Voir aussi [README.md](./README.md).
 

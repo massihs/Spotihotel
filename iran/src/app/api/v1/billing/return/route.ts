@@ -5,7 +5,7 @@ import { completeCheckout } from "@/server/modules/billing/service";
 
 /**
  * GET /api/v1/billing/return?id={billingPaymentId}&Authority=…&Status=OK|NOK
- * Zarinpal sends the restaurant owner back here after paying their Spotifood plan. The payment
+ * Zarinpal sends the restaurant owner back here after paying their Spotihotel plan. The payment
  * is verified server-to-server before the period is extended; then back to the billing page.
  */
 export async function GET(req: Request) {

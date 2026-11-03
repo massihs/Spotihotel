@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Spotifood",
+    "appName": "Spotihotel",
     "loading": "جارٍ التحميل…",
     "save": "حفظ",
     "cancel": "إلغاء",
@@ -29,7 +29,7 @@
     "clear": "مسح"
   },
   "landing": {
-    "metaTitle": "Spotifood — قوائم QR والطلب والدفع على الطاولة للمطاعم",
+    "metaTitle": "Spotihotel — قوائم QR والطلب والدفع على الطاولة للمطاعم",
     "metaDescription": "قائمة رقمية، طلب على الطاولة، مطبخ مباشر، دفع زرين‌بال وفواتير رسمية — دون تثبيت تطبيق.",
     "nav": {
       "features": "المزايا",
@@ -42,7 +42,7 @@
       "pricing": "الأسعار"
     },
     "badge": "المنصة الكاملة للمطاعم والمقاهي في إيران",
-    "subtitle": "تجمع سبوتيفود قائمة QR على الطاولة والكاشير والمطبخ والتوصيل والحجوزات ونادي الزبائن والمخزون في منصة واحدة — دون أي تطبيق يثبّته الزبون.",
+    "subtitle": "تجمع سبوتي‌هوتيل قائمة QR على الطاولة والكاشير والمطبخ والتوصيل والحجوزات ونادي الزبائن والمخزون في منصة واحدة — دون أي تطبيق يثبّته الزبون.",
     "ctaPrimary": "أنشئ مطعمي",
     "ctaSecondary": "تسجيل الدخول",
     "trust": {
@@ -130,7 +130,7 @@
       },
       "offline": {
         "q": "ماذا لو انقطع الإنترنت؟",
-        "a": "يعمل برنامج سبوتيفود للحاسوب على الشبكة المحلية للمطعم: تستمر الطلبات والمطبخ والطباعة، ويتزامن كل شيء عند عودة الإنترنت."
+        "a": "يعمل برنامج سبوتي‌هوتيل للحاسوب على الشبكة المحلية للمطعم: تستمر الطلبات والمطبخ والطباعة، ويتزامن كل شيء عند عودة الإنترنت."
       },
       "branches": {
         "q": "لدي عدة فروع: هل أراها كلها في مكان واحد؟",
@@ -140,7 +140,7 @@
     "finalTitle": "حوّل مطعمك إلى الرقمي اليوم",
     "finalBody": "إنشاء الحساب يستغرق دقائق. أنشئ قائمتك واستقبل أول طلب اليوم.",
     "footer": {
-      "rights": "© Spotifood — صُنع لمطاعم إيران",
+      "rights": "© Spotihotel — صُنع لمطاعم إيران",
       "login": "تسجيل الدخول",
       "signup": "التسجيل",
       "product": "المنتج",
@@ -151,7 +151,7 @@
     "findRestaurant": "تبحث عن مطعم أو مقهى؟ تصفح الدليل",
     "contact": {
       "title": "اتصل بنا",
-      "subtitle": "لديك سؤال أو تريد عرضًا تجريبيًا؟ فريق سبوتيفود في خدمتك.",
+      "subtitle": "لديك سؤال أو تريد عرضًا تجريبيًا؟ فريق سبوتي‌هوتيل في خدمتك.",
       "phone": "الهاتف",
       "email": "البريد الإلكتروني",
       "address": "العنوان",
@@ -167,8 +167,8 @@
       "kitchen": "المطبخ",
       "minutes": "٠٤:١٢"
     },
-    "onSpotifood": {
-      "title": "يعملون مع سبوتيفود",
+    "onSpotihotel": {
+      "title": "يعملون مع سبوتي‌هوتيل",
       "all": "عرض الكل"
     },
     "platform": {
@@ -239,7 +239,7 @@
         },
         "guide": {
           "title": "دليل المطاعم",
-          "body": "صفحة عامة وخريطة وحجز إلكتروني على spotifood.ir."
+          "body": "صفحة عامة وخريطة وحجز إلكتروني على spotihotel.ir."
         },
         "hotel": {
           "title": "الفنادق وخدمة الغرف",
@@ -384,7 +384,7 @@
     },
     "role": "دورك",
     "suspendedTitle": "المطعم معلّق",
-    "suspendedBody": "هذا المطعم معلّق مؤقتًا. يرجى التواصل مع دعم Spotifood.",
+    "suspendedBody": "هذا المطعم معلّق مؤقتًا. يرجى التواصل مع دعم Spotihotel.",
     "noRestaurantTitle": "لا يوجد مطعم",
     "noRestaurantBody": "حسابك غير مرتبط بأي مطعم نشط.",
     "pickRestaurant": "اختر مطعمًا",
@@ -462,7 +462,7 @@
   },
   "admin": {
     "title": "المنصة",
-    "subtitle": "نظرة شاملة على Spotifood.",
+    "subtitle": "نظرة شاملة على Spotihotel.",
     "stats": {
       "activeRestaurants": "المطاعم النشطة",
       "suspendedRestaurants": "المطاعم المعلّقة",
@@ -510,7 +510,7 @@
     },
     "plans": {
       "title": "الباقات",
-      "billingOn": "دفع الاشتراكات مفعّل (تم ضبط تاجر زرين بال لسبوتيفود).",
+      "billingOn": "دفع الاشتراكات مفعّل (تم ضبط تاجر زرين بال لسبوتي‌هوتيل).",
       "billingOff": "دفع الاشتراكات معطّل: اضبط BILLING_ZARINPAL_MERCHANT_ID لتفعيله (تجربة 14 يومًا للمطاعم الجديدة).",
       "public": "ظاهرة في /pricing",
       "name": "الاسم",
@@ -789,7 +789,7 @@
     "fullName": "الاسم الكامل",
     "role": "الدور",
     "password": "كلمة المرور الأولية",
-    "passwordHint": "فقط إذا لم يكن لدى الشخص حساب Spotifood. شاركها معه بشكل آمن.",
+    "passwordHint": "فقط إذا لم يكن لدى الشخص حساب Spotihotel. شاركها معه بشكل آمن.",
     "status": "الحالة",
     "lastLogin": "آخر دخول",
     "never": "أبدًا",
@@ -1122,12 +1122,12 @@
     "printers": "الطابعات وإرسال الطلبات للمطبخ",
     "printersHint": "قبول الطلب في الصندوق وطباعة تذاكر المطبخ والبار والصندوق تلقائياً.",
     "listing": "الظهور في دليل المطاعم",
-    "listingHint": "يظهر مطعمك على spotifood.ir/restaurants مع القائمة والحجز عبر الإنترنت.",
+    "listingHint": "يظهر مطعمك على spotihotel.ir/restaurants مع القائمة والحجز عبر الإنترنت.",
     "desktopTitle": "برنامج الحاسوب",
-    "desktopHint": "سبوتيفود لويندوز وماك: كل ميزات الموقع، مع أخذ الطلبات والطباعة حتى دون إنترنت.",
+    "desktopHint": "سبوتي‌هوتيل لويندوز وماك: كل ميزات الموقع، مع أخذ الطلبات والطباعة حتى دون إنترنت.",
     "desktop": {
       "onlineTitle": "مثل الموقع",
-      "onlineBody": "مع الإنترنت يعرض البرنامج سبوتيفود كالمتصفح ويطبع تذاكر المطبخ والبار.",
+      "onlineBody": "مع الإنترنت يعرض البرنامج سبوتي‌هوتيل كالمتصفح ويطبع تذاكر المطبخ والبار.",
       "offlineTitle": "دون إنترنت",
       "offlineBody": "يتولى حاسوب الصندوق العمل: طلبات في الصندوق وعلى هواتف النُّدُل (نفس الواي فاي) وطباعة محلية.",
       "syncTitle": "كل شيء يعود",
@@ -2012,7 +2012,7 @@
     "ownerOnly": "Only the owner or an admin can subscribe.",
     "cancelRequest": "Cancel request",
     "pendingTitle": "Request received",
-    "pendingBody": "Your “{plan}” subscription with “{theme}” starts once the Spotifood team confirms payment.",
+    "pendingBody": "Your “{plan}” subscription with “{theme}” starts once the Spotihotel team confirms payment.",
     "playlistOfWeek": "This week's playlist",
     "playlistOfMonth": "This month's playlist",
     "emptyTheme": "This style has no tracks yet.",
@@ -2021,7 +2021,7 @@
     "nextPlaylist": "Next playlist",
     "nextMonth": "Next month",
     "changeTheme": "Change style or plan",
-    "radioPromoTitle": "Spotifood live radio",
+    "radioPromoTitle": "Spotihotel live radio",
     "radioPromoBody": "Anyone can listen to the live radio for free; subscribe for your own playlist.",
     "allStations": "All stations →",
     "plans": {
@@ -2058,7 +2058,7 @@
       "durationCol": "المدة"
     },
     "radio": {
-      "pageTitle": "راديو سبوتيفود",
+      "pageTitle": "راديو سبوتي‌هوتيل",
       "heading": "راديو مباشر",
       "intro": "Non-stop music for cafés and restaurants. Pick a station and press play.",
       "live": "مباشر",
@@ -2583,6 +2583,10 @@
   "brandColors": {
     "label": "لون العلامة",
     "hint": "يُستخدم في قائمة الضيوف والأزرار ولوحة التحكم. معاينة فورية.",
+    "navy": "كحلي",
+    "bordeaux": "عنابي",
+    "forest": "أخضر غامق",
+    "brass": "نحاسي",
     "orange": "برتقالي",
     "violet": "بنفسجي",
     "indigo": "نيلي",
@@ -2975,7 +2979,7 @@
     "browserHint": "فعّل «الطباعة التلقائية» في شاشة المطبخ وصفحة الطلبات. للطباعة دون نافذة تأكيد افتح كروم بهذا الأمر:"
   },
   "directory": {
-    "metaTitle": "مطاعم ومقاهي إيران — القوائم والحجز عبر الإنترنت | Spotifood",
+    "metaTitle": "مطاعم ومقاهي إيران — القوائم والحجز عبر الإنترنت | Spotihotel",
     "metaDescription": "اعثر على مطاعم ومقاهي مدينتك أو بالقرب منك، وتصفح القائمة واحجز طاولة عبر الإنترنت.",
     "eyebrow": "دليل المطاعم",
     "title": "أين نأكل؟",
@@ -3203,7 +3207,7 @@
   },
   "account": {
     "loginTitle": "سجلّك الغذائي",
-    "loginSubtitle": "سجّل الدخول: كل طبق تطلبه عبر سبوتيفود يُحفظ، وترى يوميًا سعراتك والبروتين والألياف…",
+    "loginSubtitle": "سجّل الدخول: كل طبق تطلبه عبر سبوتي‌هوتيل يُحفظ، وترى يوميًا سعراتك والبروتين والألياف…",
     "tabPhone": "الجوال",
     "tabEmail": "البريد",
     "mobile": "رقم الجوال",
@@ -3223,7 +3227,7 @@
     "haveAccount": "لديك حساب؟",
     "privacyNote": "وجباتك مرئية لك وحدك. المطاعم لا ترى سجلّك.",
     "hello": "مرحبًا {name}",
-    "subtitle": "ما أكلته مع سبوتيفود",
+    "subtitle": "ما أكلته مع سبوتي‌هوتيل",
     "settings": "الإعدادات",
     "logout": "تسجيل الخروج",
     "prevDay": "اليوم السابق",
@@ -3237,7 +3241,7 @@
     "meals": "الوجبات",
     "noData": "غير محدد",
     "noMeals": "لا وجبات في هذا اليوم",
-    "noMealsHint": "تظهر طلباتك عبر سبوتيفود هنا تلقائيًا: سجّل الدخول من قائمة QR أو أعطِ رقم جوالك عند الصندوق.",
+    "noMealsHint": "تظهر طلباتك عبر سبوتي‌هوتيل هنا تلقائيًا: سجّل الدخول من قائمة QR أو أعطِ رقم جوالك عند الصندوق.",
     "trend": "الاتجاه",
     "days": "{n} يومًا",
     "goal": "الهدف {n}",
@@ -3255,7 +3259,7 @@
     "saved": "تم الحفظ",
     "signInMethods": "تسجيل الدخول",
     "verified": "موثّق",
-    "addPhoneHint": "أضف جوالك: الطلبات المسجلة بهذا الرقم في كل مطاعم سبوتيفود ستنضم إلى سجلّك.",
+    "addPhoneHint": "أضف جوالك: الطلبات المسجلة بهذا الرقم في كل مطاعم سبوتي‌هوتيل ستنضم إلى سجلّك.",
     "privacy": "الخصوصية",
     "clear": "مسح السجل",
     "clearHint": "يزيل كل وجباتك من سجلّك (تحتفظ المطاعم بفواتيرها).",
@@ -3337,7 +3341,7 @@
     "searchTitle": "ابحث عن مادة غذائية",
     "searchPlaceholder": "مثلًا دجاج، برنج، سلطة سيزر، rice…",
     "search": "بحث",
-    "source": "المصدر: USDA FoodData Central (SR Legacy، ملكية عامة) ووصفات سبوتيفود.",
+    "source": "المصدر: USDA FoodData Central (SR Legacy، ملكية عامة) ووصفات سبوتي‌هوتيل.",
     "food": "المادة",
     "ingredient": "مكوّن",
     "recipe": "وصفة نموذجية",
@@ -3483,7 +3487,7 @@
   },
   "billing": {
     "title": "الاشتراك",
-    "subtitle": "باقة سبوتيفود الخاصة بك وتاريخ انتهائها وفواتيرك.",
+    "subtitle": "باقة سبوتي‌هوتيل الخاصة بك وتاريخ انتهائها وفواتيرك.",
     "paidOk": "تم استلام الدفع، شكرًا! تم تمديد باقتك.",
     "paidFailed": "لم يتم الدفع. لم يُخصم أي مبلغ؛ يمكنك المحاولة مجددًا.",
     "current": "الباقة الحالية",
@@ -3519,7 +3523,7 @@
     "amount": "المبلغ",
     "lineLabel": "باقة {plan} — {months} شهر",
     "paidWith": "مدفوع عبر زرين بال · المرجع {ref} · البطاقة {card}",
-    "paidManual": "تمت التسوية لدى سبوتيفود.",
+    "paidManual": "تمت التسوية لدى سبوتي‌هوتيل.",
     "limits": {
       "tables": "حتى {count} طاولة",
       "tablesUnlimited": "طاولات غير محدودة",
@@ -3547,7 +3551,7 @@
     }
   },
   "pricing": {
-    "metaTitle": "الأسعار — سبوتيفود",
+    "metaTitle": "الأسعار — سبوتي‌هوتيل",
     "title": "أسعار بسيطة",
     "subtitle": "قائمة QR والطلبات والصندوق والمطبخ: ابدأ مجانًا وانتقل للأعلى كلما كبرت.",
     "yearly": "ادفع 12 شهرًا واحصل على شهرين مجانًا. بلا التزام.",

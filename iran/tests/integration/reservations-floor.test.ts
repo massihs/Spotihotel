@@ -171,7 +171,7 @@ describe("guest booking flow", () => {
     expect(defaultWishTime(tz, new Date("2026-10-29T20:20:00Z"))).toBe("23:30"); // 23:50
 
     const ics = icsEvent({
-      uid: "abc@spotifood",
+      uid: "abc@spotihotel",
       start: new Date("2026-10-30T16:30:00Z"),
       minutes: 90,
       title: "میز در رستوران خیلی خیلی خوب, با یک نام بسیار طولانی برای آزمایش تا خط بشکند",

@@ -40,7 +40,7 @@ export async function AppShell({
         <CollapsibleNav
           header={
             <div className="flex min-w-0 items-center gap-3">
-              <Link href="/dashboard" aria-label="Spotifood" className="shrink-0">
+              <Link href="/dashboard" aria-label="Spotihotel" className="shrink-0">
                 <Logo withText={false} className="lg:hidden" />
                 <Logo className="hidden lg:inline-flex" />
               </Link>

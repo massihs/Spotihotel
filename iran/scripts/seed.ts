@@ -48,12 +48,12 @@ import { BRIELLE_MENU } from "./brielle";
 import { assignBrielleJobs, listBrielle, seedBrielleHistory } from "./brielle-history";
 
 const DEMO_OWNER = {
-  email: "owner@demo.spotifood.local",
+  email: "owner@demo.spotihotel.local",
   password: "DemoOwner!2026",
   fullName: "علی رضایی",
 };
 const DEMO_STAFF = {
-  email: "staff@demo.spotifood.local",
+  email: "staff@demo.spotihotel.local",
   password: "DemoStaff!2026",
   fullName: "مریم احمدی",
 };
@@ -288,7 +288,7 @@ async function seedPlatform() {
   for (const [i, key] of DEFAULT_CATEGORY_TEMPLATES.entries()) {
     await db.insert(globalCategoryTemplates).values({ key, sortOrder: i }).onConflictDoNothing();
   }
-  const email = process.env.SEED_SUPERADMIN_EMAIL ?? "admin@spotifood.local";
+  const email = process.env.SEED_SUPERADMIN_EMAIL ?? "admin@spotihotel.local";
   const password = process.env.SEED_SUPERADMIN_PASSWORD;
   if (!password && process.env.NODE_ENV === "production") {
     // Never create a production admin with a well-known password.
@@ -343,7 +343,7 @@ async function seedDemoRestaurant() {
         addressLine1: "خیابان ولیعصر، پلاک ۱۲",
         city: "تهران",
         postalCode: "1234567890",
-        email: "contact@demo.spotifood.local",
+        email: "contact@demo.spotihotel.local",
       })
       .where(eq(restaurants.id, restaurant.id));
     await tx
@@ -641,7 +641,7 @@ async function seedDemoOrders() {
  * Owned by the platform super admin, so it appears in that account's dashboard.
  */
 async function seedBrielle() {
-  const email = (process.env.SEED_SUPERADMIN_EMAIL ?? "admin@spotifood.local").toLowerCase();
+  const email = (process.env.SEED_SUPERADMIN_EMAIL ?? "admin@spotihotel.local").toLowerCase();
   const [owner] = await db
     .select()
     .from(users)

@@ -1,7 +1,7 @@
 import "server-only";
 
 /** Latest release of the desktop app (built by .github/workflows/desktop.yml). */
-const RELEASES = "https://github.com/massihs/Spotifood/releases/latest/download";
+const RELEASES = "https://github.com/massihs/Spotihotel/releases/latest/download";
 
 /**
  * Where the installers are downloaded from. DESKTOP_WINDOWS_URL / DESKTOP_MAC_URL override the
@@ -11,7 +11,7 @@ export function desktopDownloads() {
   const url = (v: string | undefined, fallback: string) =>
     v === "off" ? null : v && /^https:\/\//.test(v) ? v : fallback;
   return {
-    windows: url(process.env.DESKTOP_WINDOWS_URL, `${RELEASES}/Spotifood-Setup.exe`),
-    mac: url(process.env.DESKTOP_MAC_URL, `${RELEASES}/Spotifood-mac.dmg`),
+    windows: url(process.env.DESKTOP_WINDOWS_URL, `${RELEASES}/Spotihotel-Setup.exe`),
+    mac: url(process.env.DESKTOP_MAC_URL, `${RELEASES}/Spotihotel-mac.dmg`),
   };
 }

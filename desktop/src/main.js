@@ -21,12 +21,12 @@ import { createSync } from "./sync.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(here, "..");
-const DEFAULT_SERVER = process.env.SPOTIFOOD_URL ?? "https://spotifood.ir";
+const DEFAULT_SERVER = process.env.SPOTIHOTEL_URL ?? "https://spotihotel.ir";
 const BAR_H = 44;
 const UUID = /\/dashboard\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/;
 
 // A separate data folder (tests, or two restaurants on one PC).
-if (process.env.SPOTIFOOD_DATA) app.setPath("userData", process.env.SPOTIFOOD_DATA);
+if (process.env.SPOTIHOTEL_DATA) app.setPath("userData", process.env.SPOTIHOTEL_DATA);
 if (!app.requestSingleInstanceLock()) app.quit();
 
 const store = createStore(path.join(app.getPath("userData"), "data"));
@@ -175,7 +175,7 @@ function createWindow() {
     height: 860,
     minWidth: 380,
     minHeight: 560,
-    title: "Spotifood",
+    title: "Spotihotel",
     backgroundColor: "#f6f7f9",
     icon: path.join(root, "build", "icon.png"),
     autoHideMenuBar: true,
@@ -228,7 +228,7 @@ function onNavigate(url) {
         type: "question",
         buttons: ["OK", "×"],
         defaultId: 0,
-        message: "Spotifood",
+        message: "Spotihotel",
         detail: "Activer ce PC pour ce restaurant ? (mode hors ligne, impression locale)\nاین کامپیوتر برای این رستوران فعال شود؟",
       })
       .then(async ({ response }) => {
@@ -307,12 +307,12 @@ ipcMain.handle("action", async (e, name, arg) => {
       if (!p) throw new Error("not_found");
       await deliver(p, {
         kind: "kitchen",
-        restaurant: config.restaurantName ?? "Spotifood",
+        restaurant: config.restaurantName ?? "Spotihotel",
         title: "Test",
         number: "✓",
         where: p.name,
         time: new Date().toLocaleTimeString(),
-        offline: "Spotifood",
+        offline: "Spotihotel",
         lines: [{ quantity: 1, name: "چاپ آزمایشی · Test", options: [], note: null }],
       });
       return true;
@@ -322,7 +322,7 @@ ipcMain.handle("action", async (e, name, arg) => {
         type: "warning",
         buttons: ["OK", "×"],
         defaultId: 1,
-        message: "Spotifood",
+        message: "Spotihotel",
         detail: hub.pending().length
           ? "Des commandes hors ligne ne sont pas encore envoyées. Délier quand même ?"
           : "Délier ce PC du restaurant ?",
@@ -365,7 +365,7 @@ app.whenReady().then(async () => {
   }
   createWindow();
   if (config.deviceToken) sync.start();
-  if (process.env.SPOTIFOOD_SMOKE) void smoke(process.env.SPOTIFOOD_SMOKE);
+  if (process.env.SPOTIHOTEL_SMOKE) void smoke(process.env.SPOTIHOTEL_SMOKE);
 });
 
 /** Test run: screenshots of the bar and each screen, then quit. */
@@ -380,7 +380,7 @@ async function smoke(dir) {
     log(`smoke ${name}: ${content.webContents.getURL()}`);
   };
   await shot(mode);
-  if (process.env.SPOTIFOOD_SMOKE_ORDER && hub.snapshot) {
+  if (process.env.SPOTIHOTEL_SMOKE_ORDER && hub.snapshot) {
     // A real order through the hub: kitchen tickets and the paid receipt go to the printers.
     const dishes = hub.snapshot.products.filter((p) => p.isAvailable && !p.optionGroups.some((g) => g.minSelect > 0));
     hub._createOrder({
@@ -395,7 +395,7 @@ async function smoke(dir) {
     });
     await wait(6000);
   }
-  for (const screen of (process.env.SPOTIFOOD_SMOKE_SCREENS ?? "").split(",").filter(Boolean)) {
+  for (const screen of (process.env.SPOTIHOTEL_SMOKE_SCREENS ?? "").split(",").filter(Boolean)) {
     if (screen === "settings") showSettings();
     else showLocal(`#/${screen}`);
     await shot(screen);

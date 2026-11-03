@@ -1,11 +1,11 @@
-# Spotifood
+# Spotihotel
 
 Plateforme SaaS de commande en salle par QR code, en **deux versions indépendantes** :
 
 | Dossier              | Version                     | Langues         | Devise | Paiement en ligne | Hébergement                    |
 | -------------------- | --------------------------- | --------------- | ------ | ----------------- | ------------------------------ |
-| [`global/`](global/) | **Spotifood International** | fr*, en, fa, ar | EUR…   | Stripe            | Docker (Railway, Render, VPS…) |
-| [`iran/`](iran/)     | **Spotifood Iran**          | fa*, en, ar     | IRR    | Zarinpal          | Liara                          |
+| [`global/`](global/) | **Spotihotel International** | fr*, en, fa, ar | EUR…   | Stripe            | Docker (Railway, Render, VPS…) |
+| [`iran/`](iran/)     | **Spotihotel Iran**          | fa*, en, ar     | IRR    | Zarinpal          | Liara                          |
 
 \* langue par défaut
 

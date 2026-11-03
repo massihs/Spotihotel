@@ -145,7 +145,7 @@ export async function AppShell({
         />
         <aside className="relative flex flex-col lg:sticky lg:top-0 lg:h-dvh">
           <div className="px-5 pt-6 pb-5">
-            <Link href="/dashboard" aria-label="Spotifood" className="inline-flex">
+            <Link href="/dashboard" aria-label="Spotihotel" className="inline-flex">
               <Logo />
             </Link>
           </div>
@@ -176,7 +176,7 @@ export async function AppShell({
         {/* Top bar */}
         <header className="sticky top-0 z-30 border-b border-border/70 bg-surface/75 backdrop-blur-xl print:hidden">
           <div className="flex h-16 items-center gap-3 px-4 sm:px-8">
-            <Link href="/dashboard" aria-label="Spotifood" className="lg:hidden">
+            <Link href="/dashboard" aria-label="Spotihotel" className="lg:hidden">
               <LogoMark className="size-8" />
             </Link>
             <div className="min-w-0 flex-1 lg:hidden">

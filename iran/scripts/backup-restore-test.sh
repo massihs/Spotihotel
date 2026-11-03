@@ -9,7 +9,7 @@
 set -euo pipefail
 
 SRC="${1:?usage: backup-restore-test.sh DATABASE_URL [dump-file]}"
-DUMP="${2:-$(mktemp -t spotifood-XXXXXX.dump)}"
+DUMP="${2:-$(mktemp -t spotihotel-XXXXXX.dump)}"
 BASE="${SRC%/*}"
 NAME="${SRC##*/}"; NAME="${NAME%%\?*}"
 CHECK="${NAME}_restore_check"

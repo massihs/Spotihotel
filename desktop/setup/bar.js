@@ -8,7 +8,7 @@ function render(s) {
   if (!s) return;
   t = translator(s.locale);
   document.documentElement.dir = isRtl(s.locale) ? "rtl" : "ltr";
-  $("name").textContent = s.restaurantName ?? "Spotifood";
+  $("name").textContent = s.restaurantName ?? "Spotihotel";
   const online = s.status.online;
   // Before the PC is linked there is no connection to report.
   $("pill").className = `pill ${online ? "on" : "off"}${s.linked ? "" : " hidden"}`;
@@ -43,10 +43,10 @@ function render(s) {
   $("settings").setAttribute("aria-pressed", String(s.mode === "settings"));
 }
 
-$("site").onclick = () => window.spotifood.action("site");
-$("local").onclick = () => window.spotifood.action("local");
-$("sync").onclick = () => window.spotifood.action("sync").then(render);
-$("settings").onclick = () => window.spotifood.action("settings");
-window.spotifood.onState(render);
-window.spotifood.state().then(render);
-setInterval(() => window.spotifood.state().then(render), 4000);
+$("site").onclick = () => window.spotihotel.action("site");
+$("local").onclick = () => window.spotihotel.action("local");
+$("sync").onclick = () => window.spotihotel.action("sync").then(render);
+$("settings").onclick = () => window.spotihotel.action("settings");
+window.spotihotel.onState(render);
+window.spotihotel.state().then(render);
+setInterval(() => window.spotihotel.state().then(render), 4000);

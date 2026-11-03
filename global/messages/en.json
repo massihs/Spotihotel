@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Spotifood",
+    "appName": "Spotihotel",
     "loading": "Loading…",
     "save": "Save",
     "cancel": "Cancel",
@@ -28,11 +28,11 @@
     "selectNone": "Select none"
   },
   "landing": {
-    "metaTitle": "Spotifood — QR code table ordering for restaurants",
+    "metaTitle": "Spotihotel — QR code table ordering for restaurants",
     "metaDescription": "Digitize your menu and ordering: guests scan, order and pay from their table. Real-time kitchen, split payments, invoices and reviews.",
     "badge": "Restaurant platform",
     "title": "Guests scan. Order. Pay.",
-    "subtitle": "Spotifood turns every table into an ordering point. Online menu, real-time kitchen orders, individual payments and invoices — no app to install.",
+    "subtitle": "Spotihotel turns every table into an ordering point. Online menu, real-time kitchen orders, individual payments and invoices — no app to install.",
     "ctaPrimary": "Create my restaurant",
     "ctaSecondary": "Sign in",
     "features": {
@@ -117,7 +117,7 @@
     },
     "role": "Your role",
     "suspendedTitle": "Restaurant suspended",
-    "suspendedBody": "This restaurant is temporarily suspended. Please contact Spotifood support.",
+    "suspendedBody": "This restaurant is temporarily suspended. Please contact Spotihotel support.",
     "noRestaurantTitle": "No restaurant",
     "noRestaurantBody": "Your account is not linked to any active restaurant.",
     "pickRestaurant": "Choose a restaurant"
@@ -129,7 +129,7 @@
   },
   "admin": {
     "title": "Platform",
-    "subtitle": "Global view of Spotifood.",
+    "subtitle": "Global view of Spotihotel.",
     "stats": {
       "activeRestaurants": "Active restaurants",
       "suspendedRestaurants": "Suspended restaurants",
@@ -310,7 +310,7 @@
     "fullName": "Full name",
     "role": "Role",
     "password": "Initial password",
-    "passwordHint": "Only if the person has no Spotifood account yet. Share it with them securely.",
+    "passwordHint": "Only if the person has no Spotihotel account yet. Share it with them securely.",
     "status": "Status",
     "lastLogin": "Last sign-in",
     "never": "Never",

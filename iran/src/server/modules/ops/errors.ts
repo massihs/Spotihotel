@@ -85,7 +85,7 @@ async function maybeAlert(
     .where(and(eq(appErrors.id, id), or(isNull(appErrors.alertedAt), lt(appErrors.alertedAt, hourAgo))))
     .returning({ id: appErrors.id });
   if (!claimed) return;
-  const text = `Spotifood: erreur serveur (${count}x)\n${route}\n${message.slice(0, 120)}`;
+  const text = `Spotihotel: erreur serveur (${count}x)\n${route}\n${message.slice(0, 120)}`;
   await sms()
     .send(phone, text)
     .catch((err) => console.error("[errors] alert sms failed", err));

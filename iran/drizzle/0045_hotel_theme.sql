@@ -1,0 +1,1 @@
+ALTER TABLE "restaurants" ALTER COLUMN "brand_color" SET DEFAULT 'navy';

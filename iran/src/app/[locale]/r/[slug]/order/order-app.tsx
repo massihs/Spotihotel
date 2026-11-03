@@ -20,7 +20,7 @@ type Channel = "dine_in" | "takeaway" | "delivery";
 type Line = { key: string; productId: string; optionValueIds: string[]; quantity: number; note: string };
 type Zone = { id: string; name: string; feeCents: number; minOrderCents: number };
 
-const storageKey = (slug: string) => `spotifood:online-cart:${slug}`;
+const storageKey = (slug: string) => `spotihotel:online-cart:${slug}`;
 
 /** The online ordering site: menu, browser-side cart, checkout with a verified mobile. */
 export function OrderApp({

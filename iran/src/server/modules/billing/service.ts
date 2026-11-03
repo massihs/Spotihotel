@@ -19,9 +19,9 @@ import { isUuid } from "@/lib/ids";
 import { jalaliYear } from "@/lib/jalali";
 
 /**
- * Spotifood's own subscriptions: restaurants pay the platform for their plan.
+ * Spotihotel's own subscriptions: restaurants pay the platform for their plan.
  *
- * Off until `BILLING_ZARINPAL_MERCHANT_ID` (Spotifood's Zarinpal merchant) is set: no trial,
+ * Off until `BILLING_ZARINPAL_MERCHANT_ID` (Spotihotel's Zarinpal merchant) is set: no trial,
  * no checkout, nothing changes for existing restaurants. Once it is set:
  * - a new organization starts a TRIAL_DAYS trial of TRIAL_PLAN;
  * - the owner pays 1, 3 or 12 months (12 = 10 months' price) from the dashboard;
@@ -251,7 +251,7 @@ export async function startCheckout(db: Database, ctx: RestaurantContext, raw: u
       paymentId: pay!.id,
       amountCents,
       currency,
-      description: `Spotifood · ${plan.name} · ${input.months} · ${ctx.restaurant.name}`.slice(0, 250),
+      description: `Spotihotel · ${plan.name} · ${input.months} · ${ctx.restaurant.name}`.slice(0, 250),
       returnUrl: new URL(`/dashboard/${ctx.restaurant.id}/billing`, base).toString(),
       callbackUrl: callback.toString(),
       idempotencyKey: `billing_${pay!.id}`,

@@ -1,5 +1,5 @@
 /**
- * Spotifood ships as two editions built from the same code base:
+ * Spotihotel ships as two editions built from the same code base:
  *
  * - `global` — international SaaS (EU/World): French by default, EUR, Stripe.
  * - `iran`   — Iranian market, hosted in Iran (Liara): Persian by default, IRR, Zarinpal,

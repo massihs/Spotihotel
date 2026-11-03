@@ -70,8 +70,8 @@ export async function requestPhoneCode(db: DbOrTx, rawPhone: string, meta: { ip?
   });
   const text =
     edition.defaultLocale === "fa"
-      ? `کد ورود اسپاتیفود: ${code}\nاین کد را به کسی ندهید.`
-      : `Spotifood code: ${code}`;
+      ? `کد ورود اسپاتی‌هتل: ${code}\nاین کد را به کسی ندهید.`
+      : `Spotihotel code: ${code}`;
   await sendCode(phone, code, text);
   return { phone };
 }
@@ -79,7 +79,7 @@ export async function requestPhoneCode(db: DbOrTx, rawPhone: string, meta: { ip?
 /**
  * Checks a code. On success: the diner with this number (created on first sign-in), or — when
  * `attachTo` is given — that signed-in diner, who now owns the verified number. Past orders
- * placed with this number in any Spotifood restaurant are attached to the account.
+ * placed with this number in any Spotihotel restaurant are attached to the account.
  */
 export async function verifyPhoneCode(
   db: DbOrTx,

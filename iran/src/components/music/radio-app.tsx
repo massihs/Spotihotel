@@ -517,7 +517,7 @@ function TopBar({
   const { t } = ctx;
   return (
     <header className="hidden h-16 shrink-0 items-center gap-2 px-4 lg:flex">
-      <Link href="/" aria-label="Spotifood" className="grid size-10 place-items-center rounded-full">
+      <Link href="/" aria-label="Spotihotel" className="grid size-10 place-items-center rounded-full">
         <LogoMark className="size-8" />
       </Link>
       <div className="flex gap-1">
@@ -693,7 +693,7 @@ function LibraryPanel({ ctx, view, mobile }: { ctx: Ctx; view: View; mobile?: bo
                 { kind: "station", slug: s.slug },
                 <StationArt s={s} className="size-12" rounded="rounded" />,
                 s.name,
-                `${t("radioType")} · Spotifood`,
+                `${t("radioType")} · Spotihotel`,
                 ctx.isOn(s.slug),
               ),
             )
@@ -730,7 +730,7 @@ function HomeView({ ctx }: { ctx: Ctx }) {
         <div className="flex items-center gap-2">
           <Link
             href="/"
-            aria-label="Spotifood"
+            aria-label="Spotihotel"
             className="grid size-8 place-items-center rounded-full bg-[#1ed760] lg:hidden"
           >
             <LogoMark className="size-5" />
@@ -817,7 +817,7 @@ function HomeView({ ctx }: { ctx: Ctx }) {
                 key={s.slug}
                 art={<StationArt s={s} className="w-full" />}
                 title={s.name}
-                sub={`${t("radioType")} · Spotifood`}
+                sub={`${t("radioType")} · Spotihotel`}
                 onOpen={() => ctx.go({ kind: "station", slug: s.slug })}
                 onPlay={() => ctx.play(s.slug)}
                 playing={ctx.isOn(s.slug)}
@@ -954,7 +954,7 @@ function SearchView({ ctx, query, setQuery }: { ctx: Ctx; query: string; setQuer
                     <span className="me-2 rounded-full bg-black/40 px-3 py-1 text-xs font-bold text-white">
                       {t("radioType")}
                     </span>
-                    Spotifood
+                    Spotihotel
                   </p>
                   <span className="absolute end-5 bottom-5 translate-y-2 opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100">
                     <GreenPlay
@@ -985,7 +985,7 @@ function SearchView({ ctx, query, setQuery }: { ctx: Ctx; query: string; setQuer
                   key={s.slug}
                   art={<StationArt s={s} className="w-full" />}
                   title={s.name}
-                  sub={`${t("radioType")} · Spotifood`}
+                  sub={`${t("radioType")} · Spotihotel`}
                   onOpen={() => ctx.go({ kind: "station", slug: s.slug })}
                   onPlay={() => ctx.play(s.slug)}
                   playing={ctx.isOn(s.slug)}
@@ -1112,7 +1112,7 @@ function StationView({
               <span className="grid size-6 place-items-center rounded-full bg-black">
                 <LogoMark className="size-4" />
               </span>
-              Spotifood
+              Spotihotel
             </span>
             <span className="text-white/70">
               · {t("tracksOnStation", { count: s.trackCount })}, {t("minutes", { count: s.minutes })}

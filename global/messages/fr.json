@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Spotifood",
+    "appName": "Spotihotel",
     "loading": "Chargement…",
     "save": "Enregistrer",
     "cancel": "Annuler",
@@ -28,11 +28,11 @@
     "selectNone": "Tout désélectionner"
   },
   "landing": {
-    "metaTitle": "Spotifood — Commande à table par QR code pour restaurants",
+    "metaTitle": "Spotihotel — Commande à table par QR code pour restaurants",
     "metaDescription": "Digitalisez votre menu et vos commandes : vos clients scannent, commandent et paient depuis leur table. Cuisine en temps réel, paiement séparé, factures, avis.",
     "badge": "Plateforme restaurant",
     "title": "Vos clients scannent. Commandent. Paient.",
-    "subtitle": "Spotifood transforme chaque table en point de commande. Menu en ligne, commandes en temps réel en cuisine, paiement individuel et factures — sans application à installer.",
+    "subtitle": "Spotihotel transforme chaque table en point de commande. Menu en ligne, commandes en temps réel en cuisine, paiement individuel et factures — sans application à installer.",
     "ctaPrimary": "Créer mon restaurant",
     "ctaSecondary": "Se connecter",
     "features": {
@@ -117,7 +117,7 @@
     },
     "role": "Votre rôle",
     "suspendedTitle": "Restaurant suspendu",
-    "suspendedBody": "Ce restaurant est temporairement suspendu. Contactez le support Spotifood.",
+    "suspendedBody": "Ce restaurant est temporairement suspendu. Contactez le support Spotihotel.",
     "noRestaurantTitle": "Aucun restaurant",
     "noRestaurantBody": "Votre compte n'est rattaché à aucun restaurant actif.",
     "pickRestaurant": "Choisissez un restaurant"
@@ -129,7 +129,7 @@
   },
   "admin": {
     "title": "Plateforme",
-    "subtitle": "Vue globale de Spotifood.",
+    "subtitle": "Vue globale de Spotihotel.",
     "stats": {
       "activeRestaurants": "Restaurants actifs",
       "suspendedRestaurants": "Restaurants suspendus",
@@ -310,7 +310,7 @@
     "fullName": "Nom complet",
     "role": "Rôle",
     "password": "Mot de passe initial",
-    "passwordHint": "Uniquement si la personne n'a pas encore de compte Spotifood. Transmettez-le-lui de façon sûre.",
+    "passwordHint": "Uniquement si la personne n'a pas encore de compte Spotihotel. Transmettez-le-lui de façon sûre.",
     "status": "Statut",
     "lastLogin": "Dernière connexion",
     "never": "Jamais",

@@ -23,7 +23,7 @@ afterEach(() => {
 
 describe("kavenegar sign-in codes", () => {
   it("uses the verify template when one is set", async () => {
-    const fetch = kavenegar({ template: "spotifood-login", sender: "10008663" });
+    const fetch = kavenegar({ template: "spotihotel-login", sender: "10008663" });
     expect(await sendCode("09121234567", "123456", "code 123456")).toEqual({ ref: "42" });
     const [url, init] = fetch.mock.calls[0] as unknown as [string, RequestInit];
     expect(url).toBe("https://api.kavenegar.com/v1/key/verify/lookup.json");
@@ -31,7 +31,7 @@ describe("kavenegar sign-in codes", () => {
     expect(Object.fromEntries(body)).toEqual({
       receptor: "09121234567",
       token: "123456",
-      template: "spotifood-login",
+      template: "spotihotel-login",
     });
   });
 
@@ -48,7 +48,7 @@ describe("kavenegar sign-in codes", () => {
   });
 
   it("other texts keep the regular send", async () => {
-    const fetch = kavenegar({ template: "spotifood-login" });
+    const fetch = kavenegar({ template: "spotihotel-login" });
     await sms().send("09121234567", "ready");
     expect((fetch.mock.calls[0] as unknown as [string])[0]).toContain("/sms/send.json");
   });

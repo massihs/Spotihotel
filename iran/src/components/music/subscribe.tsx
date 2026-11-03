@@ -11,7 +11,7 @@ import {
 
 type Theme = { id: string; name: string; description: string | null; color: string; trackCount: number };
 
-/** Two plans, a theme picker, one button. Payment is confirmed by the Spotifood team. */
+/** Two plans, a theme picker, one button. Payment is confirmed by the Spotihotel team. */
 export function SubscribeForm({
   restaurantId,
   themes,

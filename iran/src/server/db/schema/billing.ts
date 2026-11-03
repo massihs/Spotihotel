@@ -4,7 +4,7 @@ import { organizations, plans, users } from "./platform";
 import { restaurants } from "./restaurant";
 
 /**
- * A restaurant paying Spotifood for its plan (Zarinpal, to the platform's own merchant), or a
+ * A restaurant paying Spotihotel for its plan (Zarinpal, to the platform's own merchant), or a
  * period granted by the admin ('manual'). Paid rows carry the invoice number.
  */
 export const billingPayments = pgTable(

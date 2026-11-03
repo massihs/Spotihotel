@@ -4,14 +4,14 @@ import { pk, timestamps } from "./_helpers";
 
 /**
  * Food composition database (shared by every restaurant): USDA FoodData Central SR Legacy
- * (public domain) plus Spotifood's multilingual ingredients and dish recipes. Values per 100 g
+ * (public domain) plus Spotihotel's multilingual ingredients and dish recipes. Values per 100 g
  * (for a recipe: per portion, `portionG` grams).
  */
 export const foods = pgTable(
   "foods",
   {
     id: pk(),
-    /** "usda_sr" | "spotifood_ingredient" | "spotifood_recipe" */
+    /** "usda_sr" | "spotihotel_ingredient" | "spotihotel_recipe" */
     source: varchar({ length: 24 }).notNull(),
     /** USDA fdc_id, or the catalogue key. */
     sourceRef: varchar({ length: 64 }).notNull(),

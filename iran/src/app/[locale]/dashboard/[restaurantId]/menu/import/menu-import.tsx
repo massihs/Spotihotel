@@ -49,7 +49,7 @@ export function MenuImport({ restaurantId, currency }: { restaurantId: string; c
     const csv = "﻿" + rows.map((r) => r.map((c) => `"${c.replace(/"/g, '""')}"`).join(",")).join("\r\n");
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
-    a.download = "spotifood-menu.csv";
+    a.download = "spotihotel-menu.csv";
     a.click();
     URL.revokeObjectURL(a.href);
   };

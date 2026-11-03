@@ -1,4 +1,4 @@
-/** Generates PWA icons from the Spotifood mark. Run: npx tsx scripts/generate-icons.ts */
+/** Generates PWA icons from the Spotihotel mark. Run: npx tsx scripts/generate-icons.ts */
 import sharp from "sharp";
 
 const ACCENT = "#E4572E";

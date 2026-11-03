@@ -1,5 +1,5 @@
 /**
- * Spotifood food catalogue: common ingredients named in Persian, French and English, each tied
+ * Spotihotel food catalogue: common ingredients named in Persian, French and English, each tied
  * to one USDA FoodData Central entry (SR Legacy, public domain) for its values per 100 g — and
  * typical recipes of restaurant dishes made of those ingredients (grams per portion).
  *

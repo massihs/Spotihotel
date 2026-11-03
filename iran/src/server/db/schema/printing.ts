@@ -60,7 +60,7 @@ export const printJobs = pgTable(
 );
 
 /**
- * A Spotifood desktop app (Windows / macOS) linked to the restaurant. It keeps a copy of the menu
+ * A Spotihotel desktop app (Windows / macOS) linked to the restaurant. It keeps a copy of the menu
  * and, when the internet drops, takes orders on the restaurant's network and prints them; the
  * orders come back here once online. The token is shown once; only its hash is kept.
  */

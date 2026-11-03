@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Spotifood",
+    "appName": "Spotihotel",
     "loading": "Chargement…",
     "save": "Enregistrer",
     "cancel": "Annuler",
@@ -29,10 +29,10 @@
     "clear": "Effacer"
   },
   "landing": {
-    "metaTitle": "Spotifood — Commande à table par QR code pour restaurants",
+    "metaTitle": "Spotihotel — Commande à table par QR code pour restaurants",
     "metaDescription": "Digitalisez votre menu et vos commandes : vos clients scannent, commandent et paient depuis leur table. Cuisine en temps réel, paiement séparé, factures, avis.",
     "badge": "La plateforme complète des restaurants et cafés d'Iran",
-    "subtitle": "Spotifood réunit le menu QR à table, la caisse, la cuisine, la livraison, les réservations, le club clients et les stocks sur une seule plateforme — sans appli à installer pour vos clients.",
+    "subtitle": "Spotihotel réunit le menu QR à table, la caisse, la cuisine, la livraison, les réservations, le club clients et les stocks sur une seule plateforme — sans appli à installer pour vos clients.",
     "ctaPrimary": "Créer mon restaurant",
     "ctaSecondary": "Se connecter",
     "nav": {
@@ -130,7 +130,7 @@
       },
       "offline": {
         "q": "Et si Internet est coupé ?",
-        "a": "Le logiciel Spotifood pour ordinateur fonctionne sur le réseau local du restaurant : commandes, cuisine et impression continuent, et tout se synchronise au retour d'Internet."
+        "a": "Le logiciel Spotihotel pour ordinateur fonctionne sur le réseau local du restaurant : commandes, cuisine et impression continuent, et tout se synchronise au retour d'Internet."
       },
       "branches": {
         "q": "J'ai plusieurs établissements : puis-je tout voir au même endroit ?",
@@ -140,7 +140,7 @@
     "finalTitle": "Passez votre restaurant au numérique dès aujourd'hui",
     "finalBody": "Créer un compte prend quelques minutes. Montez votre carte et prenez votre première commande aujourd'hui.",
     "footer": {
-      "rights": "© Spotifood — conçu pour les restaurants d'Iran",
+      "rights": "© Spotihotel — conçu pour les restaurants d'Iran",
       "login": "Connexion",
       "signup": "Inscription",
       "product": "Produit",
@@ -151,7 +151,7 @@
     "findRestaurant": "Vous cherchez un restaurant ou un café ? Voir le guide",
     "contact": {
       "title": "Nous contacter",
-      "subtitle": "Une question, une démo ? L'équipe Spotifood vous répond.",
+      "subtitle": "Une question, une démo ? L'équipe Spotihotel vous répond.",
       "phone": "Téléphone",
       "email": "E-mail",
       "address": "Adresse",
@@ -167,8 +167,8 @@
       "kitchen": "Cuisine",
       "minutes": "04:12"
     },
-    "onSpotifood": {
-      "title": "Ils travaillent avec Spotifood",
+    "onSpotihotel": {
+      "title": "Ils travaillent avec Spotihotel",
       "all": "Tout voir"
     },
     "platform": {
@@ -239,7 +239,7 @@
         },
         "guide": {
           "title": "Guide des restaurants",
-          "body": "Page publique, carte et réservation en ligne sur spotifood.ir."
+          "body": "Page publique, carte et réservation en ligne sur spotihotel.ir."
         },
         "hotel": {
           "title": "Hôtels & room service",
@@ -384,7 +384,7 @@
     },
     "role": "Votre rôle",
     "suspendedTitle": "Restaurant suspendu",
-    "suspendedBody": "Ce restaurant est temporairement suspendu. Contactez le support Spotifood.",
+    "suspendedBody": "Ce restaurant est temporairement suspendu. Contactez le support Spotihotel.",
     "noRestaurantTitle": "Aucun restaurant",
     "noRestaurantBody": "Votre compte n'est rattaché à aucun restaurant actif.",
     "pickRestaurant": "Choisissez un restaurant",
@@ -462,7 +462,7 @@
   },
   "admin": {
     "title": "Plateforme",
-    "subtitle": "Vue globale de Spotifood.",
+    "subtitle": "Vue globale de Spotihotel.",
     "stats": {
       "activeRestaurants": "Restaurants actifs",
       "suspendedRestaurants": "Restaurants suspendus",
@@ -510,7 +510,7 @@
     },
     "plans": {
       "title": "Forfaits",
-      "billingOn": "Paiement des abonnements actif (merchant Zarinpal Spotifood configuré).",
+      "billingOn": "Paiement des abonnements actif (merchant Zarinpal Spotihotel configuré).",
       "billingOff": "Paiement des abonnements inactif : définissez BILLING_ZARINPAL_MERCHANT_ID pour l’ouvrir (essai de 14 jours pour les nouveaux restaurants).",
       "public": "Visible sur /pricing",
       "name": "Nom",
@@ -789,7 +789,7 @@
     "fullName": "Nom complet",
     "role": "Rôle",
     "password": "Mot de passe initial",
-    "passwordHint": "Uniquement si la personne n'a pas encore de compte Spotifood. Transmettez-le-lui de façon sûre.",
+    "passwordHint": "Uniquement si la personne n'a pas encore de compte Spotihotel. Transmettez-le-lui de façon sûre.",
     "status": "Statut",
     "lastLogin": "Dernière connexion",
     "never": "Jamais",
@@ -1122,12 +1122,12 @@
     "printers": "Imprimantes et envoi en cuisine",
     "printersHint": "Acceptation en caisse, tickets cuisine, bar et caisse imprimés automatiquement.",
     "listing": "Présence dans le guide des restaurants",
-    "listingHint": "Votre restaurant apparaît sur spotifood.ir/restaurants avec son menu et la réservation en ligne.",
+    "listingHint": "Votre restaurant apparaît sur spotihotel.ir/restaurants avec son menu et la réservation en ligne.",
     "desktopTitle": "Logiciel PC",
-    "desktopHint": "Spotifood pour Windows et macOS : tout le site, plus la prise de commandes et l'impression même sans internet.",
+    "desktopHint": "Spotihotel pour Windows et macOS : tout le site, plus la prise de commandes et l'impression même sans internet.",
     "desktop": {
       "onlineTitle": "Comme le site",
-      "onlineBody": "Avec internet, le logiciel affiche Spotifood comme le navigateur et imprime les tickets cuisine et bar.",
+      "onlineBody": "Avec internet, le logiciel affiche Spotihotel comme le navigateur et imprime les tickets cuisine et bar.",
       "offlineTitle": "Sans internet",
       "offlineBody": "Le PC caisse prend le relais : commandes à la caisse et sur les téléphones des serveurs (même Wi-Fi), tickets imprimés en local.",
       "syncTitle": "Tout revient",
@@ -2012,7 +2012,7 @@
     "ownerOnly": "Seul le propriétaire ou un admin peut s'abonner.",
     "cancelRequest": "Annuler la demande",
     "pendingTitle": "Demande reçue",
-    "pendingBody": "L'abonnement « {plan} » avec « {theme} » démarre dès que l'équipe Spotifood confirme le paiement.",
+    "pendingBody": "L'abonnement « {plan} » avec « {theme} » démarre dès que l'équipe Spotihotel confirme le paiement.",
     "playlistOfWeek": "Playlist de la semaine",
     "playlistOfMonth": "Playlist du mois",
     "emptyTheme": "Ce style n'a pas encore de morceaux.",
@@ -2021,7 +2021,7 @@
     "nextPlaylist": "Prochaine playlist",
     "nextMonth": "Le mois prochain",
     "changeTheme": "Changer de style ou d'offre",
-    "radioPromoTitle": "Radio live Spotifood",
+    "radioPromoTitle": "Radio live Spotihotel",
     "radioPromoBody": "Tout le monde peut écouter la radio live gratuitement ; abonnez-vous pour votre propre playlist.",
     "allStations": "Toutes les stations →",
     "plans": {
@@ -2066,7 +2066,7 @@
       "durationCol": "Durée"
     },
     "radio": {
-      "pageTitle": "Radio Spotifood",
+      "pageTitle": "Radio Spotihotel",
       "heading": "Radio live",
       "intro": "De la musique en continu pour cafés et restaurants. Choisissez une station et lancez la lecture.",
       "live": "EN DIRECT",
@@ -2591,6 +2591,10 @@
   "brandColors": {
     "label": "Couleur de marque",
     "hint": "Utilisée sur le menu client, les boutons et le tableau de bord. Aperçu immédiat.",
+    "navy": "Marine",
+    "bordeaux": "Bordeaux",
+    "forest": "Forêt",
+    "brass": "Laiton",
     "orange": "Orange",
     "violet": "Violet",
     "indigo": "Indigo",
@@ -2983,7 +2987,7 @@
     "browserHint": "Activez « impression auto » sur l'écran cuisine et la page Commandes. Pour imprimer sans fenêtre de confirmation, ouvrez Chrome avec :"
   },
   "directory": {
-    "metaTitle": "Restaurants et cafés en Iran — menus et réservation en ligne | Spotifood",
+    "metaTitle": "Restaurants et cafés en Iran — menus et réservation en ligne | Spotihotel",
     "metaDescription": "Trouvez les restaurants et cafés de votre ville ou autour de vous, consultez leur menu et réservez une table en ligne.",
     "eyebrow": "Guide des restaurants",
     "title": "Où manger ?",
@@ -3211,7 +3215,7 @@
   },
   "account": {
     "loginTitle": "Votre bilan nutrition",
-    "loginSubtitle": "Connectez-vous : tous les plats commandés avec Spotifood sont enregistrés et vous voyez chaque jour vos calories, protéines, fibres…",
+    "loginSubtitle": "Connectez-vous : tous les plats commandés avec Spotihotel sont enregistrés et vous voyez chaque jour vos calories, protéines, fibres…",
     "tabPhone": "Mobile",
     "tabEmail": "E-mail",
     "mobile": "Numéro de mobile",
@@ -3231,7 +3235,7 @@
     "haveAccount": "Déjà un compte ?",
     "privacyNote": "Vos repas ne sont visibles que par vous. Les restaurants ne voient pas votre bilan.",
     "hello": "Bonjour {name}",
-    "subtitle": "Ce que vous avez mangé avec Spotifood",
+    "subtitle": "Ce que vous avez mangé avec Spotihotel",
     "settings": "Réglages",
     "logout": "Déconnexion",
     "prevDay": "Jour précédent",
@@ -3245,7 +3249,7 @@
     "meals": "Repas",
     "noData": "non renseigné",
     "noMeals": "Aucun repas ce jour-là",
-    "noMealsHint": "Vos commandes Spotifood apparaissent ici automatiquement : connectez-vous au menu QR ou donnez votre numéro de mobile en caisse.",
+    "noMealsHint": "Vos commandes Spotihotel apparaissent ici automatiquement : connectez-vous au menu QR ou donnez votre numéro de mobile en caisse.",
     "trend": "Tendance",
     "days": "{n} jours",
     "goal": "Objectif {n}",
@@ -3263,7 +3267,7 @@
     "saved": "Enregistré",
     "signInMethods": "Connexion",
     "verified": "vérifié",
-    "addPhoneHint": "Ajoutez votre mobile : les commandes passées avec ce numéro dans tous les restaurants Spotifood rejoindront votre bilan.",
+    "addPhoneHint": "Ajoutez votre mobile : les commandes passées avec ce numéro dans tous les restaurants Spotihotel rejoindront votre bilan.",
     "privacy": "Confidentialité",
     "clear": "Effacer l'historique",
     "clearHint": "Retire tous vos repas de votre bilan (les restaurants gardent leurs tickets).",
@@ -3345,7 +3349,7 @@
     "searchTitle": "Chercher un aliment",
     "searchPlaceholder": "Ex. poulet, برنج, salade césar, rice…",
     "search": "Chercher",
-    "source": "Source : USDA FoodData Central (SR Legacy, domaine public) et recettes Spotifood.",
+    "source": "Source : USDA FoodData Central (SR Legacy, domaine public) et recettes Spotihotel.",
     "food": "Aliment",
     "ingredient": "Ingrédient",
     "recipe": "Recette type",
@@ -3491,7 +3495,7 @@
   },
   "billing": {
     "title": "Abonnement",
-    "subtitle": "Votre forfait Spotifood, sa date de fin et vos factures.",
+    "subtitle": "Votre forfait Spotihotel, sa date de fin et vos factures.",
     "paidOk": "Paiement reçu, merci ! Votre forfait est prolongé.",
     "paidFailed": "Le paiement n’a pas abouti. Aucun montant n’a été prélevé ; vous pouvez réessayer.",
     "current": "Forfait actuel",
@@ -3527,7 +3531,7 @@
     "amount": "Montant",
     "lineLabel": "Forfait {plan} — {months, plural, one {# mois} other {# mois}}",
     "paidWith": "Payé par Zarinpal · référence {ref} · carte {card}",
-    "paidManual": "Réglé auprès de Spotifood.",
+    "paidManual": "Réglé auprès de Spotihotel.",
     "limits": {
       "tables": "{count, plural, one {# table} other {Jusqu’à # tables}}",
       "tablesUnlimited": "Tables illimitées",
@@ -3555,7 +3559,7 @@
     }
   },
   "pricing": {
-    "metaTitle": "Tarifs — Spotifood",
+    "metaTitle": "Tarifs — Spotihotel",
     "title": "Des tarifs simples",
     "subtitle": "Menu QR, commandes, caisse et cuisine : commencez gratuitement, passez au forfait supérieur quand vous grandissez.",
     "yearly": "Payez 12 mois, 2 mois sont offerts. Sans engagement.",

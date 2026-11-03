@@ -1,5 +1,5 @@
 /**
- * Public restaurant directory (spotifood.ir/restaurants): Iranian cities with their
+ * Public restaurant directory (spotihotel.ir/restaurants): Iranian cities with their
  * centre coordinates, and the themes a restaurant can be found by.
  */
 

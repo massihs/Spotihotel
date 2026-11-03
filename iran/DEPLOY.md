@@ -1,10 +1,10 @@
-# Spotifood Iran — déploiement sur Liara
+# Spotihotel Iran — déploiement sur Liara
 
 Édition `iran` : persan par défaut, rial, Zarinpal, serveurs en Iran. Voir aussi [README.md](./README.md).
 
 ## 1. Créer les ressources dans le panel Liara
 
-1. **Application** : plateforme **Docker**, nom `spotifood` (sinon modifiez `"app"` dans `iran/liara.json`), au moins 1 Go de RAM.
+1. **Application** : plateforme **Docker**, nom `spotihotel` (sinon modifiez `"app"` dans `iran/liara.json`), au moins 1 Go de RAM.
 2. **Base de données PostgreSQL** (version 16 ou plus).
 3. **Disque** nommé exactement `uploads` (1 Go suffit pour commencer), pour les photos : il est monté sur `/app/.storage` par `liara.json`. **Sans ce disque, le déploiement échoue.** Plus tard, vous pourrez passer au stockage objet de Liara (compatible S3) : voir `deploy/.env.production.example`.
 4. **Domaine** : rattachez votre domaine `.ir` à l'application et activez le SSL.
@@ -27,7 +27,7 @@ Dans l'application → Paramètres → Variables d'environnement, renseignez cel
 Le dépôt contient un `liara.json` **à la racine**, prévu pour ce cas : Liara construit l'image Iran à partir du dossier `iran/` (`iran/Dockerfile`, argument `APP_DIR=iran`). Le dossier `global/` n'est jamais envoyé (voir `.dockerignore` à la racine).
 
 1. Dans Liara : votre application → **استقرار جدید / New deployment** → onglet **GitHub**.
-2. Dépôt `Spotifood`, branche **`main`**.
+2. Dépôt `Spotihotel`, branche **`main`**.
 3. Mode : « استقرار خودکار » (à chaque push) ou « استقرار در صورت CI موفق » (seulement si les tests GitHub passent ; **recommandé**).
 4. Cliquez sur « اتصال به برنامه », puis une première fois sur « استقرار دستی ».
 
@@ -72,7 +72,7 @@ Testé avant livraison : l'image Iran a été construite et lancée en local (mi
 
 Liara's builder is slow (15-minute build limit, frequent queueing). The workflow
 **Deploy — Iran via ready image** (`.github/workflows/deploy-iran-image.yml`) builds the full
-image on GitHub, pushes it to `ghcr.io/massihs/spotifood-iran:<commit>` and asks Liara to run
+image on GitHub, pushes it to `ghcr.io/massihs/spotihotel-iran:<commit>` and asks Liara to run
 it: nothing is built on Liara, a release takes ~4 minutes. The ghcr.io package must stay
 **public** (it contains no secret: all credentials are Liara environment variables).
 Runtime logs: workflow **Liara — app logs (Iran)**.
@@ -93,8 +93,8 @@ Variables Liara à ajouter :
 
 **Codes de connexion (comptes clients).** Avec `KAVENEGAR_OTP_TEMPLATE`, le code est envoyé par le
 service Verify de Kavenegar (ligne rapide, texte du modèle) au lieu d'un SMS simple. Dans le panneau
-Kavenegar : Verify (اعتبارسنجی) → ajouter un modèle, par exemple nommé `spotifood-login`, avec le
-texte `کد ورود اسپاتیفود: %token%` puis attendre sa validation. Ce modèle est propre à Spotifood :
+Kavenegar : Verify (اعتبارسنجی) → ajouter un modèle, par exemple nommé `spotihotel-login`, avec le
+texte `کد ورود اسپاتی‌هتل: %token%` puis attendre sa validation. Ce modèle est propre à Spotihotel :
 celui de Padel Time reste distinct même avec le même compte et la même clé API.
 
 Sans clé, rien n'est envoyé : le message apparaît seulement dans les journaux (`[sms:console]`).

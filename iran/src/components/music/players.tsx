@@ -241,7 +241,7 @@ export function PlaylistPlayer({
             {title}
           </p>
           <p className="mt-3 text-sm text-white/80">
-            Spotifood · {t("tracks", { count: tracks.length })} · {t("minutes", { count: totalMin })}
+            Spotihotel · {t("tracks", { count: tracks.length })} · {t("minutes", { count: totalMin })}
           </p>
         </div>
       </div>

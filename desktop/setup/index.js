@@ -1,6 +1,6 @@
 import { isRtl, translator } from "/i18n.js";
 const $ = (id) => document.getElementById(id);
-const s = await window.spotifood.state();
+const s = await window.spotihotel.state();
 const locale = navigator.language?.startsWith("fr") ? "fr" : navigator.language?.startsWith("en") ? "en" : "fa";
 const t = translator(locale);
 document.documentElement.dir = isRtl(locale) ? "rtl" : "ltr";
@@ -15,8 +15,8 @@ $("server").value = s.serverUrl;
 $("go").onclick = async () => {
   $("err").textContent = "";
   try {
-    await window.spotifood.action("setServer", $("server").value);
-    await window.spotifood.action("login");
+    await window.spotihotel.action("setServer", $("server").value);
+    await window.spotihotel.action("login");
   } catch {
     $("err").textContent = "https://…";
   }

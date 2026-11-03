@@ -7,35 +7,36 @@
 @custom-variant doux (&:where([data-menu-theme="doux"] *));
 
 /*
- * Spotifood design tokens: "palette".
+ * Spotihotel design tokens: "palette".
+ * Sober hotel look: cool slate neutrals, a deep navy sidebar, navy accent by default, brass highlights.
  * Cool neutral canvas, white cards, a deep ink sidebar, and a brand accent whose hue comes from
  * the restaurant's chosen color (`data-brand`, see brands.css). A set of "tone" hues colors icons,
  * charts and statuses so screens are never single-colored. Dark mode swaps values.
  */
 :root {
-  --brand-h: 47;
-  --brand-c: 0.19;
-  --brand-l: 0.66;
+  --brand-h: 258;
+  --brand-c: 0.09;
+  --brand-l: 0.42;
   --brand-fg: oklch(1 0 0);
 
-  --bg: oklch(0.975 0.0042 62);
+  --bg: oklch(0.975 0.0042 255);
   --surface: oklch(1 0 0);
-  --surface-2: oklch(0.962 0.0056 62);
-  --surface-3: oklch(0.925 0.0077 62);
-  --border: oklch(0.915 0.007 62);
-  --border-strong: oklch(0.86 0.0098 62);
-  --fg: oklch(0.21 0.021 62);
-  --fg-muted: oklch(0.49 0.0175 62);
-  --fg-subtle: oklch(0.63 0.014 62);
-  --ink: oklch(0.21 0.021 62);
-  --ink-hover: oklch(0.3 0.0245 62);
+  --surface-2: oklch(0.962 0.0056 255);
+  --surface-3: oklch(0.925 0.0077 255);
+  --border: oklch(0.915 0.007 255);
+  --border-strong: oklch(0.86 0.0098 255);
+  --fg: oklch(0.21 0.021 255);
+  --fg-muted: oklch(0.49 0.0175 255);
+  --fg-subtle: oklch(0.63 0.014 255);
+  --ink: oklch(0.21 0.021 255);
+  --ink-hover: oklch(0.3 0.0245 255);
   --ink-fg: oklch(1 0 0);
 
-  --sidebar: oklch(0.205 0.0245 62);
-  --sidebar-2: oklch(0.255 0.028 62);
-  --sidebar-fg: oklch(0.96 0.007 62);
-  --sidebar-muted: oklch(0.72 0.021 62);
-  --sidebar-border: oklch(0.3 0.028 62);
+  --sidebar: oklch(0.225 0.045 258);
+  --sidebar-2: oklch(0.28 0.05 258);
+  --sidebar-fg: oklch(0.96 0.007 255);
+  --sidebar-muted: oklch(0.74 0.03 258);
+  --sidebar-border: oklch(0.32 0.045 258);
 
   --success: oklch(0.6 0.15 155);
   --success-soft: oklch(0.96 0.035 155);
@@ -57,8 +58,9 @@
   --tone-fuchsia: oklch(0.6 0.22 338);
   --tone-indigo: oklch(0.55 0.19 268);
   --tone-lime: oklch(0.72 0.17 128);
+  --brass: oklch(0.72 0.1 80);
 
-  --shadow-color: 25 25% 18%;
+  --shadow-color: 220 30% 18%;
 }
 
 :root,
@@ -79,21 +81,21 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: oklch(0.15 0.0105 62);
-    --surface: oklch(0.195 0.014 62);
-    --surface-2: oklch(0.235 0.0154 62);
-    --surface-3: oklch(0.285 0.0175 62);
-    --border: oklch(0.27 0.0154 62);
-    --border-strong: oklch(0.35 0.0175 62);
-    --fg: oklch(0.97 0.0035 62);
-    --fg-muted: oklch(0.74 0.014 62);
-    --fg-subtle: oklch(0.6 0.014 62);
-    --ink: oklch(0.97 0.0035 62);
-    --ink-hover: oklch(0.87 0.007 62);
-    --ink-fg: oklch(0.15 0.0105 62);
-    --sidebar: oklch(0.13 0.014 62);
-    --sidebar-2: oklch(0.2 0.021 62);
-    --sidebar-border: oklch(0.24 0.021 62);
+    --bg: oklch(0.15 0.0105 255);
+    --surface: oklch(0.195 0.014 255);
+    --surface-2: oklch(0.235 0.0154 255);
+    --surface-3: oklch(0.285 0.0175 255);
+    --border: oklch(0.27 0.0154 255);
+    --border-strong: oklch(0.35 0.0175 255);
+    --fg: oklch(0.97 0.0035 255);
+    --fg-muted: oklch(0.74 0.014 255);
+    --fg-subtle: oklch(0.6 0.014 255);
+    --ink: oklch(0.97 0.0035 255);
+    --ink-hover: oklch(0.87 0.007 255);
+    --ink-fg: oklch(0.15 0.0105 255);
+    --sidebar: oklch(0.13 0.014 255);
+    --sidebar-2: oklch(0.2 0.021 255);
+    --sidebar-border: oklch(0.24 0.021 255);
     --success: oklch(0.75 0.16 155);
     --success-soft: oklch(0.29 0.06 155);
     --warning-soft: oklch(0.32 0.06 75);
@@ -113,21 +115,21 @@
 }
 
 :root[data-theme="dark"] {
-  --bg: oklch(0.15 0.0105 62);
-  --surface: oklch(0.195 0.014 62);
-  --surface-2: oklch(0.235 0.0154 62);
-  --surface-3: oklch(0.285 0.0175 62);
-  --border: oklch(0.27 0.0154 62);
-  --border-strong: oklch(0.35 0.0175 62);
-  --fg: oklch(0.97 0.0035 62);
-  --fg-muted: oklch(0.74 0.014 62);
-  --fg-subtle: oklch(0.6 0.014 62);
-  --ink: oklch(0.97 0.0035 62);
-  --ink-hover: oklch(0.87 0.007 62);
-  --ink-fg: oklch(0.15 0.0105 62);
-  --sidebar: oklch(0.13 0.014 62);
-  --sidebar-2: oklch(0.2 0.021 62);
-  --sidebar-border: oklch(0.24 0.021 62);
+  --bg: oklch(0.15 0.0105 255);
+  --surface: oklch(0.195 0.014 255);
+  --surface-2: oklch(0.235 0.0154 255);
+  --surface-3: oklch(0.285 0.0175 255);
+  --border: oklch(0.27 0.0154 255);
+  --border-strong: oklch(0.35 0.0175 255);
+  --fg: oklch(0.97 0.0035 255);
+  --fg-muted: oklch(0.74 0.014 255);
+  --fg-subtle: oklch(0.6 0.014 255);
+  --ink: oklch(0.97 0.0035 255);
+  --ink-hover: oklch(0.87 0.007 255);
+  --ink-fg: oklch(0.15 0.0105 255);
+  --sidebar: oklch(0.13 0.014 255);
+  --sidebar-2: oklch(0.2 0.021 255);
+  --sidebar-border: oklch(0.24 0.021 255);
   --success: oklch(0.75 0.16 155);
   --success-soft: oklch(0.29 0.06 155);
   --warning-soft: oklch(0.32 0.06 75);
@@ -148,13 +150,13 @@
 /* Dark sidebar: every token-based component inside (links, switchers, cards) adapts. */
 .on-dark {
   --surface: var(--sidebar-2);
-  --surface-2: oklch(0.3 0.028 62);
-  --surface-3: oklch(0.35 0.0315 62);
+  --surface-2: oklch(0.3 0.028 255);
+  --surface-3: oklch(0.35 0.0315 255);
   --fg: var(--sidebar-fg);
   --fg-muted: var(--sidebar-muted);
-  --fg-subtle: oklch(0.6 0.021 62);
+  --fg-subtle: oklch(0.6 0.021 255);
   --border: var(--sidebar-border);
-  --border-strong: oklch(0.38 0.0315 62);
+  --border-strong: oklch(0.38 0.0315 255);
   --ink: var(--sidebar-fg);
   --ink-fg: var(--sidebar);
   color: var(--fg);
@@ -279,7 +281,7 @@
   --color-tone-lime: var(--tone-lime);
   --font-sans: var(--app-font);
   --font-mono: var(--font-mono-loaded), ui-monospace, monospace;
-  --radius-card: 1.25rem;
+  --radius-card: 0.875rem;
   --shadow-soft: 0 1px 2px hsl(var(--shadow-color) / 0.05), 0 6px 18px -10px hsl(var(--shadow-color) / 0.12);
   --shadow-float: 0 22px 50px -14px hsl(var(--shadow-color) / 0.3);
   --shadow-accent: 0 10px 24px -10px oklch(var(--brand-l) var(--brand-c) var(--brand-h) / 0.65);
@@ -407,17 +409,17 @@ dialog[open]::backdrop {
 
 /* Kitchen display: dark, high-contrast surfaces for a screen read from a distance. */
 .kds-dark {
-  --bg: oklch(0.15 0.0105 62);
-  --surface: oklch(0.21 0.014 62);
-  --surface-2: oklch(0.25 0.0154 62);
-  --surface-3: oklch(0.3 0.0175 62);
-  --border: oklch(0.3 0.0154 62);
-  --border-strong: oklch(0.38 0.0175 62);
-  --fg: oklch(0.98 0.0035 62);
-  --fg-muted: oklch(0.78 0.014 62);
-  --fg-subtle: oklch(0.62 0.014 62);
-  --ink: oklch(0.97 0.0035 62);
-  --ink-fg: oklch(0.15 0.0105 62);
+  --bg: oklch(0.15 0.0105 255);
+  --surface: oklch(0.21 0.014 255);
+  --surface-2: oklch(0.25 0.0154 255);
+  --surface-3: oklch(0.3 0.0175 255);
+  --border: oklch(0.3 0.0154 255);
+  --border-strong: oklch(0.38 0.0175 255);
+  --fg: oklch(0.98 0.0035 255);
+  --fg-muted: oklch(0.78 0.014 255);
+  --fg-subtle: oklch(0.62 0.014 255);
+  --ink: oklch(0.97 0.0035 255);
+  --ink-fg: oklch(0.15 0.0105 255);
   --success: oklch(0.75 0.16 155);
   --success-soft: oklch(0.29 0.06 155);
   --warning-soft: oklch(0.32 0.06 75);

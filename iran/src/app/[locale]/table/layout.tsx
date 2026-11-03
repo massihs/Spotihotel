@@ -6,7 +6,7 @@ import { GuestSkeleton } from "@/components/guest/states";
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
   referrer: "no-referrer",
-  appleWebApp: { capable: true, title: "Spotifood", statusBarStyle: "default" },
+  appleWebApp: { capable: true, title: "Spotihotel", statusBarStyle: "default" },
 };
 
 export const viewport: Viewport = {

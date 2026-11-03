@@ -1,6 +1,6 @@
-# Spotifood International
+# Spotihotel International
 
-Ce dossier contient la version **International** de Spotifood. C'est une application indépendante : la version Iran (`../iran/`) vit dans son propre dossier et peut évoluer différemment.
+Ce dossier contient la version **International** de Spotihotel. C'est une application indépendante : la version Iran (`../iran/`) vit dans son propre dossier et peut évoluer différemment.
 
 Les deux versions sont nées du même code. Les réglages qui les distinguaient au départ sont dans `src/config/edition.ts`. Ce fichier contient encore les deux configurations ; ce dossier utilise la sienne par défaut (`NEXT_PUBLIC_EDITION`). Vous pouvez simplifier ce fichier ou diverger librement.
 

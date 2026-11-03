@@ -62,7 +62,7 @@ export const restaurants = pgTable(
     kind: restaurantKind().notNull().default("restaurant"),
     logoKey: text(),
     /** Brand color key (lib/brand-colors): menu and dashboard accent. */
-    brandColor: varchar({ length: 16 }).notNull().default("orange"),
+    brandColor: varchar({ length: 16 }).notNull().default("navy"),
     /** Guest menu look: atelier | nuit | doux. */
     menuTheme: varchar({ length: 16 }).notNull().default("doux"),
     /** Guest menu shows prices in thousand tomans (1 319 instead of 1 319 000 tomans). */
@@ -79,7 +79,7 @@ export const restaurants = pgTable(
     defaultLocale: varchar({ length: 8 }).notNull().default("fr"),
     status: restaurantStatus().notNull().default("active"),
     suspendedReason: text(),
-    /** Public directory (spotifood.ir/restaurants): opt-in listing, themes, price level, position. */
+    /** Public directory (spotihotel.ir/restaurants): opt-in listing, themes, price level, position. */
     listed: boolean().notNull().default(false),
     cuisines: text()
       .array()

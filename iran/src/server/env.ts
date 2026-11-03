@@ -8,7 +8,7 @@ const bool = z
 
 const schema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-  // No trailing slash: callers append paths ("https://spotifood.ir/" would give "//table/...").
+  // No trailing slash: callers append paths ("https://spotihotel.ir/" would give "//table/...").
   APP_URL: z
     .url()
     .default("http://localhost:3000")
@@ -19,7 +19,7 @@ const schema = z.object({
   STORAGE_DRIVER: z.enum(["local", "s3"]).default("local"),
   STORAGE_LOCAL_DIR: z.string().default("./.storage"),
   EMAIL_PROVIDER: z.enum(["console", "smtp", "resend"]).default("console"),
-  EMAIL_FROM: z.string().default("Spotifood <no-reply@spotifood.local>"),
+  EMAIL_FROM: z.string().default("Spotihotel <no-reply@spotihotel.local>"),
   ENABLE_MOCK_PAYMENTS: bool,
   NEXT_PUBLIC_EDITION: z.enum(["global", "iran"]).default("global"),
   STRIPE_SECRET_KEY: z.string().optional(),

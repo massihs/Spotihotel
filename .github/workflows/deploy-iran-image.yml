@@ -2,7 +2,7 @@ name: Deploy — Iran via ready image (Liara, iran/)
 
 # Builds the complete Docker image here, publishes it on GitHub's registry (ghcr.io) and asks
 # Liara to run that image: nothing is built on Liara's side (its builder queue/limits are the
-# bottleneck). One-time setup: make the ghcr.io package "spotifood-iran" public (Liara pulls
+# bottleneck). One-time setup: make the ghcr.io package "spotihotel-iran" public (Liara pulls
 # it anonymously).
 on:
   workflow_dispatch:
@@ -30,7 +30,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Image name
         id: img
-        run: echo "ref=ghcr.io/$(echo '${{ github.repository_owner }}' | tr 'A-Z' 'a-z')/spotifood-iran:${GITHUB_SHA::12}" >> "$GITHUB_OUTPUT"
+        run: echo "ref=ghcr.io/$(echo '${{ github.repository_owner }}' | tr 'A-Z' 'a-z')/spotihotel-iran:${GITHUB_SHA::12}" >> "$GITHUB_OUTPUT"
       - uses: docker/build-push-action@v6
         with:
           context: iran
@@ -65,6 +65,6 @@ jobs:
           LIARA_API_TOKEN: ${{ secrets.LIARA_API_TOKEN }}
       - name: Liara app logs
         if: always()
-        run: sleep 60 && timeout 90 npx --yes @liara/cli@9 logs --app spotifood --since "10 minutes ago" --timestamps --api-token "$LIARA_API_TOKEN" || true
+        run: sleep 60 && timeout 90 npx --yes @liara/cli@9 logs --app spotihotel --since "10 minutes ago" --timestamps --api-token "$LIARA_API_TOKEN" || true
         env:
           LIARA_API_TOKEN: ${{ secrets.LIARA_API_TOKEN }}

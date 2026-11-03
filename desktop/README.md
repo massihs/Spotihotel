@@ -1,6 +1,6 @@
-# Spotifood Desktop (Windows · macOS)
+# Spotihotel Desktop (Windows · macOS)
 
-Le logiciel de caisse Spotifood. Avec internet, il affiche le site Spotifood comme un navigateur
+Le logiciel de caisse Spotihotel. Avec internet, il affiche le site Spotihotel comme un navigateur
 et imprime les tickets cuisine et bar (il remplace l'agent d'impression). Quand internet coupe,
 le PC caisse devient le serveur du restaurant :
 
@@ -16,12 +16,12 @@ le PC caisse devient le serveur du restaurant :
 ## Installation
 
 1. Téléchargez l'installateur depuis **Réglages → Logiciel PC** sur le site (ou la dernière
-   release GitHub : `Spotifood-Setup.exe` pour Windows, `Spotifood-mac.dmg` pour macOS).
+   release GitHub : `Spotihotel-Setup.exe` pour Windows, `Spotihotel-mac.dmg` pour macOS).
 2. Installez-le sur le PC caisse (toujours allumé, sur le Wi-Fi du restaurant).
    - Windows : « Windows a protégé votre ordinateur » → *Informations complémentaires* → *Exécuter quand même*.
      Autorisez le pare-feu sur les réseaux privés (pour les téléphones).
-   - macOS : clic droit sur Spotifood → *Ouvrir* → *Ouvrir*. Si macOS dit que l'app est endommagée :
-     `xattr -cr /Applications/Spotifood.app` dans le Terminal.
+   - macOS : clic droit sur Spotihotel → *Ouvrir* → *Ouvrir*. Si macOS dit que l'app est endommagée :
+     `xattr -cr /Applications/Spotihotel.app` dans le Terminal.
 3. Ouvrez-le, gardez l'adresse du site, *Se connecter* avec un compte gérant, ouvrez le restaurant
    et confirmez **Activer ce PC**. Le logiciel démarre ensuite tout seul avec l'ordinateur.
 
@@ -42,8 +42,8 @@ Côté site : `POST /api/v1/offline/devices` (activation, session gérant), `GET
 et `POST /api/v1/offline/orders` (jeton du PC). Chaque commande porte l'identifiant du PC qui l'a
 prise (`orders.offline_ref`, unique) : un renvoi après coupure ne crée jamais de doublon.
 
-Les données locales sont dans le dossier de l'application (`%APPDATA%/Spotifood/data` sous
-Windows, `~/Library/Application Support/Spotifood/data` sous macOS).
+Les données locales sont dans le dossier de l'application (`%APPDATA%/Spotihotel/data` sous
+Windows, `~/Library/Application Support/Spotihotel/data` sous macOS).
 
 ## Développement
 
@@ -51,7 +51,7 @@ Windows, `~/Library/Application Support/Spotifood/data` sous macOS).
 cd desktop
 npm install
 npm test            # hub, prix, tickets, ESC/POS
-npm start           # SPOTIFOOD_URL=http://localhost:3000 npm start pour un site local
+npm start           # SPOTIHOTEL_URL=http://localhost:3000 npm start pour un site local
 ```
 
 Les installateurs sont construits par `.github/workflows/desktop.yml` (Actions → *Desktop app* →

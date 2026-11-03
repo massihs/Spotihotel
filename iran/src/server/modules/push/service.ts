@@ -19,7 +19,7 @@ let configured = false;
 function configure() {
   if (configured) return;
   webpush.setVapidDetails(
-    process.env.VAPID_SUBJECT || "mailto:contact@spotifood.ir",
+    process.env.VAPID_SUBJECT || "mailto:contact@spotihotel.ir",
     process.env.VAPID_PUBLIC_KEY!,
     process.env.VAPID_PRIVATE_KEY!,
   );

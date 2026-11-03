@@ -19,17 +19,17 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_USER: spotifood
-          POSTGRES_PASSWORD: spotifood
-          POSTGRES_DB: spotifood_test
+          POSTGRES_USER: spotihotel
+          POSTGRES_PASSWORD: spotihotel
+          POSTGRES_DB: spotihotel_test
         ports: ["5432:5432"]
         options: >-
-          --health-cmd "pg_isready -U spotifood"
+          --health-cmd "pg_isready -U spotihotel"
           --health-interval 5s --health-timeout 5s --health-retries 10
     env:
       APP_SECRET: ci-only-secret-value-that-is-long-enough-123456
-      DATABASE_URL: postgres://spotifood:spotifood@localhost:5432/spotifood_test
-      TEST_DATABASE_URL: postgres://spotifood:spotifood@localhost:5432/spotifood_test
+      DATABASE_URL: postgres://spotihotel:spotihotel@localhost:5432/spotihotel_test
+      TEST_DATABASE_URL: postgres://spotihotel:spotihotel@localhost:5432/spotihotel_test
       NEXT_TELEMETRY_DISABLED: "1"
     defaults:
       run:
@@ -57,21 +57,21 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_USER: spotifood
-          POSTGRES_PASSWORD: spotifood
-          POSTGRES_DB: spotifood_e2e
+          POSTGRES_USER: spotihotel
+          POSTGRES_PASSWORD: spotihotel
+          POSTGRES_DB: spotihotel_e2e
         ports: ["5432:5432"]
         options: >-
-          --health-cmd "pg_isready -U spotifood"
+          --health-cmd "pg_isready -U spotihotel"
           --health-interval 5s --health-timeout 5s --health-retries 10
     env:
       APP_SECRET: ci-only-secret-value-that-is-long-enough-123456
       APP_URL: http://localhost:3000
-      DATABASE_URL: postgres://spotifood:spotifood@localhost:5432/spotifood_e2e
+      DATABASE_URL: postgres://spotihotel:spotihotel@localhost:5432/spotihotel_e2e
       NEXT_PUBLIC_EDITION: iran
       NEXT_TELEMETRY_DISABLED: "1"
       SEED_DEMO: "true"
-      SEED_SUPERADMIN_EMAIL: admin@spotifood.local
+      SEED_SUPERADMIN_EMAIL: admin@spotihotel.local
       SEED_SUPERADMIN_PASSWORD: ci-only-admin-password-123
       E2E_BASE_URL: http://localhost:3000
     defaults:

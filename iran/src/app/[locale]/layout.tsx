@@ -70,8 +70,8 @@ const menuKufi = localFont({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Spotifood", template: "%s · Spotifood" },
-  applicationName: "Spotifood",
+  title: { default: "Spotihotel", template: "%s · Spotihotel" },
+  applicationName: "Spotihotel",
   manifest: "/manifest.webmanifest",
   icons: { icon: "/icons/icon-192.png", apple: "/icons/apple-touch-icon.png" },
   metadataBase: new URL(process.env.APP_URL ?? "http://localhost:3000"),

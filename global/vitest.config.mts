@@ -18,10 +18,10 @@ export default defineConfig({
     env: {
       NODE_ENV: "test",
       DATABASE_URL:
-        process.env.TEST_DATABASE_URL ?? "postgres://spotifood:spotifood@localhost:5432/spotifood_test",
+        process.env.TEST_DATABASE_URL ?? "postgres://spotihotel:spotihotel@localhost:5432/spotihotel_test",
       // The realtime listener must watch the test database too.
       DATABASE_URL_DIRECT:
-        process.env.TEST_DATABASE_URL ?? "postgres://spotifood:spotifood@localhost:5432/spotifood_test",
+        process.env.TEST_DATABASE_URL ?? "postgres://spotihotel:spotihotel@localhost:5432/spotihotel_test",
     },
     // Integration tests share one database.
     fileParallelism: false,

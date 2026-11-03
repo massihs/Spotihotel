@@ -4,7 +4,7 @@ const { contextBridge, ipcRenderer } = require("electron");
 
 const local = /^http:\/\/127\.0\.0\.1:\d+$/.test(location.origin);
 if (local) {
-  contextBridge.exposeInMainWorld("spotifood", {
+  contextBridge.exposeInMainWorld("spotihotel", {
     state: () => ipcRenderer.invoke("state"),
     action: (name, arg) => ipcRenderer.invoke("action", name, arg),
     onState: (fn) => ipcRenderer.on("state", (_e, s) => fn(s)),

@@ -4,6 +4,10 @@
  * The CSS lives in styles/brands.css (one `[data-brand]` rule per key).
  */
 export const BRAND_COLORS = [
+  { key: "navy", h: 258, c: 0.09, l: 0.42 },
+  { key: "bordeaux", h: 15, c: 0.12, l: 0.42 },
+  { key: "forest", h: 162, c: 0.07, l: 0.42 },
+  { key: "brass", h: 80, c: 0.1, l: 0.7, dark: true },
   { key: "orange", h: 47, c: 0.19, l: 0.66 },
   { key: "violet", h: 292, c: 0.2, l: 0.55 },
   { key: "indigo", h: 268, c: 0.19, l: 0.52 },
@@ -20,7 +24,7 @@ export const BRAND_COLORS = [
 ] as const;
 
 export type BrandColor = (typeof BRAND_COLORS)[number]["key"];
-export const DEFAULT_BRAND: BrandColor = "orange";
+export const DEFAULT_BRAND: BrandColor = "navy";
 export const isBrandColor = (v: unknown): v is BrandColor =>
   typeof v === "string" && BRAND_COLORS.some((b) => b.key === v);
 export const brandSwatch = (key: string) => {

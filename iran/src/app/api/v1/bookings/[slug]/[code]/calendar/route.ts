@@ -26,7 +26,7 @@ export async function GET(
     getDirectory().then((all) => all.find((e) => e.id === place.id)),
   ]);
   const body = icsEvent({
-    uid: `${r.code}@spotifood`,
+    uid: `${r.code}@spotihotel`,
     start: r.startsAt,
     minutes: r.durationMin,
     title: t("icsTitle", { restaurant: place.name, count: r.partySize }),

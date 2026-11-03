@@ -40,7 +40,7 @@ const ENTRIES: Entry[] = INGREDIENTS.map((i) => ({
   names: [...i.fa, ...i.fr, ...i.en].map(normalizeFoodText),
   per100: i.custom ?? usdaPer100(i.usda!) ?? [0, 0, 0, 0, 0, 0, 0],
   portionG: i.portionG,
-  ref: i.usda ? `usda:${i.usda}` : `spotifood:${i.key}`,
+  ref: i.usda ? `usda:${i.usda}` : `spotihotel:${i.key}`,
 }));
 const BY_KEY = new Map(ENTRIES.map((e) => [e.key, e]));
 const RECIPE_ENTRIES = RECIPES.map((r) => ({
@@ -106,7 +106,7 @@ const COUNT =
 
 export type DishEstimate = {
   nutrition: Nutrition;
-  /** Ingredients counted, with grams and the reference used (usda:<id> or spotifood:<key>). */
+  /** Ingredients counted, with grams and the reference used (usda:<id> or spotihotel:<key>). */
   matched: { text: string; grams: number; ref: string }[];
   unknown: string[];
   /** The recipe used when the dish name was recognised. */

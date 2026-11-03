@@ -1,4 +1,4 @@
-# Spotifood — Analyse & Architecture
+# Spotihotel — Analyse & Architecture
 
 > Plateforme SaaS multi-tenant de commande en salle par QR code.
 > Ce document est la référence technique du projet. Il est mis à jour à chaque décision structurante.
@@ -216,7 +216,7 @@ Conventions : `snake_case`, UUID v7, `created_at/updated_at` timestamptz, `delet
 ## 5. Arborescence du projet
 
 ```
-spotifood/
+spotihotel/
 ├─ docs/                     ARCHITECTURE.md, API.md, décisions (ADR)
 ├─ drizzle/                  migrations SQL générées (versionnées)
 ├─ messages/                 fr.json, en.json, fa.json, ar.json

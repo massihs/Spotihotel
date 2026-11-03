@@ -15,7 +15,7 @@ const schema = z.object({
   STORAGE_DRIVER: z.enum(["local", "s3"]).default("local"),
   STORAGE_LOCAL_DIR: z.string().default("./.storage"),
   EMAIL_PROVIDER: z.enum(["console", "smtp", "resend"]).default("console"),
-  EMAIL_FROM: z.string().default("Spotifood <no-reply@spotifood.local>"),
+  EMAIL_FROM: z.string().default("Spotihotel <no-reply@spotihotel.local>"),
   ENABLE_MOCK_PAYMENTS: bool,
   NEXT_PUBLIC_EDITION: z.enum(["global", "iran"]).default("global"),
   STRIPE_SECRET_KEY: z.string().optional(),

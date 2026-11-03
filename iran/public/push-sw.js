@@ -1,13 +1,13 @@
-/* Spotifood push service worker: shows the notification and opens its page on tap. */
+/* Spotihotel push service worker: shows the notification and opens its page on tap. */
 self.addEventListener("push", (event) => {
   let data = {};
   try {
     data = event.data ? event.data.json() : {};
   } catch {
-    data = { title: "Spotifood", body: event.data ? event.data.text() : "" };
+    data = { title: "Spotihotel", body: event.data ? event.data.text() : "" };
   }
   event.waitUntil(
-    self.registration.showNotification(data.title || "Spotifood", {
+    self.registration.showNotification(data.title || "Spotihotel", {
       body: data.body || "",
       tag: data.tag,
       icon: "/icons/icon-192.png",

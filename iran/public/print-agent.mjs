@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 /**
- * Spotifood print agent — forwards kitchen, bar and till tickets to the network printers of
+ * Spotihotel print agent — forwards kitchen, bar and till tickets to the network printers of
  * the restaurant (ESC/POS, usually port 9100). Run it on any computer of the restaurant's
  * network that stays on (the till PC, a mini PC, a Raspberry Pi). Node.js 18+, no install.
  *
  *   node print-agent.mjs <server address> <agent token>
- *   e.g. node print-agent.mjs https://spotifood.ir 01a1…xyz
+ *   e.g. node print-agent.mjs https://spotihotel.ir 01a1…xyz
  *
  * The token comes from Settings → Printers → "Connect the print agent".
  */
 import net from "node:net";
 
-const [server = process.env.SPOTIFOOD_URL, token = process.env.SPOTIFOOD_PRINT_TOKEN] = process.argv.slice(2);
+const [server = process.env.SPOTIHOTEL_URL, token = process.env.SPOTIHOTEL_PRINT_TOKEN] = process.argv.slice(2);
 if (!server || !token) {
   console.error("Usage: node print-agent.mjs <server address> <agent token>");
   process.exit(1);
@@ -40,7 +40,7 @@ async function ack(id, ok, error) {
   }).catch(() => {});
 }
 
-log(`Spotifood print agent → ${base}`);
+log(`Spotihotel print agent → ${base}`);
 let backoff = 2000;
 for (;;) {
   try {

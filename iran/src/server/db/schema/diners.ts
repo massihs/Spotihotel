@@ -15,7 +15,7 @@ import type { Nutrition } from "@/lib/nutrition";
 import { pk, softDelete, timestamps, tstz } from "./_helpers";
 
 /**
- * People who eat at Spotifood restaurants and keep an account (not restaurant staff: those are
+ * People who eat at Spotihotel restaurants and keep an account (not restaurant staff: those are
  * `users`). They sign in with their mobile (SMS code) or an e-mail and password, and see what
  * they ate and its nutrition. A phone is stored only once verified by a code.
  */

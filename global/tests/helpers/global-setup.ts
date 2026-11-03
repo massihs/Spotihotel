@@ -5,7 +5,7 @@ import { DEFAULT_PLANS } from "../../src/server/modules/catalog/defaults";
 
 /** Recreates the test database schema from the committed migrations before the run. */
 export default async function setup() {
-  const url = process.env.TEST_DATABASE_URL ?? "postgres://spotifood:spotifood@localhost:5432/spotifood_test";
+  const url = process.env.TEST_DATABASE_URL ?? "postgres://spotihotel:spotihotel@localhost:5432/spotihotel_test";
   if (!/test/.test(url)) throw new Error(`Refusing to reset a non-test database: ${url}`);
   const pool = new Pool({ connectionString: url });
   await pool.query(

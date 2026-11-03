@@ -1,4 +1,4 @@
-# Spotifood Iran
+# Spotihotel Iran
 
 Version **Iran** : persan par défaut (en, ar), rial, Zarinpal, hébergée sur **Liara**. Déploiement : [`DEPLOY.md`](DEPLOY.md).
 
@@ -27,9 +27,9 @@ Comptes de démonstration (seed) :
 
 | Rôle         | Email                        | Mot de passe                                    |
 | ------------ | ---------------------------- | ----------------------------------------------- |
-| Super admin  | `admin@spotifood.local`      | `ChangeMe!2026` (variables `SEED_SUPERADMIN_*`) |
-| Propriétaire | `owner@demo.spotifood.local` | `DemoOwner!2026`                                |
-| Équipe       | `staff@demo.spotifood.local` | `DemoStaff!2026`                                |
+| Super admin  | `admin@spotihotel.local`      | `ChangeMe!2026` (variables `SEED_SUPERADMIN_*`) |
+| Propriétaire | `owner@demo.spotihotel.local` | `DemoOwner!2026`                                |
+| Équipe       | `staff@demo.spotihotel.local` | `DemoStaff!2026`                                |
 
 ## Scripts
 

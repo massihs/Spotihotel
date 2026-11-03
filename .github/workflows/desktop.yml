@@ -1,6 +1,6 @@
 name: Desktop app (Windows + macOS)
 
-# Builds the Spotifood desktop installers and publishes them as a GitHub release.
+# Builds the Spotihotel desktop installers and publishes them as a GitHub release.
 # Run it from the Actions tab (it uses the version in desktop/package.json), or push a tag
 # desktop-v1.2.3. The settings page links to the latest release.
 on:
@@ -66,8 +66,8 @@ jobs:
         with:
           name: installer-${{ matrix.os }}
           path: |
-            desktop/dist/Spotifood-Setup.exe
-            desktop/dist/Spotifood-mac.dmg
+            desktop/dist/Spotihotel-Setup.exe
+            desktop/dist/Spotihotel-mac.dmg
           if-no-files-found: error
 
   release:
@@ -88,9 +88,9 @@ jobs:
           tag="desktop-v${version}"
           ls -la out
           if gh release view "$tag" >/dev/null 2>&1; then
-            gh release upload "$tag" out/Spotifood-Setup.exe out/Spotifood-mac.dmg --clobber
+            gh release upload "$tag" out/Spotihotel-Setup.exe out/Spotihotel-mac.dmg --clobber
           else
-            gh release create "$tag" out/Spotifood-Setup.exe out/Spotifood-mac.dmg \
-              --title "Spotifood Desktop ${version}" --latest \
-              --notes "Windows: Spotifood-Setup.exe · macOS (Intel + Apple Silicon): Spotifood-mac.dmg"
+            gh release create "$tag" out/Spotihotel-Setup.exe out/Spotihotel-mac.dmg \
+              --title "Spotihotel Desktop ${version}" --latest \
+              --notes "Windows: Spotihotel-Setup.exe · macOS (Intel + Apple Silicon): Spotihotel-mac.dmg"
           fi

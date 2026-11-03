@@ -1,6 +1,6 @@
-# Spotifood Iran — production image.
-#   from iran/:          docker build -t spotifood-iran .
-#   from the repo root:  docker build -f iran/Dockerfile --build-arg APP_DIR=iran -t spotifood-iran .
+# Spotihotel Iran — production image.
+#   from iran/:          docker build -t spotihotel-iran .
+#   from the repo root:  docker build -f iran/Dockerfile --build-arg APP_DIR=iran -t spotihotel-iran .
 # APP_DIR is where the application sits inside the build context: Liara's GitHub deployments
 # build from the repository root (see /liara.json).
 ARG NODE_IMAGE=node:22-bookworm-slim

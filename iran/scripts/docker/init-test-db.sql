@@ -1,1 +1,1 @@
-CREATE DATABASE spotifood_test OWNER spotifood;
+CREATE DATABASE spotihotel_test OWNER spotihotel;

@@ -12,7 +12,7 @@ const toNutrition = (v: number[]): Nutrition =>
 type UsdaRow = [number, string, number, ...(number | null)[]];
 
 /**
- * Loads the food database: the USDA table once (7 793 foods), the Spotifood catalogue on every
+ * Loads the food database: the USDA table once (7 793 foods), the Spotihotel catalogue on every
  * start (small, follows the code). Idempotent.
  */
 export async function syncFoods(db: DbOrTx) {
@@ -36,13 +36,13 @@ export async function syncFoods(db: DbOrTx) {
 
   const catalogue = [
     ...INGREDIENTS.map((i) => ({
-      source: "spotifood_ingredient",
+      source: "spotihotel_ingredient",
       sourceRef: i.key,
       nameEn: i.en[0] ?? i.key,
       nameFr: i.fr[0] ?? null,
       nameFa: i.fa[0] ?? null,
       aliases: [...i.fa, ...i.fr, ...i.en].join(" | ").toLowerCase(),
-      category: i.usda ? `USDA ${i.usda}` : "Spotifood (moyenne publiée)",
+      category: i.usda ? `USDA ${i.usda}` : "Spotihotel (moyenne publiée)",
       per100g: toNutrition(i.custom ?? usdaPer100(i.usda!) ?? []),
       portionG: i.portionG,
       isRecipe: false,
@@ -56,7 +56,7 @@ export async function syncFoods(db: DbOrTx) {
         (i.custom ?? usdaPer100(i.usda!) ?? []).forEach((v, j) => (sum[j]! += (v * g) / 100));
       }
       return {
-        source: "spotifood_recipe",
+        source: "spotihotel_recipe",
         sourceRef: r.key,
         nameEn: r.en[0] ?? r.key,
         nameFr: r.fr[0] ?? null,
@@ -102,7 +102,7 @@ export async function searchFoods(db: DbOrTx, q: string, limit = 30) {
       .orderBy(
         // Exact names first, then our catalogue (recipes, ingredients), then USDA.
         sql`case when lower(${foods.nameEn}) = lower(${term}) or lower(coalesce(${foods.nameFr}, '')) = lower(${term}) or ${foods.nameFa} = ${term} then 0 else 1 end`,
-        sql`case ${foods.source} when 'spotifood_recipe' then 0 when 'spotifood_ingredient' then 1 else 2 end`,
+        sql`case ${foods.source} when 'spotihotel_recipe' then 0 when 'spotihotel_ingredient' then 1 else 2 end`,
         sql`length(${foods.nameEn})`,
       )
       .limit(limit)

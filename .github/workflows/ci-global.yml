@@ -19,17 +19,17 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_USER: spotifood
-          POSTGRES_PASSWORD: spotifood
-          POSTGRES_DB: spotifood_test
+          POSTGRES_USER: spotihotel
+          POSTGRES_PASSWORD: spotihotel
+          POSTGRES_DB: spotihotel_test
         ports: ["5432:5432"]
         options: >-
-          --health-cmd "pg_isready -U spotifood"
+          --health-cmd "pg_isready -U spotihotel"
           --health-interval 5s --health-timeout 5s --health-retries 10
     env:
       APP_SECRET: ci-only-secret-value-that-is-long-enough-123456
-      DATABASE_URL: postgres://spotifood:spotifood@localhost:5432/spotifood_test
-      TEST_DATABASE_URL: postgres://spotifood:spotifood@localhost:5432/spotifood_test
+      DATABASE_URL: postgres://spotihotel:spotihotel@localhost:5432/spotihotel_test
+      TEST_DATABASE_URL: postgres://spotihotel:spotihotel@localhost:5432/spotihotel_test
       NEXT_TELEMETRY_DISABLED: "1"
     defaults:
       run:

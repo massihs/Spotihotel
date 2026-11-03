@@ -76,6 +76,6 @@ jobs:
           LIARA_API_TOKEN: ${{ secrets.LIARA_API_TOKEN }}
       - name: Liara app logs
         if: always()
-        run: sleep 90 && timeout 90 npx --yes @liara/cli@9 logs --app spotifood --since "10 minutes ago" --timestamps --api-token "$LIARA_API_TOKEN" || true
+        run: sleep 90 && timeout 90 npx --yes @liara/cli@9 logs --app spotihotel --since "10 minutes ago" --timestamps --api-token "$LIARA_API_TOKEN" || true
         env:
           LIARA_API_TOKEN: ${{ secrets.LIARA_API_TOKEN }}

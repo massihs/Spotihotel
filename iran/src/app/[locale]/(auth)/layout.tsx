@@ -13,7 +13,7 @@ const PHOTOS = [
 
 /**
  * Sign in / sign up: the form on one side and, from laptops up, a dark brand panel (what
- * Spotifood does, a few dishes, a live "order ready" chip) on the other.
+ * Spotihotel does, a few dishes, a live "order ready" chip) on the other.
  */
 export default async function AuthLayout({ children }: LayoutProps<"/[locale]">) {
   const t = await getTranslations("landing");
@@ -25,7 +25,7 @@ export default async function AuthLayout({ children }: LayoutProps<"/[locale]">)
           className="pointer-events-none absolute -end-40 -top-40 size-[28rem] rounded-full bg-accent/12 blur-3xl lg:hidden"
         />
         <header className="relative mx-auto flex w-full max-w-md items-center justify-between py-6">
-          <Link href="/" aria-label="Spotifood">
+          <Link href="/" aria-label="Spotihotel">
             <Logo />
           </Link>
           <LanguageSwitcher />

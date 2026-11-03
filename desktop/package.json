@@ -1,9 +1,9 @@
 {
-  "name": "spotifood-desktop",
-  "productName": "Spotifood",
+  "name": "spotihotel-desktop",
+  "productName": "Spotihotel",
   "version": "1.0.4",
-  "description": "Spotifood for Windows and macOS: the restaurant's till, with offline ordering and local printing.",
-  "author": "Spotifood",
+  "description": "Spotihotel for Windows and macOS: the restaurant's till, with offline ordering and local printing.",
+  "author": "Spotihotel",
   "license": "UNLICENSED",
   "private": true,
   "type": "module",
@@ -19,9 +19,9 @@
     "electron-builder": "26.17.0"
   },
   "build": {
-    "appId": "ir.spotifood.desktop",
-    "productName": "Spotifood",
-    "artifactName": "Spotifood-${version}-${os}-${arch}.${ext}",
+    "appId": "ir.spotihotel.desktop",
+    "productName": "Spotihotel",
+    "artifactName": "Spotihotel-${version}-${os}-${arch}.${ext}",
     "directories": {
       "output": "dist",
       "buildResources": "build"
@@ -48,8 +48,8 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "shortcutName": "Spotifood",
-      "artifactName": "Spotifood-Setup.${ext}"
+      "shortcutName": "Spotihotel",
+      "artifactName": "Spotihotel-Setup.${ext}"
     },
     "mac": {
       "target": [
@@ -67,7 +67,7 @@
       "gatekeeperAssess": false
     },
     "dmg": {
-      "artifactName": "Spotifood-mac.${ext}"
+      "artifactName": "Spotihotel-mac.${ext}"
     },
     "publish": null
   }

@@ -1,5 +1,5 @@
 {
-  "app": "spotifood",
+  "app": "spotihotel",
   "platform": "docker",
   "port": 3000,
   "build": {

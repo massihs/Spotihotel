@@ -7,7 +7,7 @@ import { DEFAULT_LOCALE, isLocale } from "@/i18n/config";
 import { pickDemoTable } from "@/server/modules/guest/demo";
 
 /**
- * GET /demo — try Spotifood as a guest: seats the visitor at a table of the demo restaurant
+ * GET /demo — try Spotihotel as a guest: seats the visitor at a table of the demo restaurant
  * (same path as scanning its QR code). Without a demo restaurant, the restaurant guide.
  */
 export async function GET(_req: Request, { params }: RouteContext<"/[locale]/demo">) {

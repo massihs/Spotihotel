@@ -152,7 +152,7 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
           </div>
         </section>
 
-        {/* ── Real restaurants on Spotifood (read at request time: no database at build) ── */}
+        {/* ── Real restaurants on Spotihotel (read at request time: no database at build) ── */}
         <Suspense fallback={null}>
           <RestaurantsStrip locale={locale} />
         </Suspense>
@@ -404,7 +404,7 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
   );
 }
 
-/** Spotifood's own contact details (the "Contact us" section and the footer). */
+/** Spotihotel's own contact details (the "Contact us" section and the footer). */
 const CONTACT = COMPANY;
 
 /** The real restaurants of the public guide (left out while there are fewer than two). */
@@ -416,9 +416,9 @@ async function RestaurantsStrip({ locale }: { locale: string }) {
   return (
     <section className="border-b border-border bg-surface py-8">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 sm:px-6">
-        <p className="text-sm font-semibold text-fg-muted">{t("onSpotifood.title")}</p>
+        <p className="text-sm font-semibold text-fg-muted">{t("onSpotihotel.title")}</p>
         <Link href="/restaurants" className="text-sm font-semibold text-accent-text hover:underline">
-          {t("onSpotifood.all")}
+          {t("onSpotihotel.all")}
         </Link>
       </div>
       <div className="landing-marquee-mask mt-5 overflow-hidden" dir="ltr">
