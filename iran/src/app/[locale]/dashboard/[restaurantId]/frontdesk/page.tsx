@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 import { and, eq, isNull } from "drizzle-orm";
-import { getTranslations } from "next-intl/server";
-import { BedDouble, CalendarPlus, Gauge, TrendingUp, Users } from "lucide-react";
+import { getLocale, getTranslations } from "next-intl/server";
+import { BedDouble, CalendarPlus, FileDown, Gauge, TrendingUp, Users } from "lucide-react";
+import { DEFAULT_LOCALE } from "@/i18n/config";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { StatCard } from "@/components/ui/card";
 import { buttonClasses } from "@/components/ui/button";
@@ -30,6 +31,7 @@ async function FrontDesk({ params }: Pick<Props, "params">) {
   const { restaurantId } = await params;
   const ctx = await requireRestaurant(restaurantId, "frontdesk.view");
   const rid = ctx.restaurant.id;
+  const locale = await getLocale();
   const [t, money, desk, preflight, rooms, occupied] = await Promise.all([
     getTranslations("pms.desk"),
     getMoney(ctx.restaurant.currency),
@@ -64,12 +66,21 @@ async function FrontDesk({ params }: Pick<Props, "params">) {
         title={t("title")}
         description={t("subtitle")}
         actions={
-          can(ctx, "frontdesk.manage") ? (
-            <Link href={`/dashboard/${rid}/stays/new`} className={buttonClasses("primary", "md")}>
-              <CalendarPlus className="size-4" aria-hidden="true" />
-              {t("newBooking")}
-            </Link>
-          ) : null
+          <>
+            <a
+              href={`${locale === DEFAULT_LOCALE ? "" : `/${locale}`}/dashboard/${rid}/frontdesk/travellers?day=${desk.businessDate}`}
+              className={buttonClasses("secondary", "md")}
+            >
+              <FileDown className="size-4" aria-hidden="true" />
+              {t("travellers")}
+            </a>
+            {can(ctx, "frontdesk.manage") ? (
+              <Link href={`/dashboard/${rid}/stays/new`} className={buttonClasses("primary", "md")}>
+                <CalendarPlus className="size-4" aria-hidden="true" />
+                {t("newBooking")}
+              </Link>
+            ) : null}
+          </>
         }
       />
       <LiveRefresh types={["notification.created", "session.closed", "order.created"]} />

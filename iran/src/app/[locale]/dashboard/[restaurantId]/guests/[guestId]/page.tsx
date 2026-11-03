@@ -9,6 +9,8 @@ import { db } from "@/server/db/client";
 import { can } from "@/server/tenancy";
 import { getMoney } from "@/lib/money-server";
 import { getGuest } from "@/server/modules/pms/guests";
+import { calendarLocale } from "@/lib/jalali-calendar";
+import { EDITION } from "@/config/edition";
 
 type Props = PageProps<"/[locale]/dashboard/[restaurantId]/guests/[guestId]">;
 
@@ -30,7 +32,7 @@ async function Guest({ params }: Pick<Props, "params">) {
     getGuest(db, ctx, guestId),
   ]);
   const day = (d: string) =>
-    new Intl.DateTimeFormat(locale, {
+    new Intl.DateTimeFormat(calendarLocale(locale, EDITION), {
       day: "numeric",
       month: "short",
       year: "numeric",

@@ -7,6 +7,7 @@ import { MoneyField } from "@/components/ui/money-field";
 import { useMoney } from "@/components/ui/use-money";
 import { useRun } from "@/components/ui/sheet-kit";
 import { cn } from "@/lib/cn";
+import { EDITION } from "@/config/edition";
 import { centsToInput, parseMoneyInput } from "@/lib/money";
 import {
   assignRoomTypeAction,
@@ -23,6 +24,7 @@ import {
   setRateRangeAction,
 } from "@/app/[locale]/dashboard/[restaurantId]/hotel-actions";
 import { Empty, FormError, Label, RunButton, SheetButton, inputCls, useDay } from "./kit";
+import { DateInput } from "@/components/ui/date-input";
 
 const money0 = (v: FormDataEntryValue | null, currency: string) =>
   parseMoneyInput(String(v ?? ""), currency) ?? 0;
@@ -578,11 +580,11 @@ export function RatesPanel({
         </label>
         <label>
           <Label>{t("from")}</Label>
-          <input name="from" type="date" defaultValue={from} className={inputCls} required />
+          <DateInput name="from" defaultValue={from} className={inputCls} required />
         </label>
         <label>
           <Label>{t("to")}</Label>
-          <input name="to" type="date" defaultValue={nights[6] ?? from} className={inputCls} required />
+          <DateInput name="to" defaultValue={nights[6] ?? from} className={inputCls} required />
         </label>
         <div>
           <MoneyField name="rate" currency={currency} label={t("rate")} hint={t("rateHint")} />
@@ -593,7 +595,7 @@ export function RatesPanel({
         </label>
         <fieldset className="flex flex-wrap items-center gap-3 text-sm sm:col-span-4">
           <legend className="sr-only">{t("weekdays")}</legend>
-          {[1, 2, 3, 4, 5, 6, 0].map((d) => (
+          {(EDITION === "iran" ? [6, 0, 1, 2, 3, 4, 5] : [1, 2, 3, 4, 5, 6, 0]).map((d) => (
             <label key={d} className="flex items-center gap-1">
               <input type="checkbox" name="wd" value={d} className="size-4" />
               {day(`2024-01-0${d === 0 ? 7 : d}`, { weekday: "short" })}

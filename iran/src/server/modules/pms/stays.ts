@@ -21,7 +21,7 @@ import { conflict, notFound, validation } from "@/server/errors";
 import { assertCan, type RestaurantContext } from "@/server/tenancy";
 import { isUuid, randomToken } from "@/lib/ids";
 import { addDays, eachNight, isDay, keyFigures, nightPrice, nightsBetween } from "./calc";
-import { createGuest, guestSchema } from "./guests";
+import { createGuest, guestFields, nationalCodeOk, nationalCodeRule } from "./guests";
 import { getPmsSettings } from "./setup";
 import {
   accountFolioOf,
@@ -53,6 +53,15 @@ export const SOURCES = [
   "website",
   "email",
   "agency",
+  // Iranian booking platforms
+  "snapptrip",
+  "alibaba",
+  "jabama",
+  "eghamat24",
+  "jainjas",
+  "flytoday",
+  "otaghak",
+  // International channels (not reachable from Iran)
   "booking",
   "expedia",
   "airbnb",
@@ -321,7 +330,7 @@ export const staySchema = z
     /** An existing guest profile… */
     guestId: optUuid,
     /** …or a new one created with the booking. */
-    guest: guestSchema.partial({ lastName: true }).optional(),
+    guest: guestFields.partial({ lastName: true }).refine(nationalCodeOk, nationalCodeRule).optional(),
     roomTypeId: z.uuid(),
     ratePlanId: optUuid,
     roomId: optUuid,

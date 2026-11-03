@@ -1,0 +1,1 @@
+ALTER TABLE "hotel_guests" ADD COLUMN "father_name" varchar(80);

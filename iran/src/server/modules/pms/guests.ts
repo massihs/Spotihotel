@@ -6,6 +6,7 @@ import { recordAudit } from "@/server/audit";
 import { notFound } from "@/server/errors";
 import { assertCan, type RestaurantContext } from "@/server/tenancy";
 import { isDay } from "./calc";
+import { isIranNationalCode } from "@/lib/iran-id";
 
 const optText = (max: number) =>
   z
@@ -18,8 +19,9 @@ const optText = (max: number) =>
 
 export const DOCUMENT_TYPES = ["passport", "id_card", "driving_licence"] as const;
 
-export const guestSchema = z.object({
+export const guestFields = z.object({
   firstName: z.string().trim().max(80).default(""),
+  fatherName: optText(80),
   lastName: z.string().trim().min(1).max(80),
   email: z
     .string()
@@ -57,6 +59,21 @@ export const guestSchema = z.object({
   notes: optText(2000),
   blacklisted: z.coerce.boolean().default(false),
 });
+
+type GuestLike = {
+  documentType?: string | null;
+  documentNumber?: string | null;
+  nationality?: string | null;
+};
+/** An Iranian national ID card carries a national code with a check digit. */
+export const nationalCodeOk = (v: GuestLike) =>
+  v.documentType !== "id_card" ||
+  !v.documentNumber ||
+  (!!v.nationality && v.nationality !== "IR") ||
+  isIranNationalCode(v.documentNumber);
+export const nationalCodeRule = { message: "invalid_national_code", path: ["documentNumber"] };
+
+export const guestSchema = guestFields.refine(nationalCodeOk, nationalCodeRule);
 export type GuestInput = z.input<typeof guestSchema>;
 
 export async function createGuest(db: DbOrTx, ctx: RestaurantContext, raw: GuestInput) {

@@ -28,7 +28,7 @@ export const CHARGE_DEPARTMENTS = [
 ] as const;
 export type ChargeDepartment = (typeof CHARGE_DEPARTMENTS)[number];
 
-export const PAYMENT_METHODS = ["cash", "card", "transfer", "online"] as const;
+export const PAYMENT_METHODS = ["cash", "card", "transfer", "cheque", "online"] as const;
 export type PaymentMethod = (typeof PAYMENT_METHODS)[number];
 
 /** Live lines only: a voided line no longer counts. */

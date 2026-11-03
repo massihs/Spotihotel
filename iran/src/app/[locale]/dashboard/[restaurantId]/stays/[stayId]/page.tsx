@@ -19,6 +19,8 @@ import { listMinibar } from "@/server/modules/pms/minibar";
 import { bookingsOfStay } from "@/server/modules/pms/wellness";
 import { nightsBetween } from "@/server/modules/pms/calc";
 import { StatusText } from "@/components/pms/status-text";
+import { calendarLocale } from "@/lib/jalali-calendar";
+import { EDITION } from "@/config/edition";
 
 type Props = PageProps<"/[locale]/dashboard/[restaurantId]/stays/[stayId]">;
 
@@ -87,7 +89,7 @@ async function Stay({ params }: Pick<Props, "params">) {
       .map((b) => b.roomId),
   );
   const fmt = (d: string) =>
-    new Intl.DateTimeFormat(locale, {
+    new Intl.DateTimeFormat(calendarLocale(locale, EDITION), {
       weekday: "short",
       day: "numeric",
       month: "long",
@@ -167,7 +169,7 @@ async function Stay({ params }: Pick<Props, "params">) {
               <ul className="space-y-1 text-sm">
                 {spa.map((b) => (
                   <li key={b.id} className={b.status === "cancelled" ? "text-fg-subtle line-through" : ""}>
-                    {new Intl.DateTimeFormat(locale, {
+                    {new Intl.DateTimeFormat(calendarLocale(locale, EDITION), {
                       day: "numeric",
                       month: "short",
                       hour: "2-digit",

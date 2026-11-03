@@ -26,6 +26,9 @@ import {
 } from "@/app/[locale]/table/stay/actions";
 import { useLineLabel } from "@/components/pms/folio-panel";
 import { FormError, inputCls, useDay } from "@/components/pms/kit";
+import { DateInput } from "@/components/ui/date-input";
+import { calendarLocale } from "@/lib/jalali-calendar";
+import { EDITION } from "@/config/edition";
 
 type Service = {
   id: string;
@@ -237,7 +240,7 @@ function Spa({
   const money = useMoney(currency);
   const locale = useLocale();
   const when = (iso: string) =>
-    new Intl.DateTimeFormat(locale, {
+    new Intl.DateTimeFormat(calendarLocale(locale, EDITION), {
       weekday: "short",
       day: "numeric",
       hour: "2-digit",
@@ -286,13 +289,12 @@ function Spa({
         {svc.description ? <span className="mt-1 block">{svc.description}</span> : null}
       </p>
       <div className="mb-3 grid grid-cols-2 gap-2">
-        <input
-          type="date"
+        <DateInput
           className={inputCls}
           min={today}
           value={day}
-          onChange={(e) => {
-            setDay(e.target.value);
+          onChange={(v) => {
+            setDay(v);
             setPicked(null);
           }}
           aria-label={t("day")}

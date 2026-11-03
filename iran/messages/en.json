@@ -29,8 +29,8 @@
     "clear": "Clear"
   },
   "landing": {
-    "metaTitle": "Spotihotel — QR menus, table ordering and payment for restaurants",
-    "metaDescription": "Digital menu, table ordering, live kitchen, Zarinpal payments and official invoices — no app to install.",
+    "metaTitle": "Spotihotel — hotel management for Iran: front desk, bookings, room QR and accounting",
+    "metaDescription": "Front desk and room bookings, room planning, guest bills, spa and pool, room service and minibar by QR, police travellers list, Persian calendar and double-entry accounting.",
     "nav": {
       "features": "Features",
       "how": "How it works",
@@ -41,9 +41,9 @@
       "contact": "Contact us",
       "pricing": "Pricing"
     },
-    "badge": "The complete platform for restaurants and cafés in Iran",
-    "subtitle": "Spotihotel brings the QR menu at the table, the till, the kitchen, delivery, reservations, the customer club and stock together in one platform — with no app for your guests to install.",
-    "ctaPrimary": "Create my restaurant",
+    "badge": "Hotel software made for Iran",
+    "subtitle": "Spotihotel brings the front desk, bookings, room planning, housekeeping, spa and pool, restaurant and room service, minibar and the hotel's accounting together — guests just scan their room's QR code.",
+    "ctaPrimary": "Set up my hotel",
     "ctaSecondary": "Log in",
     "trust": {
       "noApp": "No app to install",
@@ -51,15 +51,15 @@
       "invoice": "Official invoices"
     },
     "mock": {
-      "table": "Table 4",
+      "table": "Room 204",
       "cart": "View cart",
       "featured": "Featured",
-      "menu": "Our menu"
+      "menu": "Room service"
     },
     "stats": {
       "setup": {
-        "value": "10 min",
-        "label": "to the first order"
+        "value": "1 day",
+        "label": "to set up the whole hotel"
       },
       "app": {
         "value": "0",
@@ -78,32 +78,32 @@
     "howSubtitle": "No hardware, no long staff training.",
     "steps": {
       "menu": {
-        "title": "Build your menu",
-        "body": "Categories, dishes, photos, options and prices in tomans in minutes."
+        "title": "Set up rooms and rates",
+        "body": "Room types, B&B or half-board rates, weekend and holiday prices, spa and minibar."
       },
       "qr": {
-        "title": "Print table QR codes",
-        "body": "A unique QR code per table, ready to print."
+        "title": "Print the rooms' QR codes",
+        "body": "Each room gets a QR code: room service, spa, minibar, Wi-Fi and the guest's bill."
       },
       "serve": {
-        "title": "Take orders",
-        "body": "Guests scan and order; the kitchen sees it instantly."
+        "title": "Check guests in",
+        "body": "Bookings, check-in, check-out, night audit and accounting — all from one screen."
       }
     },
     "split": {
       "guestTitle": "For guests",
       "guest": [
-        "A beautiful photo menu, no download",
-        "Order and pay without waiting for staff",
-        "Live tracking: placed, cooking, ready",
-        "The invoice on their own phone"
+        "Room service and minibar by QR, no phone call",
+        "Book spa, pool, massage and a restaurant table",
+        "See the stay bill live",
+        "Ask for towels, cleaning or a taxi in one tap"
       ],
-      "ownerTitle": "For restaurants",
+      "ownerTitle": "For the hotel",
       "owner": [
-        "Faster table turns, bigger orders",
-        "Fewer mistakes between floor and kitchen",
-        "Change prices and stock in a second",
-        "Staff freed from taking orders"
+        "More spa, restaurant and minibar sales",
+        "Accurate bills, nothing forgotten",
+        "Occupancy, ADR and RevPAR every day",
+        "Double-entry books on the Persian calendar"
       ]
     },
     "faqTitle": "Frequently asked questions",
@@ -137,16 +137,16 @@
         "a": "Yes. The group view shows sales for every branch, and you can copy a menu from one branch to another."
       }
     },
-    "finalTitle": "Take your restaurant digital today",
-    "finalBody": "Creating an account takes minutes. Build your menu and take your first order today.",
+    "finalTitle": "Take your hotel digital today",
+    "finalBody": "Set up rooms, rates and services, print the room QR codes and check in your first guest today.",
     "footer": {
-      "rights": "© Spotihotel — made for restaurants in Iran",
+      "rights": "© Spotihotel — made for Iran's hotels",
       "login": "Log in",
       "signup": "Sign up",
       "product": "Product",
       "explore": "Explore",
       "account": "Account",
-      "tagline": "Your restaurant's QR menu, till and kitchen on one platform."
+      "tagline": "Front desk, bookings, room QR and hotel accounting in one platform."
     },
     "findRestaurant": "Looking for a restaurant or café? Browse the guide",
     "contact": {
@@ -157,7 +157,7 @@
       "address": "Address",
       "addressValue": "Tehran, District 1, Park Center Tower"
     },
-    "titleRich": "Guests scan, order and <hl>pay.</hl>",
+    "titleRich": "Guests scan, book and order — <hl>everything on the room bill.</hl>",
     "ctaGuide": "Restaurant guide",
     "float": {
       "newOrder": "New order",
@@ -168,24 +168,24 @@
       "minutes": "04:12"
     },
     "onSpotihotel": {
-      "title": "Already working with Spotihotel",
+      "title": "Hotels working with Spotihotel",
       "all": "See all"
     },
     "platform": {
-      "eyebrow": "One platform, the whole restaurant",
-      "title": "Everything the floor, the kitchen and the office need",
+      "eyebrow": "One platform, the whole hotel",
+      "title": "Everything the front desk, housekeeping, restaurant and accounting need",
       "subtitle": "Turn on the modules you need; the rest stay out of the way.",
       "qr": {
-        "title": "QR menu and table ordering",
-        "body": "Guests scan with their camera, browse a photo menu, order and pay their own share online or in cash."
+        "title": "Room QR: the guest portal",
+        "body": "Guests order room service, book the spa, declare the minibar and see their bill from their phone — all on the room account."
       },
       "kds": {
         "title": "Kitchen and bar in real time",
         "body": "Each order goes to the right station, with a timer from the moment it was placed and automatic ticket printing."
       },
       "reports": {
-        "title": "Reports, accounting and invoices",
-        "body": "Daily sales, best sellers, margins, VAT and official Persian-calendar invoices."
+        "title": "Accounting and management reports",
+        "body": "Automatic vouchers, balance sheet, P&L by department, Persian monthly budgets, seasonal VAT and Excel export."
       },
       "mockOrders": "Today's orders",
       "mockRevenue": "Sales this week",
@@ -249,15 +249,15 @@
     },
     "iran": {
       "eyebrow": "Made for Iran",
-      "title": "Designed from day one for Iranian restaurants",
+      "title": "Designed for Iran's hotels from day one",
       "items": {
         "zarinpal": {
           "title": "Your own Zarinpal gateway",
           "body": "Money goes straight to your account."
         },
         "invoice": {
-          "title": "Official Persian invoices",
-          "body": "Numbered by solar year, with VAT and PDF."
+          "title": "Persian calendar, fiscal year from Farvardin",
+          "body": "Dates, reports, budgets and seasonal VAT all in the Persian calendar."
         },
         "toman": {
           "title": "Prices in tomans",
@@ -268,12 +268,12 @@
           "body": "Fully right-to-left menu and dashboard, and for foreign visitors too."
         },
         "offline": {
-          "title": "Works without Internet",
-          "body": "Windows and Mac app with thermal printers on the local network."
+          "title": "Travellers list for the police",
+          "body": "Father's name, national code or passport, foreigners flagged; Excel export each night."
         },
         "sms": {
-          "title": "SMS",
-          "body": "Login codes, order ready, reservations and campaigns."
+          "title": "Snapptrip, Alibaba, Jabama…",
+          "body": "Each booking's platform and reference recorded; agency commissions in the books."
         }
       }
     },
@@ -776,7 +776,8 @@
     "room_type_not_found": "Room type not found.",
     "rate_plan_not_found": "Rate plan not found.",
     "guest_not_found": "Guest not found.",
-    "room_not_found": "Room not found."
+    "room_not_found": "Room not found.",
+    "invalid_national_code": "Invalid national code."
   },
   "tables": {
     "title": "Tables & QR codes",
@@ -3951,7 +3952,14 @@
       "booking": "Booking.com",
       "expedia": "Expedia",
       "airbnb": "Airbnb",
-      "other": "Other"
+      "other": "Other",
+      "snapptrip": "Snapptrip",
+      "alibaba": "Alibaba",
+      "jabama": "Jabama",
+      "eghamat24": "Eghamat24",
+      "jainjas": "Jainjas",
+      "flytoday": "Flytoday",
+      "otaghak": "Otaghak"
     },
     "guarantee": {
       "none": "Not guaranteed",
@@ -3976,10 +3984,11 @@
     },
     "method": {
       "cash": "Cash",
-      "card": "Card",
-      "transfer": "Bank transfer",
-      "online": "Online payment",
-      "city_ledger": "Company account"
+      "card": "Card terminal",
+      "transfer": "Transfer / card-to-card",
+      "online": "Online gateway",
+      "city_ledger": "Company account",
+      "cheque": "Cheque"
     },
     "meal": {
       "RO": "Room only",
@@ -4040,7 +4049,8 @@
       "auditNoShows": "{n, plural, one {# arrival} other {# arrivals}} will be marked no-show.",
       "auditReady": "Room nights and city tax posted, figures frozen, books updated, next business day.",
       "auditConfirm": "Close the day? Tonight's room charges will be posted to every guest in house.",
-      "auditRun": "Run night audit"
+      "auditRun": "Run night audit",
+      "travellers": "Travellers list (police)"
     },
     "planning": {
       "title": "Room planning",
@@ -4103,7 +4113,9 @@
       "override": "Override (manager's decision)",
       "submit": "Save booking",
       "submitHint": "Availability is checked again when saving: two clerks cannot sell the last room twice.",
-      "save": "Save"
+      "save": "Save",
+      "fatherName": "Father's name",
+      "nationalCode": "National code"
     },
     "stays": {
       "title": "Bookings",
@@ -4227,7 +4239,8 @@
       "notes": "Internal notes",
       "vip": "VIP guest",
       "blacklisted": "Blacklisted",
-      "save": "Save"
+      "save": "Save",
+      "fatherName": "Father's name"
     },
     "wellness": {
       "title": "Spa & wellness",
@@ -4458,7 +4471,7 @@
     "assets": "Assets",
     "liabilities": "Liabilities",
     "equity": "Equity",
-    "periodResult": "Result for the year",
+    "periodResult": "Result for the year (since {from})",
     "customer": "Customer",
     "overdue": "Overdue",
     "overLimit": "over limit",
@@ -4500,7 +4513,22 @@
     "exportFec": "Download FEC ({from} – {to})",
     "syncTitle": "Update postings",
     "syncHint": "Postings are generated automatically whenever the books are opened and at each night audit. This forces an update.",
-    "sync": "Update now"
+    "sync": "Update now",
+    "priorResult": "Prior years' results",
+    "season": "{season} {year} total",
+    "seasons": {
+      "1": "Spring",
+      "2": "Summer",
+      "3": "Autumn",
+      "4": "Winter"
+    },
+    "quick": {
+      "thisMonth": "This month",
+      "lastMonth": "Last month",
+      "fiscalYear": "Fiscal year to date"
+    },
+    "exportHintIran": "Full journal (voucher, Persian date, account, debit and credit in rials), opens in Excel.",
+    "exportExcel": "Download journal for Excel ({from} – {to})"
   },
   "portal": {
     "welcome": "Welcome",
@@ -4541,5 +4569,13 @@
     "billEmpty": "Nothing yet.",
     "balance": "Balance",
     "billHint": "Room nights are added each night. You settle at check-out, at the front desk."
+  },
+  "dateInput": {
+    "pick": "Pick a date",
+    "clear": "Clear",
+    "previous": "Previous month",
+    "next": "Next month",
+    "today": "Today",
+    "close": "Close"
   }
 }

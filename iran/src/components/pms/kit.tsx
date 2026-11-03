@@ -5,18 +5,26 @@ import { useState, type ReactNode } from "react";
 import { Button, type ButtonVariant, type ButtonSize } from "@/components/ui/button";
 import { Sheet, useRun } from "@/components/ui/sheet-kit";
 import { cn } from "@/lib/cn";
+import { calendarLocale } from "@/lib/jalali-calendar";
+import { EDITION } from "@/config/edition";
 
 /** "2026-11-03" → "3 nov." / "۱۲ آبان" (the UI language picks the calendar). */
 export function useDay() {
   const locale = useLocale();
   return (day: string, opts: Intl.DateTimeFormatOptions = { day: "numeric", month: "short" }) =>
-    new Intl.DateTimeFormat(locale, { ...opts, timeZone: "UTC" }).format(new Date(`${day}T12:00:00Z`));
+    new Intl.DateTimeFormat(calendarLocale(locale, EDITION), { ...opts, timeZone: "UTC" }).format(
+      new Date(`${day}T12:00:00Z`),
+    );
 }
 
 export function useTime(timeZone: string) {
   const locale = useLocale();
   return (iso: string | Date) =>
-    new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit", timeZone }).format(new Date(iso));
+    new Intl.DateTimeFormat(calendarLocale(locale, EDITION), {
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone,
+    }).format(new Date(iso));
 }
 
 const STATUS_TONE: Record<string, string> = {

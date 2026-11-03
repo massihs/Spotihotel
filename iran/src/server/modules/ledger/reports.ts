@@ -13,7 +13,9 @@ import {
 import { notFound } from "@/server/errors";
 import { assertCan, type RestaurantContext } from "@/server/tenancy";
 import { addDays, nightsBetween } from "@/server/modules/pms/calc";
+import { toJalali } from "@/lib/jalali-calendar";
 import { budgetsFor } from "./service";
+import { fiscalYearStart, monthKeyOf, monthsBetween, seasonOf } from "./periods";
 
 /** Debit-nature accounts grow with debits; the others with credits. */
 const debitNature = (type: string) => type === "asset" || type === "expense";
@@ -79,24 +81,6 @@ export async function trialBalance(db: DbOrTx, ctx: RestaurantContext, from: str
   };
 }
 
-const months = (from: string, to: string) => {
-  const out: string[] = [];
-  let y = Number(from.slice(0, 4));
-  let m = Number(from.slice(5, 7));
-  const end = to.slice(0, 7);
-  for (let i = 0; i < 240; i++) {
-    const key = `${y}-${String(m).padStart(2, "0")}`;
-    out.push(key);
-    if (key >= end) break;
-    m++;
-    if (m > 12) {
-      m = 1;
-      y++;
-    }
-  }
-  return out;
-};
-
 /**
  * Income statement (compte de résultat) by USALI department, compared with the budget and with
  * the previous period of the same length.
@@ -107,7 +91,7 @@ export async function incomeStatement(db: DbOrTx, ctx: RestaurantContext, from: 
   const length = nightsBetween(from, to) + 1;
   const prevFrom = addDays(from, -length);
   const prevTo = addDays(from, -1);
-  const span = months(from, to);
+  const span = monthsBetween(from, to);
   const [list, current, previous, budgets, byDept] = await Promise.all([
     accounts(db, rid),
     totals(db, rid, from, to),
@@ -196,13 +180,24 @@ export async function incomeStatement(db: DbOrTx, ctx: RestaurantContext, from: 
 export async function balanceSheet(db: DbOrTx, ctx: RestaurantContext, asOf: string) {
   assertCan(ctx, "accounting.manage");
   const rid = ctx.restaurant.id;
-  const [list, all] = await Promise.all([accounts(db, rid), totals(db, rid, null, asOf)]);
+  const fyStart = fiscalYearStart(asOf);
+  const [list, all, before] = await Promise.all([
+    accounts(db, rid),
+    totals(db, rid, null, asOf),
+    totals(db, rid, null, addDays(fyStart, -1)),
+  ]);
   const t = new Map(all.map((x) => [x.accountId, x]));
-  const balanceOf = (a: (typeof list)[number]) => {
-    const x = t.get(a.id);
+  const b = new Map(before.map((x) => [x.accountId, x]));
+  const signedOf = (a: (typeof list)[number], m: typeof t) => {
+    const x = m.get(a.id);
     const net = (x?.debit ?? 0) - (x?.credit ?? 0);
     return debitNature(a.type) ? net : -net;
   };
+  const balanceOf = (a: (typeof list)[number]) => signedOf(a, t);
+  // Results of earlier fiscal years not yet closed into retained earnings.
+  const priorResult =
+    list.filter((a) => a.type === "revenue").reduce((s, a) => s + signedOf(a, b), 0) -
+    list.filter((a) => a.type === "expense").reduce((s, a) => s + signedOf(a, b), 0);
   const section = (type: string) =>
     list
       .filter((a) => a.type === type)
@@ -213,20 +208,23 @@ export async function balanceSheet(db: DbOrTx, ctx: RestaurantContext, asOf: str
   const equity = section("equity");
   const result =
     list.filter((a) => a.type === "revenue").reduce((s, a) => s + balanceOf(a), 0) -
-    list.filter((a) => a.type === "expense").reduce((s, a) => s + balanceOf(a), 0);
+    list.filter((a) => a.type === "expense").reduce((s, a) => s + balanceOf(a), 0) -
+    priorResult;
   const total = (xs: { amount: number }[]) => xs.reduce((s, x) => s + x.amount, 0);
   return {
     asOf,
     assets,
     liabilities,
     equity,
+    fiscalYearStart: fyStart,
+    priorResult,
     result,
     totals: {
       assets: total(assets),
       liabilities: total(liabilities),
-      equity: total(equity) + result,
+      equity: total(equity) + priorResult + result,
     },
-    balanced: total(assets) === total(liabilities) + total(equity) + result,
+    balanced: total(assets) === total(liabilities) + total(equity) + priorResult + result,
   };
 }
 
@@ -385,13 +383,16 @@ export async function agedReceivables(db: DbOrTx, ctx: RestaurantContext, asOf: 
   };
 }
 
-/** VAT and city tax collected per month (déclaration de TVA). */
+/**
+ * VAT and levies collected per month of the hotel's calendar (Jalali months in Iran, with the
+ * season of the quarterly VAT return).
+ */
 export async function taxReport(db: DbOrTx, ctx: RestaurantContext, from: string, to: string) {
   assertCan(ctx, "accounting.manage");
   const rid = ctx.restaurant.id;
   const rows = await db
     .select({
-      month: sql<string>`to_char(${journalEntries.date}::date, 'YYYY-MM')`,
+      day: journalEntries.date,
       key: ledgerAccounts.systemKey,
       collected:
         sql<number>`coalesce(sum(${journalLines.creditCents} - ${journalLines.debitCents}),0)::bigint`.mapWith(
@@ -411,16 +412,18 @@ export async function taxReport(db: DbOrTx, ctx: RestaurantContext, from: string
         sql`${journalEntries.sourceType} <> 'manual' or ${journalLines.creditCents} > 0`,
       ),
     )
-    .groupBy(sql`1`, ledgerAccounts.systemKey)
-    .orderBy(sql`1`);
+    .groupBy(journalEntries.date, ledgerAccounts.systemKey);
   const byMonth = new Map<string, { vat: number; cityTax: number }>();
   for (const r of rows) {
-    const cur = byMonth.get(r.month) ?? { vat: 0, cityTax: 0 };
+    const month = monthKeyOf(r.day);
+    const cur = byMonth.get(month) ?? { vat: 0, cityTax: 0 };
     if (r.key === "vat_payable") cur.vat += r.collected;
     else cur.cityTax += r.collected;
-    byMonth.set(r.month, cur);
+    byMonth.set(month, cur);
   }
-  return [...byMonth.entries()].map(([month, v]) => ({ month, ...v }));
+  return [...byMonth.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([month, v]) => ({ month, season: seasonOf(month), ...v }));
 }
 
 /** Cash and bank: what came in and went out per account over the period. */
@@ -534,4 +537,52 @@ export async function exportFec(db: DbOrTx, ctx: RestaurantContext, from: string
     ].join("\t");
   });
   return [header.join("\t"), ...lines].join("\r\n");
+}
+
+/**
+ * Journal export for Iranian accountants (opens in Excel): voucher number, Jalali date, account code
+ * and name, description, debit and credit in rials (the legal unit; amounts are stored in hundredths
+ * of a rial).
+ */
+export async function exportJournalCsv(db: DbOrTx, ctx: RestaurantContext, from: string, to: string) {
+  assertCan(ctx, "accounting.manage");
+  const rid = ctx.restaurant.id;
+  const rows = await db
+    .select({
+      number: journalEntries.number,
+      date: journalEntries.date,
+      memo: journalEntries.memo,
+      code: ledgerAccounts.code,
+      name: ledgerAccounts.name,
+      debit: journalLines.debitCents,
+      credit: journalLines.creditCents,
+      description: journalLines.description,
+    })
+    .from(journalLines)
+    .innerJoin(journalEntries, eq(journalEntries.id, journalLines.entryId))
+    .innerJoin(ledgerAccounts, eq(ledgerAccounts.id, journalLines.accountId))
+    .where(
+      and(eq(journalLines.restaurantId, rid), gte(journalEntries.date, from), lte(journalEntries.date, to)),
+    )
+    .orderBy(asc(journalEntries.number), sql`${journalLines.debitCents} = 0`);
+  const cell = (v: string | number) => {
+    const s = String(v);
+    return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  const jdate = (d: string) => {
+    const j = toJalali(d);
+    return `${j.jy}/${String(j.jm).padStart(2, "0")}/${String(j.jd).padStart(2, "0")}`;
+  };
+  const rial = (c: number) => Math.round(c / 100);
+  const header = ["شماره سند", "تاریخ", "کد حساب", "نام حساب", "شرح", "بدهکار (ریال)", "بستانکار (ریال)"];
+  const lines = rows.map((r) =>
+    [r.number, jdate(r.date), r.code, r.name, r.description ?? r.memo, rial(r.debit), rial(r.credit)]
+      .map(cell)
+      .join(","),
+  );
+  const totalD = rows.reduce((s, r) => s + rial(r.debit), 0);
+  const totalC = rows.reduce((s, r) => s + rial(r.credit), 0);
+  return [header.join(","), ...lines, ["", "", "", "", "جمع", totalD, totalC].map(cell).join(",")].join(
+    "\r\n",
+  );
 }

@@ -5,10 +5,13 @@ import { Button } from "@/components/ui/button";
 import { useRun } from "@/components/ui/sheet-kit";
 import { saveGuestAction } from "@/app/[locale]/dashboard/[restaurantId]/hotel-actions";
 import { FormError, Label, inputCls } from "./kit";
+import { DateInput } from "@/components/ui/date-input";
+import { EDITION } from "@/config/edition";
 
 export type GuestValues = {
   id: string;
   firstName: string;
+  fatherName: string | null;
   lastName: string;
   email: string | null;
   phone: string | null;
@@ -61,6 +64,7 @@ export function GuestForm({
         r.run(() =>
           saveGuestAction(restaurantId, g.id, {
             firstName: v("firstName"),
+            fatherName: v("fatherName"),
             lastName: v("lastName"),
             email: v("email"),
             phone: v("phone"),
@@ -80,10 +84,18 @@ export function GuestForm({
     >
       {field("lastName", t("lastName"), { required: true, maxLength: 80 })}
       {field("firstName", t("firstName"), { maxLength: 80 })}
+      {field("fatherName", t("fatherName"), { maxLength: 80 })}
       {field("phone", t("phone"), { type: "tel", dir: "ltr", maxLength: 24 })}
       {field("email", t("email"), { type: "email", dir: "ltr", maxLength: 320 })}
-      {field("nationality", t("nationality"), { maxLength: 2, placeholder: "FR", dir: "ltr" })}
-      {field("birthDate", t("birthDate"), { type: "date" })}
+      {field("nationality", t("nationality"), {
+        maxLength: 2,
+        placeholder: EDITION === "iran" ? "IR" : "FR",
+        dir: "ltr",
+      })}
+      <label>
+        <Label>{t("birthDate")}</Label>
+        <DateInput name="birthDate" defaultValue={g.birthDate ?? ""} disabled={!canEdit} />
+      </label>
       <label>
         <Label>{t("documentType")}</Label>
         <select

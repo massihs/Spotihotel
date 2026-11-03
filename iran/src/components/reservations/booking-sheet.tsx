@@ -12,6 +12,7 @@ import {
   setReservationStatusAction,
   updateBookingAction,
 } from "@/app/[locale]/dashboard/[restaurantId]/reservations/actions";
+import { DateInput } from "@/components/ui/date-input";
 
 export const STATUS_TONE: Record<string, string> = {
   pending: "bg-warning-soft text-warning",
@@ -255,13 +256,7 @@ export function BookingSheet({
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <label className="col-span-2 block space-y-1 sm:col-span-1">
               <span className="text-sm font-medium">{t("date")}</span>
-              <input
-                type="date"
-                value={day}
-                onChange={(e) => setDay(e.target.value)}
-                dir="ltr"
-                className={field}
-              />
+              <DateInput value={day} onChange={(v) => setDay(v)} className={field} />
               {/^\d{4}-\d{2}-\d{2}$/.test(day) ? (
                 // The picker is Gregorian; say the day in the team's own calendar.
                 <span className="block text-xs text-fg-muted">

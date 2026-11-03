@@ -10,6 +10,8 @@ import { db } from "@/server/db/client";
 import { can } from "@/server/tenancy";
 import { getMoney } from "@/lib/money-server";
 import { listStays, STAY_STATUSES } from "@/server/modules/pms/stays";
+import { calendarLocale } from "@/lib/jalali-calendar";
+import { EDITION } from "@/config/edition";
 
 type Props = PageProps<"/[locale]/dashboard/[restaurantId]/stays">;
 
@@ -35,9 +37,11 @@ async function Stays({ params, searchParams }: Props) {
     listStays(db, ctx, { q, status: status || undefined }),
   ]);
   const day = (d: string) =>
-    new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", timeZone: "UTC" }).format(
-      new Date(`${d}T12:00:00Z`),
-    );
+    new Intl.DateTimeFormat(calendarLocale(locale, EDITION), {
+      day: "numeric",
+      month: "short",
+      timeZone: "UTC",
+    }).format(new Date(`${d}T12:00:00Z`));
   const base = `/dashboard/${ctx.restaurant.id}`;
   return (
     <>

@@ -18,6 +18,7 @@ import {
   confirmStayAction,
 } from "@/app/[locale]/dashboard/[restaurantId]/hotel-actions";
 import { FormError, Label, RunButton, SheetButton, inputCls } from "./kit";
+import { DateInput } from "@/components/ui/date-input";
 
 type Room = { id: string; label: string; roomTypeId: string | null; housekeeping: string; free: boolean };
 
@@ -254,9 +255,9 @@ function Amend({
     >
       <label>
         <Label>{t("arrival")}</Label>
-        <input
+        <DateInput
           name="arrival"
-          type="date"
+
           defaultValue={stay.arrival}
           readOnly={inHouse}
           className={inputCls}
@@ -264,7 +265,7 @@ function Amend({
       </label>
       <label>
         <Label>{t("departure")}</Label>
-        <input name="departure" type="date" defaultValue={stay.departure} className={inputCls} />
+        <DateInput name="departure" defaultValue={stay.departure} className={inputCls} />
       </label>
       <label>
         <Label>{t("roomType")}</Label>

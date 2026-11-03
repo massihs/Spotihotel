@@ -11,6 +11,7 @@ import {
   createExpenseAction,
   deleteExpenseAction,
 } from "@/app/[locale]/dashboard/[restaurantId]/reports/actions";
+import { DateInput } from "@/components/ui/date-input";
 
 const CATEGORIES = [
   "rent",
@@ -45,23 +46,11 @@ export function CustomPeriod({ base, from, to }: { base: string; from: string; t
           <div className="grid grid-cols-2 gap-3">
             <label className="block text-sm font-medium">
               {t("from")}
-              <input
-                type="date"
-                value={a}
-                onChange={(e) => setA(e.target.value)}
-                dir="ltr"
-                className={cn(field, "mt-1")}
-              />
+              <DateInput value={a} onChange={(v) => setA(v)} className={cn(field, "mt-1")} />
             </label>
             <label className="block text-sm font-medium">
               {t("to")}
-              <input
-                type="date"
-                value={b}
-                onChange={(e) => setB(e.target.value)}
-                dir="ltr"
-                className={cn(field, "mt-1")}
-              />
+              <DateInput value={b} onChange={(v) => setB(v)} className={cn(field, "mt-1")} />
             </label>
           </div>
           <button
@@ -134,12 +123,10 @@ export function NewExpenseButton({ rid, currency, today }: { rid: string; curren
               </label>
               <label className="block text-sm font-medium">
                 {t("date")}
-                <input
-                  type="date"
+                <DateInput
                   value={paidAt}
                   max={today}
-                  onChange={(e) => setPaidAt(e.target.value)}
-                  dir="ltr"
+                  onChange={(v) => setPaidAt(v)}
                   className={cn(field, "mt-1")}
                 />
               </label>

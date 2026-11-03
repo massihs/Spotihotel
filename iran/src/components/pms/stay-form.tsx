@@ -13,6 +13,8 @@ import {
   searchGuestsAction,
 } from "@/app/[locale]/dashboard/[restaurantId]/hotel-actions";
 import { FormError, Label, inputCls, useDay } from "./kit";
+import { DateInput } from "@/components/ui/date-input";
+import { EDITION } from "@/config/edition";
 
 type Type = { id: string; code: string; name: string; maxOccupancy: number };
 type Plan = { id: string; code: string; name: string; isDefault: boolean };
@@ -26,18 +28,25 @@ type GuestHit = {
   blacklisted: boolean;
 };
 
-const SOURCES = [
-  "direct",
-  "phone",
-  "walk_in",
-  "website",
-  "email",
-  "agency",
-  "booking",
-  "expedia",
-  "airbnb",
-  "other",
-];
+const SOURCES =
+  EDITION === "iran"
+    ? [
+        "direct",
+        "phone",
+        "walk_in",
+        "website",
+        "snapptrip",
+        "alibaba",
+        "jabama",
+        "eghamat24",
+        "jainjas",
+        "flytoday",
+        "otaghak",
+        "agency",
+        "email",
+        "other",
+      ]
+    : ["direct", "phone", "walk_in", "website", "email", "agency", "booking", "expedia", "airbnb", "other"];
 const GUARANTEES = ["none", "card", "deposit", "company"];
 
 const add = (d: string, n: number) =>
@@ -131,6 +140,14 @@ export function StayForm({
               lastName: String(fd.get("lastName") ?? ""),
               phone: String(fd.get("phone") ?? ""),
               email: String(fd.get("email") ?? ""),
+              ...(EDITION === "iran"
+                ? {
+                    fatherName: String(fd.get("fatherName") ?? ""),
+                    nationality: "IR",
+                    documentType: fd.get("nationalCode") ? ("id_card" as const) : null,
+                    documentNumber: String(fd.get("nationalCode") ?? ""),
+                  }
+                : {}),
             },
         roomTypeId,
         ratePlanId: ratePlanId || null,
@@ -165,26 +182,24 @@ export function StayForm({
           <legend className="px-1 text-sm font-bold">{t("stay")}</legend>
           <label>
             <Label>{t("arrival")}</Label>
-            <input
-              type="date"
+            <DateInput
               className={inputCls}
               min={today}
               value={arrival}
-              onChange={(e) => {
-                setArrival(e.target.value);
-                if (departure <= e.target.value) setDeparture(add(e.target.value, 1));
+              onChange={(v) => {
+                setArrival(v);
+                if (v && departure <= v) setDeparture(add(v, 1));
               }}
               required
             />
           </label>
           <label>
             <Label>{t("departure")}</Label>
-            <input
-              type="date"
+            <DateInput
               className={inputCls}
               min={add(arrival, 1)}
               value={departure}
-              onChange={(e) => setDeparture(e.target.value)}
+              onChange={(v) => setDeparture(v)}
               required
             />
           </label>
@@ -297,6 +312,24 @@ export function StayForm({
                   <Label>{t("email")}</Label>
                   <input name="email" type="email" className={inputCls} maxLength={320} dir="ltr" />
                 </label>
+                {EDITION === "iran" ? (
+                  <>
+                    <label>
+                      <Label>{t("fatherName")}</Label>
+                      <input name="fatherName" className={inputCls} maxLength={80} />
+                    </label>
+                    <label>
+                      <Label>{t("nationalCode")}</Label>
+                      <input
+                        name="nationalCode"
+                        className={inputCls}
+                        inputMode="numeric"
+                        maxLength={10}
+                        dir="ltr"
+                      />
+                    </label>
+                  </>
+                ) : null}
               </div>
             </>
           )}

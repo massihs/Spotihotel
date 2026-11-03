@@ -151,6 +151,8 @@ export const hotelGuests = pgTable(
       .references(() => restaurants.id, { onDelete: "cascade" }),
     firstName: varchar({ length: 80 }).notNull().default(""),
     lastName: varchar({ length: 80 }).notNull(),
+    /** نام پدر — asked on Iranian registration cards and by the police (Amaken) report. */
+    fatherName: varchar({ length: 80 }),
     email: varchar({ length: 320 }),
     phone: varchar({ length: 24 }),
     /** ISO 3166 alpha-2. */

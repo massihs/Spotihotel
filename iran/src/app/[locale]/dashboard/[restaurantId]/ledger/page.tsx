@@ -37,9 +37,13 @@ import {
   trialBalance,
 } from "@/server/modules/ledger/reports";
 import { listNightAudits } from "@/server/modules/pms/night-audit";
-import { isDay } from "@/server/modules/pms/calc";
+import { addDays, isDay } from "@/server/modules/pms/calc";
+import { fiscalYearMonths, fiscalYearStart, monthRange, monthStart } from "@/server/modules/ledger/periods";
 import { can } from "@/server/tenancy";
 import { DEFAULT_LOCALE } from "@/i18n/config";
+import { DateInput } from "@/components/ui/date-input";
+import { calendarLocale } from "@/lib/jalali-calendar";
+import { EDITION } from "@/config/edition";
 
 const TABS = [
   "overview",
@@ -91,7 +95,7 @@ async function Ledger({ params, searchParams }: Props) {
   const rid = ctx.restaurant.id;
   const tz = ctx.restaurant.timezone;
   const today = localDay(new Date(), tz);
-  const from = typeof sp.from === "string" && isDay(sp.from) ? sp.from : `${today.slice(0, 7)}-01`;
+  const from = typeof sp.from === "string" && isDay(sp.from) ? sp.from : monthStart(today);
   const to = typeof sp.to === "string" && isDay(sp.to) ? sp.to : today;
   const tab: Tab = (TABS as readonly string[]).includes(String(sp.tab)) ? (sp.tab as Tab) : "overview";
   // The books are brought up to date before any report is read.
@@ -105,12 +109,16 @@ async function Ledger({ params, searchParams }: Props) {
   ]);
   const tType = await getTranslations("ledger.type");
   const day = (d: string) =>
-    new Intl.DateTimeFormat(locale, {
+    new Intl.DateTimeFormat(calendarLocale(locale, EDITION), {
       day: "numeric",
       month: "short",
       year: "numeric",
       timeZone: "UTC",
     }).format(new Date(`${d}T12:00:00Z`));
+  const monthName = (key: string, opts: Intl.DateTimeFormatOptions = { month: "long", year: "numeric" }) =>
+    new Intl.DateTimeFormat(calendarLocale(locale, EDITION), { ...opts, timeZone: "UTC" }).format(
+      new Date(`${monthRange(key).first}T12:00:00Z`),
+    );
   const base = `/dashboard/${rid}/ledger`;
   const q = (extra: Record<string, string>) => `${base}?${new URLSearchParams({ tab, from, to, ...extra })}`;
   const signed = (n: number) => <span className={n < 0 ? "text-danger" : undefined}>{money(n)}</span>;
@@ -492,10 +500,18 @@ async function Ledger({ params, searchParams }: Props) {
             {col(
               t("equity"),
               bs.equity,
-              <li className="flex justify-between px-4 py-2 font-semibold">
-                <span>{t("periodResult")}</span>
-                <span className="tabular-nums">{signed(bs.result)}</span>
-              </li>,
+              <>
+                {bs.priorResult ? (
+                  <li className="flex justify-between px-4 py-2">
+                    <span>{t("priorResult")}</span>
+                    <span className="tabular-nums">{signed(bs.priorResult)}</span>
+                  </li>
+                ) : null}
+                <li className="flex justify-between px-4 py-2 font-semibold">
+                  <span>{t("periodResult", { from: day(bs.fiscalYearStart) })}</span>
+                  <span className="tabular-nums">{signed(bs.result)}</span>
+                </li>
+              </>,
               bs.totals.equity,
             )}
           </div>
@@ -567,6 +583,8 @@ async function Ledger({ params, searchParams }: Props) {
     );
   } else if (tab === "tax") {
     const rows = await taxReport(db, ctx, from, to);
+    const seasonal = EDITION === "iran";
+    const seasons = [...new Set(rows.map((r) => `${r.month.slice(0, 4)}-${r.season}`))];
     body = (
       <Table>
         <thead className="bg-surface-2">
@@ -577,17 +595,30 @@ async function Ledger({ params, searchParams }: Props) {
           </tr>
         </thead>
         <tbody>
-          {rows.map((r) => (
-            <tr key={r.month}>
-              <td className={td}>
-                {new Intl.DateTimeFormat(locale, { month: "long", year: "numeric", timeZone: "UTC" }).format(
-                  new Date(`${r.month}-15T12:00:00Z`),
-                )}
-              </td>
-              <td className={tdNum}>{money(r.vat)}</td>
-              <td className={tdNum}>{money(r.cityTax)}</td>
-            </tr>
-          ))}
+          {(seasonal ? seasons : [""]).map((sk) => {
+            const list = seasonal ? rows.filter((r) => `${r.month.slice(0, 4)}-${r.season}` === sk) : rows;
+            return [
+              ...list.map((r) => (
+                <tr key={r.month}>
+                  <td className={td}>{monthName(r.month)}</td>
+                  <td className={tdNum}>{money(r.vat)}</td>
+                  <td className={tdNum}>{money(r.cityTax)}</td>
+                </tr>
+              )),
+              seasonal ? (
+                <tr key={`s${sk}`} className="bg-surface-2/60 font-semibold">
+                  <td className={td}>
+                    {t("season", {
+                      season: t(`seasons.${sk.slice(5)}`),
+                      year: monthName(`${sk.slice(0, 4)}-01`, { year: "numeric" }),
+                    })}
+                  </td>
+                  <td className={tdNum}>{money(list.reduce((x, r) => x + r.vat, 0))}</td>
+                  <td className={tdNum}>{money(list.reduce((x, r) => x + r.cityTax, 0))}</td>
+                </tr>
+              ) : null,
+            ];
+          })}
           {!rows.length ? (
             <tr>
               <td className="px-3 py-8 text-center text-fg-muted" colSpan={3}>
@@ -648,8 +679,8 @@ async function Ledger({ params, searchParams }: Props) {
       </div>
     );
   } else if (tab === "chart") {
-    const year = Number(to.slice(0, 4));
-    const months = Array.from({ length: 12 }, (_, i) => `${year}-${String(i + 1).padStart(2, "0")}`);
+    const months = fiscalYearMonths(to);
+    const year = monthName(months[0]!, { year: "numeric" });
     const budgets = await budgetsFor(db, rid, months[0]!, months[11]!);
     const bmap = new Map(budgets.map((b) => [`${b.accountId}|${b.month}`, b.amountCents]));
     body = (
@@ -695,9 +726,7 @@ async function Ledger({ params, searchParams }: Props) {
                 <th className={th}>{t("account")}</th>
                 {months.map((m) => (
                   <th key={m} className={thEnd}>
-                    {new Intl.DateTimeFormat(locale, { month: "short", timeZone: "UTC" }).format(
-                      new Date(`${m}-15T12:00:00Z`),
-                    )}
+                    {monthName(m, { month: "short" })}
                   </th>
                 ))}
               </tr>
@@ -745,13 +774,13 @@ async function Ledger({ params, searchParams }: Props) {
         </section>
         <section className="space-y-3 rounded-2xl border border-border bg-surface p-5">
           <h2 className="font-semibold">{t("exportTitle")}</h2>
-          <p className="text-sm text-fg-muted">{t("exportHint")}</p>
+          <p className="text-sm text-fg-muted">{t(EDITION === "iran" ? "exportHintIran" : "exportHint")}</p>
           <a
-            href={`${locale === DEFAULT_LOCALE ? "" : `/${locale}`}/dashboard/${rid}/ledger/fec?from=${from}&to=${to}`}
+            href={`${locale === DEFAULT_LOCALE ? "" : `/${locale}`}/dashboard/${rid}/ledger/${EDITION === "iran" ? "export" : "fec"}?from=${from}&to=${to}`}
             className={buttonClasses("secondary", "md")}
           >
             <Download className="size-4" aria-hidden="true" />
-            {t("exportFec", { from: day(from), to: day(to) })}
+            {t(EDITION === "iran" ? "exportExcel" : "exportFec", { from: day(from), to: day(to) })}
           </a>
         </section>
         <section className="space-y-3 rounded-2xl border border-border bg-surface p-5">
@@ -772,8 +801,7 @@ async function Ledger({ params, searchParams }: Props) {
           {typeof sp.account === "string" ? <input type="hidden" name="account" value={sp.account} /> : null}
           <label className="text-sm">
             <span className="mb-1 block font-semibold">{t("from")}</span>
-            <input
-              type="date"
+            <DateInput
               name="from"
               defaultValue={from}
               className="h-10 rounded-xl border border-border-strong bg-surface px-3"
@@ -781,8 +809,7 @@ async function Ledger({ params, searchParams }: Props) {
           </label>
           <label className="text-sm">
             <span className="mb-1 block font-semibold">{t("to")}</span>
-            <input
-              type="date"
+            <DateInput
               name="to"
               defaultValue={to}
               className="h-10 rounded-xl border border-border-strong bg-surface px-3"
@@ -790,6 +817,28 @@ async function Ledger({ params, searchParams }: Props) {
           </label>
           <button className={buttonClasses("secondary", "md")}>{t("apply")}</button>
         </form>
+        <div className="flex flex-wrap gap-1.5 text-sm">
+          {[
+            { k: "thisMonth", f: monthStart(today), to: today },
+            {
+              k: "lastMonth",
+              f: monthStart(addDays(monthStart(today), -1)),
+              to: addDays(monthStart(today), -1),
+            },
+            { k: "fiscalYear", f: fiscalYearStart(today), to: today },
+          ].map((p) => (
+            <Link
+              key={p.k}
+              href={`${base}?${new URLSearchParams({ tab, from: p.f, to: p.to })}`}
+              className={cn(
+                "rounded-full px-3 py-1.5 font-semibold ring-1 ring-border",
+                from === p.f && to === p.to ? "bg-accent text-accent-fg ring-accent" : "hover:bg-surface-2",
+              )}
+            >
+              {t(`quick.${p.k}`)}
+            </Link>
+          ))}
+        </div>
         {state?.lockedUntil ? (
           <span className="ms-auto rounded-full bg-surface-2 px-3 py-1 text-xs font-semibold">
             🔒 {t("lockedUntil", { day: day(state.lockedUntil) })}

@@ -14,6 +14,7 @@ import {
   serviceDayAction,
 } from "@/app/[locale]/dashboard/[restaurantId]/hotel-actions";
 import { Empty, FormError, Label, RunButton, StatusPill, inputCls, useTime } from "./kit";
+import { DateInput } from "@/components/ui/date-input";
 
 type Service = {
   id: string;
@@ -68,13 +69,10 @@ export function WellnessBoard({
     <div className="grid gap-5 xl:grid-cols-[1fr_380px]">
       <div className="space-y-4">
         <div className="flex items-center gap-2">
-          <input
-            type="date"
+          <DateInput
             className={cn(inputCls, "w-auto")}
             value={day}
-            onChange={(e) =>
-              e.target.value && router.push(`/dashboard/${restaurantId}/wellness?day=${e.target.value}`)
-            }
+            onChange={(v) => v && router.push(`/dashboard/${restaurantId}/wellness?day=${v}`)}
             aria-label={t("day")}
           />
         </div>
@@ -217,7 +215,7 @@ function BookForm({
       <div className="grid grid-cols-2 gap-3">
         <label>
           <Label>{t("day")}</Label>
-          <input type="date" className={inputCls} value={date} onChange={(e) => setDate(e.target.value)} />
+          <DateInput className={inputCls} value={date} onChange={(v) => setDate(v)} />
         </label>
         <label>
           <Label>{t("people")}</Label>

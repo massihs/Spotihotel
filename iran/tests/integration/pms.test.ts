@@ -96,6 +96,15 @@ async function hotel() {
   return { h, rooms, dbl, ste, bb, today: settings.businessDate };
 }
 
+/** Account code of a system account (the chart differs per edition). */
+async function codeOf(restaurantId: string, key: string) {
+  const [a] = await db
+    .select({ code: ledgerAccounts.code })
+    .from(ledgerAccounts)
+    .where(and(eq(ledgerAccounts.restaurantId, restaurantId), eq(ledgerAccounts.systemKey, key)));
+  return a!.code;
+}
+
 async function seat(qrToken: string) {
   const guestId = randomUUID();
   const e = await enterTableByQr(db, qrToken, guestId);
@@ -227,10 +236,12 @@ describe("hotel PMS", () => {
     const tb = await trialBalance(db, h, addDays(today, -1), until);
     expect(tb.totals.debit).toBe(tb.totals.credit);
     expect(tb.totals.closingDebit).toBe(tb.totals.closingCredit);
-    const guestLedger = tb.rows.find((r) => r.code === "1100")!;
+    const GL = await codeOf(h.restaurant.id, "guest_ledger");
+    const guestLedger = tb.rows.find((r) => r.code === GL)!;
     expect(guestLedger.closingNet).toBe(0);
     const pl = await incomeStatement(db, h, today, until);
-    const roomsRevenue = pl.revenue.find((r) => r.code === "4000")!;
+    const ROOM = await codeOf(h.restaurant.id, "revenue_room");
+    const roomsRevenue = pl.revenue.find((r) => r.code === ROOM)!;
     // Rooms revenue excludes VAT (10% included in 11 500 + 13 500 + the 2nd guest's 11 500).
     expect(roomsRevenue.amount).toBe(25_000 + 11_500 - (1_045 + 1_227 + 1_045));
     const bs = await balanceSheet(db, h, until);
@@ -244,7 +255,7 @@ describe("hotel PMS", () => {
         await db
           .select()
           .from(ledgerAccounts)
-          .where(and(eq(ledgerAccounts.restaurantId, h.restaurant.id), eq(ledgerAccounts.code, "1000")))
+          .where(and(eq(ledgerAccounts.restaurantId, h.restaurant.id), eq(ledgerAccounts.systemKey, "cash")))
       )[0]!.id,
       today,
       until,
@@ -274,22 +285,24 @@ describe("hotel PMS", () => {
     // A transfer is not revenue twice: rooms revenue is the night only.
     await syncLedger(db, h.restaurant);
     const tb = await trialBalance(db, h, today, addDays(today, 1));
-    expect(tb.rows.find((r) => r.code === "1110")!.closingNet).toBe(26_700);
-    expect(tb.rows.find((r) => r.code === "1100")!.closingNet).toBe(0);
+    const CITY = await codeOf(h.restaurant.id, "city_ledger");
+    const GUEST = await codeOf(h.restaurant.id, "guest_ledger");
+    expect(tb.rows.find((r) => r.code === CITY)!.closingNet).toBe(26_700);
+    expect(tb.rows.find((r) => r.code === GUEST)!.closingNet).toBe(0);
 
     // Manual entry (opening capital), reversal, then the period is locked.
     const accounts = await db
       .select()
       .from(ledgerAccounts)
       .where(eq(ledgerAccounts.restaurantId, h.restaurant.id));
-    const id = (code: string) => accounts.find((a) => a.code === code)!.id;
+    const id = (key: string) => accounts.find((a) => a.systemKey === key)!.id;
     await expect(
       createManualEntry(db, h, {
         date: today,
         memo: "unbalanced",
         lines: [
-          { accountId: id("1010"), debitCents: 100 },
-          { accountId: id("3000"), creditCents: 99 },
+          { accountId: id("bank"), debitCents: 100 },
+          { accountId: id("equity"), creditCents: 99 },
         ],
       }),
     ).rejects.toBeTruthy();
@@ -297,8 +310,8 @@ describe("hotel PMS", () => {
       date: today,
       memo: "Apport en capital",
       lines: [
-        { accountId: id("1010"), debitCents: 1_000_000 },
-        { accountId: id("3000"), creditCents: 1_000_000 },
+        { accountId: id("bank"), debitCents: 1_000_000 },
+        { accountId: id("equity"), creditCents: 1_000_000 },
       ],
     });
     await reverseEntry(db, h, e.id, today);
@@ -309,8 +322,8 @@ describe("hotel PMS", () => {
         date: today,
         memo: "late",
         lines: [
-          { accountId: id("1010"), debitCents: 10 },
-          { accountId: id("3000"), creditCents: 10 },
+          { accountId: id("bank"), debitCents: 10 },
+          { accountId: id("equity"), creditCents: 10 },
         ],
       }),
     ).rejects.toMatchObject({ message: "period_locked" });

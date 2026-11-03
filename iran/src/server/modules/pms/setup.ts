@@ -6,6 +6,9 @@ import { recordAudit } from "@/server/audit";
 import { conflict, notFound, validation } from "@/server/errors";
 import { assertCan, type RestaurantContext } from "@/server/tenancy";
 import { localDay } from "@/lib/period";
+import { edition } from "@/config/edition";
+
+const DEFAULT_VAT_BPS = edition.defaultTaxRates.find((r) => r.isDefault)?.rateBps ?? 0;
 import { addDays, eachNight, isDay, nightsBetween } from "./calc";
 
 const MAX_CENTS = 1_000_000_000_000;
@@ -30,7 +33,13 @@ export async function getPmsSettings(db: DbOrTx, restaurantId: string, timezone:
   const today = localDay(new Date(), timezone);
   const [created] = await db
     .insert(pmsSettings)
-    .values({ restaurantId, businessDate: today })
+    .values({
+      restaurantId,
+      businessDate: today,
+      // The edition's standard VAT (10% in Iran), editable in the hotel settings.
+      roomTaxBps: DEFAULT_VAT_BPS,
+      serviceTaxBps: DEFAULT_VAT_BPS,
+    })
     .onConflictDoUpdate({
       target: pmsSettings.restaurantId,
       set: { businessDate: sql`coalesce(${pmsSettings.businessDate}, ${today})` },

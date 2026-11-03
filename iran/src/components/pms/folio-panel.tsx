@@ -59,7 +59,7 @@ const DEPARTMENTS = [
   "transport",
   "misc",
 ];
-const METHODS = ["cash", "card", "transfer", "online"];
+const METHODS = ["cash", "card", "transfer", "cheque", "online"];
 
 /** Human label of a posting (automatic descriptions are codes: "room:101:2026-11-03"). */
 export function useLineLabel() {

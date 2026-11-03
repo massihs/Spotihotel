@@ -18,6 +18,9 @@ import {
   syncBooksAction,
 } from "@/app/[locale]/dashboard/[restaurantId]/ledger/actions";
 import { FormError, Label, RunButton, SheetButton, inputCls } from "@/components/pms/kit";
+import { DateInput } from "@/components/ui/date-input";
+import { calendarLocale } from "@/lib/jalali-calendar";
+import { EDITION } from "@/config/edition";
 
 type Account = { id: string; code: string; name: string; type: string; active: boolean };
 
@@ -116,7 +119,7 @@ function EntryForm({
       <div className="grid grid-cols-[140px_1fr] gap-3">
         <label>
           <Label>{t("date")}</Label>
-          <input name="date" type="date" defaultValue={today} className={inputCls} required />
+          <DateInput name="date" defaultValue={today} className={inputCls} required />
         </label>
         <label>
           <Label>{t("memo")}</Label>
@@ -224,7 +227,7 @@ export function LockForm({
     >
       <label>
         <Label>{t("lockUntil")}</Label>
-        <input name="until" type="date" defaultValue={lockedUntil ?? ""} className={cn(inputCls, "w-auto")} />
+        <DateInput name="until" defaultValue={lockedUntil ?? ""} className={cn(inputCls, "w-auto")} />
       </label>
       <Button type="submit" disabled={r.pending}>
         {t("lock")}
@@ -397,9 +400,11 @@ export function ReconcileTable({
   const r = useRun();
   const delta = lines.filter((l) => picked.has(l.id)).reduce((s, l) => s + l.debitCents - l.creditCents, 0);
   const day = (d: string) =>
-    new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", timeZone: "UTC" }).format(
-      new Date(`${d}T12:00:00Z`),
-    );
+    new Intl.DateTimeFormat(calendarLocale(locale, EDITION), {
+      day: "numeric",
+      month: "short",
+      timeZone: "UTC",
+    }).format(new Date(`${d}T12:00:00Z`));
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-surface p-4 text-sm">

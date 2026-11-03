@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
+import { EDITION } from "@/config/edition";
 import { useRun } from "@/components/ui/sheet-kit";
 import { assignRoomAction } from "@/app/[locale]/dashboard/[restaurantId]/hotel-actions";
 import { FormError, inputCls, useDay } from "./kit";
@@ -30,6 +31,9 @@ export type PlanStay = {
   balanceCents: number;
 };
 export type PlanAvail = { id: string; code: string; days: { day: string; free: number; closed: boolean }[] };
+
+/** Busy nights of the week: Thursday–Friday in Iran, Friday–Saturday elsewhere. */
+const WEEKEND = EDITION === "iran" ? [4, 5] : [5, 6];
 
 const BAR: Record<string, string> = {
   tentative: "bg-warning-soft text-fg ring-1 ring-warning/40",
@@ -148,7 +152,7 @@ export function PlanningGrid({
                   key={d}
                   className={cn(
                     "border-s border-border px-0.5 py-1.5",
-                    (wd === 5 || wd === 6) && "bg-surface-3/60",
+                    WEEKEND.includes(wd) && "bg-surface-3/60",
                     d === today && "bg-accent-soft font-bold text-accent-text",
                   )}
                 >

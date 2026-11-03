@@ -20,6 +20,7 @@ import {
   repayAccountAction,
   setCreditLimitAction,
 } from "@/app/[locale]/dashboard/[restaurantId]/customers/actions";
+import { DateInput } from "@/components/ui/date-input";
 
 const pill = "inline-flex h-10 items-center gap-2 rounded-full px-4 text-sm font-semibold";
 const primary = cn(pill, "bg-accent text-accent-fg disabled:opacity-50");
@@ -403,13 +404,7 @@ function CouponForm({ rid, currency, onClose }: { rid: string; currency: string;
           </label>
           <label className="block text-sm font-medium">
             {t("endsAt")}
-            <input
-              type="date"
-              value={endsAt}
-              onChange={(e) => setEndsAt(e.target.value)}
-              dir="ltr"
-              className={cn(field, "mt-1")}
-            />
+            <DateInput value={endsAt} onChange={(v) => setEndsAt(v)} className={cn(field, "mt-1")} />
           </label>
         </div>
         {error ? <p className="text-sm text-danger">{error}</p> : null}

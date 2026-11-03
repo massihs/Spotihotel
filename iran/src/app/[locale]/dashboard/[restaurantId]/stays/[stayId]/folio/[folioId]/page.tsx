@@ -9,6 +9,8 @@ import { getStay } from "@/server/modules/pms/stays";
 import { PrintButton } from "@/components/ui/print-button";
 import { FolioLineLabel } from "@/components/pms/folio-line-label";
 import { notFound } from "next/navigation";
+import { calendarLocale } from "@/lib/jalali-calendar";
+import { EDITION } from "@/config/edition";
 
 type Props = PageProps<"/[locale]/dashboard/[restaurantId]/stays/[stayId]/folio/[folioId]">;
 
@@ -46,7 +48,7 @@ async function FolioPrint({ params }: Pick<Props, "params">) {
       .where(eq(restaurants.id, ctx.restaurant.id)),
   ]);
   const day = (d: string) =>
-    new Intl.DateTimeFormat(locale, {
+    new Intl.DateTimeFormat(calendarLocale(locale, EDITION), {
       day: "numeric",
       month: "short",
       year: "numeric",
