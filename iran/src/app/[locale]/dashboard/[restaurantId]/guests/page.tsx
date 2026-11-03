@@ -60,7 +60,7 @@ async function Guests({ params, searchParams }: Props) {
                   {[g.lastName, g.firstName].filter(Boolean).join(" ")}
                 </span>
                 <span className="block text-sm text-fg-muted" dir="ltr">
-                  {[g.phone, g.email].filter(Boolean).join(" · ")}
+                  {[g.phone, g.email].filter(Boolean).join(" | ")}
                 </span>
               </span>
               {g.blacklisted ? (

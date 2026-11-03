@@ -91,7 +91,7 @@ export function SectionsPanel({
               </p>
               <p className="mt-1 flex items-start gap-1.5 text-xs text-fg-muted">
                 <Bell className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
-                {s.notify.length ? s.notify.map((k) => t(`notify.${k}`)).join(" · ") : t("notifyNone")}
+                {s.notify.length ? s.notify.map((k) => t(`notify.${k}`)).join(" | ") : t("notifyNone")}
               </p>
             </button>
           ))}

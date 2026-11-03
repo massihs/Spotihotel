@@ -446,7 +446,7 @@ export async function startOnlinePayment(
       amountCents: payment.amountCents,
       currency: payment.currency,
       description:
-        `${guest.restaurant.name} · ${guest.table.label} · ${payment.orderNumbers.join(", ")}`.slice(0, 250),
+        `${guest.restaurant.name} | ${guest.table.label} | ${payment.orderNumbers.join(", ")}`.slice(0, 250),
       returnUrl: returnUrl.toString(),
       callbackUrl: callbackUrl.toString(),
       idempotencyKey: `create_${payment.id}`,

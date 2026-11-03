@@ -368,7 +368,10 @@
     "hotelGuests": "Clients",
     "wellness": "Bien-être & spa",
     "ledger": "Comptabilité",
-    "hotelSetup": "Configuration hôtel"
+    "hotelSetup": "Configuration hôtel",
+    "chain": "Groupe hôtelier",
+    "blocks": "Groupes & allotements",
+    "forecast": "Prévisions & canaux"
   },
   "dashboard": {
     "welcome": "Bonjour {name}",
@@ -777,7 +780,18 @@
     "rate_plan_not_found": "Tarif introuvable.",
     "guest_not_found": "Client introuvable.",
     "room_not_found": "Chambre introuvable.",
-    "invalid_national_code": "Code national invalide."
+    "invalid_national_code": "Code national invalide.",
+    "block_not_found": "Groupe introuvable.",
+    "outside_block": "Les dates sortent de celles du groupe.",
+    "release_after_arrival": "La libération doit précéder l'arrivée.",
+    "duplicate_room_type": "Un type figure deux fois.",
+    "block_closed": "Ce groupe est libéré ou annulé.",
+    "chain_managers_only": "Réservé aux dirigeants de la chaîne.",
+    "cheque_required": "Indiquez les informations du chèque.",
+    "invalid_sayad": "Le n° Sayad comporte 16 chiffres.",
+    "sayad_taken": "Ce chèque est déjà enregistré.",
+    "supplier_not_found": "Fournisseur introuvable.",
+    "document_required": "Indiquez votre pièce d'identité."
   },
   "tables": {
     "title": "Tables & QR codes",
@@ -3941,7 +3955,9 @@
       "booked": "Réservé",
       "done": "Effectué",
       "open": "Ouverte",
-      "closed": "Soldée"
+      "closed": "Soldée",
+      "definite": "Ferme",
+      "released": "Libéré"
     },
     "housekeeping": {
       "clean": "Propre",
@@ -4058,7 +4074,8 @@
       "auditReady": "Nuitées et taxe de séjour facturées, chiffres figés, comptabilité à jour, passage au jour suivant.",
       "auditConfirm": "Clôturer la journée ? Les nuitées de ce soir seront facturées à tous les clients présents.",
       "auditRun": "Clôturer la journée",
-      "travellers": "Liste des voyageurs (Amaken)"
+      "travellers": "Liste des voyageurs (Amaken)",
+      "preregistered": "pré-enregistré"
     },
     "planning": {
       "title": "Planning des chambres",
@@ -4167,7 +4184,19 @@
       "cancel": "Annuler la réservation",
       "cancelReason": "Motif",
       "cancelFee": "Frais d'annulation",
-      "cancelFeeHint": "Facturés au client (annulation tardive, tarif non remboursable)."
+      "cancelFeeHint": "Facturés au client (annulation tardive, tarif non remboursable).",
+      "precheckin": "Pré-enregistrement",
+      "precheckinDone": "Pré-enregistré",
+      "precheckinHint": "Le client reçoit un lien par SMS pour remplir sa fiche de police avant d'arriver : il n'aura plus qu'à prendre sa clé.",
+      "precheckinDoneHint": "Le client a déjà rempli et signé sa fiche. Vous pouvez renvoyer le lien s'il doit la corriger.",
+      "precheckinSent": "SMS envoyé.",
+      "precheckinNoPhone": "Pas de SMS (téléphone manquant ou service indisponible) : copiez le lien.",
+      "precheckinSend": "Envoyer le lien",
+      "policy": {
+        "non_refundable": "Tarif non remboursable : tout le séjour est dû.",
+        "late": "Annulation tardive : la première nuit est due selon la politique du tarif.",
+        "free": "Annulation gratuite selon la politique du tarif."
+      }
     },
     "folio": {
       "folio": "Folio {number}",
@@ -4197,7 +4226,12 @@
       "lineOrder": "Commande {number}",
       "linePayment": "Règlement — {method}",
       "lineCancellation": "Frais d'annulation",
-      "lineTransfer": "Transfert — {label}"
+      "lineTransfer": "Transfert — {label}",
+      "sayadId": "N° Sayad (16 chiffres)",
+      "chequeNumber": "N° du chèque",
+      "bank": "Banque",
+      "drawer": "Tireur",
+      "dueDate": "Échéance"
     },
     "invoice": {
       "print": "Imprimer",
@@ -4290,7 +4324,8 @@
         "services": "Bien-être",
         "minibar": "Minibar",
         "accounts": "Sociétés & agences",
-        "settings": "Réglages"
+        "settings": "Réglages",
+        "pricing": "Tarification dynamique"
       },
       "addType": "Ajouter un type",
       "edit": "Modifier",
@@ -4376,7 +4411,81 @@
       "wifiName": "Wi-Fi (nom du réseau)",
       "wifiPassword": "Mot de passe Wi-Fi",
       "guestInfo": "Informations pour les clients (QR de la chambre)",
-      "guestInfoHint": "Petit-déjeuner 7 h – 10 h 30, piscine au rez-de-chaussée, réception 24 h/24…"
+      "guestInfoHint": "Petit-déjeuner 7 h – 10 h 30, piscine au rez-de-chaussée, réception 24 h/24…",
+      "overbook": "Surréservation autorisée",
+      "overbookHint": "(chambres vendables au-delà du stock)",
+      "chargeNoShows": "Facturer la première nuit aux no-shows garantis (clôture de journée)",
+      "commissions": "Commissions par canal (%)",
+      "allTypes": "Tous les types",
+      "fromOccupancy": "À partir d'une occupation de",
+      "priceChange": "Variation du prix",
+      "withinDays": "Dernière minute (jours avant l'arrivée)",
+      "withinDaysHint": "(vide = toujours)",
+      "addRule": "Ajouter une règle",
+      "pricingHint": "Le prix de chaque nuit s'ajuste automatiquement à la demande : quand l'occupation déjà réservée atteint un seuil, la règle la plus haute s'applique (ex. +10 % à 70 %, +25 % à 90 %). Les prix négociés et les groupes ne sont pas concernés.",
+      "ruleLine": "{type} : {change} % dès {occ} % d'occupation",
+      "ruleWithin": "seulement à moins de {n} jours de l'arrivée",
+      "noRules": "Aucune règle : les prix suivent le calendrier."
+    },
+    "blocks": {
+      "title": "Groupes & allotements",
+      "subtitle": "Chambres retenues pour un circuit, un congrès ou une société, réservées nom par nom jusqu'à la date de libération.",
+      "new": "Nouveau bloc",
+      "name": "Nom du groupe",
+      "namePlaceholder": "Circuit Ispahan, congrès médical…",
+      "arrival": "Arrivée",
+      "departure": "Départ",
+      "release": "Date de libération",
+      "releaseHint": "(chambres non nommées remises en vente)",
+      "account": "Société / agence",
+      "rooms": "Chambres retenues par nuit",
+      "roomsN": "Nombre",
+      "addType": "Ajouter un type",
+      "ratePlan": "Tarif",
+      "groupRate": "Prix groupe / nuit",
+      "groupRateHint": "Vide = prix du tarif",
+      "contactName": "Contact",
+      "contactPhone": "Téléphone du contact",
+      "notes": "Notes",
+      "tentative": "Option (non ferme)",
+      "create": "Créer le bloc",
+      "rooming": "Rooming list",
+      "roomingHint": "Collez un nom par ligne (« Nom Prénom ») : une réservation est créée pour chacun, au prix du groupe.",
+      "roomingPlaceholder": "Rezaei Ali\nAhmadi Sara",
+      "adults": "Adultes",
+      "pickup": "Créer {n} réservation(s)",
+      "makeDefinite": "Confirmer (ferme)",
+      "releaseConfirm": "Remettre en vente les chambres non nommées ?",
+      "releaseNow": "Libérer maintenant",
+      "cancelConfirm": "Annuler le bloc ? Les réservations déjà nommées restent.",
+      "cancel": "Annuler",
+      "releaseOn": "libération {day}",
+      "pickupShort": "Pris",
+      "empty": "Aucun groupe pour l'instant.",
+      "rateN": "{rate} / nuit",
+      "type": "Type"
+    },
+    "forecast": {
+      "title": "Prévisions & canaux",
+      "subtitle": "Les 30 prochaines nuits déjà réservées (on the books) et la provenance du chiffre d'affaires par canal.",
+      "otbOccupancy": "Occupation à 30 jours",
+      "otbRevenue": "CA hébergement réservé",
+      "adr": "Prix moyen",
+      "roomNights": "Nuitées",
+      "night": "Nuit",
+      "sold": "Vendues",
+      "blocked": "Groupes",
+      "free": "Libres",
+      "occupancy": "Occupation",
+      "revenue": "CA",
+      "arrivals": "Arrivées",
+      "departures": "Départs",
+      "channel": "Canal",
+      "bookings": "Réservations",
+      "share": "Part du CA",
+      "none": "Aucune donnée.",
+      "mixPast": "Mix par canal — 30 derniers jours",
+      "mixAhead": "Mix par canal — à venir (60 jours)"
     }
   },
   "ledger": {
@@ -4393,7 +4502,10 @@
       "tax": "TVA & taxes",
       "bank": "Trésorerie & rapprochement",
       "chart": "Plan comptable & budgets",
-      "close": "Clôture & export"
+      "close": "Clôture & export",
+      "cheques": "Chèques",
+      "payables": "Fournisseurs",
+      "cashier": "Caisse"
     },
     "type": {
       "asset": "Actif",
@@ -4411,7 +4523,11 @@
       "expense_del": "Dépense supprimée",
       "purchase": "Achat",
       "manual": "Manuelle",
-      "reversal": "Contrepassation"
+      "reversal": "Contrepassation",
+      "deposit_apply": "Acompte",
+      "commission": "Commission",
+      "cheque_event": "Chèque",
+      "supplier_payment": "Fournisseur"
     },
     "dept": {
       "rooms": "Hébergement",
@@ -4536,7 +4652,63 @@
       "fiscalYear": "Exercice en cours"
     },
     "exportHintIran": "Journal complet (n° de pièce, date persane, compte, débit et crédit en rials), à ouvrir dans Excel ou à remettre au comptable.",
-    "exportExcel": "Télécharger le journal Excel ({from} – {to})"
+    "exportExcel": "Télécharger le journal Excel ({from} – {to})",
+    "cheque": {
+      "receivedOpen": "Chèques reçus en portefeuille",
+      "issuedOpen": "Chèques émis non débités",
+      "bounced": "Chèques impayés",
+      "dueWeek": "Échéances sous 7 jours",
+      "due": "Échéance",
+      "direction": "Sens",
+      "received": "Reçu",
+      "issued": "Émis",
+      "party": "Tireur / bénéficiaire",
+      "ref": "Sayad · n° · banque",
+      "statusLabel": "Statut",
+      "none": "Aucun chèque.",
+      "hint": "Chaque changement de statut passe automatiquement l'écriture : encaissé → banque, rejeté → chèques impayés, chèque émis débité → banque.",
+      "bounceConfirm": "Marquer ce chèque comme rejeté ?",
+      "status": {
+        "in_hand": "En portefeuille",
+        "deposited": "Remis en banque",
+        "cleared": "Encaissé",
+        "bounced": "Rejeté",
+        "returned": "Restitué",
+        "issued": "Émis",
+        "cancelled": "Annulé"
+      },
+      "to": {
+        "deposited": "Remettre en banque",
+        "cleared": "Encaissé",
+        "bounced": "Rejeté",
+        "returned": "Restituer",
+        "cancelled": "Annuler"
+      }
+    },
+    "amount": "Montant",
+    "supplier": "Fournisseur",
+    "invoiced": "Facturé",
+    "paid": "Payé",
+    "owed": "Reste dû",
+    "noPayables": "Aucune dette fournisseur.",
+    "recentPayments": "Derniers paiements",
+    "payablesHint": "Dettes fournisseurs (achats de stock) : {total}",
+    "paySupplier": "Payer un fournisseur",
+    "method": "Mode de paiement",
+    "methods": {
+      "cash": "Espèces",
+      "transfer": "Virement",
+      "cheque": "Chèque émis"
+    },
+    "reference": "Référence",
+    "sayadId": "N° Sayad",
+    "chequeNumber": "N° du chèque",
+    "dueDate": "Échéance",
+    "bank": "Banque",
+    "cashierName": "Caissier / réceptionniste",
+    "cashierHint": "Encaissements du jour par personne et par mode (réception et restaurant) : ce que chacun remet en fin de service.",
+    "trevpar": "TRevPAR",
+    "goppar": "Résultat / ch. dispo"
   },
   "portal": {
     "welcome": "Bienvenue",
@@ -4585,5 +4757,73 @@
     "next": "Mois suivant",
     "today": "Aujourd'hui",
     "close": "Fermer"
+  },
+  "chain": {
+    "title": "Groupe hôtelier",
+    "subtitle": "Tous les hôtels de la chaîne : indicateurs du jour, disponibilités centrales, recherche de réservations et comptes consolidés.",
+    "tabs": {
+      "overview": "Portefeuille",
+      "availability": "Disponibilités centrales",
+      "search": "Recherche centrale",
+      "finance": "Comptes consolidés"
+    },
+    "occupancy": "Occupation",
+    "roomsSold": "{sold} / {rooms} chambres",
+    "adr": "Prix moyen",
+    "revpar": "RevPAR",
+    "guests": "Clients présents",
+    "hotelsN": "{n} hôtel(s)",
+    "hotel": "Hôtel",
+    "businessDay": "Jour hôtelier",
+    "arrivals": "Arrivées",
+    "departures": "Départs",
+    "inHouse": "Présents",
+    "openBills": "Notes ouvertes",
+    "total": "Total chaîne",
+    "openHotel": "Ouvrir un nouvel hôtel dans la chaîne",
+    "from": "Du",
+    "to": "Au",
+    "show": "Afficher",
+    "availabilityHint": "Chambres libres par hôtel, type et nuit (réservations et blocs de groupe déduits). Cliquez un type pour réserver dans cet hôtel.",
+    "searchHint": "Nom, téléphone, code national / passeport, n° ou référence de réservation",
+    "find": "Rechercher",
+    "noResults": "Aucune réservation trouvée dans la chaîne.",
+    "revenue": "Produits",
+    "expenses": "Charges",
+    "netResult": "Résultat net",
+    "assets": "Total actif",
+    "account": "Compte",
+    "group": "Groupe",
+    "booksBalanced": "Comptes équilibrés",
+    "financeHint": "Chaque hôtel tient sa propre comptabilité ; le groupe additionne les comptes de même numéro (même plan comptable)."
+  },
+  "precheckin": {
+    "title": "Enregistrement en ligne",
+    "stay": "Réservation n° {number} · {type} · {nights} nuit(s)",
+    "intro": "Remplissez votre fiche avant d'arriver : à l'hôtel, il ne restera qu'à prendre votre clé.",
+    "closed": "Cette réservation n'accepte plus l'enregistrement en ligne.",
+    "thanks": "Merci, votre fiche est enregistrée.",
+    "thanksHint": "Présentez simplement votre pièce d'identité à la réception.",
+    "edit": "Modifier",
+    "lastName": "Nom",
+    "firstName": "Prénom",
+    "fatherName": "Nom du père",
+    "birthDate": "Date de naissance",
+    "identity": "Pièce d'identité",
+    "iranian": "Iranien (code national)",
+    "foreigner": "Étranger (passeport)",
+    "nationality": "Nationalité (code pays)",
+    "passport": "N° de passeport",
+    "nationalCode": "Code national",
+    "phone": "Téléphone",
+    "email": "E-mail",
+    "address": "Adresse",
+    "eta": "Heure d'arrivée prévue",
+    "requests": "Demandes particulières",
+    "requestsHint": "Lit bébé, étage élevé, arrivée tardive…",
+    "signature": "Signature (tapez votre nom complet)",
+    "signatureHint": "Prénom Nom",
+    "accept": "Je certifie l'exactitude de ces informations, transmises aux autorités comme la loi l'exige, et j'accepte le règlement de l'hôtel.",
+    "submit": "Valider ma fiche"
   }
 }

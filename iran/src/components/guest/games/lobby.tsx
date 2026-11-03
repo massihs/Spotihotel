@@ -115,7 +115,7 @@ export function GamesLobby({
                   <span className="min-w-0 flex-1 text-sm">
                     <PlayerTag p={c.white} />
                     <span className="block text-xs text-fg-muted">
-                      {t("vs")} {c.black?.name} · {c.score?.w ?? 0} – {c.score?.b ?? 0} ·{" "}
+                      {t("vs")} {c.black?.name} | {c.score?.w ?? 0} – {c.score?.b ?? 0} ·{" "}
                       {t("toPoints", { n: c.target })}
                     </span>
                   </span>

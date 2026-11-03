@@ -56,6 +56,11 @@ export const pmsSettingsSchema = z.object({
   cityTaxCents: cents,
   autoChargeRoomService: z.coerce.boolean(),
   minibarSelfService: z.coerce.boolean(),
+  chargeNoShows: z.coerce.boolean().default(true),
+  /** Commission per booking channel (basis points). */
+  channelCommissions: z
+    .record(z.string().regex(/^[a-z0-9_]{2,16}$/), z.coerce.number().int().min(0).max(5000))
+    .default({}),
   wifiName: optText(64),
   wifiPassword: optText(64),
   guestInfo: optText(4000),
@@ -94,6 +99,7 @@ export const roomTypeSchema = z
     maxOccupancy: z.coerce.number().int().min(1).max(20),
     baseRateCents: cents,
     extraAdultCents: cents.default(0),
+    overbookLimit: z.coerce.number().int().min(0).max(50).default(0),
     amenities: z.array(z.string().trim().min(1).max(40)).max(40).default([]),
   })
   .refine((v) => v.baseOccupancy <= v.maxOccupancy, { message: "occupancy_invalid", path: ["maxOccupancy"] });

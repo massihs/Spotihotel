@@ -38,7 +38,7 @@ async function Errors() {
                   <div className="min-w-0 flex-1">
                     <p className="font-mono text-sm font-semibold break-words">{r.message}</p>
                     <p className="mt-1 text-xs text-fg-muted" dir="ltr">
-                      {[r.method, r.route, r.kind, r.digest].filter(Boolean).join(" · ")}
+                      {[r.method, r.route, r.kind, r.digest].filter(Boolean).join(" | ")}
                     </p>
                     <p className="mt-1 text-xs text-fg-muted">
                       {t("errors.seen", {

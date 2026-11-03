@@ -83,7 +83,7 @@ async function Invoices({ params }: { params: Params }) {
                     >
                       {t("invoice.print")}
                     </a>
-                    {" · "}
+                    {" | "}
                     <a
                       href={`/api/v1/invoices/${i.publicToken}/pdf`}
                       className="text-accent-text hover:underline"

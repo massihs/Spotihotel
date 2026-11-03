@@ -379,7 +379,7 @@ export function ProductSheet({
               {!p.isAvailable ? (
                 <span className="mx-auto">{t("guest.soldOut")}</span>
               ) : missing ? (
-                <span className="mx-auto truncate">{`${missing.name} · ${t("guest.required")}`}</span>
+                <span className="mx-auto truncate">{`${missing.name} | ${t("guest.required")}`}</span>
               ) : (
                 <>
                   <span>{t("common.add")}</span>

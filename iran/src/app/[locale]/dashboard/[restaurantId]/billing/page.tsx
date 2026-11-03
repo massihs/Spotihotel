@@ -113,7 +113,7 @@ async function Billing({ params, searchParams }: Props) {
                 >
                   <div>
                     <p className="font-medium">
-                      {h.planName} · {t("months", { count: h.months })}
+                      {h.planName} | {t("months", { count: h.months })}
                     </p>
                     <p className="text-fg-muted">
                       {date(h.paidAt ?? h.createdAt)}

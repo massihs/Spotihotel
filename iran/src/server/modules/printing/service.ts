@@ -347,7 +347,7 @@ export async function ticketBlocks(
     return [
       { kind: "text", text: r.name, size: "lg", align: "center" },
       { kind: "text", text: "چاپ آزمایشی", size: "xl", align: "center" },
-      { kind: "text", text: `${printer.name} · ${time(new Date())}`, size: "md", align: "center" },
+      { kind: "text", text: `${printer.name} | ${time(new Date())}`, size: "md", align: "center" },
       { kind: "rule" },
       { kind: "text", text: "چاپگر به درستی متصل است ✓", size: "md", align: "center" },
     ] satisfies TicketBlock[];
@@ -412,7 +412,7 @@ export async function ticketBlocks(
       { kind: "rule" },
       {
         kind: "text",
-        text: `${o.deliveryAddress}${o.customerPhone ? ` · ${o.customerPhone}` : ""}`,
+        text: `${o.deliveryAddress}${o.customerPhone ? ` | ${o.customerPhone}` : ""}`,
         size: "sm",
       },
     );

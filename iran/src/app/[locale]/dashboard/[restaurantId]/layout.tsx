@@ -4,6 +4,9 @@ import { getTranslations } from "next-intl/server";
 import { AppShell, ShellSkeleton } from "@/components/dashboard/app-shell";
 import {
   BookOpenCheck,
+  ChartSpline,
+  UsersRound,
+  Building2,
   CalendarRange,
   Contact,
   Flower2,
@@ -162,6 +165,14 @@ async function RestaurantShell({
         group: g.hotel,
       },
       {
+        show: hotel && ctx.role !== "staff",
+        href: `${base}/chain`,
+        label: t("nav.chain"),
+        icon: <Building2 />,
+        groupKey: "hotel",
+        group: g.hotel,
+      },
+      {
         show: hotel && can(ctx, "frontdesk.view"),
         href: `${base}/planning`,
         label: t("nav.planning"),
@@ -174,6 +185,22 @@ async function RestaurantShell({
         href: `${base}/stays`,
         label: t("nav.stays"),
         icon: <NotebookTabs />,
+        groupKey: "hotel",
+        group: g.hotel,
+      },
+      {
+        show: hotel && can(ctx, "frontdesk.view"),
+        href: `${base}/blocks`,
+        label: t("nav.blocks"),
+        icon: <UsersRound />,
+        groupKey: "hotel",
+        group: g.hotel,
+      },
+      {
+        show: hotel && can(ctx, "frontdesk.view"),
+        href: `${base}/forecast`,
+        label: t("nav.forecast"),
+        icon: <ChartSpline />,
         groupKey: "hotel",
         group: g.hotel,
       },

@@ -318,7 +318,7 @@ export function WaiterApp({
                           </span>
                           {r.length ? (
                             <span className="block text-fg-muted tabular-nums">
-                              {t("rounds", { count: r.length })} · {money(tb.totalCents)}
+                              {t("rounds", { count: r.length })} | {money(tb.totalCents)}
                             </span>
                           ) : null}
                         </span>
@@ -494,10 +494,10 @@ export function WaiterApp({
             <div className="flex items-center justify-between border-b border-border p-4">
               <div>
                 <p className="text-lg font-black">
-                  {t("ticket")} · {t(table.kind === "room" ? "tableRoom" : "table", { label: table.label })}
+                  {t("ticket")} | {t(table.kind === "room" ? "tableRoom" : "table", { label: table.label })}
                 </p>
                 <p className="text-xs text-fg-muted">
-                  {t("ticketItems", { count })} · {t("draftKept")}
+                  {t("ticketItems", { count })} | {t("draftKept")}
                 </p>
               </div>
               <button
@@ -682,7 +682,7 @@ function Rounds({
             {r.items.map((it, i) => (
               <li key={i}>
                 <b className="tabular-nums">{it.quantity}×</b> {it.name}
-                {it.options.length ? <span className="text-fg-muted"> · {it.options.join("، ")}</span> : null}
+                {it.options.length ? <span className="text-fg-muted"> | {it.options.join("، ")}</span> : null}
                 {it.note ? <span className="block text-xs text-warning">↳ {it.note}</span> : null}
               </li>
             ))}

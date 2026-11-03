@@ -32,6 +32,7 @@ export type DeskStay = {
   eta: string | null;
   balanceCents: number;
   accountName: string | null;
+  precheckinAt?: Date | string | null;
 };
 export type DeskRoom = {
   id: string;
@@ -88,12 +89,17 @@ export function FrontDeskBoard({
             <div className="min-w-0 flex-1">
               {name(s)}
               <p className="text-xs text-fg-muted">
-                #{s.number} · {s.typeCode} · {t("nights", { n: nights(s) })} · {s.adults + s.children} 👤
-                {s.eta ? ` · ${t("eta", { time: s.eta })}` : ""}
-                {s.arrival < businessDate ? ` · ${t("late", { day: day(s.arrival) })}` : ""}
+                #{s.number} | {s.typeCode} | {t("nights", { n: nights(s) })} | {s.adults + s.children} 👤
+                {s.eta ? ` | ${t("eta", { time: s.eta })}` : ""}
+                {s.arrival < businessDate ? ` | ${t("late", { day: day(s.arrival) })}` : ""}
               </p>
             </div>
             {s.status === "tentative" ? <StatusPill status="tentative" /> : null}
+            {s.precheckinAt ? (
+              <span className="rounded-full bg-success-soft px-2 py-0.5 text-xs font-semibold text-success">
+                ✓ {t("preregistered")}
+              </span>
+            ) : null}
             {canManage ? (
               <CheckIn
                 restaurantId={restaurantId}
@@ -120,7 +126,7 @@ export function FrontDeskBoard({
                 className={s.balanceCents > 0 ? "text-xs font-semibold text-danger" : "text-xs text-fg-muted"}
               >
                 {s.balanceCents > 0 ? t("due", { amount: money(s.balanceCents) }) : t("settled")}
-                {s.accountName ? ` · ${s.accountName}` : ""}
+                {s.accountName ? ` | ${s.accountName}` : ""}
               </p>
             </div>
             {canManage ? (
@@ -163,7 +169,7 @@ export function FrontDeskBoard({
             <div className="min-w-0 flex-1">
               {name(s)}
               <p className="text-xs text-fg-muted">
-                {t("until", { day: day(s.departure) })} · {money(s.balanceCents)}
+                {t("until", { day: day(s.departure) })} | {money(s.balanceCents)}
               </p>
             </div>
           </li>
@@ -228,7 +234,7 @@ function CheckIn({ restaurantId, stay, rooms }: { restaurantId: string; stay: De
               <option value="">{t("autoRoom")}</option>
               {free.map((x) => (
                 <option key={x.id} value={x.id}>
-                  {x.label} · {tHk(x.housekeeping)}
+                  {x.label} | {tHk(x.housekeeping)}
                 </option>
               ))}
             </select>

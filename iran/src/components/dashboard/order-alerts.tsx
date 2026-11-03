@@ -166,7 +166,7 @@ export function OrderAlerts({
         id: String(data.orderId ?? Date.now()),
         title: t("title", { number: String(data.number ?? "") }),
         body: room
-          ? `${t("roomOrder")} · ${t("bodyRoom", { table: String(data.tableLabel ?? "") })}`
+          ? `${t("roomOrder")} | ${t("bodyRoom", { table: String(data.tableLabel ?? "") })}`
           : t("body", { table: String(data.tableLabel ?? "") }),
         href: `/dashboard/${restaurantId}/orders`,
       };

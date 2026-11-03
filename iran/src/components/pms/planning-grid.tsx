@@ -122,7 +122,7 @@ export function PlanningGrid({
                   #{s.number} {s.lastName}
                 </Link>
                 <span className="text-fg-muted">
-                  {s.typeCode} · {day(s.arrival)} → {day(s.departure)}
+                  {s.typeCode} | {day(s.arrival)} → {day(s.departure)}
                 </span>
                 {canManage ? (
                   <Assign

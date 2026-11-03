@@ -224,7 +224,7 @@ export function OrderCard({
               {o.tableLabel
                 ? t(o.placeKind === "room" ? "orders.tableRoom" : "orders.table", { label: o.tableLabel })
                 : "—"}
-              {who ? ` · ${who}` : ""}
+              {who ? ` | ${who}` : ""}
             </p>
           </div>
         </div>
@@ -271,7 +271,7 @@ export function OrderCard({
               <span className={kitchen ? "font-bold" : "font-semibold"}>{i.productName}</span>
               {i.options.length ? (
                 <span className={cn("block text-fg-muted", kitchen ? "text-sm" : "text-xs")}>
-                  {i.options.map((x) => x.valueName).join(" · ")}
+                  {i.options.map((x) => x.valueName).join(" | ")}
                 </span>
               ) : null}
               {i.note ? (

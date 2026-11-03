@@ -121,7 +121,7 @@ export function DispatchBoard({
                       <p className="mt-2 flex gap-1.5 text-sm text-fg-muted">
                         <MapPin className="mt-0.5 size-4 shrink-0 text-tone-rose" />
                         <span className="line-clamp-2">
-                          {o.zoneName ? <b className="text-fg">{o.zoneName} · </b> : null}
+                          {o.zoneName ? <b className="text-fg">{o.zoneName} | </b> : null}
                           {o.address}
                         </span>
                       </p>
@@ -238,7 +238,7 @@ export function CourierSettlement({
               <p className="font-semibold">{b.name}</p>
               <p className="text-xs text-fg-muted">
                 {t("toSettle", { count: b.deliveries })}
-                {b.onTheRoad ? ` · ${t("onRoadN", { count: b.onTheRoad })}` : ""}
+                {b.onTheRoad ? ` | ${t("onRoadN", { count: b.onTheRoad })}` : ""}
               </p>
             </div>
             <div className="text-end">
@@ -332,7 +332,7 @@ export function DeliverySettings({
                   <span className="block font-medium">{z.name}</span>
                   <span className="block text-xs text-fg-muted">
                     {t("eta", { count: z.etaMinutes })}
-                    {z.minOrderCents ? ` · ${t("minOrder", { amount: money(z.minOrderCents) })}` : ""}
+                    {z.minOrderCents ? ` | ${t("minOrder", { amount: money(z.minOrderCents) })}` : ""}
                   </span>
                 </span>
                 <span className="font-bold tabular-nums">{money(z.feeCents)}</span>

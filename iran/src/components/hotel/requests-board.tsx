@@ -180,7 +180,7 @@ export function RequestsBoard({
                               {r.status !== "done" ? <span>· {t("ago", { min: wait })}</span> : null}
                               {r.status === "done" && r.doneAt ? (
                                 <span>
-                                  · {t("doneAt")} <span dir="ltr">{clock(r.doneAt)}</span>
+                                  | {t("doneAt")} <span dir="ltr">{clock(r.doneAt)}</span>
                                 </span>
                               ) : null}
                             </p>

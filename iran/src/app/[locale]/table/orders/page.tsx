@@ -69,7 +69,7 @@ async function GuestOrders({ searchParams }: Pick<PageProps<"/[locale]/table/ord
           <LiveRefresh types={["order.updated", "session.closed", "payment.updated"]} />
           <GuestTopBar
             title={t("guest.myOrders")}
-            subtitle={`${guest.restaurant.name} · ${t(guest.table.kind === "room" ? "guest.tableBadgeRoom" : "guest.tableBadge", { table: guest.table.label })}`}
+            subtitle={`${guest.restaurant.name} | ${t(guest.table.kind === "room" ? "guest.tableBadgeRoom" : "guest.tableBadge", { table: guest.table.label })}`}
             extra={<LiveIndicator className="rounded-full bg-surface-2 px-3 py-1.5" />}
           />
           <main className="mx-auto max-w-2xl px-4 pt-4 pb-32 lg:grid lg:max-w-6xl lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start lg:gap-x-6 lg:pt-6 lg:pb-12">

@@ -102,7 +102,7 @@ export function NutritionFields({
         <div role="status" className="rounded-xl bg-warning-soft px-3 py-2 text-sm">
           <p>{estimate.recipe ? t("estimatedRecipe") : t("estimatedNotice")}</p>
           <p className="mt-1 text-xs text-fg-muted">
-            {estimate.matched.map((m) => `${m.text} (${m.grams} g)`).join(" · ")}
+            {estimate.matched.map((m) => `${m.text} (${m.grams} g)`).join(" | ")}
           </p>
           {estimate.unknown.length ? (
             <p className="mt-1 text-xs text-fg-muted">

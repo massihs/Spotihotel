@@ -5,6 +5,9 @@ import type { Database, DbOrTx } from "@/server/db/client";
 import {
   diningTables,
   folios,
+  pricingRules,
+  roomBlockDays,
+  roomBlocks,
   hotelAccounts,
   hotelGuests,
   pmsSettings,
@@ -132,6 +135,10 @@ export async function quoteStay(
     departure: string;
     adults: number;
     fixedRateCents?: number | null;
+    /** The hotel's business day: enables last-minute pricing rules. */
+    today?: string;
+    /** Group block whose rooms the stay uses (they are not counted as sold for pricing). */
+    blockId?: string | null;
   },
 ) {
   const type = await loadType(db, restaurantId, q.roomTypeId);
@@ -149,35 +156,128 @@ export async function quoteStay(
   const minStay = Math.max(plan?.minStay ?? 1, byDay.get(q.arrival)?.minStay ?? 1);
   if (nights.length < minStay) issues.push("min_stay");
   if (q.adults > type.maxOccupancy) issues.push("too_many_guests");
-  const priced = nights.map((d) => ({
-    day: d,
-    rateCents: q.fixedRateCents ?? nightPrice(type, byDay.get(d)?.rateCents, plan, q.adults),
-  }));
+  // Revenue management: the night's occupancy on the books picks the price adjustment.
+  const rules =
+    q.fixedRateCents == null && nights.length
+      ? await db
+          .select()
+          .from(pricingRules)
+          .where(
+            and(
+              eq(pricingRules.restaurantId, restaurantId),
+              eq(pricingRules.active, true),
+              or(isNull(pricingRules.roomTypeId), eq(pricingRules.roomTypeId, type.id)),
+            ),
+          )
+      : [];
+  let occupancy = new Map<string, number>();
+  if (rules.length) {
+    const [counts, booked, held] = await Promise.all([
+      roomCounts(db, restaurantId),
+      bookedCounts(db, restaurantId, q.arrival, q.departure),
+      blockHeld(db, restaurantId, q.arrival, q.departure),
+    ]);
+    const total = counts.get(type.id)?.rooms ?? 0;
+    occupancy = new Map(
+      nights.map((d) => {
+        const k = `${type.id}|${d}`;
+        const own = q.blockId ? 0 : (held.get(k) ?? 0);
+        return [d, total ? Math.round((((booked.get(k) ?? 0) + own) / total) * 100) : 100];
+      }),
+    );
+  }
+  const lead = q.today ? nightsBetween(q.today, q.arrival) : null;
+  const priced = nights.map((d) => {
+    const base = q.fixedRateCents ?? nightPrice(type, byDay.get(d)?.rateCents, plan, q.adults);
+    const occ = occupancy.get(d) ?? 0;
+    const rule = rules
+      .filter(
+        (r) => occ >= r.minOccupancyPct && (r.withinDays == null || (lead != null && lead <= r.withinDays)),
+      )
+      .sort((a, b) => b.minOccupancyPct - a.minOccupancyPct || b.adjustBps - a.adjustBps)[0];
+    const adjustBps = rule?.adjustBps ?? 0;
+    return {
+      day: d,
+      rateCents: adjustBps ? Math.max(0, Math.round((base * (10_000 + adjustBps)) / 10_000)) : base,
+      adjustBps,
+    };
+  });
   return {
     type,
     plan,
-    nights: priced,
+    nights: priced.map(({ day, rateCents }) => ({ day, rateCents })),
+    adjustments: priced.filter((n) => n.adjustBps).map(({ day, adjustBps }) => ({ day, adjustBps })),
     totalCents: priced.reduce((s, n) => s + n.rateCents, 0),
     minStay,
     issues,
   };
 }
 
-/** Rooms of each type that can be sold (out-of-order rooms are not). */
+/**
+ * Rooms of each type that can be sold (out-of-order rooms are not), and the capacity including
+ * the controlled overbooking allowed on the type.
+ */
 async function roomCounts(db: DbOrTx, restaurantId: string) {
+  const [rows, types] = await Promise.all([
+    db
+      .select({ roomTypeId: diningTables.roomTypeId, n: sql<number>`count(*)::int` })
+      .from(diningTables)
+      .where(
+        and(
+          eq(diningTables.restaurantId, restaurantId),
+          eq(diningTables.kind, "room"),
+          isNull(diningTables.deletedAt),
+          ne(diningTables.housekeeping, "out_of_order"),
+        ),
+      )
+      .groupBy(diningTables.roomTypeId),
+    db
+      .select({ id: roomTypes.id, overbook: roomTypes.overbookLimit })
+      .from(roomTypes)
+      .where(eq(roomTypes.restaurantId, restaurantId)),
+  ]);
+  const over = new Map(types.map((t) => [t.id, t.overbook]));
+  return new Map(
+    rows.map((r) => [
+      r.roomTypeId,
+      { rooms: r.n, capacity: r.n + (r.roomTypeId ? (over.get(r.roomTypeId) ?? 0) : 0) },
+    ]),
+  );
+}
+
+/**
+ * Rooms still held by active group blocks per type and night (allotted minus picked up), and
+ * per block (what each block has left).
+ */
+export async function blockHeld(db: DbOrTx, restaurantId: string, from: string, to: string) {
   const rows = await db
-    .select({ roomTypeId: diningTables.roomTypeId, n: sql<number>`count(*)::int` })
-    .from(diningTables)
+    .select({
+      blockId: roomBlockDays.blockId,
+      roomTypeId: roomBlockDays.roomTypeId,
+      day: roomBlockDays.day,
+      rooms: roomBlockDays.rooms,
+      picked: sql<number>`(select count(*)::int from ${stayNights} sn join ${stays} s on s.id = sn.stay_id where s.block_id = ${roomBlockDays.blockId} and s.room_type_id = ${roomBlockDays.roomTypeId} and sn.day = ${roomBlockDays.day} and s.status in ('tentative','confirmed','in_house'))`,
+    })
+    .from(roomBlockDays)
+    .innerJoin(roomBlocks, eq(roomBlocks.id, roomBlockDays.blockId))
     .where(
       and(
-        eq(diningTables.restaurantId, restaurantId),
-        eq(diningTables.kind, "room"),
-        isNull(diningTables.deletedAt),
-        ne(diningTables.housekeeping, "out_of_order"),
+        eq(roomBlockDays.restaurantId, restaurantId),
+        inArray(roomBlocks.status, ["tentative", "definite"]),
+        gte(roomBlockDays.day, from),
+        lt(roomBlockDays.day, to),
       ),
-    )
-    .groupBy(diningTables.roomTypeId);
-  return new Map(rows.map((r) => [r.roomTypeId, r.n]));
+    );
+  const byType = new Map<string, number>() as Map<string, number> & { perBlock?: Map<string, number> };
+  const perBlock = new Map<string, number>();
+  for (const r of rows) {
+    const left = Math.max(0, r.rooms - r.picked);
+    const k = `${r.roomTypeId}|${r.day}`;
+    byType.set(k, (byType.get(k) ?? 0) + left);
+    perBlock.set(`${r.blockId}|${k}`, left);
+  }
+  byType.perBlock = perBlock;
+  return byType;
 }
 
 /** Rooms booked per type and night over [from, to) (active stays only). */
@@ -217,7 +317,7 @@ export async function availabilityGrid(db: DbOrTx, ctx: RestaurantContext, from:
   const n = Math.max(1, Math.min(days, 62));
   const to = addDays(from, n);
   const rid = ctx.restaurant.id;
-  const [types, counts, booked, rates] = await Promise.all([
+  const [types, counts, booked, rates, held] = await Promise.all([
     db
       .select()
       .from(roomTypes)
@@ -229,13 +329,14 @@ export async function availabilityGrid(db: DbOrTx, ctx: RestaurantContext, from:
       .select()
       .from(rateDays)
       .where(and(eq(rateDays.restaurantId, rid), gte(rateDays.day, from), lt(rateDays.day, to))),
+    blockHeld(db, rid, from, to),
   ]);
   const rateMap = new Map(rates.map((r) => [`${r.roomTypeId}|${r.day}`, r]));
   const nights = eachNight(from, to);
   return {
     nights,
     types: types.map((t) => {
-      const total = counts.get(t.id) ?? 0;
+      const total = counts.get(t.id)?.rooms ?? 0;
       return {
         id: t.id,
         code: t.code,
@@ -244,10 +345,12 @@ export async function availabilityGrid(db: DbOrTx, ctx: RestaurantContext, from:
         days: nights.map((d) => {
           const r = rateMap.get(`${t.id}|${d}`);
           const sold = booked.get(`${t.id}|${d}`) ?? 0;
+          const blocked = held.get(`${t.id}|${d}`) ?? 0;
           return {
             day: d,
-            free: total - sold,
+            free: total - sold - blocked,
             sold,
+            blocked,
             rateCents: r?.rateCents ?? t.baseRateCents,
             closed: r?.closed ?? false,
             minStay: r?.minStay ?? null,
@@ -265,14 +368,26 @@ export async function availabilityGrid(db: DbOrTx, ctx: RestaurantContext, from:
 async function assertBookable(
   tx: DbOrTx,
   restaurantId: string,
-  s: { roomTypeId: string; roomId: string | null; arrival: string; departure: string },
+  s: {
+    roomTypeId: string;
+    roomId: string | null;
+    arrival: string;
+    departure: string;
+    blockId?: string | null;
+  },
   excludeStayId?: string,
 ) {
   const counts = await roomCounts(tx, restaurantId);
-  const total = counts.get(s.roomTypeId) ?? 0;
-  const booked = await bookedCounts(tx, restaurantId, s.arrival, s.departure, excludeStayId);
+  const capacity = counts.get(s.roomTypeId)?.capacity ?? 0;
+  const [booked, held] = await Promise.all([
+    bookedCounts(tx, restaurantId, s.arrival, s.departure, excludeStayId),
+    blockHeld(tx, restaurantId, s.arrival, s.departure),
+  ]);
   for (const d of eachNight(s.arrival, s.departure)) {
-    if ((booked.get(`${s.roomTypeId}|${d}`) ?? 0) >= total) throw conflict("no_availability", { day: d });
+    const k = `${s.roomTypeId}|${d}`;
+    // A room picked up from its block uses a room the block already holds.
+    if (s.blockId && (held.perBlock?.get(`${s.blockId}|${k}`) ?? 0) > 0) continue;
+    if ((booked.get(k) ?? 0) + (held.get(k) ?? 0) >= capacity) throw conflict("no_availability", { day: d });
   }
   if (s.roomId) await assertRoomFree(tx, restaurantId, s.roomId, s.arrival, s.departure, excludeStayId);
 }
@@ -335,6 +450,8 @@ export const staySchema = z
     ratePlanId: optUuid,
     roomId: optUuid,
     accountId: optUuid,
+    /** Picked up from a group block: the block's rate, plan and company apply. */
+    blockId: optUuid,
     arrival: day,
     departure: day,
     adults: z.coerce.number().int().min(1).max(20).default(1),
@@ -382,11 +499,24 @@ export async function createStay(db: Database, ctx: RestaurantContext, raw: z.in
   const rid = ctx.restaurant.id;
   const settings = await getPmsSettings(db, rid, ctx.restaurant.timezone);
   if (input.arrival < settings.businessDate) throw validation("arrival_in_past", { field: "arrival" });
-  if (input.fixedRateCents != null) assertCan(ctx, "folio.adjust");
+  if (input.fixedRateCents != null && !input.blockId) assertCan(ctx, "folio.adjust");
 
   const stay = await db.transaction(async (tx) => {
     await lockType(tx, input.roomTypeId);
-    const quote = await quoteStay(tx, rid, input);
+    // A room of a group block: inside its dates, at the group's rate, billed to its company.
+    if (input.blockId) {
+      const [block] = await tx
+        .select()
+        .from(roomBlocks)
+        .where(and(eq(roomBlocks.id, input.blockId), eq(roomBlocks.restaurantId, rid)));
+      if (!block || !["tentative", "definite"].includes(block.status)) throw notFound("block_not_found");
+      if (input.arrival < block.arrival || input.departure > block.departure)
+        throw validation("outside_block", { field: "arrival" });
+      if (input.fixedRateCents == null && block.rateCents != null) input.fixedRateCents = block.rateCents;
+      input.ratePlanId ??= block.ratePlanId;
+      input.accountId ??= block.accountId;
+    }
+    const quote = await quoteStay(tx, rid, { ...input, today: settings.businessDate });
     if (quote.issues.includes("too_many_guests")) throw validation("too_many_guests", { field: "adults" });
     if (quote.issues.length && !input.override) throw conflict(quote.issues[0]!, { minStay: quote.minStay });
     if (input.override && quote.issues.length) assertCan(ctx, "rates.manage");
@@ -394,7 +524,7 @@ export async function createStay(db: Database, ctx: RestaurantContext, raw: z.in
       const room = await loadRoom(tx, rid, input.roomId);
       if (room.roomTypeId !== input.roomTypeId) throw validation("room_type_mismatch", { field: "roomId" });
     }
-    await assertBookable(tx, rid, { ...input, roomId: input.roomId ?? null });
+    await assertBookable(tx, rid, { ...input, roomId: input.roomId ?? null, blockId: input.blockId ?? null });
     if (input.accountId) {
       const [acc] = await tx
         .select({ id: hotelAccounts.id })
@@ -429,6 +559,7 @@ export async function createStay(db: Database, ctx: RestaurantContext, raw: z.in
         children: input.children,
         guestId,
         accountId: input.accountId ?? null,
+        blockId: input.blockId ?? null,
         source: input.source,
         channelRef: input.channelRef ?? null,
         eta: input.eta ?? null,
@@ -518,12 +649,13 @@ export async function amendStay(
     if (s.status === "in_house" && input.arrival !== s.arrival) throw conflict("arrival_locked");
     if (posted.some((p) => p.day >= input.departure)) throw conflict("nights_already_charged");
     await lockType(tx, input.roomTypeId);
-    const quote = await quoteStay(tx, rid, input);
+    const { businessDate } = await getPmsSettings(tx, rid, ctx.restaurant.timezone);
+    const quote = await quoteStay(tx, rid, { ...input, today: businessDate, blockId: s.blockId });
     if (quote.issues.includes("too_many_guests")) throw validation("too_many_guests", { field: "adults" });
     if (quote.issues.length && !input.override) throw conflict(quote.issues[0]!, { minStay: quote.minStay });
     const roomId = input.roomTypeId === s.roomTypeId ? s.roomId : null;
     if (s.status === "in_house" && !roomId) throw conflict("move_room_first");
-    await assertBookable(tx, rid, { ...input, roomId }, s.id);
+    await assertBookable(tx, rid, { ...input, roomId, blockId: s.blockId }, s.id);
     await tx.delete(stayNights).where(and(eq(stayNights.stayId, s.id), isNull(stayNights.postedAt)));
     const fresh = quote.nights.filter((n) => !postedDays.has(n.day));
     if (fresh.length)
@@ -961,6 +1093,8 @@ const stayColumns = {
   totalCents: stays.totalCents,
   accountName: hotelAccounts.name,
   notes: stays.notes,
+  precheckinAt: stays.precheckinAt,
+  blockId: stays.blockId,
 };
 
 function staysQuery(db: DbOrTx) {
@@ -1005,7 +1139,7 @@ export async function frontDesk(db: DbOrTx, ctx: RestaurantContext) {
       .orderBy(asc(diningTables.label)),
     roomCounts(db, rid),
   ]);
-  const rooms = [...counts.entries()].filter(([k]) => k).reduce((s, [, n]) => s + n, 0);
+  const rooms = [...counts.entries()].filter(([k]) => k).reduce((s, [, n]) => s + n.rooms, 0);
   const [tonight] = await db
     .select({
       sold: sql<number>`count(*)::int`,

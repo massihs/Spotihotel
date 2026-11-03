@@ -7,6 +7,7 @@ import { conflict, notFound, validation } from "@/server/errors";
 import { assertCan, type RestaurantContext } from "@/server/tenancy";
 import { includedTax } from "./calc";
 import { getPmsSettings } from "./setup";
+import { chequeDetailsSchema, insertCheque } from "@/server/modules/ledger/finance";
 
 type Tx = Parameters<Parameters<Database["transaction"]>[0]>[0];
 
@@ -233,17 +234,21 @@ export async function postCharge(
   });
 }
 
-export const paymentSchema = z.object({
-  amountCents: z.coerce.number().int().min(1).max(MAX_CENTS),
-  method: z.enum(PAYMENT_METHODS),
-  reference: z
-    .string()
-    .trim()
-    .max(64)
-    .transform((v) => v || null)
-    .nullable()
-    .optional(),
-});
+export const paymentSchema = z
+  .object({
+    amountCents: z.coerce.number().int().min(1).max(MAX_CENTS),
+    method: z.enum(PAYMENT_METHODS),
+    reference: z
+      .string()
+      .trim()
+      .max(64)
+      .transform((v) => v || null)
+      .nullable()
+      .optional(),
+    /** Paid by cheque (چک): the cheque enters the register with its Sayad id and due date. */
+    cheque: chequeDetailsSchema.optional(),
+  })
+  .refine((v) => v.method !== "cheque" || !!v.cheque, { message: "cheque_required", path: ["cheque"] });
 
 /** Money received on a folio (deposit before arrival, settlement at check-out, company payment). */
 export async function postPayment(
@@ -264,9 +269,18 @@ export async function postPayment(
       unitCents: -input.amountCents,
       amountCents: -input.amountCents,
       method: input.method,
-      reference: input.reference ?? null,
+      reference: input.reference ?? input.cheque?.sayadId ?? null,
       userId: ctx.user.id,
     });
+    if (input.method === "cheque" && input.cheque)
+      await insertCheque(tx, rid, {
+        ...input.cheque,
+        direction: "received",
+        amountCents: input.amountCents,
+        folioLineId: line.id,
+        userId: ctx.user.id,
+        today: line.businessDate,
+      });
     await recordAudit(tx, {
       action: "folio.payment_posted",
       actorUserId: ctx.user.id,

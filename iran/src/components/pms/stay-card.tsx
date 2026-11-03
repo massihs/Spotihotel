@@ -1,16 +1,18 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MoneyField } from "@/components/ui/money-field";
 import { useMoney } from "@/components/ui/use-money";
 import { useRun } from "@/components/ui/sheet-kit";
-import { parseMoneyInput } from "@/lib/money";
+import { centsToInput, parseMoneyInput } from "@/lib/money";
 import {
   amendStayAction,
   assignRoomAction,
   cancelStayAction,
+  cancellationFeeAction,
+  precheckinLinkAction,
   chargeMinibarAction,
   chargeRoomOrdersAction,
   checkInAction,
@@ -51,6 +53,7 @@ export function StayActions({
     eta: string | null;
     notes: string | null;
     balanceCents: number;
+    precheckinAt: Date | string | null;
   };
   rooms: Room[];
   types: { id: string; code: string; name: string }[];
@@ -119,7 +122,7 @@ export function StayActions({
                   .filter((x) => x.free || x.id === s.roomId)
                   .map((x) => (
                     <option key={x.id} value={x.id}>
-                      {x.label} · {types.find((ty) => ty.id === x.roomTypeId)?.code ?? "?"} ·{" "}
+                      {x.label} | {types.find((ty) => ty.id === x.roomTypeId)?.code ?? "?"} ·{" "}
                       {tHk(x.housekeeping)}
                       {x.roomTypeId !== s.roomTypeId ? ` (${t("otherType")})` : ""}
                     </option>
@@ -164,6 +167,14 @@ export function StayActions({
         </>
       ) : null}
       {canManage && arriving ? (
+        <SheetButton
+          label={s.precheckinAt ? `✓ ${t("precheckinDone")}` : t("precheckin")}
+          title={t("precheckin")}
+        >
+          {() => <PrecheckinLink restaurantId={restaurantId} stayId={s.id} done={!!s.precheckinAt} />}
+        </SheetButton>
+      ) : null}
+      {canManage && arriving ? (
         <SheetButton label={t("cancel")} title={t("cancel")} variant="ghost">
           {(close) => (
             <form
@@ -185,7 +196,7 @@ export function StayActions({
                 <Label>{t("cancelReason")}</Label>
                 <input name="reason" className={inputCls} required minLength={2} maxLength={200} />
               </label>
-              <MoneyField name="fee" currency={currency} label={t("cancelFee")} hint={t("cancelFeeHint")} />
+              <PolicyFee restaurantId={restaurantId} stayId={s.id} currency={currency} />
               <FormError error={r.error} />
               <Button type="submit" variant="danger" className="w-full" disabled={r.pending}>
                 {t("cancel")}
@@ -387,6 +398,88 @@ function Minibar({
         onClick={() => r.run(() => chargeMinibarAction(restaurantId, stayId, lines), done)}
       >
         {t("chargeMinibar", { total: money(total) })}
+      </Button>
+    </div>
+  );
+}
+
+/** The cancellation fee the rate plan's policy sets now, editable before confirming. */
+function PolicyFee({
+  restaurantId,
+  stayId,
+  currency,
+}: {
+  restaurantId: string;
+  stayId: string;
+  currency: string;
+}) {
+  const t = useTranslations("pms.card");
+  const locale = useLocale();
+  const [fee, setFee] = useState<{ feeCents: number; reason: string } | null>(null);
+  useEffect(() => {
+    let live = true;
+    cancellationFeeAction(restaurantId, stayId).then((r) => live && r?.ok && r.data && setFee(r.data));
+    return () => {
+      live = false;
+    };
+  }, [restaurantId, stayId]);
+  if (!fee) return <div className="h-20 animate-pulse rounded-xl bg-surface-2" />;
+  return (
+    <MoneyField
+      name="fee"
+      currency={currency}
+      label={t("cancelFee")}
+      hint={t(`policy.${fee.reason}`)}
+      defaultValue={fee.feeCents ? centsToInput(fee.feeCents, locale, currency) : ""}
+    />
+  );
+}
+
+/** Texts the guest their online pre-check-in link; the link can also be copied. */
+function PrecheckinLink({
+  restaurantId,
+  stayId,
+  done,
+}: {
+  restaurantId: string;
+  stayId: string;
+  done: boolean;
+}) {
+  const t = useTranslations("pms.card");
+  const [res, setRes] = useState<{ link: string; sent: boolean } | null>(null);
+  const r = useRun();
+  return (
+    <div className="space-y-3">
+      <p className="text-sm text-fg-muted">{done ? t("precheckinDoneHint") : t("precheckinHint")}</p>
+      {res ? (
+        <>
+          <p
+            className={`rounded-xl px-3 py-2 text-sm ${res.sent ? "bg-success-soft text-success" : "bg-warning-soft"}`}
+          >
+            {res.sent ? t("precheckinSent") : t("precheckinNoPhone")}
+          </p>
+          <input
+            readOnly
+            value={res.link}
+            className={`${inputCls} text-xs`}
+            dir="ltr"
+            onFocus={(e) => e.target.select()}
+          />
+        </>
+      ) : null}
+      <FormError error={r.error} />
+      <Button
+        className="w-full"
+        disabled={r.pending}
+        onClick={() =>
+          r.run(async () => {
+            const out = await precheckinLinkAction(restaurantId, stayId);
+            if (out?.ok && out.data) setRes(out.data);
+            return out;
+          })
+        }
+      >
+        {t("precheckinSend")}
       </Button>
     </div>
   );

@@ -241,7 +241,7 @@ export function PlaylistPlayer({
             {title}
           </p>
           <p className="mt-3 text-sm text-white/80">
-            Spotihotel · {t("tracks", { count: tracks.length })} · {t("minutes", { count: totalMin })}
+            Spotihotel | {t("tracks", { count: tracks.length })} | {t("minutes", { count: totalMin })}
           </p>
         </div>
       </div>
@@ -511,7 +511,7 @@ export function RadioPlayer({ slug, name, color }: { slug: string; name: string;
           </span>
           <p className="mt-2 truncate text-2xl font-black tracking-tight">{name}</p>
           <p className="truncate text-sm text-white/75" dir="auto">
-            {r.live ? `${r.live.track.title} · ${r.live.track.artist ?? "—"}` : t("tapToListen")}
+            {r.live ? `${r.live.track.title} | ${r.live.track.artist ?? "—"}` : t("tapToListen")}
           </p>
         </div>
         <PlayButton

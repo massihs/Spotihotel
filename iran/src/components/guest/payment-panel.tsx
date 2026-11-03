@@ -138,7 +138,7 @@ export function PaymentPanel({
             .map((p) => (
               <li key={p.id} className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-fg-muted">
-                  {t(`invoice.provider.${p.provider}`)} · {money(p.amountCents)}
+                  {t(`invoice.provider.${p.provider}`)} | {money(p.amountCents)}
                 </span>
                 <Button variant="secondary" size="sm" disabled={pending} onClick={() => openInvoice(p.id)}>
                   {t("invoice.get")}

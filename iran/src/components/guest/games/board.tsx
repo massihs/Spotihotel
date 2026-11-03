@@ -1126,7 +1126,7 @@ export function GameBoard({ initial, title }: { initial: GameView; title: string
               {s?.score.w ?? 0} – {s?.score.b ?? 0}
             </p>
             <p className="mt-1 text-xs text-white/60">
-              {view.players.w.name} · {view.players.b?.name}
+              {view.players.w.name} | {view.players.b?.name}
             </p>
             <Link
               href="/table/games"

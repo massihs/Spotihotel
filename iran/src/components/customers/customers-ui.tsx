@@ -285,12 +285,12 @@ export function CouponList({
                         : t("amountOff", { amount: money(c.value) })}
                     </p>
                     <p className="mt-1 text-xs text-fg-muted">
-                      {c.minOrderCents > 0 ? `${t("minOrder", { amount: money(c.minOrderCents) })} · ` : ""}
+                      {c.minOrderCents > 0 ? `${t("minOrder", { amount: money(c.minOrderCents) })} | ` : ""}
                       {c.maxUses != null
                         ? t("usesOf", { used: c.usedCount, max: c.maxUses })
                         : t("uses", { used: c.usedCount })}
                       {c.endsAt
-                        ? ` · ${t("until", { date: c.endsAt.toLocaleDateString(locale === "fa" ? "fa-IR" : locale) })}`
+                        ? ` | ${t("until", { date: c.endsAt.toLocaleDateString(locale === "fa" ? "fa-IR" : locale) })}`
                         : ""}
                     </p>
                   </div>

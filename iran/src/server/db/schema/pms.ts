@@ -49,6 +49,11 @@ export const pmsSettings = pgTable("pms_settings", {
   wifiName: varchar({ length: 64 }),
   wifiPassword: varchar({ length: 64 }),
   guestInfo: text(),
+  /** Commission of each booking channel (basis points): { snapptrip: 1500, alibaba: 1200 }. */
+  channelCommissions: jsonb().$type<Record<string, number>>().notNull().default({}),
+  /** Charge the first night to guaranteed bookings that never arrive (night audit). */
+  chargeNoShows: boolean().notNull().default(true),
+  nextBlockNumber: integer().notNull().default(1),
   nextStayNumber: integer().notNull().default(1001),
   nextFolioNumber: integer().notNull().default(1),
   ...timestamps,
@@ -72,6 +77,8 @@ export const roomTypes = pgTable(
     /** Per extra adult above the base occupancy, per night. */
     extraAdultCents: money().notNull().default(0),
     amenities: jsonb().$type<string[]>().notNull().default([]),
+    /** Rooms that may be sold beyond the physical inventory (controlled overbooking). */
+    overbookLimit: integer().notNull().default(0),
     sortOrder: integer().notNull().default(0),
     ...timestamps,
     ...softDelete,
@@ -95,7 +102,7 @@ export const ratePlans = pgTable(
       .references(() => restaurants.id, { onDelete: "cascade" }),
     code: varchar({ length: 12 }).notNull(),
     name: varchar({ length: 80 }).notNull(),
-    /** RO room only · BB breakfast · HB half board · FB full board · AI all inclusive */
+    /** RO room only | BB breakfast | HB half board | FB full board | AI all inclusive */
     mealPlan: varchar({ length: 2 }).notNull().default("RO"),
     /** Percentage on the base rate (basis points, may be negative: -1000 = 10% off). */
     adjustBps: integer().notNull().default(0),
@@ -234,6 +241,11 @@ export const stays = pgTable(
     source: varchar({ length: 16 }).notNull().default("direct"),
     /** The channel's own booking reference. */
     channelRef: varchar({ length: 64 }),
+    /** Group block (allotment) the room was picked up from. */
+    blockId: uuid(),
+    /** Online pre-check-in: when the guest filled their registration card, and their signature. */
+    precheckinAt: tstz(),
+    precheckinSignature: varchar({ length: 120 }),
     /** Expected time of arrival "HH:MM". */
     eta: varchar({ length: 5 }),
     /** none | card | deposit | company */
@@ -473,4 +485,175 @@ export const nightAudits = pgTable(
     ...timestamps,
   },
   (t) => [uniqueIndex("night_audits_day_uq").on(t.restaurantId, t.businessDate)],
+);
+
+/**
+ * A group block (allotment): rooms of some types held for an event, a tour or a company over
+ * dates, picked up as named bookings until the release date, after which the rooms left go back
+ * to general sale.
+ */
+export const roomBlocks = pgTable(
+  "room_blocks",
+  {
+    id: pk(),
+    restaurantId: uuid()
+      .notNull()
+      .references(() => restaurants.id, { onDelete: "cascade" }),
+    number: integer().notNull(),
+    name: varchar({ length: 160 }).notNull(),
+    accountId: uuid().references(() => hotelAccounts.id, { onDelete: "set null" }),
+    contactName: varchar({ length: 120 }),
+    contactPhone: varchar({ length: 24 }),
+    /** tentative | definite | released | cancelled */
+    status: varchar({ length: 10 }).notNull().default("definite"),
+    arrival: date({ mode: "string" }).notNull(),
+    departure: date({ mode: "string" }).notNull(),
+    /** Rooms not picked up by this day return to general sale (night audit). */
+    releaseDate: date({ mode: "string" }).notNull(),
+    ratePlanId: uuid().references(() => ratePlans.id, { onDelete: "set null" }),
+    /** Group rate per room and night (null = the rate plan's price). */
+    rateCents: money(),
+    notes: text(),
+    createdByUserId: uuid().references(() => users.id, { onDelete: "set null" }),
+    ...timestamps,
+  },
+  (t) => [
+    uniqueIndex("room_blocks_number_uq").on(t.restaurantId, t.number),
+    index("room_blocks_dates_idx").on(t.restaurantId, t.arrival, t.departure),
+    check("room_blocks_dates_chk", sql`${t.departure} > ${t.arrival} and ${t.releaseDate} <= ${t.arrival}`),
+  ],
+);
+
+/** Rooms held by a block, per room type and night. */
+export const roomBlockDays = pgTable(
+  "room_block_days",
+  {
+    blockId: uuid()
+      .notNull()
+      .references(() => roomBlocks.id, { onDelete: "cascade" }),
+    restaurantId: uuid()
+      .notNull()
+      .references(() => restaurants.id, { onDelete: "cascade" }),
+    roomTypeId: uuid()
+      .notNull()
+      .references(() => roomTypes.id, { onDelete: "cascade" }),
+    day: date({ mode: "string" }).notNull(),
+    rooms: integer().notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.blockId, t.roomTypeId, t.day] }),
+    index("room_block_days_type_day_idx").on(t.restaurantId, t.roomTypeId, t.day),
+    check("room_block_days_rooms_chk", sql`${t.rooms} between 0 and 1000`),
+  ],
+);
+
+/**
+ * Revenue management: the price of a room type rises (or falls) by a percentage when its
+ * occupancy for the night reaches a level, optionally only close to arrival (last minute).
+ */
+export const pricingRules = pgTable(
+  "pricing_rules",
+  {
+    id: pk(),
+    restaurantId: uuid()
+      .notNull()
+      .references(() => restaurants.id, { onDelete: "cascade" }),
+    /** null = every room type. */
+    roomTypeId: uuid().references(() => roomTypes.id, { onDelete: "cascade" }),
+    /** Occupancy of the night (on the books) from which the rule applies, 0–100. */
+    minOccupancyPct: integer().notNull().default(0),
+    /** Only for arrivals within this many days (null = any lead time). */
+    withinDays: integer(),
+    adjustBps: integer().notNull(),
+    active: boolean().notNull().default(true),
+    ...timestamps,
+  },
+  (t) => [
+    index("pricing_rules_restaurant_idx").on(t.restaurantId),
+    check(
+      "pricing_rules_chk",
+      sql`${t.minOccupancyPct} between 0 and 100 and ${t.adjustBps} between -9000 and 50000`,
+    ),
+  ],
+);
+
+/**
+ * Cheques (چک): received from guests and companies, or issued to suppliers, with their Sayad
+ * id (شناسه صیادی) and due date; each status change is an event that the books journal.
+ */
+export const cheques = pgTable(
+  "cheques",
+  {
+    id: pk(),
+    restaurantId: uuid()
+      .notNull()
+      .references(() => restaurants.id, { onDelete: "cascade" }),
+    /** received | issued */
+    direction: varchar({ length: 8 }).notNull(),
+    sayadId: varchar({ length: 16 }),
+    number: varchar({ length: 32 }),
+    bank: varchar({ length: 80 }),
+    /** Drawer (received) or payee (issued). */
+    party: varchar({ length: 160 }).notNull(),
+    amountCents: money().notNull(),
+    dueDate: date({ mode: "string" }).notNull(),
+    /** received: in_hand | deposited | cleared | bounced | returned | issued: issued | cleared | bounced | cancelled */
+    status: varchar({ length: 10 }).notNull(),
+    /** The folio payment it settled (received at the desk). */
+    folioLineId: uuid().references(() => folioLines.id, { onDelete: "set null" }),
+    supplierId: uuid(),
+    note: varchar({ length: 300 }),
+    createdByUserId: uuid().references(() => users.id, { onDelete: "set null" }),
+    ...timestamps,
+  },
+  (t) => [
+    index("cheques_due_idx").on(t.restaurantId, t.direction, t.dueDate),
+    uniqueIndex("cheques_sayad_uq")
+      .on(t.restaurantId, t.direction, t.sayadId)
+      .where(sql`${t.sayadId} IS NOT NULL`),
+    check("cheques_amount_chk", sql`${t.amountCents} > 0`),
+  ],
+);
+
+export const chequeEvents = pgTable(
+  "cheque_events",
+  {
+    id: pk(),
+    restaurantId: uuid()
+      .notNull()
+      .references(() => restaurants.id, { onDelete: "cascade" }),
+    chequeId: uuid()
+      .notNull()
+      .references(() => cheques.id, { onDelete: "cascade" }),
+    status: varchar({ length: 10 }).notNull(),
+    day: date({ mode: "string" }).notNull(),
+    userId: uuid().references(() => users.id, { onDelete: "set null" }),
+    ...timestamps,
+  },
+  (t) => [index("cheque_events_cheque_idx").on(t.chequeId)],
+);
+
+/** Money paid to a supplier (settles the accounts payable left by stock purchases). */
+export const supplierPayments = pgTable(
+  "supplier_payments",
+  {
+    id: pk(),
+    restaurantId: uuid()
+      .notNull()
+      .references(() => restaurants.id, { onDelete: "cascade" }),
+    supplierId: uuid().notNull(),
+    amountCents: money().notNull(),
+    /** cash | transfer | cheque */
+    method: varchar({ length: 10 }).notNull(),
+    chequeId: uuid().references(() => cheques.id, { onDelete: "set null" }),
+    paidOn: date({ mode: "string" }).notNull(),
+    reference: varchar({ length: 64 }),
+    note: varchar({ length: 300 }),
+    createdByUserId: uuid().references(() => users.id, { onDelete: "set null" }),
+    ...timestamps,
+  },
+  (t) => [
+    index("supplier_payments_idx").on(t.restaurantId, t.supplierId, t.paidOn),
+    check("supplier_payments_amount_chk", sql`${t.amountCents} > 0`),
+  ],
 );

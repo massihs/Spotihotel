@@ -20,7 +20,7 @@ export const printers = pgTable(
     port: integer().notNull().default(9100),
     /** Paper width in mm: 80 (576 dots) or 58 (384 dots). */
     paperMm: integer().notNull().default(80),
-    /** cashier: whole order with prices · station: that station's items · all: whole order, no prices */
+    /** cashier: whole order with prices | station: that station's items | all: whole order, no prices */
     target: varchar({ length: 12 }).notNull().default("station"),
     stationId: uuid(),
     copies: integer().notNull().default(1),

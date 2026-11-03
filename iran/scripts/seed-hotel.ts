@@ -26,6 +26,8 @@ import { saveService } from "@/server/modules/pms/wellness";
 import { saveMinibarItem } from "@/server/modules/pms/minibar";
 import { addDays } from "@/server/modules/pms/calc";
 import { syncLedger } from "@/server/modules/ledger/sync";
+import { savePricingRule } from "@/server/modules/pms/revenue";
+import { createBlock } from "@/server/modules/pms/blocks";
 
 const price = (eur: number) => edition.demoPrice(eur * 100);
 const fa = edition.edition === "iran";
@@ -87,6 +89,8 @@ export async function seedDemoHotel(ownerId: string) {
     cityTaxCents: fa ? 0 : price(2),
     autoChargeRoomService: true,
     minibarSelfService: true,
+    chargeNoShows: true,
+    channelCommissions: fa ? { snapptrip: 1500, alibaba: 1200, jabama: 1000, eghamat24: 1200 } : { booking: 1700, expedia: 1800 },
     wifiName: "HotelDemo-Guests",
     wifiPassword: fa ? "welcome1405" : "welcome2026",
     guestInfo: L(
@@ -300,6 +304,18 @@ export async function seedDemoHotel(ownerId: string) {
     adults: 1,
     source: fa ? "jabama" : "expedia",
     status: "tentative",
+  });
+  // Revenue management and a group block.
+  await savePricingRule(db, ctx, null, { minOccupancyPct: 70, adjustBps: 1000 });
+  await savePricingRule(db, ctx, null, { minOccupancyPct: 90, adjustBps: 2500 });
+  await createBlock(db, ctx, {
+    name: L("تور فرهنگی اصفهان", "Circuit culturel"),
+    arrival: addDays(today, 10),
+    departure: addDays(today, 13),
+    releaseDate: addDays(today, 5),
+    accountId: company.id,
+    rateCents: price(95),
+    rooms: [{ roomTypeId: dbl.id, rooms: 3 }],
   });
   await syncLedger(db, restaurant);
   console.log("✓ demo hotel (12 rooms, 4 bookings, spa, minibar, books)");

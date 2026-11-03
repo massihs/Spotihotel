@@ -76,9 +76,9 @@ async function CallCenter({ params, searchParams }: Props) {
                     <p className="text-lg font-bold">{b.name}</p>
                     {b.customer ? (
                       <p className="text-sm text-fg-muted">
-                        {b.customer.name ? `${b.customer.name} · ` : ""}
+                        {b.customer.name ? `${b.customer.name} | ` : ""}
                         {t("orders", { count: b.customer.ordersCount })}
-                        {b.customer.points ? ` · ${t("points", { count: b.customer.points })}` : ""}
+                        {b.customer.points ? ` | ${t("points", { count: b.customer.points })}` : ""}
                       </p>
                     ) : (
                       <p className="text-sm text-fg-subtle">{t("unknown")}</p>
@@ -99,7 +99,7 @@ async function CallCenter({ params, searchParams }: Props) {
                     {b.orders.map((o) => (
                       <li key={o.id} className="flex justify-between gap-2 py-1.5">
                         <span>
-                          #{o.number} · {ts(o.status)} ·{" "}
+                          #{o.number} | {ts(o.status)} ·{" "}
                           {format.dateTime(o.placedAt, {
                             dateStyle: "short",
                             timeZone: ctx.restaurant.timezone,

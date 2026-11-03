@@ -299,9 +299,9 @@ export async function renderInvoicePdf(input: {
 
   // Payment.
   for (const p of s.payments) {
-    const ref = p.reference ? ` · شماره پیگیری: ${ltr(p.reference)}` : "";
+    const ref = p.reference ? ` | شماره پیگیری: ${ltr(p.reference)}` : "";
     w.line(
-      `پرداخت: ${PROVIDERS[p.provider] ?? p.provider} · ${rial(p.amountCents)} ریال · ${ltr(jalaliDateTime(new Date(p.at), input.timezone))}${ref}`,
+      `پرداخت: ${PROVIDERS[p.provider] ?? p.provider} | ${rial(p.amountCents)} ریال | ${ltr(jalaliDateTime(new Date(p.at), input.timezone))}${ref}`,
       left,
       y,
       width,

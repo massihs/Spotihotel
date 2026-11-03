@@ -570,7 +570,7 @@ function HeroVisual({ t }: { t: T }) {
       </div>
       <div className="landing-float absolute -end-2 bottom-24 flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-bold text-accent-fg shadow-xl lg:-end-10">
         <ChefHat className="size-4" />
-        {t("float.ready")} · {t("float.table")}
+        {t("float.ready")} | {t("float.table")}
       </div>
     </div>
   );

@@ -163,8 +163,8 @@ function PurchasesList({
             <div className="min-w-0 flex-1">
               <p className="font-semibold">{p.supplierName ?? "—"}</p>
               <p className="text-xs text-fg-muted">
-                {date(p.purchasedAt)} · {t("lines", { count: p.lineCount })}
-                {p.reference ? ` · ${p.reference}` : ""}
+                {date(p.purchasedAt)} | {t("lines", { count: p.lineCount })}
+                {p.reference ? ` | ${p.reference}` : ""}
               </p>
             </div>
             <p className="font-bold tabular-nums">{money(p.totalCents)}</p>

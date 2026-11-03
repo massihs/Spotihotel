@@ -98,7 +98,7 @@ export function CartView({
     <>
       <GuestTopBar
         title={t("guest.cartTitle")}
-        subtitle={restaurantName ? `${restaurantName} · ${seatLabel}` : seatLabel}
+        subtitle={restaurantName ? `${restaurantName} | ${seatLabel}` : seatLabel}
       />
       {lines.length === 0 ? (
         <main className="px-6 py-20 text-center">
@@ -569,7 +569,7 @@ function CartLine({ line: l, money }: { line: CartLineView; money: (c: number) =
                 .map((s) =>
                   s.priceDeltaCents ? `${s.valueName} (+${money(s.priceDeltaCents)})` : s.valueName,
                 )
-                .join(" · ")}
+                .join(" | ")}
             </p>
           ) : null}
           {l.issue ? (

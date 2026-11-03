@@ -81,7 +81,7 @@ async function Invoice({ params }: PageProps<"/[locale]/invoice/[token]">) {
             <div>
               <dt className="inline text-fg-muted">{t("orders")}: </dt>
               <dd className="inline" dir="ltr">
-                {s.orders.map((o) => o.number).join(" · ")}
+                {s.orders.map((o) => o.number).join(" | ")}
               </dd>
             </div>
           ) : null}
@@ -184,11 +184,11 @@ async function Invoice({ params }: PageProps<"/[locale]/invoice/[token]">) {
               {t("paidWith", {
                 method: t.has(`provider.${p.provider}`) ? t(`provider.${p.provider}`) : p.provider,
               })}{" "}
-              · {money(p.amountCents)} · <span dir="ltr">{jalaliDateTime(new Date(p.at), timezone)}</span>
+              | {money(p.amountCents)} | <span dir="ltr">{jalaliDateTime(new Date(p.at), timezone)}</span>
               {p.reference ? (
                 <>
                   {" "}
-                  · {t("reference")}: <span dir="ltr">{p.reference}</span>
+                  | {t("reference")}: <span dir="ltr">{p.reference}</span>
                 </>
               ) : null}
             </p>

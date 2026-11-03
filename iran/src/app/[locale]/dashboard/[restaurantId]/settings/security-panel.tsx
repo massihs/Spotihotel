@@ -72,11 +72,11 @@ export function SecurityPanel({
                       b.orderNumber ? `#${b.orderNumber}` : null,
                     ]
                       .filter(Boolean)
-                      .join(" · ") || t("blockedDevice")}
+                      .join(" | ") || t("blockedDevice")}
                   </p>
                   <p className="text-fg-muted">
                     {format.dateTime(b.createdAt, { dateStyle: "medium", timeStyle: "short", timeZone })}
-                    {b.reason ? ` · ${b.reason}` : ""}
+                    {b.reason ? ` | ${b.reason}` : ""}
                   </p>
                 </div>
                 {canUnblock ? <UnblockButton restaurantId={restaurantId} blockId={b.id} /> : null}

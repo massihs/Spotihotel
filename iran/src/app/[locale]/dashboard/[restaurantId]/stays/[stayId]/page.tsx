@@ -98,8 +98,8 @@ async function Stay({ params }: Pick<Props, "params">) {
   return (
     <>
       <PageHeader
-        title={`#${s.number} · ${[g.lastName, g.firstName].filter(Boolean).join(" ")}`}
-        description={`${card.typeCode}${card.roomLabel ? ` · ${t("roomN", { room: card.roomLabel })}` : ""} · ${tSrc(s.source)}${s.channelRef ? ` (${s.channelRef})` : ""}`}
+        title={`#${s.number} | ${[g.lastName, g.firstName].filter(Boolean).join(" ")}`}
+        description={`${card.typeCode}${card.roomLabel ? ` | ${t("roomN", { room: card.roomLabel })}` : ""} | ${tSrc(s.source)}${s.channelRef ? ` (${s.channelRef})` : ""}`}
         actions={
           <StayActions
             restaurantId={rid}
@@ -125,7 +125,7 @@ async function Stay({ params }: Pick<Props, "params">) {
               {fmt(s.arrival)} → {fmt(s.departure)}
             </p>
             <p className="text-sm text-fg-muted">
-              {t("nights", { n: nightsBetween(s.arrival, s.departure) })} · {money(s.totalCents)}
+              {t("nights", { n: nightsBetween(s.arrival, s.departure) })} | {money(s.totalCents)}
             </p>
             <p className="flex items-center gap-2 text-sm">
               <Users className="size-4 text-fg-muted" aria-hidden="true" />
@@ -176,7 +176,7 @@ async function Stay({ params }: Pick<Props, "params">) {
                       minute: "2-digit",
                       timeZone: ctx.restaurant.timezone,
                     }).format(b.startsAt)}{" "}
-                    · {b.service} · {b.people} 👤
+                    | {b.service} | {b.people} 👤
                   </li>
                 ))}
               </ul>

@@ -7,7 +7,7 @@ import { emit, topics } from "@/server/infra/realtime";
 import { assertCan, type RestaurantContext } from "@/server/tenancy";
 import { isUuid } from "@/lib/ids";
 
-/** 🟢 free · 🟡 order in progress in the kitchen · 🔴 occupied (seated, nothing cooking). */
+/** 🟢 free | 🟡 order in progress in the kitchen | 🔴 occupied (seated, nothing cooking). */
 export type TableState = "free" | "in_progress" | "occupied";
 
 export type FloorTable = {

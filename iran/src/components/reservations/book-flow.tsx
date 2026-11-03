@@ -459,7 +459,7 @@ export function BookFlow({
               {current.weekday} {current.label} {current.month}
               {slot ? (
                 <>
-                  {" · "}
+                  {" | "}
                   <span dir="ltr">{slot.time}</span>
                 </>
               ) : null}

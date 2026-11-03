@@ -140,7 +140,7 @@ async function TableDetail({ params }: { params: Params }) {
                   <span>
                     {t("payments.onlineInProgress", { amount: money(p.amountCents) })}
                     {p.participantId
-                      ? ` · ${t("orders.client", { n: view.participants.find((x) => x.id === p.participantId)?.seq ?? 0 })}`
+                      ? ` | ${t("orders.client", { n: view.participants.find((x) => x.id === p.participantId)?.seq ?? 0 })}`
                       : ""}
                   </span>
                   {canCollect ? (
@@ -155,7 +155,7 @@ async function TableDetail({ params }: { params: Params }) {
               <section key={p.id} aria-labelledby={`p-${p.id}`}>
                 <div className="mb-3 flex flex-wrap items-baseline justify-between gap-3">
                   <h2 id={`p-${p.id}`} className="text-lg font-semibold">
-                    {p.displayName ? `${p.displayName} · ` : ""}
+                    {p.displayName ? `${p.displayName} | ` : ""}
                     {t("orders.client", { n: p.seq })}
                   </h2>
                   <p className="text-sm">
@@ -164,10 +164,10 @@ async function TableDetail({ params }: { params: Params }) {
                     {p.unpaidCents ? (
                       <span className="text-fg-muted">
                         {" "}
-                        · {t("tableView.unpaid")} {money(p.unpaidCents)}
+                        | {t("tableView.unpaid")} {money(p.unpaidCents)}
                       </span>
                     ) : p.totalCents > 0 ? (
-                      <span className="text-success"> · ✓ {t("paymentStatus.paid")}</span>
+                      <span className="text-success"> | ✓ {t("paymentStatus.paid")}</span>
                     ) : null}
                   </p>
                   {canCollect && payable(p.orders) > 0 ? (

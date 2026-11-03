@@ -112,10 +112,10 @@ async function AdminMusic() {
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-medium">{s.restaurantName}</p>
                   <p className="text-xs text-fg-muted">
-                    {t(`plans.${s.plan}.name`)} · {s.themeName} ·{" "}
+                    {t(`plans.${s.plan}.name`)} | {s.themeName} ·{" "}
                     {formatMoney(s.priceCents, edition.platformCurrency, locale)}
                     {s.endsAt && s.status === "active"
-                      ? ` · ${t("admin.until", { date: format.dateTime(s.endsAt, { dateStyle: "medium" }) })}`
+                      ? ` | ${t("admin.until", { date: format.dateTime(s.endsAt, { dateStyle: "medium" }) })}`
                       : ""}
                   </p>
                 </div>

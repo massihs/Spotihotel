@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, isNull, lte, ne, sql } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, isNull, lte, ne, sql } from "drizzle-orm";
 import type { Database, DbOrTx } from "@/server/db/client";
 import {
   diningTables,
@@ -15,6 +15,8 @@ import { assertCan, type RestaurantContext } from "@/server/tenancy";
 import { addDays, keyFigures } from "./calc";
 import { getPmsSettings } from "./setup";
 import { postNights } from "./stays";
+import { mainFolioOf, postLine } from "./folios";
+import { releaseDueBlocks } from "./blocks";
 import { syncLedger } from "@/server/modules/ledger/sync";
 
 /** What still blocks closing the day: guests due out still in their room, arrivals not shown up. */
@@ -93,7 +95,33 @@ export async function runNightAudit(db: Database, ctx: RestaurantContext) {
           lte(stays.arrival, day),
         ),
       )
-      .returning({ id: stays.id });
+      .returning({ id: stays.id, guarantee: stays.guarantee, number: stays.number });
+    // A guaranteed booking that never came pays its first night (card, deposit or company).
+    if (settings.chargeNoShows)
+      for (const ns of noShows.filter((x) => x.guarantee !== "none")) {
+        const [first] = await tx
+          .select({ rateCents: stayNights.rateCents })
+          .from(stayNights)
+          .where(eq(stayNights.stayId, ns.id))
+          .orderBy(asc(stayNights.day))
+          .limit(1);
+        if (!first?.rateCents) continue;
+        const folio = await mainFolioOf(tx, rid, ns.id);
+        await postLine(tx, rid, ctx.restaurant.timezone, {
+          folioId: folio.id,
+          kind: "charge",
+          department: "room",
+          description: "no_show_fee",
+          unitCents: first.rateCents,
+          amountCents: first.rateCents,
+          taxRateBps: settings.roomTaxBps,
+          sourceType: "no_show",
+          sourceId: ns.id,
+          businessDate: day,
+        });
+      }
+    // Group blocks whose release date has come give their unpicked rooms back to sale.
+    const released = await releaseDueBlocks(tx, rid, day);
     if (noShows.length)
       await tx.delete(stayNights).where(
         and(
@@ -179,7 +207,12 @@ export async function runNightAudit(db: Database, ctx: RestaurantContext) {
       action: "pms.night_audit",
       actorUserId: ctx.user.id,
       restaurantId: rid,
-      metadata: { businessDate: day, roomsSold: inHouse.length, noShows: noShows.length },
+      metadata: {
+        businessDate: day,
+        roomsSold: inHouse.length,
+        noShows: noShows.length,
+        blocksReleased: released,
+      },
     });
     return audit!;
   });

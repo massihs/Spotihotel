@@ -86,7 +86,7 @@ async function Ticket({ params, searchParams }: Pick<Props, "params" | "searchPa
       {o.channel === "delivery" && o.deliveryAddress ? (
         <p className="mt-1 border-t-2 border-dashed border-black pt-1 text-xs">
           {o.deliveryAddress}
-          {o.customerPhone ? ` · ${o.customerPhone}` : ""}
+          {o.customerPhone ? ` | ${o.customerPhone}` : ""}
         </p>
       ) : null}
       {till ? (

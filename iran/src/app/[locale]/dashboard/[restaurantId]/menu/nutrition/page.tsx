@@ -143,7 +143,7 @@ async function NutritionDatabase({ params, searchParams }: Props) {
                     <td className="px-4 py-2.5">
                       <p className="font-semibold">{f.nameFa ?? f.nameFr ?? f.nameEn}</p>
                       <p className="text-xs text-fg-muted" dir="ltr">
-                        {[f.nameFr, f.nameEn].filter(Boolean).join(" · ")}
+                        {[f.nameFr, f.nameEn].filter(Boolean).join(" | ")}
                       </p>
                       <p className="mt-1 flex flex-wrap items-center gap-1.5 text-[11px]">
                         {src ? (

@@ -682,7 +682,7 @@ function LibraryPanel({ ctx, view, mobile }: { ctx: Ctx; view: View; mobile?: bo
               { kind: "liked" },
               <LikedArt className="size-12 rounded" />,
               t("likedSongs"),
-              `${t("radioType")} · ${t("likedCount", { count: lib.liked.length })}`,
+              `${t("radioType")} | ${t("likedCount", { count: lib.liked.length })}`,
               false,
             )
           : null}
@@ -693,7 +693,7 @@ function LibraryPanel({ ctx, view, mobile }: { ctx: Ctx; view: View; mobile?: bo
                 { kind: "station", slug: s.slug },
                 <StationArt s={s} className="size-12" rounded="rounded" />,
                 s.name,
-                `${t("radioType")} · Spotihotel`,
+                `${t("radioType")} | Spotihotel`,
                 ctx.isOn(s.slug),
               ),
             )
@@ -784,7 +784,7 @@ function HomeView({ ctx }: { ctx: Ctx }) {
                     />
                   }
                   title={l?.track.title ?? s.name}
-                  sub={l ? `${l.track.artist ?? "—"} · ${s.name}` : s.name}
+                  sub={l ? `${l.track.artist ?? "—"} | ${s.name}` : s.name}
                   onOpen={() => ctx.go({ kind: "station", slug: s.slug })}
                   onPlay={() => ctx.play(s.slug)}
                   playing={ctx.isOn(s.slug)}
@@ -801,7 +801,7 @@ function HomeView({ ctx }: { ctx: Ctx }) {
               key={s.slug}
               art={<StationArt s={s} className="w-full" />}
               title={s.name}
-              sub={s.description ?? `${t("radioType")} · ${t("tracksOnStation", { count: s.trackCount })}`}
+              sub={s.description ?? `${t("radioType")} | ${t("tracksOnStation", { count: s.trackCount })}`}
               onOpen={() => ctx.go({ kind: "station", slug: s.slug })}
               onPlay={() => ctx.play(s.slug)}
               playing={ctx.isOn(s.slug)}
@@ -817,7 +817,7 @@ function HomeView({ ctx }: { ctx: Ctx }) {
                 key={s.slug}
                 art={<StationArt s={s} className="w-full" />}
                 title={s.name}
-                sub={`${t("radioType")} · Spotihotel`}
+                sub={`${t("radioType")} | Spotihotel`}
                 onOpen={() => ctx.go({ kind: "station", slug: s.slug })}
                 onPlay={() => ctx.play(s.slug)}
                 playing={ctx.isOn(s.slug)}
@@ -985,7 +985,7 @@ function SearchView({ ctx, query, setQuery }: { ctx: Ctx; query: string; setQuer
                   key={s.slug}
                   art={<StationArt s={s} className="w-full" />}
                   title={s.name}
-                  sub={`${t("radioType")} · Spotihotel`}
+                  sub={`${t("radioType")} | Spotihotel`}
                   onOpen={() => ctx.go({ kind: "station", slug: s.slug })}
                   onPlay={() => ctx.play(s.slug)}
                   playing={ctx.isOn(s.slug)}
@@ -1115,7 +1115,7 @@ function StationView({
               Spotihotel
             </span>
             <span className="text-white/70">
-              · {t("tracksOnStation", { count: s.trackCount })}, {t("minutes", { count: s.minutes })}
+              | {t("tracksOnStation", { count: s.trackCount })}, {t("minutes", { count: s.minutes })}
             </span>
           </p>
         </div>
@@ -1380,7 +1380,7 @@ function NowPanel({ ctx, s, live, close }: { ctx: Ctx; s: Station; live: Live | 
               {s.name}
             </p>
             <p className="mt-1 text-sm text-[#b3b3b3]">
-              {t("tracksOnStation", { count: s.trackCount })} · {t("minutes", { count: s.minutes })}
+              {t("tracksOnStation", { count: s.trackCount })} | {t("minutes", { count: s.minutes })}
             </p>
             {s.description ? (
               <p className="mt-3 text-sm text-[#b3b3b3]" dir="auto">

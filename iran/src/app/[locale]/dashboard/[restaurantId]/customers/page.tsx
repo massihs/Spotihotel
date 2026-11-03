@@ -106,7 +106,7 @@ async function Customers({ params, searchParams }: Pick<Props, "params" | "searc
                 <li key={c.id} className="px-4 py-3">
                   <p className="line-clamp-2 text-sm">{c.message}</p>
                   <p className="mt-1 text-xs text-fg-muted">
-                    {t(`audiences.${c.audience}`)} · {t("sentOf", { sent: c.sent, total: c.recipients })} ·{" "}
+                    {t(`audiences.${c.audience}`)} | {t("sentOf", { sent: c.sent, total: c.recipients })} ·{" "}
                     {format.dateTime(c.createdAt, { dateStyle: "medium", timeStyle: "short" })}
                   </p>
                 </li>

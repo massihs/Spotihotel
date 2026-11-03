@@ -12,7 +12,10 @@ import {
   ReconcileTable,
   ReverseButton,
   SyncButton,
+  ChequeActions,
+  PaySupplierButton,
 } from "@/components/ledger/ledger-forms";
+import { cashierReport, chequeRegister, payablesAging } from "@/server/modules/ledger/finance";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 import { requireRestaurant } from "@/server/auth/current";
@@ -53,6 +56,9 @@ const TABS = [
   "income",
   "balance",
   "receivables",
+  "cheques",
+  "payables",
+  "cashier",
   "tax",
   "bank",
   "chart",
@@ -169,13 +175,18 @@ async function Ledger({ params, searchParams }: Props) {
         {inPeriod.length ? (
           <section>
             <h2 className="mb-2 font-semibold">{t("hotelKpis")}</h2>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
               <StatCard
                 label={t("occupancy")}
                 value={`${avail ? Math.round((sold / avail) * 1000) / 10 : 0}%`}
               />
               <StatCard label={t("adr")} value={money(sold ? Math.round(roomRev / sold) : 0)} />
               <StatCard label={t("revpar")} value={money(avail ? Math.round(roomRev / avail) : 0)} />
+              <StatCard
+                label={t("trevpar")}
+                value={money(avail ? Math.round(pl.totals.revenue / avail) : 0)}
+              />
+              <StatCard label={t("goppar")} value={money(avail ? Math.round(pl.totals.net / avail) : 0)} />
             </div>
           </section>
         ) : null}
@@ -491,7 +502,7 @@ async function Ledger({ params, searchParams }: Props) {
             bs.balanced ? "bg-success-soft text-success" : "bg-danger-soft text-danger",
           )}
         >
-          {bs.balanced ? t("balanced") : t("unbalanced")} · {t("asOf", { day: day(to) })}
+          {bs.balanced ? t("balanced") : t("unbalanced")} | {t("asOf", { day: day(to) })}
         </p>
         <div className="grid gap-4 lg:grid-cols-2">
           {col(t("assets"), bs.assets, null, bs.totals.assets)}
@@ -579,6 +590,185 @@ async function Ledger({ params, searchParams }: Props) {
             </tbody>
           </Table>
         </section>
+      </div>
+    );
+  } else if (tab === "cheques") {
+    const reg = await chequeRegister(db, ctx);
+    const tStatus = await getTranslations("ledger.cheque.status");
+    body = (
+      <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <StatCard label={t("cheque.receivedOpen")} value={money(reg.totals.receivedOpen)} tone="indigo" />
+          <StatCard label={t("cheque.issuedOpen")} value={money(reg.totals.issuedOpen)} tone="amber" />
+          <StatCard label={t("cheque.bounced")} value={money(reg.totals.bounced)} tone="rose" />
+          <StatCard label={t("cheque.dueWeek")} value={reg.totals.dueThisWeek} tone="teal" />
+        </div>
+        <Table min={900}>
+          <thead className="bg-surface-2">
+            <tr>
+              <th className={th}>{t("cheque.due")}</th>
+              <th className={th}>{t("cheque.direction")}</th>
+              <th className={th}>{t("cheque.party")}</th>
+              <th className={th}>{t("cheque.ref")}</th>
+              <th className={thEnd}>{t("amount")}</th>
+              <th className={th}>{t("cheque.statusLabel")}</th>
+              <th className="w-56" />
+            </tr>
+          </thead>
+          <tbody>
+            {reg.rows.map((c) => (
+              <tr
+                key={c.id}
+                className={c.overdue ? "bg-danger-soft/40" : c.dueSoon ? "bg-warning-soft/40" : undefined}
+              >
+                <td className={cn(td, "font-semibold whitespace-nowrap")}>{day(c.dueDate)}</td>
+                <td className={td}>{t(`cheque.${c.direction}`)}</td>
+                <td className={td}>{c.party}</td>
+                <td className={cn(td, "font-mono text-xs")} dir="ltr">
+                  {[c.sayadId, c.number, c.bank].filter(Boolean).join(" | ")}
+                </td>
+                <td className={tdNum}>{money(c.amountCents)}</td>
+                <td className={td}>{tStatus(c.status)}</td>
+                <td className="px-2 py-1 text-end">
+                  <ChequeActions
+                    restaurantId={rid}
+                    chequeId={c.id}
+                    direction={c.direction}
+                    status={c.status}
+                  />
+                </td>
+              </tr>
+            ))}
+            {!reg.rows.length ? (
+              <tr>
+                <td className="px-3 py-8 text-center text-fg-muted" colSpan={7}>
+                  {t("cheque.none")}
+                </td>
+              </tr>
+            ) : null}
+          </tbody>
+        </Table>
+        <p className="text-xs text-fg-muted">{t("cheque.hint")}</p>
+      </div>
+    );
+  } else if (tab === "payables") {
+    const ap = await payablesAging(db, ctx, to);
+    body = (
+      <div className="space-y-5">
+        <div className="flex flex-wrap items-center gap-3">
+          <PaySupplierButton
+            restaurantId={rid}
+            currency={ctx.restaurant.currency}
+            suppliers={ap.suppliers.map((x) => ({ id: x.id, name: x.name }))}
+            today={today}
+          />
+          <p className="text-sm text-fg-muted">{t("payablesHint", { total: money(ap.total) })}</p>
+        </div>
+        <Table min={800}>
+          <thead className="bg-surface-2">
+            <tr>
+              <th className={th}>{t("supplier")}</th>
+              <th className={thEnd}>{t("invoiced")}</th>
+              <th className={thEnd}>{t("paid")}</th>
+              <th className={thEnd}>{t("age.current")}</th>
+              <th className={thEnd}>{t("age.d30")}</th>
+              <th className={thEnd}>{t("age.d60")}</th>
+              <th className={thEnd}>{t("age.d90")}</th>
+              <th className={thEnd}>{t("owed")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ap.rows.map((r) => (
+              <tr key={r.id}>
+                <td className={cn(td, "font-semibold")}>{r.name}</td>
+                <td className={tdNum}>{money(r.invoiced)}</td>
+                <td className={tdNum}>{money(r.paid)}</td>
+                <td className={tdNum}>{money(r.current)}</td>
+                <td className={tdNum}>{money(r.d30)}</td>
+                <td className={tdNum}>{money(r.d60)}</td>
+                <td className={cn(tdNum, r.d90 ? "text-danger" : "")}>{money(r.d90)}</td>
+                <td className={cn(tdNum, "font-bold")}>{signed(r.total)}</td>
+              </tr>
+            ))}
+            {!ap.rows.length ? (
+              <tr>
+                <td className="px-3 py-8 text-center text-fg-muted" colSpan={8}>
+                  {t("noPayables")}
+                </td>
+              </tr>
+            ) : null}
+          </tbody>
+        </Table>
+        {ap.recent.length ? (
+          <section>
+            <h2 className="mb-2 font-semibold">{t("recentPayments")}</h2>
+            <Table>
+              <tbody>
+                {ap.recent.map((p) => (
+                  <tr key={p.id}>
+                    <td className={td}>{day(p.paidOn)}</td>
+                    <td className={td}>{p.supplier}</td>
+                    <td className={td}>{t(`methods.${p.method}`)}</td>
+                    <td className={tdNum}>{money(p.amountCents)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </section>
+        ) : null}
+      </div>
+    );
+  } else if (tab === "cashier") {
+    const d = typeof sp.day === "string" && isDay(sp.day) ? sp.day : to;
+    const rep = await cashierReport(db, ctx, d);
+    const tPay = await getTranslations("pms.method");
+    const methods = Object.keys(rep.methods);
+    body = (
+      <div className="space-y-4">
+        <form className="flex flex-wrap items-end gap-2">
+          <input type="hidden" name="tab" value="cashier" />
+          <label className="text-sm">
+            <span className="mb-1 block font-semibold">{t("date")}</span>
+            <DateInput name="day" defaultValue={d} />
+          </label>
+          <button className={buttonClasses("secondary", "md")}>{t("show")}</button>
+        </form>
+        <Table>
+          <thead className="bg-surface-2">
+            <tr>
+              <th className={th}>{t("cashierName")}</th>
+              {methods.map((m) => (
+                <th key={m} className={thEnd}>
+                  {tPay.has(m) ? tPay(m) : m}
+                </th>
+              ))}
+              <th className={thEnd}>{t("total")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rep.people.map((p) => (
+              <tr key={p.id}>
+                <td className={cn(td, "font-semibold")}>{p.name}</td>
+                {methods.map((m) => (
+                  <td key={m} className={tdNum}>
+                    {p.lines[m] ? `${money(p.lines[m].total)} (${p.lines[m].count})` : ""}
+                  </td>
+                ))}
+                <td className={cn(tdNum, "font-bold")}>{money(p.total)}</td>
+              </tr>
+            ))}
+            <tr className="bg-surface-2 font-bold">
+              <td className={td}>{t("totals")}</td>
+              {methods.map((m) => (
+                <td key={m} className={tdNum}>
+                  {money(rep.methods[m] ?? 0)}
+                </td>
+              ))}
+              <td className={tdNum}>{money(rep.total)}</td>
+            </tr>
+          </tbody>
+        </Table>
+        <p className="text-xs text-fg-muted">{t("cashierHint")}</p>
       </div>
     );
   } else if (tab === "tax") {

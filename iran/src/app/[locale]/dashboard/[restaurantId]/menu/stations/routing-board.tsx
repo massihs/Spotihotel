@@ -164,7 +164,7 @@ export function RoutingBoard({
                       aria-expanded={expanded}
                     >
                       {t("dishes", { n: items.length })}
-                      {overrides ? ` · ${t("overrides", { n: overrides })}` : ""}
+                      {overrides ? ` | ${t("overrides", { n: overrides })}` : ""}
                       <ChevronDown
                         className={cn("size-3.5 transition-transform", expanded && "rotate-180")}
                       />

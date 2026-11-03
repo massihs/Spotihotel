@@ -70,7 +70,7 @@ const menuKufi = localFont({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Spotihotel", template: "%s · Spotihotel" },
+  title: { default: "Spotihotel", template: "%s | Spotihotel" },
   applicationName: "Spotihotel",
   manifest: "/manifest.webmanifest",
   icons: { icon: "/icons/icon-192.png", apple: "/icons/apple-touch-icon.png" },

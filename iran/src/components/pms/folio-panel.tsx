@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { MoneyField } from "@/components/ui/money-field";
+import { DateInput } from "@/components/ui/date-input";
 import { useMoney } from "@/components/ui/use-money";
 import { useRun } from "@/components/ui/sheet-kit";
 import { cn } from "@/lib/cn";
@@ -328,6 +329,7 @@ function PaymentButton({
   const t = useTranslations("pms.folio");
   const tPay = useTranslations("pms.method");
   const r = useRun();
+  const [method, setMethod] = useState("card");
   const factor = currency === "IRR" ? 1000 : 100;
   return (
     <SheetButton label={t("takePayment")} title={t("takePayment")} variant="primary">
@@ -340,8 +342,18 @@ function PaymentButton({
               () =>
                 postPaymentAction(restaurantId, folioId, {
                   amountCents,
-                  method: String(fd.get("method")) as "cash",
+                  method: method as "cash",
                   reference: String(fd.get("reference") ?? ""),
+                  cheque:
+                    method === "cheque"
+                      ? {
+                          sayadId: String(fd.get("sayadId") ?? ""),
+                          number: String(fd.get("chequeNumber") ?? ""),
+                          bank: String(fd.get("bank") ?? ""),
+                          party: String(fd.get("party") ?? ""),
+                          dueDate: String(fd.get("dueDate") ?? ""),
+                        }
+                      : undefined,
                 }),
               close,
             );
@@ -360,7 +372,12 @@ function PaymentButton({
           />
           <label className="block">
             <Label>{t("method")}</Label>
-            <select name="method" className={inputCls} defaultValue="card">
+            <select
+              name="method"
+              className={inputCls}
+              value={method}
+              onChange={(e) => setMethod(e.target.value)}
+            >
               {METHODS.map((m) => (
                 <option key={m} value={m}>
                   {tPay(m)}
@@ -368,10 +385,35 @@ function PaymentButton({
               ))}
             </select>
           </label>
-          <label className="block">
-            <Label>{t("reference")}</Label>
-            <input name="reference" className={inputCls} maxLength={64} dir="ltr" />
-          </label>
+          {method === "cheque" ? (
+            <div className="grid grid-cols-2 gap-3 rounded-xl bg-surface-2 p-3">
+              <label className="col-span-2">
+                <Label>{t("sayadId")}</Label>
+                <input name="sayadId" className={inputCls} inputMode="numeric" maxLength={16} dir="ltr" />
+              </label>
+              <label>
+                <Label>{t("chequeNumber")}</Label>
+                <input name="chequeNumber" className={inputCls} maxLength={32} dir="ltr" />
+              </label>
+              <label>
+                <Label>{t("bank")}</Label>
+                <input name="bank" className={inputCls} maxLength={80} />
+              </label>
+              <label>
+                <Label>{t("drawer")}</Label>
+                <input name="party" className={inputCls} required minLength={2} maxLength={160} />
+              </label>
+              <label>
+                <Label>{t("dueDate")}</Label>
+                <DateInput name="dueDate" required />
+              </label>
+            </div>
+          ) : (
+            <label className="block">
+              <Label>{t("reference")}</Label>
+              <input name="reference" className={inputCls} maxLength={64} dir="ltr" />
+            </label>
+          )}
           <FormError error={r.error} />
           <Button type="submit" className="w-full" disabled={r.pending}>
             {t("takePayment")}

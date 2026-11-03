@@ -102,7 +102,7 @@ export function DesktopPanel({
                         ? t("connected")
                         : t("seen", { when: format.relativeTime(new Date(d.lastSeenAt), now) })
                       : t("neverSeen")}
-                    {" · "}
+                    {" | "}
                     {t("synced", { n: d.syncedOrders })}
                   </p>
                 </div>

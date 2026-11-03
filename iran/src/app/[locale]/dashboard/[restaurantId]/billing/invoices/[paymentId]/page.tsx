@@ -51,7 +51,7 @@ async function Invoice({ params }: Props) {
             <p className="text-2xl font-bold">{COMPANY.name}</p>
             <p className="mt-1 text-sm text-fg-muted">{th("contact.addressValue")}</p>
             <p className="text-sm text-fg-muted" dir="ltr">
-              {COMPANY.phone} · {COMPANY.email}
+              {COMPANY.phone} | {COMPANY.email}
             </p>
           </div>
           <div className="text-end">

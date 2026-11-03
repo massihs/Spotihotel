@@ -380,7 +380,7 @@ export function BookingSheet({
                   <span className="font-bold">{x.label}</span>
                   <span className="max-w-full truncate text-[11px] opacity-80">
                     {x.state === "taken"
-                      ? `${x.takenBy?.name} · ${clock(x.takenBy!.startsAt, timeZone)}`
+                      ? `${x.takenBy?.name} | ${clock(x.takenBy!.startsAt, timeZone)}`
                       : x.state === "small"
                         ? t("agenda.small")
                         : x.capacity

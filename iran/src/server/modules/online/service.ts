@@ -229,7 +229,7 @@ async function insertGuestOrder(
         taxCents,
         totalCents,
         pricesIncludeTax,
-        note: [input.customerName, input.note].filter(Boolean).join(" · ").slice(0, 500) || null,
+        note: [input.customerName, input.note].filter(Boolean).join(" | ").slice(0, 500) || null,
         customerPhone: phone,
         dinerId: who.dinerId,
         ...(input.channel === "delivery"

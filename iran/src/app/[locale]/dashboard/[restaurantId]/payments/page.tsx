@@ -142,7 +142,7 @@ async function Payments({ params, searchParams }: Pick<Props, "params" | "search
                       {p.tableLabel ? t("payments.tableLabel", { label: p.tableLabel }) : "—"}
                       <span className="block text-xs text-fg-muted">
                         {p.participantSeq
-                          ? `${p.participantName ? `${p.participantName} · ` : ""}${t("orders.client", { n: p.participantSeq })}`
+                          ? `${p.participantName ? `${p.participantName} | ` : ""}${t("orders.client", { n: p.participantSeq })}`
                           : t("payments.wholeTable")}
                       </span>
                     </td>
@@ -160,7 +160,7 @@ async function Payments({ params, searchParams }: Pick<Props, "params" | "search
                         <span key={r.id} className="mt-1 block text-xs text-fg-muted">
                           {t("payments.refundLine", { amount: money(r.amountCents) })}
                           {r.status !== "succeeded" ? ` (${t(`payments.refundStatus.${r.status}`)})` : ""}
-                          {r.reason ? ` · ${r.reason}` : ""}
+                          {r.reason ? ` | ${r.reason}` : ""}
                         </span>
                       ))}
                     </td>

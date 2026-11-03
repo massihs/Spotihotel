@@ -6,6 +6,7 @@ import {
   AccountsPanel,
   MinibarPanel,
   PmsSettingsPanel,
+  PricingPanel,
   RatePlansPanel,
   RatesPanel,
   RoomsPanel,
@@ -21,12 +22,23 @@ import { can } from "@/server/tenancy";
 import { getPmsSettings, listRatePlans, roomTypesWithCounts } from "@/server/modules/pms/setup";
 import { availabilityGrid } from "@/server/modules/pms/stays";
 import { listServices } from "@/server/modules/pms/wellness";
+import { listPricingRules } from "@/server/modules/pms/revenue";
 import { listMinibar } from "@/server/modules/pms/minibar";
 import { listAccounts } from "@/server/modules/pms/guests";
 import { accountBalance } from "@/server/modules/pms/folios";
 import { addDays, isDay } from "@/server/modules/pms/calc";
 
-const TABS = ["types", "rooms", "plans", "rates", "services", "minibar", "accounts", "settings"] as const;
+const TABS = [
+  "types",
+  "rooms",
+  "plans",
+  "rates",
+  "pricing",
+  "services",
+  "minibar",
+  "accounts",
+  "settings",
+] as const;
 type Tab = (typeof TABS)[number];
 type Props = PageProps<"/[locale]/dashboard/[restaurantId]/hotel">;
 
@@ -108,6 +120,15 @@ async function HotelSetup({ params, searchParams }: Props) {
           types={grid.types}
         />
       </div>
+    );
+  } else if (tab === "pricing") {
+    const [rules, types] = await Promise.all([listPricingRules(db, rid), roomTypesWithCounts(db, rid)]);
+    body = (
+      <PricingPanel
+        restaurantId={rid}
+        rules={rules.map((r) => ({ ...r.rule, typeCode: r.typeCode }))}
+        types={types.types.map((x) => ({ id: x.id, code: x.code }))}
+      />
     );
   } else if (tab === "services") {
     body = <ServicesPanel restaurantId={rid} currency={currency} services={await listServices(db, rid)} />;

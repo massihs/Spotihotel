@@ -47,8 +47,8 @@ async function Tables({ params }: { params: Params }) {
         title={hotel ? t("tables.titleHotel") : t("tables.title")}
         description={
           hotel
-            ? `${t("tables.subtitleHotel")} · ${t("tables.roomsCount", { count: rooms.length })} · ${t("tables.count", { count: tables.length - rooms.length })}`
-            : `${t("tables.subtitle")} · ${t("tables.count", { count: tables.length })}`
+            ? `${t("tables.subtitleHotel")} | ${t("tables.roomsCount", { count: rooms.length })} | ${t("tables.count", { count: tables.length - rooms.length })}`
+            : `${t("tables.subtitle")} | ${t("tables.count", { count: tables.length })}`
         }
         actions={
           <div className="flex flex-wrap gap-2">
@@ -125,7 +125,7 @@ async function Tables({ params }: { params: Params }) {
                               table.capacity ? t("tables.seats", { count: table.capacity }) : null,
                             ]
                               .filter(Boolean)
-                              .join(" · ") || "—"}
+                              .join(" | ") || "—"}
                           </p>
                         </div>
                         <img
@@ -144,7 +144,7 @@ async function Tables({ params }: { params: Params }) {
                         {table.openSessionId ? (
                           <span className="inline-flex items-center gap-1.5 rounded-full bg-warning-soft px-2.5 py-1 text-xs font-bold">
                             <span className="size-1.5 rounded-full bg-warning" aria-hidden="true" />
-                            {t("tables.occupied")} · {format.relativeTime(table.openSessionSince!)}
+                            {t("tables.occupied")} | {format.relativeTime(table.openSessionSince!)}
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1.5 rounded-full bg-success-soft px-2.5 py-1 text-xs font-bold text-success">

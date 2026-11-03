@@ -330,7 +330,7 @@ async function Reports({ params, searchParams }: Pick<Props, "params" | "searchP
                   : null,
               ]
                 .filter(Boolean)
-                .join(" · ");
+                .join(" | ");
             return (
               <Card>
                 <p className="border-b border-border px-4 py-3 text-sm text-fg-muted">{t("security.hint")}</p>
@@ -544,7 +544,7 @@ function DailyChart({
           <div
             className="rounded-t-md bg-accent/80 transition-colors group-hover:bg-accent"
             style={{ height: `${Math.max(2, (r.totalCents / max) * 100)}%` }}
-            title={`${day(r.day)} · ${money(r.totalCents)} · ${r.orders}`}
+            title={`${day(r.day)} | ${money(r.totalCents)} | ${r.orders}`}
           />
           {rows.length <= 14 ? (
             <span className="mt-1 truncate text-center text-[10px] text-fg-subtle">{day(r.day)}</span>
@@ -564,7 +564,7 @@ function HourChart({ rows }: { rows: { hour: number; orders: number }[] }) {
         <div
           key={h}
           className="flex h-full flex-1 flex-col justify-end"
-          title={`${h}:00 · ${by.get(h) ?? 0}`}
+          title={`${h}:00 | ${by.get(h) ?? 0}`}
         >
           <div
             className={cn("rounded-t-sm", by.get(h) ? "bg-accent/80" : "bg-surface-2")}

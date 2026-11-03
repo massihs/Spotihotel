@@ -247,7 +247,7 @@ export function Agenda({
                   <span className="truncate font-bold">{tb.label}</span>
                   <span className="truncate text-[11px] text-fg-muted">
                     {tb.capacity ? t("agenda.seats", { n: tb.capacity }) : ""}
-                    {tb.zone ? ` · ${tb.zone}` : ""}
+                    {tb.zone ? ` | ${tb.zone}` : ""}
                   </span>
                 </div>
                 {(() => {

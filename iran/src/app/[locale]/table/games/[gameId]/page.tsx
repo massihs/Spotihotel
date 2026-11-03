@@ -34,7 +34,7 @@ async function Game({ params }: Pick<Props, "params">) {
     <LiveProvider url="/api/v1/realtime/guest">
       <GameBoard
         initial={JSON.parse(JSON.stringify(view))}
-        title={`${t("backgammon")} · ${guest.restaurant.name}`}
+        title={`${t("backgammon")} | ${guest.restaurant.name}`}
       />
     </LiveProvider>
   );

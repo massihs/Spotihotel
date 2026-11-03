@@ -1,6 +1,8 @@
-import { and, eq, inArray, isNotNull, ne, sql } from "drizzle-orm";
+import { and, asc, eq, inArray, isNotNull, ne, sql } from "drizzle-orm";
 import type { Database, DbOrTx } from "@/server/db/client";
 import {
+  chequeEvents,
+  cheques,
   expenses,
   folioLines,
   folios,
@@ -11,7 +13,10 @@ import {
   paymentAllocations,
   payments,
   purchases,
+  pmsSettings,
   refunds,
+  stays,
+  supplierPayments,
 } from "@/server/db/schema";
 import { conflict, validation } from "@/server/errors";
 import { localDay } from "@/lib/period";
@@ -175,6 +180,10 @@ export async function syncLedger(
     posted += await syncPayments(tx, rid, acc, tz);
     posted += await syncExpenses(tx, rid, acc, tz);
     posted += await syncPurchases(tx, rid, acc, tz);
+    posted += await syncDeposits(tx, rid, acc, tz);
+    posted += await syncCommissions(tx, rid, acc, tz);
+    posted += await syncCheques(tx, rid, acc);
+    posted += await syncSupplierPayments(tx, rid, acc);
     return posted;
   });
 }
@@ -186,16 +195,31 @@ async function syncFolioLines(tx: Tx, rid: string, acc: Acc, tz: string) {
   const done = await journalled(tx, rid, "folio_line");
   const voided = await journalled(tx, rid, "void");
   const rows = await tx
-    .select({ line: folioLines, folioStay: folios.stayId, folioAccount: folios.accountId })
+    .select({
+      line: folioLines,
+      folioStay: folios.stayId,
+      folioAccount: folios.accountId,
+      stayStatus: stays.status,
+      checkedInAt: stays.checkedInAt,
+    })
     .from(folioLines)
     .innerJoin(folios, eq(folios.id, folioLines.folioId))
+    .leftJoin(stays, eq(stays.id, folios.stayId))
     .where(eq(folioLines.restaurantId, rid))
     .orderBy(folioLines.createdAt);
   const ledgerById = new Map(
     rows.map((r) => [r.line.id, !r.folioStay && r.folioAccount ? acc("city_ledger") : acc("guest_ledger")]),
   );
-  for (const { line } of rows) {
-    const ledger = ledgerById.get(line.id)!;
+  for (const { line, folioStay, stayStatus, checkedInAt } of rows) {
+    // Money received before the guest arrives is an advance deposit (a liability), moved to the
+    // guest's account when they check in (or cancel / do not show), see syncDeposits.
+    const deposit =
+      line.kind === "payment" &&
+      !!folioStay &&
+      (stayStatus === "tentative" ||
+        stayStatus === "confirmed" ||
+        (!!checkedInAt && line.createdAt < checkedInAt));
+    const ledger = deposit ? acc("advance_deposits") : ledgerById.get(line.id)!;
     const entryId = done.get(line.id);
     if (!line.voidedAt && !entryId) {
       const e = folioEntry(line, ledger, acc, ledgerById);
@@ -443,6 +467,188 @@ async function syncPurchases(tx: Tx, rid: string, acc: Acc, tz: string) {
         lines: [
           { accountId: acc("cogs"), debitCents: p.totalCents, department: "fnb" },
           { accountId: acc("accounts_payable"), creditCents: p.totalCents },
+        ],
+      },
+      { lateToOpen: true },
+    );
+    n++;
+  }
+  return n;
+}
+
+/**
+ * Advance deposits of guests who arrived (or cancelled / never came): what the deposit account
+ * holds for the stay moves to the guest's account, once.
+ */
+async function syncDeposits(tx: Tx, rid: string, acc: Acc, tz: string) {
+  const done = await journalled(tx, rid, "deposit_apply");
+  const advance = acc("advance_deposits");
+  const rows = await tx.execute<{ stay_id: string; held: string; at: Date }>(sql`
+    select f.stay_id, sum(jl.credit_cents - jl.debit_cents)::bigint as held,
+      coalesce(s.checked_in_at, s.cancelled_at, s.updated_at) as at
+    from journal_lines jl
+    join journal_entries je on je.id = jl.entry_id
+    join folio_lines l on l.id = je.source_id
+    join folios f on f.id = l.folio_id
+    join stays s on s.id = f.stay_id
+    where jl.restaurant_id = ${rid} and jl.account_id = ${advance}
+      and je.source_type in ('folio_line', 'void')
+      and s.status not in ('tentative', 'confirmed')
+    group by f.stay_id, s.checked_in_at, s.cancelled_at, s.updated_at`);
+  let n = 0;
+  for (const r of rows.rows) {
+    const held = Number(r.held);
+    if (!held || done.has(r.stay_id)) continue;
+    await postEntry(
+      tx,
+      rid,
+      {
+        date: localDay(new Date(r.at), tz),
+        memo: "deposit_applied",
+        sourceType: "deposit_apply",
+        sourceId: r.stay_id,
+        lines: [
+          { accountId: advance, debitCents: held },
+          { accountId: acc("guest_ledger"), creditCents: held },
+        ],
+      },
+      { lateToOpen: true },
+    );
+    n++;
+  }
+  return n;
+}
+
+/**
+ * Commission owed to the agency / booking platform of each stay that left: the company account's
+ * rate when it is an agency or OTA, else the hotel's rate for the stay's channel, on the room
+ * revenue net of VAT.
+ */
+async function syncCommissions(tx: Tx, rid: string, acc: Acc, tz: string) {
+  const done = await journalled(tx, rid, "commission");
+  const [settings] = await tx
+    .select({ rates: pmsSettings.channelCommissions })
+    .from(pmsSettings)
+    .where(eq(pmsSettings.restaurantId, rid));
+  const rates = settings?.rates ?? {};
+  const rows = await tx.execute<{
+    id: string;
+    source: string;
+    out_at: Date;
+    kind: string | null;
+    account_bps: number | null;
+    base: string;
+  }>(sql`
+    select s.id, s.source, s.checked_out_at as out_at, a.kind, a.commission_bps as account_bps,
+      coalesce((select sum(l.amount_cents - l.tax_cents) from folio_lines l join folios f on f.id = l.folio_id
+        where f.stay_id = s.id and l.department = 'room' and l.kind in ('charge','adjustment') and l.voided_at is null), 0)::bigint as base
+    from stays s left join hotel_accounts a on a.id = s.account_id
+    where s.restaurant_id = ${rid} and s.status = 'checked_out' and s.checked_out_at is not null`);
+  let n = 0;
+  for (const r of rows.rows) {
+    if (done.has(r.id)) continue;
+    const bps =
+      r.kind && r.kind !== "company" && Number(r.account_bps) > 0
+        ? Number(r.account_bps)
+        : Number(rates[r.source] ?? 0);
+    const amount = Math.round((Number(r.base) * bps) / 10_000);
+    if (amount <= 0) continue;
+    await postEntry(
+      tx,
+      rid,
+      {
+        date: localDay(new Date(r.out_at), tz),
+        memo: `commission:${r.source}`,
+        sourceType: "commission",
+        sourceId: r.id,
+        lines: [
+          { accountId: acc("expense_commissions"), debitCents: amount, department: "rooms" },
+          { accountId: acc("commissions_payable"), creditCents: amount },
+        ],
+      },
+      { lateToOpen: true },
+    );
+    n++;
+  }
+  return n;
+}
+
+/** Cheque status changes: cleared into the bank, bounced, issued cheques paid or voided. */
+async function syncCheques(tx: Tx, rid: string, acc: Acc) {
+  const done = await journalled(tx, rid, "cheque_event");
+  const events = await tx
+    .select({
+      e: chequeEvents,
+      direction: cheques.direction,
+      amount: cheques.amountCents,
+      party: cheques.party,
+      number: cheques.number,
+    })
+    .from(chequeEvents)
+    .innerJoin(cheques, eq(cheques.id, chequeEvents.chequeId))
+    .where(eq(chequeEvents.restaurantId, rid))
+    .orderBy(asc(chequeEvents.chequeId), asc(chequeEvents.createdAt));
+  let n = 0;
+  let prev: { cheque: string; status: string } | null = null;
+  for (const { e, direction, amount, party, number } of events) {
+    const from = prev && prev.cheque === e.chequeId ? prev.status : null;
+    prev = { cheque: e.chequeId, status: e.status };
+    if (done.has(e.id)) continue;
+    let debit: SystemKey | null = null;
+    let credit: SystemKey | null = null;
+    if (direction === "received") {
+      if (e.status === "cleared")
+        [debit, credit] = ["bank", from === "bounced" ? "bounced_cheques" : "cheques_receivable"];
+      if (e.status === "bounced") [debit, credit] = ["bounced_cheques", "cheques_receivable"];
+    } else {
+      if (e.status === "cleared")
+        [debit, credit] = [from === "bounced" ? "accounts_payable" : "cheques_payable", "bank"];
+      if ((e.status === "bounced" || e.status === "cancelled") && from === "issued")
+        [debit, credit] = ["cheques_payable", "accounts_payable"];
+    }
+    if (!debit || !credit) continue;
+    await postEntry(
+      tx,
+      rid,
+      {
+        date: e.day,
+        memo: `cheque:${e.status}:${number ?? ""} ${party}`.trim(),
+        sourceType: "cheque_event",
+        sourceId: e.id,
+        userId: e.userId,
+        lines: [
+          { accountId: acc(debit), debitCents: amount },
+          { accountId: acc(credit), creditCents: amount },
+        ],
+      },
+      { lateToOpen: true },
+    );
+    n++;
+  }
+  return n;
+}
+
+/** Supplier payments settle accounts payable (an issued cheque stays payable until it clears). */
+async function syncSupplierPayments(tx: Tx, rid: string, acc: Acc) {
+  const done = await journalled(tx, rid, "supplier_payment");
+  const list = await tx.select().from(supplierPayments).where(eq(supplierPayments.restaurantId, rid));
+  let n = 0;
+  for (const p of list) {
+    if (done.has(p.id)) continue;
+    const credit: SystemKey =
+      p.method === "cash" ? "cash" : p.method === "cheque" ? "cheques_payable" : "bank";
+    await postEntry(
+      tx,
+      rid,
+      {
+        date: p.paidOn,
+        memo: p.reference ? `supplier:${p.reference}` : "supplier_payment",
+        sourceType: "supplier_payment",
+        sourceId: p.id,
+        userId: p.createdByUserId,
+        lines: [
+          { accountId: acc("accounts_payable"), debitCents: p.amountCents },
+          { accountId: acc(credit), creditCents: p.amountCents },
         ],
       },
       { lateToOpen: true },

@@ -856,7 +856,7 @@ function TablePanel({
     <Sheet title={t("tableN", { label: table.label })} onClose={onClose}>
       <p className="-mt-2 mb-4 text-sm text-fg-muted">
         {th("seats", { count: table.capacity ?? 0 })}
-        {table.zone ? ` · ${table.zone}` : ""} ·{" "}
+        {table.zone ? ` | ${table.zone}` : ""} ·{" "}
         <span className="font-semibold">{th(`state.${state.kind}`)}</span>
       </p>
       {seated ? (
@@ -930,7 +930,7 @@ function TablePanel({
                 {clock(b.startsAt, timeZone)}
               </span>
               <span className="min-w-0 flex-1 truncate text-sm font-semibold">
-                {b.name} · {b.partySize}
+                {b.name} | {b.partySize}
               </span>
               {!seated && b.status !== "pending" ? (
                 <button

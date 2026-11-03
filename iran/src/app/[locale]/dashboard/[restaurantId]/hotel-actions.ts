@@ -68,6 +68,20 @@ import {
 } from "@/server/modules/pms/minibar";
 import { chargeRoomOrders } from "@/server/modules/pms/room-charges";
 import { assertCan } from "@/server/tenancy";
+import {
+  createBlock,
+  pickupRooming,
+  setBlockStatus,
+  type blockSchema,
+  type roomingSchema,
+} from "@/server/modules/pms/blocks";
+import {
+  cancellationFee,
+  deletePricingRule,
+  savePricingRule,
+  type pricingRuleSchema,
+} from "@/server/modules/pms/revenue";
+import { sendPrecheckinLink } from "@/server/modules/pms/precheckin";
 import type { z } from "zod";
 
 type In<T extends z.ZodType> = z.input<T>;
@@ -231,3 +245,35 @@ export const serviceDayAction = async (rid: string, serviceId: string, day: stri
     const res = await serviceDay(db, ctx.restaurant, serviceId, day);
     return res.slots;
   });
+
+// Groups, revenue management, pre-check-in
+export const createBlockAction = async (rid: string, input: In<typeof blockSchema>) =>
+  runAction(async () =>
+    done((await createBlock(db, await actionContext(rid, "frontdesk.manage"), input)).id),
+  );
+export const blockStatusAction = async (
+  rid: string,
+  id: string,
+  status: "definite" | "released" | "cancelled",
+) =>
+  runAction(async () =>
+    done(await setBlockStatus(db, await actionContext(rid, "frontdesk.manage"), id, status)),
+  );
+export const roomingAction = async (rid: string, id: string, list: In<typeof roomingSchema>) =>
+  runAction(async () =>
+    done((await pickupRooming(db, await actionContext(rid, "frontdesk.manage"), id, list)).length),
+  );
+export const savePricingRuleAction = async (
+  rid: string,
+  id: string | null,
+  input: In<typeof pricingRuleSchema>,
+) =>
+  runAction(async () =>
+    done((await savePricingRule(db, await actionContext(rid, "rates.manage"), id, input)).id),
+  );
+export const deletePricingRuleAction = async (rid: string, id: string) =>
+  runAction(async () => done(await deletePricingRule(db, await actionContext(rid, "rates.manage"), id)));
+export const cancellationFeeAction = async (rid: string, stayId: string) =>
+  runAction(async () => cancellationFee(db, await actionContext(rid, "frontdesk.view"), stayId));
+export const precheckinLinkAction = async (rid: string, stayId: string) =>
+  runAction(async () => sendPrecheckinLink(db, await actionContext(rid, "frontdesk.manage"), stayId));

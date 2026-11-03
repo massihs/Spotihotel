@@ -84,8 +84,8 @@ export function WellnessBoard({
                 <h2 className="mb-2 flex flex-wrap items-baseline gap-2 font-semibold">
                   {s.name}
                   <span className="text-xs font-normal text-fg-muted">
-                    {tKind(s.kind)} · {t("duration", { n: s.durationMin })} ·{" "}
-                    {t("capacity", { n: s.capacity })} · {money(s.priceCents)}
+                    {tKind(s.kind)} | {t("duration", { n: s.durationMin })} ·{" "}
+                    {t("capacity", { n: s.capacity })} | {money(s.priceCents)}
                   </span>
                 </h2>
                 {list.length ? (
@@ -102,10 +102,10 @@ export function WellnessBoard({
                         <span className="min-w-0 flex-1">
                           <span className="font-semibold">{b.guestName}</span>
                           {b.roomLabel ? (
-                            <span className="text-fg-muted"> · {t("room", { room: b.roomLabel })}</span>
+                            <span className="text-fg-muted"> | {t("room", { room: b.roomLabel })}</span>
                           ) : null}
-                          <span className="text-fg-muted"> · {b.people} 👤</span>
-                          {b.staffName ? <span className="text-fg-muted"> · {b.staffName}</span> : null}
+                          <span className="text-fg-muted"> | {b.people} 👤</span>
+                          {b.staffName ? <span className="text-fg-muted"> | {b.staffName}</span> : null}
                         </span>
                         <StatusPill status={b.status} />
                         {canManage && b.status === "booked" ? (
@@ -227,7 +227,7 @@ function BookForm({
         <select name="time" className={inputCls} required>
           {slots.map((s) => (
             <option key={s.time} value={s.time} disabled={s.past || s.left <= 0}>
-              {s.time} · {s.past ? t("past") : s.left > 0 ? t("left", { n: s.left }) : t("full")}
+              {s.time} | {s.past ? t("past") : s.left > 0 ? t("left", { n: s.left }) : t("full")}
             </option>
           ))}
         </select>

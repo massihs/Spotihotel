@@ -312,6 +312,27 @@ DEFAULT_CHART.splice(4, 0, {
     ar: "شيكات برسم التحصيل",
   },
 });
+DEFAULT_CHART.splice(5, 0, {
+  code: "1045",
+  key: "bounced_cheques",
+  type: "asset",
+  names: { fr: "Chèques impayés", en: "Bounced cheques", fa: "اسناد برگشتی", ar: "شيكات مرتجعة" },
+});
+DEFAULT_CHART.splice(
+  DEFAULT_CHART.findIndex((a) => a.key === "vat_payable"),
+  0,
+  {
+    code: "2010",
+    key: "cheques_payable",
+    type: "liability",
+    names: {
+      fr: "Chèques émis à payer",
+      en: "Cheques payable",
+      fa: "اسناد پرداختنی (چک)",
+      ar: "شيكات مستحقة الدفع",
+    },
+  },
+);
 
 type Entry = { code: string; key?: string; type: AccountType; reconcilable?: boolean; names: Names };
 const n = (fa: string, en: string, ar: string): Names => ({ fa, en, ar, fr: en });
@@ -374,6 +395,12 @@ export const IRAN_CHART: Entry[] = [
     type: "asset",
     names: n("اسناد دریافتنی (چک)", "Cheques receivable", "شيكات برسم التحصيل"),
   },
+  {
+    code: "1204",
+    key: "bounced_cheques",
+    type: "asset",
+    names: n("اسناد دریافتنی برگشتی", "Bounced cheques", "شيكات مرتجعة"),
+  },
   { code: "1301", key: "inventory", type: "asset", names: n("موجودی کالا و انبار", "Inventory", "المخزون") },
   { code: "1401", type: "asset", names: n("پیش‌پرداخت‌ها", "Prepayments", "المدفوعات المقدمة") },
   // ۱۵ دارایی‌های غیرجاری
@@ -392,6 +419,7 @@ export const IRAN_CHART: Entry[] = [
   },
   {
     code: "2102",
+    key: "cheques_payable",
     type: "liability",
     names: n("اسناد پرداختنی (چک)", "Cheques payable", "شيكات مستحقة الدفع"),
   },
@@ -559,7 +587,11 @@ export const IRAN_CHART: Entry[] = [
 
 export const chartFor = (edition: string): Entry[] => (edition === "iran" ? IRAN_CHART : DEFAULT_CHART);
 
-export type SystemKey = NonNullable<(typeof DEFAULT_CHART)[number]["key"]> | "cheques_receivable";
+export type SystemKey =
+  | NonNullable<(typeof DEFAULT_CHART)[number]["key"]>
+  | "cheques_receivable"
+  | "bounced_cheques"
+  | "cheques_payable";
 
 const pickName = (n: Names, locale: string) => n[(locale in n ? locale : "en") as keyof Names];
 

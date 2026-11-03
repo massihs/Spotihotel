@@ -126,7 +126,7 @@ export function MenuImport({ restaurantId, currency }: { restaurantId: string; c
               {preview.newCategories.length ? (
                 <span className="text-fg-muted">
                   {" "}
-                  · {t("newCategories", { list: preview.newCategories.join("، ") })}
+                  | {t("newCategories", { list: preview.newCategories.join("، ") })}
                 </span>
               ) : null}
             </p>

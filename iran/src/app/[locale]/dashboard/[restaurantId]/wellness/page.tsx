@@ -73,7 +73,7 @@ async function Wellness({ params, searchParams }: Props) {
         }))}
         inHouse={guests.map((g) => ({
           id: g.id,
-          label: `${g.room ?? "—"} · ${[g.lastName, g.firstName].filter(Boolean).join(" ")}`,
+          label: `${g.room ?? "—"} | ${[g.lastName, g.firstName].filter(Boolean).join(" ")}`,
         }))}
         preselectStay={typeof sp.stay === "string" ? sp.stay : null}
         canManage={can(ctx, "frontdesk.manage")}

@@ -168,7 +168,7 @@ async function Account({ searchParams }: Pick<Props, "searchParams">) {
       selected: d === date,
       today: d === today,
       href: href(d),
-      label: `${fmt(d, { weekday: "long", day: "numeric", month: "long" })} · ${tn("kcal", { n: n(r?.kcal ?? 0) })}`,
+      label: `${fmt(d, { weekday: "long", day: "numeric", month: "long" })} | ${tn("kcal", { n: n(r?.kcal ?? 0) })}`,
     };
   });
 
@@ -539,7 +539,7 @@ async function Account({ searchParams }: Pick<Props, "searchParams">) {
                   label: fmt(d.date, { weekday: "long", day: "numeric", month: "long" }),
                   short: fmt(d.date, { day: "numeric" }),
                   value: Math.round(d[metric] * 10) / 10,
-                  tooltip: `${fmt(d.date, { weekday: "long", day: "numeric", month: "long" })} · ${unit(metric, d[metric])}`,
+                  tooltip: `${fmt(d.date, { weekday: "long", day: "numeric", month: "long" })} | ${unit(metric, d[metric])}`,
                   href: href(d.date),
                   active: d.date === date,
                 }))}
@@ -577,7 +577,7 @@ async function Account({ searchParams }: Pick<Props, "searchParams">) {
                       <span className="block truncate text-sm font-semibold">{f.name}</span>
                       <span className="block text-xs text-fg-muted">
                         {t("times", { n: f.count })}
-                        {f.kcal != null ? ` · ${tn("kcal", { n: n(f.kcal) })}` : ""}
+                        {f.kcal != null ? ` | ${tn("kcal", { n: n(f.kcal) })}` : ""}
                       </span>
                     </span>
                   </li>

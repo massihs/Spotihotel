@@ -15,6 +15,8 @@ import {
   deleteRatePlanAction,
   deleteRoomTypeAction,
   deleteServiceAction,
+  deletePricingRuleAction,
+  savePricingRuleAction,
   saveAccountAction,
   saveMinibarItemAction,
   savePmsSettingsAction,
@@ -26,6 +28,10 @@ import {
 import { Empty, FormError, Label, RunButton, SheetButton, inputCls, useDay } from "./kit";
 import { DateInput } from "@/components/ui/date-input";
 
+const CHANNELS =
+  EDITION === "iran"
+    ? ["snapptrip", "alibaba", "jabama", "eghamat24", "jainjas", "flytoday", "otaghak", "agency"]
+    : ["booking", "expedia", "airbnb", "agency"];
 const money0 = (v: FormDataEntryValue | null, currency: string) =>
   parseMoneyInput(String(v ?? ""), currency) ?? 0;
 const pct = (bps: number) => String(bps / 100);
@@ -60,6 +66,7 @@ type RoomType = {
   maxOccupancy: number;
   baseRateCents: number;
   extraAdultCents: number;
+  overbookLimit: number;
   rooms: number;
 };
 
@@ -151,6 +158,7 @@ function RoomTypeForm({
               maxOccupancy: Number(fd.get("maxOccupancy")),
               baseRateCents: money0(fd.get("baseRate"), currency),
               extraAdultCents: money0(fd.get("extraAdult"), currency),
+              overbookLimit: Number(fd.get("overbookLimit") || 0),
             }),
           done,
         )
@@ -207,6 +215,17 @@ function RoomTypeForm({
         label={t("extraAdult")}
         defaultValue={centsToInput(type?.extraAdultCents, locale, currency)}
       />
+      <label className="col-span-2">
+        <Label hint={t("overbookHint")}>{t("overbook")}</Label>
+        <input
+          name="overbookLimit"
+          type="number"
+          min={0}
+          max={50}
+          defaultValue={type?.overbookLimit ?? 0}
+          className={inputCls}
+        />
+      </label>
       <label className="col-span-2">
         <Label>{t("description")}</Label>
         <textarea
@@ -368,7 +387,7 @@ export function RatePlansPanel({
                 {p.adjustBps ? `${p.adjustBps > 0 ? "+" : ""}${p.adjustBps / 100}% ` : ""}
                 {p.adjustCents ? `${p.adjustCents > 0 ? "+" : ""}${money(p.adjustCents)} ` : ""}·{" "}
                 {p.refundable ? t("refundable", { h: p.cancelHours }) : t("nonRefundable")}
-                {p.minStay > 1 ? ` · ${t("minStay", { n: p.minStay })}` : ""}
+                {p.minStay > 1 ? ` | ${t("minStay", { n: p.minStay })}` : ""}
               </p>
             </Row>
           ))}
@@ -651,7 +670,7 @@ export function RatesPanel({
                     </span>
                     <span className="text-fg-muted">
                       {d.free}
-                      {d.minStay ? ` · ≥${d.minStay}` : ""}
+                      {d.minStay ? ` | ≥${d.minStay}` : ""}
                     </span>
                   </td>
                 ))}
@@ -723,9 +742,9 @@ export function ServicesPanel({
             >
               <p className={cn("font-semibold", !s.active && "text-fg-subtle")}>{s.name}</p>
               <p className="text-sm text-fg-muted">
-                {tKind(s.kind)} · {s.opensAt}–{s.closesAt} · {t("durationN", { n: s.durationMin })} ·{" "}
-                {t("capacityN", { n: s.capacity })} · {s.priceCents ? money(s.priceCents) : t("free")}
-                {s.guestBookable ? ` · ${t("guestBookable")}` : ""}
+                {tKind(s.kind)} | {s.opensAt}–{s.closesAt} | {t("durationN", { n: s.durationMin })} ·{" "}
+                {t("capacityN", { n: s.capacity })} | {s.priceCents ? money(s.priceCents) : t("free")}
+                {s.guestBookable ? ` | ${t("guestBookable")}` : ""}
               </p>
             </Row>
           ))}
@@ -961,7 +980,7 @@ export function MinibarPanel({
             >
               <p className={cn("font-semibold", !i.active && "text-fg-subtle")}>{i.name}</p>
               <p className="text-sm text-fg-muted">
-                {money(i.priceCents)} · {t("parN", { n: i.parQty })}
+                {money(i.priceCents)} | {t("parN", { n: i.parQty })}
               </p>
             </Row>
           ))}
@@ -1140,7 +1159,7 @@ export function AccountsPanel({
               <p className="text-sm text-fg-muted">
                 {t("accountLine", { terms: a.paymentTermsDays })} ·{" "}
                 {t("owes", { amount: money(a.balanceCents) })}
-                {a.creditLimitCents ? ` · ${t("limit", { amount: money(a.creditLimitCents) })}` : ""}
+                {a.creditLimitCents ? ` | ${t("limit", { amount: money(a.creditLimitCents) })}` : ""}
               </p>
             </Row>
           ))}
@@ -1169,6 +1188,8 @@ export function PmsSettingsPanel({
     cityTaxCents: number;
     autoChargeRoomService: boolean;
     minibarSelfService: boolean;
+    chargeNoShows: boolean;
+    channelCommissions: Record<string, number>;
     wifiName: string | null;
     wifiPassword: string | null;
     guestInfo: string | null;
@@ -1176,6 +1197,7 @@ export function PmsSettingsPanel({
   };
 }) {
   const t = useTranslations("pms.setup");
+  const tSrc = useTranslations("pms.source");
   const locale = useLocale();
   const day = useDay();
   const r = useRun();
@@ -1193,6 +1215,10 @@ export function PmsSettingsPanel({
             cityTaxCents: money0(fd.get("cityTax"), currency),
             autoChargeRoomService: fd.get("autoCharge") === "on",
             minibarSelfService: fd.get("minibarSelf") === "on",
+            chargeNoShows: fd.get("chargeNoShows") === "on",
+            channelCommissions: Object.fromEntries(
+              CHANNELS.map((c) => [c, toBps(fd.get(`commission_${c}`))]).filter(([, v]) => Number(v) > 0),
+            ),
             wifiName: String(fd.get("wifiName") ?? ""),
             wifiPassword: String(fd.get("wifiPassword") ?? ""),
             guestInfo: String(fd.get("guestInfo") ?? ""),
@@ -1254,6 +1280,25 @@ export function PmsSettingsPanel({
         <input type="checkbox" name="minibarSelf" defaultChecked={s.minibarSelfService} className="size-4" />{" "}
         {t("minibarSelf")}
       </label>
+      <label className="flex items-center gap-2 text-sm sm:col-span-2">
+        <input type="checkbox" name="chargeNoShows" defaultChecked={s.chargeNoShows} className="size-4" />{" "}
+        {t("chargeNoShows")}
+      </label>
+      <fieldset className="grid grid-cols-2 gap-3 rounded-xl border border-border p-3 sm:col-span-2 sm:grid-cols-4">
+        <legend className="px-1 text-sm font-semibold">{t("commissions")}</legend>
+        {CHANNELS.map((c) => (
+          <label key={c} className="text-sm">
+            <span className="mb-1 block text-fg-muted">{tSrc(c)} %</span>
+            <input
+              name={`commission_${c}`}
+              defaultValue={s.channelCommissions[c] ? pct(s.channelCommissions[c]!) : ""}
+              className={`${inputCls} h-9`}
+              inputMode="decimal"
+              dir="ltr"
+            />
+          </label>
+        ))}
+      </fieldset>
       <label>
         <Label>{t("wifiName")}</Label>
         <input
@@ -1291,5 +1336,145 @@ export function PmsSettingsPanel({
         </Button>
       </div>
     </form>
+  );
+}
+
+// ─── Dynamic pricing (revenue management) ────────────────────────────────────
+
+type Rule = {
+  id: string;
+  roomTypeId: string | null;
+  typeCode: string | null;
+  minOccupancyPct: number;
+  withinDays: number | null;
+  adjustBps: number;
+  active: boolean;
+};
+
+export function PricingPanel({
+  restaurantId,
+  rules,
+  types,
+}: {
+  restaurantId: string;
+  rules: Rule[];
+  types: { id: string; code: string }[];
+}) {
+  const t = useTranslations("pms.setup");
+  const form = (rule: Rule | undefined, done: () => void, r: ReturnType<typeof useRun>) => (
+    <form
+      className="grid grid-cols-2 gap-4"
+      action={(fd) =>
+        r.run(
+          () =>
+            savePricingRuleAction(restaurantId, rule?.id ?? null, {
+              roomTypeId: String(fd.get("roomTypeId") ?? "") || null,
+              minOccupancyPct: Number(fd.get("minOccupancyPct") || 0),
+              withinDays: fd.get("withinDays") ? Number(fd.get("withinDays")) : null,
+              adjustBps: toBps(fd.get("adjust")),
+              active: fd.get("active") === "on",
+            }),
+          done,
+        )
+      }
+    >
+      <label className="col-span-2">
+        <Label>{t("roomType")}</Label>
+        <select name="roomTypeId" defaultValue={rule?.roomTypeId ?? ""} className={inputCls}>
+          <option value="">{t("allTypes")}</option>
+          {types.map((x) => (
+            <option key={x.id} value={x.id}>
+              {x.code}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label>
+        <Label hint="%">{t("fromOccupancy")}</Label>
+        <input
+          name="minOccupancyPct"
+          type="number"
+          min={0}
+          max={100}
+          defaultValue={rule?.minOccupancyPct ?? 70}
+          className={inputCls}
+        />
+      </label>
+      <label>
+        <Label hint="%">{t("priceChange")}</Label>
+        <input
+          name="adjust"
+          defaultValue={rule ? pct(rule.adjustBps) : "10"}
+          className={inputCls}
+          inputMode="decimal"
+          dir="ltr"
+        />
+      </label>
+      <label className="col-span-2">
+        <Label hint={t("withinDaysHint")}>{t("withinDays")}</Label>
+        <input
+          name="withinDays"
+          type="number"
+          min={0}
+          max={365}
+          defaultValue={rule?.withinDays ?? ""}
+          className={inputCls}
+        />
+      </label>
+      <label className="flex items-center gap-2 text-sm">
+        <input type="checkbox" name="active" defaultChecked={rule?.active ?? true} className="size-4" />{" "}
+        {t("active")}
+      </label>
+      <div className="col-span-2 space-y-2">
+        <FormError error={r.error} />
+        <Button type="submit" className="w-full" disabled={r.pending}>
+          {t("save")}
+        </Button>
+      </div>
+    </form>
+  );
+  return (
+    <div className="space-y-4">
+      <p className="max-w-3xl text-sm text-fg-muted">{t("pricingHint")}</p>
+      <SheetButton label={t("addRule")} title={t("addRule")} variant="primary" size="md">
+        {(close) => <WithRun>{(r) => form(undefined, close, r)}</WithRun>}
+      </SheetButton>
+      {rules.length ? (
+        <List>
+          {rules.map((rule) => (
+            <Row
+              key={rule.id}
+              actions={
+                <>
+                  <SheetButton label={t("edit")} title={t("addRule")}>
+                    {(close) => <WithRun>{(r) => form(rule, close, r)}</WithRun>}
+                  </SheetButton>
+                  <RunButton
+                    variant="ghost"
+                    confirm={t("deleteConfirm")}
+                    run={() => deletePricingRuleAction(restaurantId, rule.id)}
+                  >
+                    {t("delete")}
+                  </RunButton>
+                </>
+              }
+            >
+              <p className={cn("font-semibold", !rule.active && "text-fg-subtle")}>
+                {t("ruleLine", {
+                  type: rule.typeCode ?? t("allTypes"),
+                  occ: rule.minOccupancyPct,
+                  change: `${rule.adjustBps > 0 ? "+" : ""}${rule.adjustBps / 100}`,
+                })}
+              </p>
+              {rule.withinDays != null ? (
+                <p className="text-sm text-fg-muted">{t("ruleWithin", { n: rule.withinDays })}</p>
+              ) : null}
+            </Row>
+          ))}
+        </List>
+      ) : (
+        <Empty>{t("noRules")}</Empty>
+      )}
+    </div>
   );
 }

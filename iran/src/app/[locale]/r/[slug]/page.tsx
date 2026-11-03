@@ -127,7 +127,7 @@ async function Place({ params }: Pick<Props, "params">) {
           <p className="mt-1 text-sm leading-6 text-fg-muted">{t("profile.bookBody")}</p>
           {/* Tonight for two, one tap away (OpenTable style); other choices on the booking page. */}
           <p className="mt-4 text-xs font-bold text-fg-subtle">
-            {t("bar.today")} · {t("bar.people", { count: 2 })}
+            {t("bar.today")} | {t("bar.people", { count: 2 })}
           </p>
           {tonight.length ? (
             <ul className="mt-2 flex flex-wrap gap-1.5">
@@ -224,7 +224,7 @@ async function Place({ params }: Pick<Props, "params">) {
               </dt>
               <dd className="tabular-nums" dir="ltr">
                 {ranges.length
-                  ? ranges.map((r) => `${r.open}–${r.close}`).join(" · ")
+                  ? ranges.map((r) => `${r.open}–${r.close}`).join(" | ")
                   : t("profile.closedDay")}
               </dd>
             </div>

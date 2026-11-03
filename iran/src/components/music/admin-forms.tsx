@@ -349,7 +349,7 @@ export function TrackRow({
           {track.title}
         </p>
         <p className="truncate text-xs text-fg-subtle">
-          {track.artist ? `${track.artist} · ` : ""}
+          {track.artist ? `${track.artist} | ` : ""}
           <span className="tabular-nums">{fmtDuration(track.durationSec)}</span> ·{" "}
           <span className="tabular-nums">{(track.sizeBytes / 1024 / 1024).toFixed(1)} MB</span>
         </p>

@@ -280,7 +280,7 @@ export function ProductForm({
                       <>
                         {g.name}{" "}
                         <span className="font-normal text-fg-muted">
-                          · {t("options.rule", { min: g.minSelect, max: g.maxSelect })}
+                          | {t("options.rule", { min: g.minSelect, max: g.maxSelect })}
                         </span>
                       </>
                     }

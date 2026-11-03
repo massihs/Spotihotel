@@ -120,7 +120,7 @@ export async function deleteStockItem(db: Database, ctx: RestaurantContext, id: 
 }
 
 export const adjustSchema = z.object({
-  /** count: the new counted quantity · waste: quantity thrown away */
+  /** count: the new counted quantity | waste: quantity thrown away */
   kind: z.enum(["count", "waste"]),
   quantity: qty,
   note: z.string().trim().max(200).default(""),

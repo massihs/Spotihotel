@@ -16,6 +16,7 @@ import {
   type budgetSchema,
   type manualEntrySchema,
 } from "@/server/modules/ledger/service";
+import { paySupplier, setChequeStatus, type supplierPaymentSchema } from "@/server/modules/ledger/finance";
 
 const done = <T>(v: T) => {
   refresh();
@@ -45,4 +46,12 @@ export const ledgerAccountAction = async (
 export const reconcileAction = async (rid: string, accountId: string, ids: string[], matched: boolean) =>
   runAction(async () =>
     done(await reconcile(db, await actionContext(rid, "accounting.manage"), accountId, ids, matched)),
+  );
+export const chequeStatusAction = async (rid: string, id: string, status: string, on?: string) =>
+  runAction(async () =>
+    done(await setChequeStatus(db, await actionContext(rid, "accounting.manage"), id, status, on)),
+  );
+export const paySupplierAction = async (rid: string, input: z.input<typeof supplierPaymentSchema>) =>
+  runAction(async () =>
+    done((await paySupplier(db, await actionContext(rid, "accounting.manage"), input)).id),
   );

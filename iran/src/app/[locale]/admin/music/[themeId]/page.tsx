@@ -49,7 +49,7 @@ async function AdminTheme({ params }: Pick<PageProps<"/[locale]/admin/music/[the
           <p className="text-sm text-fg-muted">
             {t("trackCount", { count: tracks.length })} ·{" "}
             <span className="tabular-nums">{fmtDuration(total)}</span>
-            {theme.description ? ` · ${theme.description}` : ""}
+            {theme.description ? ` | ${theme.description}` : ""}
           </p>
         </div>
         <ThemeFlags id={theme.id} isActive={theme.isActive} radioEnabled={theme.radioEnabled} />

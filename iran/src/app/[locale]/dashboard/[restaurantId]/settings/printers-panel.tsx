@@ -210,7 +210,7 @@ export function PrintersPanel({
                     : data.agentConfigured
                       ? t("agentWaiting")
                       : t("agentNone")}
-                {data.pending ? ` · ${t("pendingJobs", { n: data.pending })}` : ""}
+                {data.pending ? ` | ${t("pendingJobs", { n: data.pending })}` : ""}
               </p>
             </div>
           </div>
@@ -332,7 +332,7 @@ export function PrintersPanel({
                     <span dir="ltr">
                       {p.host}:{p.port}
                     </span>{" "}
-                    · {p.paperMm} mm{p.copies > 1 ? ` · ×${p.copies}` : ""}
+                    | {p.paperMm} mm{p.copies > 1 ? ` | ×${p.copies}` : ""}
                   </p>
                   {p.lastStatus ? (
                     <p className={cn("text-xs", p.lastStatus === "done" ? "text-success" : "text-danger")}>

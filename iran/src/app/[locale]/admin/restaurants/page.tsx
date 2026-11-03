@@ -85,7 +85,7 @@ async function RestaurantsTable({
                   <Link href={`/dashboard/${r.id}`} className="min-w-0 hover:underline">
                     <p className="truncate font-semibold">{r.name}</p>
                     <p className="truncate text-xs text-fg-subtle">
-                      {r.organizationName} · /{r.slug} ·{" "}
+                      {r.organizationName} | /{r.slug} ·{" "}
                       {format.dateTime(r.createdAt, { dateStyle: "medium" })}
                     </p>
                   </Link>

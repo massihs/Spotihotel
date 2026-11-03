@@ -394,7 +394,7 @@ export function OrderApp({
                     >
                       {zones.map((z) => (
                         <option key={z.id} value={z.id}>
-                          {z.name} · {t("fee", { fee: money(z.feeCents) })}
+                          {z.name} | {t("fee", { fee: money(z.feeCents) })}
                         </option>
                       ))}
                     </select>

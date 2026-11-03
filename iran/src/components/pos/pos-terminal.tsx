@@ -339,7 +339,7 @@ export function PosTerminal({
             >
               {zones.map((z) => (
                 <option key={z.id} value={z.id}>
-                  {z.name} · {money(z.feeCents)}
+                  {z.name} | {money(z.feeCents)}
                 </option>
               ))}
             </select>
@@ -374,7 +374,7 @@ export function PosTerminal({
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold">{l.product.name}</p>
                     {opts.length ? (
-                      <p className="truncate text-xs text-fg-muted">{opts.map((o) => o.name).join(" · ")}</p>
+                      <p className="truncate text-xs text-fg-muted">{opts.map((o) => o.name).join(" | ")}</p>
                     ) : null}
                     <input
                       value={l.note}

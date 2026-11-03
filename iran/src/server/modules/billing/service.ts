@@ -251,7 +251,7 @@ export async function startCheckout(db: Database, ctx: RestaurantContext, raw: u
       paymentId: pay!.id,
       amountCents,
       currency,
-      description: `Spotihotel · ${plan.name} · ${input.months} · ${ctx.restaurant.name}`.slice(0, 250),
+      description: `Spotihotel | ${plan.name} | ${input.months} | ${ctx.restaurant.name}`.slice(0, 250),
       returnUrl: new URL(`/dashboard/${ctx.restaurant.id}/billing`, base).toString(),
       callbackUrl: callback.toString(),
       idempotencyKey: `billing_${pay!.id}`,

@@ -300,7 +300,7 @@ async function book(
         folioId: folio.id,
         kind: "charge",
         department: "spa",
-        description: `${svc.name} · ${input.day} ${input.time}`,
+        description: `${svc.name} | ${input.day} ${input.time}`,
         quantity: input.people,
         unitCents: svc.priceCents,
         amountCents: priceCents,

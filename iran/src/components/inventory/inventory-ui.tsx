@@ -99,7 +99,7 @@ export function StockTable({
                   <p className="mt-1 text-xs text-fg-muted">
                     {t("avgCost", { amount: money(i.avgCostCents), unit: t(`units.${i.unit}`) })}
                     {i.lowStockThreshold > 0
-                      ? ` · ${t("threshold", { qty: format.number(i.lowStockThreshold, { maximumFractionDigits: 2 }), unit: t(`units.${i.unit}`) })}`
+                      ? ` | ${t("threshold", { qty: format.number(i.lowStockThreshold, { maximumFractionDigits: 2 }), unit: t(`units.${i.unit}`) })}`
                       : ""}
                   </p>
                 </div>
@@ -623,7 +623,7 @@ export function RecipeList({
                 <div className="min-w-0">
                   <p className="truncate font-semibold">{r.name}</p>
                   <p className="text-xs text-fg-muted">
-                    {t("price")} {money(r.priceCents)} · {t("cost")} {money(r.costCents)}
+                    {t("price")} {money(r.priceCents)} | {t("cost")} {money(r.costCents)}
                   </p>
                 </div>
                 {margin != null ? (
@@ -643,7 +643,7 @@ export function RecipeList({
               </div>
               <p className="mt-2 text-sm text-fg-muted">
                 {r.items.length
-                  ? r.items.map((i) => `${i.name} ${i.quantity}${t(`units.${i.unit}`)}`).join(" · ")
+                  ? r.items.map((i) => `${i.name} ${i.quantity}${t(`units.${i.unit}`)}`).join(" | ")
                   : t("noRecipe")}
               </p>
               {canManage ? (

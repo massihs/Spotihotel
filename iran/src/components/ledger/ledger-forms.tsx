@@ -10,6 +10,8 @@ import { cn } from "@/lib/cn";
 import { centsToInput, parseMoneyInput } from "@/lib/money";
 import {
   budgetAction,
+  chequeStatusAction,
+  paySupplierAction,
   ledgerAccountAction,
   lockBooksAction,
   manualEntryAction,
@@ -190,7 +192,7 @@ function EntryForm({
         )}
       >
         <span>
-          {t("debit")} {money(debit)} · {t("credit")} {money(credit)}
+          {t("debit")} {money(debit)} | {t("credit")} {money(credit)}
         </span>
         <span>
           {debit === credit && debit > 0
@@ -464,5 +466,153 @@ export function ReconcileTable({
         </table>
       </div>
     </div>
+  );
+}
+
+const CHEQUE_NEXT: Record<string, Record<string, string[]>> = {
+  received: {
+    in_hand: ["deposited", "cleared", "bounced", "returned"],
+    deposited: ["cleared", "bounced"],
+    bounced: ["cleared", "returned"],
+  },
+  issued: { issued: ["cleared", "bounced", "cancelled"], bounced: ["cleared", "cancelled"] },
+};
+
+/** Next statuses of a cheque, as small buttons (each change is journalled). */
+export function ChequeActions({
+  restaurantId,
+  chequeId,
+  direction,
+  status,
+}: {
+  restaurantId: string;
+  chequeId: string;
+  direction: string;
+  status: string;
+}) {
+  const t = useTranslations("ledger.cheque");
+  const next = CHEQUE_NEXT[direction]?.[status] ?? [];
+  return (
+    <span className="inline-flex flex-wrap justify-end gap-1">
+      {next.map((n) => (
+        <RunButton
+          key={n}
+          variant={n === "cleared" ? "primary" : n === "bounced" ? "danger" : "secondary"}
+          confirm={n === "bounced" ? t("bounceConfirm") : undefined}
+          run={() => chequeStatusAction(restaurantId, chequeId, n)}
+        >
+          {t(`to.${n}`)}
+        </RunButton>
+      ))}
+    </span>
+  );
+}
+
+/** Pays a supplier by cash, transfer or an issued cheque. */
+export function PaySupplierButton({
+  restaurantId,
+  currency,
+  suppliers,
+  today,
+}: {
+  restaurantId: string;
+  currency: string;
+  suppliers: { id: string; name: string }[];
+  today: string;
+}) {
+  const t = useTranslations("ledger");
+  const r = useRun();
+  const [method, setMethod] = useState("transfer");
+  return (
+    <SheetButton label={t("paySupplier")} title={t("paySupplier")} variant="primary" size="md">
+      {(close) => (
+        <form
+          className="grid grid-cols-2 gap-4"
+          action={(fd) =>
+            r.run(
+              () =>
+                paySupplierAction(restaurantId, {
+                  supplierId: String(fd.get("supplierId")),
+                  amountCents: parseMoneyInput(String(fd.get("amount") ?? ""), currency) ?? 0,
+                  method: method as "cash",
+                  paidOn: String(fd.get("paidOn")),
+                  reference: String(fd.get("reference") ?? ""),
+                  note: String(fd.get("note") ?? ""),
+                  cheque:
+                    method === "cheque"
+                      ? {
+                          sayadId: String(fd.get("sayadId") ?? ""),
+                          number: String(fd.get("chequeNumber") ?? ""),
+                          bank: String(fd.get("bank") ?? ""),
+                          dueDate: String(fd.get("dueDate") ?? ""),
+                        }
+                      : undefined,
+                }),
+              close,
+            )
+          }
+        >
+          <label className="col-span-2">
+            <Label>{t("supplier")}</Label>
+            <select name="supplierId" className={inputCls} required>
+              {suppliers.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            <Label>{t("amount")}</Label>
+            <input name="amount" className={inputCls} inputMode="decimal" dir="ltr" required />
+          </label>
+          <label>
+            <Label>{t("date")}</Label>
+            <DateInput name="paidOn" defaultValue={today} required />
+          </label>
+          <label className="col-span-2">
+            <Label>{t("method")}</Label>
+            <select className={inputCls} value={method} onChange={(e) => setMethod(e.target.value)}>
+              {["transfer", "cash", "cheque"].map((m) => (
+                <option key={m} value={m}>
+                  {t(`methods.${m}`)}
+                </option>
+              ))}
+            </select>
+          </label>
+          {method === "cheque" ? (
+            <>
+              <label className="col-span-2">
+                <Label>{t("sayadId")}</Label>
+                <input name="sayadId" className={inputCls} inputMode="numeric" maxLength={16} dir="ltr" />
+              </label>
+              <label>
+                <Label>{t("chequeNumber")}</Label>
+                <input name="chequeNumber" className={inputCls} maxLength={32} dir="ltr" />
+              </label>
+              <label>
+                <Label>{t("dueDate")}</Label>
+                <DateInput name="dueDate" required />
+              </label>
+              <label className="col-span-2">
+                <Label>{t("bank")}</Label>
+                <input name="bank" className={inputCls} maxLength={80} />
+              </label>
+            </>
+          ) : (
+            <label className="col-span-2">
+              <Label>{t("reference")}</Label>
+              <input name="reference" className={inputCls} maxLength={64} dir="ltr" />
+            </label>
+          )}
+          <div className="col-span-2 space-y-2">
+            <FormError error={r.error} />
+            <Button type="submit" className="w-full" disabled={r.pending || !suppliers.length}>
+              {t("paySupplier")}
+            </Button>
+          </div>
+        </form>
+      )}
+    </SheetButton>
   );
 }

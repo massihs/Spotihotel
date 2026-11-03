@@ -96,7 +96,7 @@ async function FeedbackDashboard({ params }: Props) {
                   {f.comment ? <p className="mt-1.5">{f.comment}</p> : null}
                   <p className="mt-1 text-xs text-fg-muted" dir="ltr">
                     {f.phone}
-                    {f.prizeLabel ? ` · 🎁 ${f.prizeLabel}` : ""}
+                    {f.prizeLabel ? ` | 🎁 ${f.prizeLabel}` : ""}
                   </p>
                 </li>
               ))}

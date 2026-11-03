@@ -95,7 +95,7 @@ export function StayPortal({
           <KeyRound className="size-4" aria-hidden="true" />
           {t("room", { room })}
           {stay
-            ? ` · ${t("departure", { day: day(stay.departure, { weekday: "long", day: "numeric", month: "long" }), time: settings.checkOutTime })}`
+            ? ` | ${t("departure", { day: day(stay.departure, { weekday: "long", day: "numeric", month: "long" }), time: settings.checkOutTime })}`
             : ""}
         </p>
       </header>
@@ -106,7 +106,7 @@ export function StayPortal({
             <span className="text-fg-muted">SSID</span> <b>{settings.wifiName}</b>
             {settings.wifiPassword ? (
               <>
-                {" · "}
+                {" | "}
                 <span className="text-fg-muted">{t("password")}</span>{" "}
                 <b className="select-all">{settings.wifiPassword}</b>
               </>
@@ -284,7 +284,7 @@ function Spa({
         ))}
       </div>
       <p className="mb-3 text-sm text-fg-muted">
-        {tKind(svc.kind)} · {t("minutes", { n: svc.durationMin })} ·{" "}
+        {tKind(svc.kind)} | {t("minutes", { n: svc.durationMin })} ·{" "}
         {svc.priceCents ? t("perPerson", { price: money(svc.priceCents) }) : t("included")}
         {svc.description ? <span className="mt-1 block">{svc.description}</span> : null}
       </p>
@@ -353,7 +353,7 @@ function Spa({
           {upcoming.map((b) => (
             <li key={b.id} className="flex items-center gap-2">
               <span className="flex-1">
-                <b>{b.service}</b> · {when(b.startsAt)} · {t("peopleN", { n: b.people })}
+                <b>{b.service}</b> | {when(b.startsAt)} | {t("peopleN", { n: b.people })}
               </span>
               <CancelSpa id={b.id} />
             </li>

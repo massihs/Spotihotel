@@ -20,6 +20,7 @@ import { forbidden, notFound } from "@/server/errors";
 import { assertCan, listUserRestaurants, type RestaurantContext } from "@/server/tenancy";
 import { dayStart, localDay } from "@/lib/period";
 import { createRestaurant } from "@/server/modules/restaurants/service";
+import { copyHotelSetup } from "@/server/modules/pms/chain";
 
 const ACTIVE = ["received", "accepted", "preparing", "ready"] as const;
 const DAY = 86_400_000;
@@ -299,6 +300,8 @@ export async function createBranch(db: Database, ctx: RestaurantContext, raw: z.
       }
     }
     if (input.copyMenu) await copyMenuTx(tx, src.id, created.id, "append");
+    // A new hotel of the chain starts with the same room types, rates, services and settings.
+    if (src.kind === "hotel" && input.copySettings) await copyHotelSetup(tx, src.id, created.id);
     return created;
   });
   await recordAudit(db, {

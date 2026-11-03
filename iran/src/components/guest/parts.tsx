@@ -46,7 +46,7 @@ export function canQuickAdd(p: PublicProduct) {
 }
 
 /**
- * Splits a description that starts with the dish's Latin name ("Rock Shrimp · میگو، هویج…")
+ * Splits a description that starts with the dish's Latin name ("Rock Shrimp | میگو، هویج…")
  * into that name (shown on its own small line) and the rest.
  */
 export function splitDescription(

@@ -89,8 +89,8 @@ async function Branches({ params }: Pick<Props, "params">) {
                   <p className="truncate font-semibold">{r.name}</p>
                   <p className="text-xs text-fg-muted">
                     {tKind.has(r.kind) ? tKind(r.kind) : r.kind}
-                    {r.isCurrent ? ` · ${t("current")}` : ""}
-                    {r.status === "suspended" ? ` · ${t("suspended")}` : ""}
+                    {r.isCurrent ? ` | ${t("current")}` : ""}
+                    {r.status === "suspended" ? ` | ${t("suspended")}` : ""}
                   </p>
                 </div>
                 {!r.isCurrent ? (
