@@ -24,7 +24,12 @@ export const PERMISSIONS = [
   "inventory.manage", // ingredients, recipes, purchases, suppliers
   "customers.view",
   "customers.manage", // loyalty, coupons, SMS campaigns
-  "accounting.manage", // expenses and financial reports
+  "accounting.manage", // expenses, general ledger and financial reports
+  "frontdesk.view", // hotel: planning, arrivals, departures, guests
+  "frontdesk.manage", // hotel: bookings, check-in / check-out, room moves
+  "rates.manage", // hotel: room types, rate plans, yield calendar, services, night audit
+  "folio.post", // hotel: post charges and take payments on a guest's bill
+  "folio.adjust", // hotel: void postings, discounts, transfers
   "analytics.view",
   "feedback.view",
   "complaints.manage",
@@ -55,6 +60,9 @@ export const ROLE_PERMISSIONS: Record<MemberRole, ReadonlySet<Permission>> = {
     // Waiters hand out invoices (فاکتور) when a guest asks for one.
     "invoices.view",
     "feedback.view",
+    "frontdesk.view",
+    "frontdesk.manage",
+    "folio.post",
   ]),
 };
 
@@ -99,7 +107,11 @@ export const JOB_PRESETS: Record<
 > = {
   manager: { role: "admin", granted: [], revoked: [] },
   cashier: { role: "staff", granted: ["orders.cancel", "customers.manage"], revoked: [] },
-  waiter: { role: "staff", granted: [], revoked: ["cash.manage", "inventory.view"] },
+  waiter: {
+    role: "staff",
+    granted: [],
+    revoked: ["cash.manage", "inventory.view", "frontdesk.manage", "folio.post"],
+  },
   bar: {
     role: "staff",
     granted: [],
@@ -112,6 +124,9 @@ export const JOB_PRESETS: Record<
       "customers.view",
       "sessions.close",
       "tables.view",
+      "frontdesk.view",
+      "frontdesk.manage",
+      "folio.post",
     ],
   },
   kitchen: {
@@ -126,6 +141,9 @@ export const JOB_PRESETS: Record<
       "customers.view",
       "sessions.close",
       "tables.view",
+      "frontdesk.view",
+      "frontdesk.manage",
+      "folio.post",
     ],
   },
 };

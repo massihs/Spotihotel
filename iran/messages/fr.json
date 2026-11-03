@@ -992,7 +992,18 @@
       "manage": "Club clients et campagnes"
     },
     "accounting": {
-      "manage": "Dépenses et rapports financiers"
+      "manage": "Comptabilité, dépenses et rapports financiers"
+    },
+    "frontdesk": {
+      "view": "Réception : planning, arrivées, départs, clients",
+      "manage": "Réception : réservations, check-in, check-out, délogements"
+    },
+    "rates": {
+      "manage": "Types de chambre, tarifs, prestations, clôture de journée"
+    },
+    "folio": {
+      "post": "Notes clients : débits et encaissements",
+      "adjust": "Notes clients : annulations, remises, transferts"
     }
   },
   "settings": {

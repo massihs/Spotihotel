@@ -9,6 +9,8 @@ export const PROVIDER_CODES = [
   "mock_online",
   "stripe",
   "zarinpal",
+  /** Hotel: charged to the guest's room bill (folio), settled at check-out. */
+  "room_charge",
 ] as const;
 export type ProviderCode = (typeof PROVIDER_CODES)[number];
 

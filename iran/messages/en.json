@@ -992,7 +992,18 @@
       "manage": "Loyalty club and campaigns"
     },
     "accounting": {
-      "manage": "Expenses and financial reports"
+      "manage": "Accounting, expenses and financial reports"
+    },
+    "frontdesk": {
+      "view": "Front desk: planning, arrivals, departures, guests",
+      "manage": "Front desk: bookings, check-in, check-out, room moves"
+    },
+    "rates": {
+      "manage": "Room types, rates, services, night audit"
+    },
+    "folio": {
+      "post": "Guest bills: charges and payments",
+      "adjust": "Guest bills: voids, discounts, transfers"
     }
   },
   "settings": {

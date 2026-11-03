@@ -4,6 +4,7 @@ import { pk, softDelete, timestamps, tstz } from "./_helpers";
 import { tableSessionStatus } from "./enums";
 import { restaurants } from "./restaurant";
 import { users } from "./platform";
+import { roomTypes } from "./pms";
 
 export const diningTables = pgTable(
   "dining_tables",
@@ -32,6 +33,8 @@ export const diningTables = pgTable(
     /** Hotel rooms: clean | dirty | cleaning | inspected | out_of_order. */
     housekeeping: varchar({ length: 16 }).notNull().default("clean"),
     housekeepingAt: tstz(),
+    /** Hotel rooms: the type it is sold as (PMS). */
+    roomTypeId: uuid().references(() => roomTypes.id, { onDelete: "set null" }),
     ...timestamps,
     ...softDelete,
   },
