@@ -18,6 +18,8 @@ const nextConfig: NextConfig = {
   typedRoutes: false,
   serverExternalPackages: ["@node-rs/argon2", "pg", "sharp", "pdfkit"],
   experimental: {
+    // Next.js security updates: the upgrade assistant only proposes patched releases.
+    agentUpgrade: "security",
     serverActions: {
       // Image uploads (logo, product photos) go through server actions; images are re-encoded server-side.
       bodySizeLimit: "10mb",
