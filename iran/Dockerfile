@@ -28,7 +28,11 @@ RUN npm run build \
  && node_modules/.bin/esbuild scripts/seed.ts --bundle --platform=node --format=esm --target=node22 \
       --conditions=react-server --external:pg --external:@node-rs/argon2 --external:sharp \
       --banner:js="import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);" \
-      --outfile=dist/seed.mjs --log-level=warning
+      --outfile=dist/seed.mjs --log-level=warning \
+ && node_modules/.bin/esbuild scripts/seed-parsian.ts --bundle --platform=node --format=esm --target=node22 \
+      --conditions=react-server --external:pg --external:@node-rs/argon2 --external:sharp \
+      --banner:js="import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);" \
+      --outfile=dist/seed-parsian.mjs --log-level=warning
 
 # Production dependencies only (no build tooling in the final image).
 FROM ${NODE_IMAGE} AS prod-deps
@@ -54,6 +58,7 @@ COPY --from=build --chown=node:node /app/public ./public
 COPY --from=build --chown=node:node /app/drizzle ./drizzle
 COPY --from=build --chown=node:node /app/messages ./messages
 COPY --from=build --chown=node:node /app/dist/seed.mjs ./dist/seed.mjs
+COPY --from=build --chown=node:node /app/dist/seed-parsian.mjs ./dist/seed-parsian.mjs
 COPY --chown=node:node ${APP_DIR}/package.json ${APP_DIR}/next.config.ts ./
 COPY --chown=node:node ${APP_DIR}/scripts/migrate.mjs ./scripts/migrate.mjs
 # Showcase restaurant assets (Brielle logo and dish photos) read by the seed.
@@ -64,4 +69,4 @@ EXPOSE 3000
 # No HEALTHCHECK: Liara judges a release ~30 s after start, before Docker's first probe
 # (which runs only after one interval) could ever report healthy. /api/health stays available.
 # 1. migrations  2. platform data (plans, templates, admin if SEED_SUPERADMIN_PASSWORD)  3. server
-CMD ["sh", "-c", "node scripts/migrate.mjs && node dist/seed.mjs && exec node_modules/.bin/next start -H 0.0.0.0 -p ${PORT}"]
+CMD ["sh", "-c", "node scripts/migrate.mjs && node dist/seed.mjs && { if [ \"$SEED_PARSIAN\" = true ]; then node dist/seed-parsian.mjs & fi; } && exec node_modules/.bin/next start -H 0.0.0.0 -p ${PORT}"]

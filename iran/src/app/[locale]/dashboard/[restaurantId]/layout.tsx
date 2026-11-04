@@ -62,35 +62,65 @@ import { after } from "next/server";
 import { SubscriptionBanner } from "@/components/dashboard/subscription-banner";
 import { countOpenRequests } from "@/server/modules/hotel/requests";
 
+/** Where each page sits in a hotel's menu, in this order (the rest keeps its own group). */
+const HOTEL_LAYOUT: [page: string, group: HotelGroup][] = [
+  ["frontdesk", "reception"],
+  ["planning", "reception"],
+  ["stays", "reception"],
+  ["blocks", "reception"],
+  ["guests", "reception"],
+  ["rooms", "rooms"],
+  ["requests", "rooms"],
+  ["orders", "rooms"],
+  ["wellness", "rooms"],
+  ["tables", "rooms"],
+  ["forecast", "revenue"],
+  ["chain", "revenue"],
+  ["pos", "restaurant"],
+  ["waiter", "restaurant"],
+  ["kitchen", "restaurant"],
+  ["floor", "restaurant"],
+  ["reservations", "restaurant"],
+  ["menu", "restaurant"],
+  ["inventory", "restaurant"],
+];
+type HotelGroup = "reception" | "rooms" | "revenue" | "restaurant";
+/** Restaurant-chain tools a hotel has no use for (the group console replaces branches). */
+const HOTEL_HIDDEN = ["callcenter", "delivery", "branches", "music"];
+/** Groups top to bottom: the front office first, the restaurant after the money. */
+const HOTEL_ORDER = ["", "reception", "rooms", "revenue", "finance", "restaurant", "guests", "manage"];
+/** On a phone's bottom bar: home, front desk, planning and the rooms' requests. */
+const HOTEL_PRIMARY = ["", "frontdesk", "planning", "requests"];
+
 /**
- * A hotel's menu: requests, rooms and room service on top; what only its restaurant uses (the
- * floor, table bookings, delivery…) in its own group further down.
+ * A hotel's menu: the front office and the rooms on top, revenue and finance next, what only
+ * its restaurant uses in its own group further down.
  */
 function arrangeForHotel(
   nav: NavItem[],
   base: string,
-  g: Record<"hotel" | "restaurant", string>,
-  roomService: string,
-  roomsQr: string,
+  labels: Record<HotelGroup, string>,
+  names: { roomService: string; roomsQr: string },
 ) {
-  const restaurantOnly = ["floor", "waiter", "reservations", "callcenter", "delivery", "kitchen", "pos"].map(
-    (p) => `${base}/${p}`,
-  );
-  for (const item of nav) {
-    if (item.href === `${base}/orders`)
-      Object.assign(item, { label: roomService, groupKey: "hotel", group: g.hotel });
-    else if (item.href === `${base}/tables`)
-      Object.assign(item, { label: roomsQr, groupKey: "hotel", group: g.hotel, primary: false });
-    else if (restaurantOnly.includes(item.href))
-      Object.assign(item, {
-        groupKey: "restaurant",
-        group: g.restaurant,
-        primary: item.href === `${base}/kitchen`,
-      });
+  const page = (i: NavItem) => (i.href === base ? "" : i.href.slice(base.length + 1));
+  const kept = nav.filter((i) => !HOTEL_HIDDEN.includes(page(i)));
+  const slot = new Map(HOTEL_LAYOUT.map(([p, g], i) => [p, { g, i }]));
+  for (const item of kept) {
+    const p = page(item);
+    const at = slot.get(p);
+    if (at) Object.assign(item, { groupKey: at.g, group: labels[at.g] });
+    if (p === "orders") item.label = names.roomService;
+    if (p === "tables") item.label = names.roomsQr;
+    item.primary = HOTEL_PRIMARY.includes(p);
   }
-  const rank = (i: NavItem) =>
-    !i.groupKey ? 0 : i.groupKey === "hotel" ? 1 : i.groupKey === "restaurant" ? 3 : 2;
-  const sorted = [...nav].sort((a, b) => rank(a) - rank(b));
+  const rank = (i: NavItem) => {
+    const g = HOTEL_ORDER.indexOf(i.groupKey ?? "");
+    return (g < 0 ? HOTEL_ORDER.length : g) * 100 + (slot.get(page(i))?.i ?? 50);
+  };
+  const sorted = kept
+    .map((item, i) => ({ item, i }))
+    .sort((a, b) => rank(a.item) - rank(b.item) || a.i - b.i)
+    .map((x) => x.item);
   nav.splice(0, nav.length, ...sorted);
 }
 
@@ -140,8 +170,6 @@ async function RestaurantShell({
     guests: t("nav.groups.guests"),
     finance: t("nav.groups.finance"),
     manage: t("nav.groups.manage"),
-    hotel: t("nav.groups.hotel"),
-    restaurant: t("nav.groups.hotelRestaurant"),
   };
   type Item = NavItem & { show: boolean };
   const nav: NavItem[] = (
@@ -161,64 +189,64 @@ async function RestaurantShell({
         label: t("nav.frontdesk"),
         icon: <KeyRound />,
         primary: true,
-        groupKey: "hotel",
-        group: g.hotel,
+        groupKey: "reception",
+        group: "",
       },
       {
         show: hotel && ctx.role !== "staff",
         href: `${base}/chain`,
         label: t("nav.chain"),
         icon: <Building2 />,
-        groupKey: "hotel",
-        group: g.hotel,
+        groupKey: "reception",
+        group: "",
       },
       {
         show: hotel && can(ctx, "frontdesk.view"),
         href: `${base}/planning`,
         label: t("nav.planning"),
         icon: <CalendarRange />,
-        groupKey: "hotel",
-        group: g.hotel,
+        groupKey: "reception",
+        group: "",
       },
       {
         show: hotel && can(ctx, "frontdesk.view"),
         href: `${base}/stays`,
         label: t("nav.stays"),
         icon: <NotebookTabs />,
-        groupKey: "hotel",
-        group: g.hotel,
+        groupKey: "reception",
+        group: "",
       },
       {
         show: hotel && can(ctx, "frontdesk.view"),
         href: `${base}/blocks`,
         label: t("nav.blocks"),
         icon: <UsersRound />,
-        groupKey: "hotel",
-        group: g.hotel,
+        groupKey: "reception",
+        group: "",
       },
       {
         show: hotel && can(ctx, "frontdesk.view"),
         href: `${base}/forecast`,
         label: t("nav.forecast"),
         icon: <ChartSpline />,
-        groupKey: "hotel",
-        group: g.hotel,
+        groupKey: "reception",
+        group: "",
       },
       {
         show: hotel && can(ctx, "frontdesk.view"),
         href: `${base}/guests`,
         label: t("nav.hotelGuests"),
         icon: <Contact />,
-        groupKey: "hotel",
-        group: g.hotel,
+        groupKey: "reception",
+        group: "",
       },
       {
         show: hotel && can(ctx, "frontdesk.view"),
         href: `${base}/wellness`,
         label: t("nav.wellness"),
         icon: <Flower2 />,
-        groupKey: "hotel",
-        group: g.hotel,
+        groupKey: "reception",
+        group: "",
       },
       {
         show: hotel && can(ctx, "orders.view"),
@@ -227,16 +255,16 @@ async function RestaurantShell({
         icon: <ConciergeBell />,
         primary: true,
         badge: openRequests,
-        groupKey: "hotel",
-        group: g.hotel,
+        groupKey: "reception",
+        group: "",
       },
       {
         show: hotel && can(ctx, "tables.view"),
         href: `${base}/rooms`,
         label: t("nav.rooms"),
         icon: <BedDouble />,
-        groupKey: "hotel",
-        group: g.hotel,
+        groupKey: "reception",
+        group: "",
       },
       // Sales & service: everything that happens during a shift.
       {
@@ -440,7 +468,18 @@ async function RestaurantShell({
   )
     .filter((i) => i.show)
     .map(({ show: _show, ...i }) => i);
-  if (hotel) arrangeForHotel(nav, base, g, t("nav.roomService"), t("nav.roomsQr"));
+  if (hotel)
+    arrangeForHotel(
+      nav,
+      base,
+      {
+        reception: t("nav.groups.frontOffice"),
+        rooms: t("nav.groups.roomsServices"),
+        revenue: t("nav.groups.revenue"),
+        restaurant: t("nav.groups.hotelRestaurant"),
+      },
+      { roomService: t("nav.roomService"), roomsQr: t("nav.roomsQr") },
+    );
 
   // Go-anywhere search also reaches the tabs inside pages and the settings sections.
   const visible = new Set(nav.map((n) => n.href));

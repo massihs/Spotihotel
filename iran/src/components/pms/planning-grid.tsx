@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
@@ -110,10 +110,17 @@ export function PlanningGrid({
       </div>
 
       {unassigned.length ? (
-        <section className="rounded-2xl border border-warning/40 bg-warning-soft/40 p-4">
-          <h2 className="mb-2 text-sm font-semibold">{t("unassigned", { n: unassigned.length })}</h2>
-          <ul className="space-y-2">
-            {unassigned.map((s) => (
+        // A big hotel has hundreds of future bookings without a room yet: folded, soonest first.
+        <details
+          open={unassigned.length <= 8}
+          className="group rounded-2xl border border-warning/40 bg-warning-soft/40 p-4 [&_summary::-webkit-details-marker]:hidden"
+        >
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold">
+            {t("unassigned", { n: unassigned.length })}
+            <ChevronDown className="size-4 transition group-open:rotate-180" aria-hidden="true" />
+          </summary>
+          <ul className="mt-3 max-h-80 space-y-2 overflow-y-auto pe-1">
+            {[...unassigned].sort((a, b) => a.arrival.localeCompare(b.arrival)).map((s) => (
               <li key={s.id} className="flex flex-wrap items-center gap-3 text-sm">
                 <Link
                   href={`/dashboard/${restaurantId}/stays/${s.id}`}
@@ -134,7 +141,7 @@ export function PlanningGrid({
               </li>
             ))}
           </ul>
-        </section>
+        </details>
       ) : null}
 
       <div className="overflow-x-auto rounded-2xl border border-border bg-surface">

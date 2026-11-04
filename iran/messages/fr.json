@@ -51,10 +51,20 @@
       "invoice": "Factures officielles"
     },
     "mock": {
-      "table": "Chambre 204",
+      "table": "Chambre 1204",
       "cart": "Voir le panier",
       "featured": "À la une",
-      "menu": "Room service"
+      "menu": "Room service",
+      "portal": "Votre séjour",
+      "tiles": {
+        "roomService": "Room service",
+        "spa": "Spa et massage",
+        "minibar": "Minibar",
+        "requests": "Ménage et serviettes"
+      },
+      "bill": "Ma note",
+      "nights": "2 nuits, petit-déjeuner",
+      "order": "Commander en chambre"
     },
     "stats": {
       "setup": {
@@ -70,8 +80,8 @@
         "label": "persan, anglais, arabe"
       },
       "modules": {
-        "value": "15+",
-        "label": "modules sur une plateforme"
+        "value": "300+",
+        "label": "chambres par hôtel sans ralentir"
       }
     },
     "howTitle": "Trois étapes. C'est tout.",
@@ -114,7 +124,7 @@
       },
       "pay": {
         "q": "Où va l'argent des paiements en ligne ?",
-        "a": "Directement au restaurant : vous saisissez votre propre identifiant marchand Zarinpal dans les réglages."
+        "a": "Directement à l'hôtel : vous saisissez votre propre identifiant marchand Zarinpal dans les réglages."
       },
       "cash": {
         "q": "Et si un client veut payer en espèces ou par carte ?",
@@ -165,7 +175,10 @@
       "paid": "Paiement réussi",
       "ready": "Prête à servir",
       "kitchen": "Cuisine",
-      "minutes": "04:12"
+      "minutes": "04:12",
+      "checkin": "Check-in fait",
+      "checkinRoom": "Chambre 1204 | M. Rezaei",
+      "audit": "Clôture de journée"
     },
     "onSpotihotel": {
       "title": "Ils travaillent avec Spotihotel",
@@ -173,22 +186,22 @@
     },
     "platform": {
       "eyebrow": "Une plateforme, tout l'hôtel",
-      "title": "Tout ce dont la réception, le ménage, le restaurant et la comptabilité ont besoin",
-      "subtitle": "Activez les modules dont vous avez besoin ; les autres restent masqués.",
+      "title": "Réception, revenus, services et comptabilité : un seul logiciel",
+      "subtitle": "Du petit hôtel à la grande chaîne : activez les modules utiles, les autres restent masqués.",
       "qr": {
         "title": "QR de la chambre : le portail client",
-        "body": "Le client commande, réserve le spa, déclare le minibar et voit sa note depuis son téléphone, tout sur le compte de la chambre."
+        "body": "Room service, spa, minibar, demandes et note en direct, sans appli : tout va sur le compte de la chambre."
       },
       "kds": {
         "title": "Cuisine et bar en temps réel",
         "body": "Chaque commande part au bon poste, avec un chronomètre depuis la prise de commande et l'impression automatique des tickets."
       },
       "reports": {
-        "title": "Comptabilité et rapports de gestion",
-        "body": "Écritures automatiques, bilan, résultat par département, budgets mensuels, TVA et export."
+        "title": "Comptabilité et contrôle de gestion",
+        "body": "Écritures automatiques, bilan, résultat par service, budgets, TVA, chèques et paiements fournisseurs."
       },
       "mockOrders": "Commandes du jour",
-      "mockRevenue": "Ventes de la semaine",
+      "mockRevenue": "Chiffre d'affaires du mois",
       "mockDish1": "Kebab koobideh",
       "mockDish2": "Doogh",
       "mockDish3": "Salade shirazi",
@@ -245,6 +258,60 @@
           "title": "Hôtels & room service",
           "body": "Un QR code dans chaque chambre : le client commande, appelle le ménage ou la réception, et l'équipe concernée est prévenue."
         }
+      },
+      "planning": {
+        "title": "Réception et planning des chambres",
+        "body": "Réservations, arrivées, départs, attribution des chambres, notes, encaissements et clôture de journée, avec occupation, prix moyen et RevPAR en direct."
+      },
+      "mods": {
+        "booking": {
+          "title": "Réservations",
+          "body": "Plans tarifaires, petit-déjeuner, demi-pension, garanties, acomptes et annulations."
+        },
+        "revenue": {
+          "title": "Gestion des revenus",
+          "body": "Prix selon l'occupation et la date, prévisions à 30 nuits, mix des canaux."
+        },
+        "groups": {
+          "title": "Groupes et séminaires",
+          "body": "Allotements par type de chambre, rooming list, libération automatique."
+        },
+        "channels": {
+          "title": "Snapptrip, Alibaba, Jabama…",
+          "body": "Chaque réservation garde sa plateforme et sa référence ; commissions comptabilisées."
+        },
+        "precheckin": {
+          "title": "Pré-enregistrement",
+          "body": "Lien par SMS : fiche de police remplie sur le téléphone, signature comprise."
+        },
+        "housekeeping": {
+          "title": "Ménage",
+          "body": "État de chaque chambre, étage par étage, et demandes des clients."
+        },
+        "wellness": {
+          "title": "Spa, piscine, massage",
+          "body": "Créneaux, capacités, séances femmes et hommes, facturé sur la chambre."
+        },
+        "minibar": {
+          "title": "Minibar",
+          "body": "Déclaré par le client ou le ménage, facturé automatiquement."
+        },
+        "restaurant": {
+          "title": "Restaurant et room service",
+          "body": "Caisse, cuisine, tables et commandes en chambre reportées sur la note."
+        },
+        "cheques": {
+          "title": "Chèques et comptes société",
+          "body": "Chèques Sayad reçus et émis, échéances, comptes clients et balance âgée."
+        },
+        "chain": {
+          "title": "Chaînes hôtelières",
+          "body": "Console groupe, disponibilités centrales, comptes consolidés."
+        },
+        "offline": {
+          "title": "Internet coupé ?",
+          "body": "Le logiciel pour ordinateur continue sur le réseau de l'hôtel et se synchronise ensuite."
+        }
       }
     },
     "iran": {
@@ -278,23 +345,76 @@
       }
     },
     "howEyebrow": "Démarrage simple",
-    "ctaDemo": "Essayer la démo"
+    "ctaDemo": "Essayer la démo",
+    "pmsMock": {
+      "tonight": "Occupation ce soir",
+      "arrivals": "Arrivées",
+      "departures": "Départs",
+      "adr": "Prix moyen",
+      "revpar": "RevPAR",
+      "chart": "Planning des chambres",
+      "occupancy": "Occupation"
+    },
+    "howSteps": {
+      "rooms": {
+        "title": "Décrivez l'hôtel",
+        "body": "Étages et chambres, types, plans tarifaires, prix du week-end, spa et minibar."
+      },
+      "qr": {
+        "title": "Placez les QR en chambre",
+        "body": "Chaque chambre a son QR : room service, spa, minibar, Wi-Fi et la note du client."
+      },
+      "run": {
+        "title": "Pilotez au quotidien",
+        "body": "Réservations, check-in, check-out, clôture de journée et comptabilité depuis un seul écran."
+      }
+    },
+    "hotelFaq": {
+      "app": {
+        "q": "Les clients doivent-ils installer une appli ?",
+        "a": "Non. Ils scannent le QR de leur chambre avec l'appareil photo et le portail s'ouvre dans le navigateur."
+      },
+      "data": {
+        "q": "Où sont hébergées nos données ?",
+        "a": "Sur des serveurs en Iran, sauvegardés chaque jour ; chaque hôtel ne voit que ses propres données."
+      },
+      "switch": {
+        "q": "Combien de temps pour passer à Spotihotel ?",
+        "a": "Un jour pour l'essentiel : chambres, tarifs et équipe. Les réservations à venir se saisissent ou s'importent ensuite."
+      },
+      "channels": {
+        "q": "Et les réservations des plateformes ?",
+        "a": "Chaque réservation garde sa plateforme (Snapptrip, Alibaba, Jabama, Eghamat24…) et sa référence ; la commission est passée en comptabilité au départ du client."
+      },
+      "books": {
+        "q": "La comptabilité suit-elle les règles iraniennes ?",
+        "a": "Oui : plan comptable iranien, exercice depuis Farvardin, TVA par saison, chèques Sayad, export pour votre expert-comptable."
+      },
+      "chain": {
+        "q": "Nous avons plusieurs hôtels : tout est-il centralisé ?",
+        "a": "Oui. La console groupe montre occupation, prix moyen et RevPAR de chaque hôtel, les disponibilités centrales et les comptes consolidés."
+      },
+      "offline": {
+        "q": "Et si Internet est coupé ?",
+        "a": "Le logiciel Spotihotel pour ordinateur continue sur le réseau local de l'hôtel, et tout se synchronise au retour d'Internet."
+      }
+    }
   },
   "auth": {
     "loginTitle": "Bon retour",
-    "loginSubtitle": "Connectez-vous à votre espace restaurant.",
-    "signupTitle": "Créez votre restaurant",
+    "loginSubtitle": "Connectez-vous à l'espace de votre hôtel.",
+    "signupTitle": "Créez votre hôtel",
     "signupSubtitle": "Quelques secondes suffisent. Aucune carte bancaire requise.",
     "email": "Email",
     "password": "Mot de passe",
     "fullName": "Votre nom",
-    "restaurantName": "Nom du restaurant",
+    "restaurantName": "Nom de l'hôtel",
     "passwordHint": "10 caractères minimum.",
     "loginSubmit": "Se connecter",
     "signupSubmit": "Créer mon compte",
     "noAccount": "Pas encore de compte ?",
     "hasAccount": "Déjà un compte ?",
-    "goSignup": "Créer un restaurant",
+    "goSignup": "Créer un hôtel",
     "goLogin": "Se connecter",
     "errors": {
       "invalid_credentials": "Email ou mot de passe incorrect.",
@@ -309,10 +429,10 @@
     "overview": "Vue d'ensemble",
     "admin": "Administration",
     "adminOverview": "Plateforme",
-    "adminRestaurants": "Restaurants",
+    "adminRestaurants": "Hôtels",
     "adminUsers": "Utilisateurs",
-    "switchRestaurant": "Changer de restaurant",
-    "myRestaurants": "Mes restaurants",
+    "switchRestaurant": "Changer d'hôtel",
+    "myRestaurants": "Mes hôtels",
     "tables": "Tables & QR",
     "team": "Équipe",
     "settings": "Paramètres",
@@ -338,7 +458,10 @@
       "finance": "Finances & rapports",
       "manage": "Gestion",
       "hotel": "Hôtel",
-      "hotelRestaurant": "Restaurant de l’hôtel"
+      "hotelRestaurant": "Restaurant et bar",
+      "frontOffice": "Réception et séjours",
+      "roomsServices": "Chambres et services",
+      "revenue": "Revenus et groupe"
     },
     "delivery": "Livraison",
     "reservations": "Réservations",
@@ -375,11 +498,11 @@
   },
   "dashboard": {
     "welcome": "Bonjour {name}",
-    "overviewSubtitle": "Voici l'état de votre restaurant.",
+    "overviewSubtitle": "Voici l'état de votre hôtel.",
     "setupTitle": "Mise en route",
     "setupSubtitle": "Terminez ces étapes pour recevoir vos premières commandes.",
     "setup": {
-      "profile": "Compléter les informations du restaurant",
+      "profile": "Compléter les informations de l'hôtel",
       "tables": "Créer vos tables",
       "menu": "Créer votre menu (ou l’importer depuis Excel)",
       "payments": "Configurer les moyens de paiement",
@@ -393,11 +516,11 @@
       "members": "Membres de l'équipe"
     },
     "role": "Votre rôle",
-    "suspendedTitle": "Restaurant suspendu",
-    "suspendedBody": "Ce restaurant est temporairement suspendu. Contactez le support Spotihotel.",
-    "noRestaurantTitle": "Aucun restaurant",
-    "noRestaurantBody": "Votre compte n'est rattaché à aucun restaurant actif.",
-    "pickRestaurant": "Choisissez un restaurant",
+    "suspendedTitle": "Hôtel suspendu",
+    "suspendedBody": "Cet hôtel est temporairement suspendu. Contactez le support Spotihotel.",
+    "noRestaurantTitle": "Aucun hôtel",
+    "noRestaurantBody": "Votre compte n'est rattaché à aucun hôtel actif.",
+    "pickRestaurant": "Choisissez un hôtel",
     "quickActions": {
       "kitchen": "Écran cuisine",
       "floor": "Salle en direct",
@@ -463,6 +586,72 @@
       "noRooms": "Ajoutez vos chambres pour les voir ici.",
       "waitingTitle": "Demandes en attente",
       "noWaiting": "Aucune demande en attente."
+    },
+    "home": {
+      "welcome": "Bonjour {name}",
+      "businessDate": "Jour hôtelier : {day}",
+      "alerts": {
+        "auditLate": "Clôture de journée du {day} à faire",
+        "requests": "{n, plural, one {# demande de chambre en attente} other {# demandes de chambre en attente}}",
+        "arrivals": "{n, plural, one {# arrivée à accueillir} other {# arrivées à accueillir}}",
+        "departures": "{n, plural, one {# départ à faire} other {# départs à faire}}",
+        "dirty": "{n, plural, one {# chambre à nettoyer} other {# chambres à nettoyer}}"
+      },
+      "quickTitle": "Accès rapide",
+      "quick": {
+        "newBooking": "Nouvelle réservation",
+        "frontdesk": "Réception",
+        "planning": "Planning",
+        "guests": "Clients",
+        "rooms": "Ménage",
+        "requests": "Demandes",
+        "wellness": "Spa et piscine",
+        "ledger": "Comptabilité"
+      },
+      "tonight": "Occupation ce soir",
+      "roomsSold": "{sold} chambres vendues sur {rooms}",
+      "adr": "Prix moyen (ADR)",
+      "revpar": "RevPAR",
+      "guests": "Clients",
+      "next14": "14 prochaines nuits : {pct} déjà vendu",
+      "arrivals": "Arrivées",
+      "departures": "Départs",
+      "inHouse": "Chambres occupées",
+      "precheckins": "{n} pré-enregistrés",
+      "guestsN": "{n, plural, one {# client} other {# clients}}",
+      "toClean": "À nettoyer",
+      "cleaning": "{n} en cours",
+      "outOfOrder": "{n} hors service",
+      "setupTitle": "Mise en route de l'hôtel",
+      "setupSubtitle": "Terminez ces étapes pour prendre vos premières réservations.",
+      "setup": {
+        "profile": "Compléter les informations de l'hôtel",
+        "roomTypes": "Créer les types de chambre",
+        "rooms": "Rattacher chaque chambre à son type",
+        "rates": "Créer les plans tarifaires",
+        "payments": "Régler les paiements (Zarinpal)",
+        "team": "Inviter l'équipe",
+        "firstBooking": "Saisir une première réservation"
+      },
+      "arrivalsTitle": "Arrivées du jour",
+      "departuresTitle": "Départs du jour",
+      "seeAll": "Réception",
+      "nightsN": "{n, plural, one {# nuit} other {# nuits}}",
+      "precheckedIn": "pré-enregistré",
+      "noArrivals": "Aucune arrivée attendue.",
+      "noDepartures": "Aucun départ.",
+      "settled": "Soldée",
+      "revenueTitle": "Chiffre d'affaires du jour",
+      "revenueHint": "Postes facturés sur les notes, par service.",
+      "books": "Comptabilité",
+      "total": "Total",
+      "collected": "Encaissé",
+      "noRevenue": "Rien de facturé aujourd'hui pour l'instant.",
+      "lastAuditTitle": "Dernière journée clôturée",
+      "forecast": "Prévisions",
+      "occupancy": "Occupation",
+      "totalRevenue": "Chiffre d'affaires",
+      "noAudit": "Aucune clôture de journée pour l'instant."
     }
   },
   "roles": {
@@ -474,8 +663,8 @@
     "title": "Plateforme",
     "subtitle": "Vue globale de Spotihotel.",
     "stats": {
-      "activeRestaurants": "Restaurants actifs",
-      "suspendedRestaurants": "Restaurants suspendus",
+      "activeRestaurants": "Hôtels actifs",
+      "suspendedRestaurants": "Hôtels suspendus",
       "newRestaurants": "Nouveaux (30 j)",
       "users": "Utilisateurs",
       "orders": "Commandes",
@@ -483,7 +672,7 @@
     },
     "subscriptions": "Abonnements par plan",
     "restaurants": {
-      "title": "Restaurants",
+      "title": "Hôtels",
       "name": "Nom",
       "organization": "Organisation",
       "orders": "Commandes",
@@ -492,13 +681,13 @@
       "open": "Ouvrir",
       "searchPlaceholder": "Nom ou slug…",
       "all": "Tous",
-      "empty": "Aucun restaurant trouvé"
+      "empty": "Aucun hôtel trouvé"
     },
     "users": {
       "title": "Utilisateurs",
       "name": "Nom",
       "email": "Email",
-      "restaurants": "Restaurants",
+      "restaurants": "Hôtels",
       "lastLogin": "Dernière connexion",
       "superAdmin": "Super admin",
       "never": "Jamais",
@@ -521,7 +710,7 @@
     "plans": {
       "title": "Forfaits",
       "billingOn": "Paiement des abonnements actif (merchant Zarinpal Spotihotel configuré).",
-      "billingOff": "Paiement des abonnements inactif : définissez BILLING_ZARINPAL_MERCHANT_ID pour l’ouvrir (essai de 14 jours pour les nouveaux restaurants).",
+      "billingOff": "Paiement des abonnements inactif : définissez BILLING_ZARINPAL_MERCHANT_ID pour l’ouvrir (essai de 14 jours pour les nouveaux hôtels).",
       "public": "Visible sur /pricing",
       "name": "Nom",
       "price": "Prix mensuel ({currency, select, IRR {tomans} other {{currency}}})",
@@ -544,24 +733,24 @@
       "apply": "Appliquer"
     },
     "growth": {
-      "active7d": "Restaurants actifs (7 j)",
-      "active30d": "Restaurants actifs (30 j)",
-      "lost30d": "Restaurants perdus (30 j)",
+      "active7d": "Hôtels actifs (7 j)",
+      "active30d": "Hôtels actifs (30 j)",
+      "lost30d": "Hôtels perdus (30 j)",
       "lostHint": "Ont commandé le mois d’avant, plus rien ce mois-ci.",
       "ordersPerDay": "Commandes par jour (30 j)",
-      "restaurantsPerDay": "Restaurants qui commandent, par jour",
+      "restaurantsPerDay": "Hôtels actifs, par jour",
       "orders": "{count, plural, one {# commande} other {# commandes}}",
-      "restaurants": "{count, plural, one {# restaurant} other {# restaurants}}",
+      "restaurants": "{count, plural, one {# hôtel} other {# hôtels}}",
       "signups": "Inscriptions par semaine",
       "weekOf": "Semaine du {date}",
       "atRisk": "À risque de départ",
       "atRiskHint": "Dernière commande il y a 14 à 60 jours : à appeler.",
-      "noRisk": "Aucun restaurant à risque.",
+      "noRisk": "Aucun hôtel à risque.",
       "lastOrder": "dernière commande {time}"
     },
     "audience": {
       "title": "Audience du site",
-      "subtitle": "Visites des pages publiques (accueil, tarifs, annuaire, fiches) sur 30 jours. Sans cookie ni service tiers.",
+      "subtitle": "Visites des pages publiques (accueil, tarifs, démo) sur 30 jours. Sans cookie ni service tiers.",
       "views": "Pages vues",
       "visitors": "Visiteurs uniques",
       "visitorsHint": "Comptés par jour : un visiteur qui revient un autre jour compte à nouveau.",
@@ -681,7 +870,7 @@
     "duplicate_coupon": "Ce code existe déjà.",
     "no_recipients": "Personne dans ce groupe.",
     "owner_only": "Seul le propriétaire peut créer une succursale.",
-    "other_organization": "Cet établissement n'appartient pas à votre organisation.",
+    "other_organization": "Cet hôtel n'appartient pas à votre groupe.",
     "address_required": "Saisissez l’adresse de livraison.",
     "below_zone_minimum": "Commande inférieure au minimum de la zone.",
     "nothing_to_settle": "Rien à régler.",
@@ -863,7 +1052,7 @@
   },
   "team": {
     "title": "Équipe",
-    "subtitle": "Gérez qui a accès au restaurant et ce que chacun peut faire.",
+    "subtitle": "Gérez qui a accès à l'hôtel et ce que chacun peut faire.",
     "add": "Ajouter un membre",
     "email": "Email",
     "fullName": "Nom complet",
@@ -883,8 +1072,8 @@
     "added": "Membre ajouté.",
     "addedNew": "Compte créé et membre ajouté.",
     "roleHelp": {
-      "admin": "Gère tout le restaurant sauf l'audit.",
-      "staff": "Service : commandes, tables, encaissement."
+      "admin": "Gère tout l'hôtel sauf le journal d'audit.",
+      "staff": "Service : réception, chambres, commandes et encaissements."
     },
     "jobs": {
       "label": "Poste",
@@ -918,11 +1107,11 @@
         "roomService": "Room service"
       },
       "title": "Postes",
-      "hint": "Nommez vos postes comme dans votre établissement (Caisse, Chicha, Réception…) et choisissez leur icône.",
+      "hint": "Nommez vos postes comme dans votre hôtel (Réception, Gouvernante, Bagagiste…) et choisissez leur icône.",
       "new": "Nouveau poste",
       "worksAs": "Fonctionne comme : {job}",
       "name": "Nom du poste",
-      "namePlaceholder": "Ex. Chicha, Plonge, Réception",
+      "namePlaceholder": "Ex. Gouvernante, Bagagiste, Night audit",
       "icon": "Icône",
       "base": "Fonctionne comme",
       "baseHint": "Ce que le poste voit et peut faire.",
@@ -931,15 +1120,15 @@
     },
     "sections": {
       "title": "Sections",
-      "hint": "Créez vos sections (Chicha, Terrasse, Bar…) : chacune a son niveau d’accès et reçoit seulement ses notifications.",
+      "hint": "Créez vos services (Étages, Spa, Room service…) : chacun a son niveau d’accès et ne reçoit que ses notifications.",
       "new": "Nouvelle section",
       "members": "{count, plural, =0 {Aucun membre} one {# membre} other {# membres}}",
       "accessCustom": "Accès de la section : {count} droits",
       "accessRole": "Accès selon le rôle de chaque membre",
       "notifyNone": "Aucune notification",
-      "empty": "Aucune section pour l’instant. Exemple : une section « Chicha » qui reçoit les demandes de charbon.",
+      "empty": "Aucun service pour l’instant. Exemple : « Étages » qui reçoit les demandes de serviettes et de ménage.",
       "name": "Nom de la section",
-      "namePlaceholder": "Ex. Chicha, Terrasse, Bar",
+      "namePlaceholder": "Ex. Étages, Spa, Room service",
       "access": "Niveau d’accès",
       "accessRoleLabel": "Selon le rôle du membre",
       "accessCustomLabel": "Accès propre à la section",
@@ -971,7 +1160,7 @@
       "title": "Cloche du menu client",
       "hint": "Choisissez les options que le client voit sur la cloche du menu et la section qui reçoit chaque demande.",
       "label": "Nom de l’option",
-      "labelPlaceholder": "Ex. Charbon chicha",
+      "labelPlaceholder": "Ex. Oreiller supplémentaire",
       "icon": "Icône",
       "icons": {
         "hand": "Serveur",
@@ -1017,7 +1206,7 @@
   },
   "permissions": {
     "restaurant": {
-      "view": "Voir le restaurant",
+      "view": "Voir l'hôtel",
       "manage": "Modifier les paramètres"
     },
     "members": {
@@ -1089,7 +1278,7 @@
   "settings": {
     "title": "Paramètres",
     "subtitle": "Informations, service, fiscalité et mentions légales.",
-    "profile": "Informations du restaurant",
+    "profile": "Informations de l'hôtel",
     "profileHint": "Affichées aux clients et sur les factures.",
     "name": "Nom",
     "email": "Email de contact",
@@ -1163,7 +1352,7 @@
     "requirePayment": "Paiement avant envoi en cuisine",
     "requirePaymentHint": "Les commandes partent en cuisine une fois réglées.",
     "zarinpalMerchant": "Code marchand Zarinpal",
-    "zarinpalMerchantHint": "À copier depuis votre panel Zarinpal. Les paiements arrivent directement sur le compte du restaurant.",
+    "zarinpalMerchantHint": "À copier depuis votre panel Zarinpal. Les paiements arrivent directement sur le compte de l'hôtel.",
     "zarinpalMerchantHintFallback": "À copier depuis votre panel Zarinpal pour encaisser directement. Laissé vide, le compte de la plateforme est utilisé.",
     "registrationNumber": "Numéro d'immatriculation (شماره ثبت)",
     "modules": "Modules",
@@ -1207,7 +1396,7 @@
       },
       "music": {
         "title": "Musique",
-        "desc": "Playlist et radio pour la salle."
+        "desc": "Playlist et radio pour le hall, le restaurant et le spa."
       }
     },
     "printers": "Imprimantes et envoi en cuisine",
@@ -1226,7 +1415,7 @@
       "windows": "Télécharger pour Windows",
       "mac": "Télécharger pour macOS",
       "soon": "Les installateurs arrivent bientôt.",
-      "step1": "Installez le logiciel sur le PC caisse (toujours allumé, branché au Wi-Fi du restaurant).",
+      "step1": "Installez le logiciel sur le PC de la caisse (toujours allumé, branché au Wi-Fi de l'hôtel).",
       "step2": "Ouvrez-le, connectez-vous avec un compte gérant, puis « Activer ce PC ».",
       "step3": "Les imprimantes réseau sont reprises automatiquement ; plus besoin de l'agent d'impression.",
       "linked": "PC reliés",
@@ -1236,7 +1425,7 @@
       "neverSeen": "Jamais connecté",
       "synced": "{n, plural, =0 {aucune commande hors ligne} one {# commande hors ligne remontée} other {# commandes hors ligne remontées}}",
       "revoke": "Retirer",
-      "revokeConfirm": "Retirer « {name} » ? Ce PC ne pourra plus travailler pour le restaurant."
+      "revokeConfirm": "Retirer « {name} » ? Ce PC ne pourra plus travailler pour l'hôtel."
     },
     "security": "Sécurité",
     "securityHint": "Évitez les commandes et appels abusifs (QR scanné puis réutilisé de loin).",
@@ -1249,7 +1438,7 @@
     "table": "Table {label}",
     "welcome": "Bienvenue",
     "unavailableTitle": "QR code inactif",
-    "unavailableBody": "Ce QR code n'est plus valide. Demandez de l'aide au personnel du restaurant.",
+    "unavailableBody": "Ce QR code n'est plus valide. Demandez de l'aide à la réception.",
     "menuSoon": "Le menu de commande en ligne arrive très bientôt sur cette table.",
     "you": "Client {n}",
     "seatOf": "Table {table} · {who}",
@@ -1318,7 +1507,7 @@
     "fixCart": "Corrigez les articles signalés avant de commander.",
     "statusHint": {
       "pending_payment": "Réglez votre commande pour l'envoyer en cuisine.",
-      "received": "Le restaurant a bien reçu votre commande.",
+      "received": "Votre commande a bien été reçue.",
       "accepted": "Votre commande est acceptée.",
       "preparing": "En cuisine, c'est parti !",
       "ready": "C'est prêt, on vous l'apporte.",
@@ -1355,7 +1544,7 @@
       "close": "Fermer",
       "unknownArtist": "Artiste inconnu",
       "upNext": "À suivre",
-      "hint": "La musique diffusée dans le restaurant en ce moment."
+      "hint": "La musique diffusée en ce moment."
     },
     "waiter": {
       "call": "Appeler le serveur",
@@ -1603,7 +1792,7 @@
     "compareAt": "Prix barré (promotion)",
     "compareAtHint": "Facultatif. Ancien prix affiché barré, supérieur au prix.",
     "taxRate": "Taux de TVA",
-    "taxDefault": "Taux par défaut du restaurant",
+    "taxDefault": "Taux par défaut de l'hôtel",
     "composition": "Composition & nutrition",
     "ingredients": "Ingrédients",
     "allergens": "Allergènes",
@@ -3034,7 +3223,7 @@
   "printers": {
     "acceptance": "Les commandes QR sont d'abord acceptées en caisse",
     "acceptanceHint": "Une fois acceptée, la commande part automatiquement en cuisine et au bar, avec son et ticket imprimé. Désactivé : elle part directement en cuisine.",
-    "agent": "Agent d'impression (sur un ordinateur du restaurant)",
+    "agent": "Agent d'impression (sur un ordinateur de l'hôtel)",
     "agentOnline": "Connecté",
     "agentSeen": "Dernière connexion {when}",
     "agentWaiting": "En attente de la première connexion…",
@@ -3043,10 +3232,10 @@
     "download": "Télécharger l'agent",
     "connect": "Connecter l'agent d'impression",
     "newToken": "Nouvelle clé",
-    "tokenOnce": "Lancez cette commande sur l'ordinateur du restaurant (la clé n'est affichée qu'une fois) :",
+    "tokenOnce": "Lancez cette commande sur l'ordinateur de l'hôtel (la clé n'est affichée qu'une fois) :",
     "copy": "Copier",
     "copied": "Copié",
-    "step1": "Installez Node.js sur un ordinateur du réseau du restaurant qui reste allumé.",
+    "step1": "Installez Node.js sur un ordinateur du réseau de l'hôtel qui reste allumé.",
     "step2": "Téléchargez l'agent et lancez la commande ci-dessus dans le même dossier.",
     "step3": "Ajoutez ici les imprimantes thermiques réseau (port 9100) et faites un test.",
     "list": "Imprimantes",
@@ -3599,8 +3788,8 @@
     "trialUntil": "Essai gratuit jusqu’au {date} ({days, plural, one {# jour restant} other {# jours restants}}).",
     "paidUntil": "Payé jusqu’au {date} ({days, plural, one {# jour restant} other {# jours restants}}).",
     "noEnd": "Sans date de fin.",
-    "expiredSince": "Terminé le {date} : votre restaurant fonctionne avec les limites du forfait Gratuit.",
-    "freeBody": "Forfait Gratuit : 5 tables, 2 membres d’équipe.",
+    "expiredSince": "Terminé le {date} : votre hôtel fonctionne avec les limites du forfait Gratuit.",
+    "freeBody": "Forfait Gratuit : 5 chambres, 2 membres d’équipe.",
     "choose": "Choisir ou prolonger un forfait",
     "chooseHint": "Paiement sécurisé par Zarinpal. La durée s’ajoute à la période en cours.",
     "disabledHint": "Le paiement en ligne de l’abonnement ouvre très bientôt.",
@@ -3626,17 +3815,17 @@
     "paidWith": "Payé par Zarinpal · référence {ref} · carte {card}",
     "paidManual": "Réglé auprès de Spotihotel.",
     "limits": {
-      "tables": "{count, plural, one {# table} other {Jusqu’à # tables}}",
-      "tablesUnlimited": "Tables illimitées",
+      "tables": "{count, plural, one {# chambre ou table} other {Jusqu’à # chambres et tables}}",
+      "tablesUnlimited": "Chambres illimitées",
       "staff": "{count, plural, one {# membre d’équipe} other {# membres d’équipe}}",
       "staffUnlimited": "Équipe illimitée",
-      "restaurants": "{count, plural, one {# établissement} other {# établissements}}",
-      "restaurantsUnlimited": "Établissements illimités",
-      "orders": "{count} commandes / mois",
+      "restaurants": "{count, plural, one {# hôtel} other {# hôtels}}",
+      "restaurantsUnlimited": "Hôtels illimités (chaîne)",
+      "orders": "{count} commandes room service et restaurant / mois",
       "ordersUnlimited": "Commandes illimitées"
     },
     "features": {
-      "online_payments": "Paiement en ligne à table",
+      "online_payments": "Paiement en ligne Zarinpal",
       "invoices_email": "Factures par e-mail",
       "analytics_advanced": "Rapports avancés",
       "custom_branding": "Couleurs et logo personnalisés",
@@ -3654,7 +3843,7 @@
   "pricing": {
     "metaTitle": "Tarifs — Spotihotel",
     "title": "Des tarifs simples",
-    "subtitle": "Menu QR, commandes, caisse et cuisine : commencez gratuitement, passez au forfait supérieur quand vous grandissez.",
+    "subtitle": "Réception, réservations, QR en chambre et comptabilité : commencez gratuitement, passez au forfait supérieur quand l'hôtel grandit.",
     "yearly": "Payez 12 mois, 2 mois sont offerts. Sans engagement.",
     "trial": "{days} jours d’essai gratuit, sans carte",
     "popular": "Le plus choisi",
@@ -3706,7 +3895,7 @@
     "label3": "Correct",
     "label4": "Bien",
     "label5": "Excellent !",
-    "whatWrong": "Qu’est-ce qui n’a pas été ? Le restaurant sera prévenu.",
+    "whatWrong": "Qu’est-ce qui n’a pas été ? L'hôtel sera prévenu.",
     "commentPlaceholder": "Un mot pour l’équipe (facultatif)",
     "send": "Envoyer",
     "thanks": "Merci pour votre avis !",

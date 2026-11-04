@@ -51,10 +51,20 @@
       "invoice": "Official invoices"
     },
     "mock": {
-      "table": "Room 204",
+      "table": "Room 1204",
       "cart": "View cart",
       "featured": "Featured",
-      "menu": "Room service"
+      "menu": "Room service",
+      "portal": "Your stay",
+      "tiles": {
+        "roomService": "Room service",
+        "spa": "Spa & massage",
+        "minibar": "Minibar",
+        "requests": "Cleaning & towels"
+      },
+      "bill": "My bill",
+      "nights": "2 nights, breakfast",
+      "order": "Order to the room"
     },
     "stats": {
       "setup": {
@@ -70,8 +80,8 @@
         "label": "Persian, English, Arabic"
       },
       "modules": {
-        "value": "15+",
-        "label": "modules in one platform"
+        "value": "300+",
+        "label": "rooms per hotel, no slowdown"
       }
     },
     "howTitle": "Three steps. That's it.",
@@ -114,7 +124,7 @@
       },
       "pay": {
         "q": "Where does online payment money go?",
-        "a": "Straight to the restaurant: you enter your own Zarinpal merchant ID in the settings."
+        "a": "Straight to the hotel: you enter your own Zarinpal merchant ID in the settings."
       },
       "cash": {
         "q": "What if a guest wants to pay cash or by card?",
@@ -165,7 +175,10 @@
       "paid": "Payment received",
       "ready": "Ready to serve",
       "kitchen": "Kitchen",
-      "minutes": "04:12"
+      "minutes": "04:12",
+      "checkin": "Checked in",
+      "checkinRoom": "Room 1204 | Mr Rezaei",
+      "audit": "Night audit"
     },
     "onSpotihotel": {
       "title": "Hotels working with Spotihotel",
@@ -173,22 +186,22 @@
     },
     "platform": {
       "eyebrow": "One platform, the whole hotel",
-      "title": "Everything the front desk, housekeeping, restaurant and accounting need",
-      "subtitle": "Turn on the modules you need; the rest stay out of the way.",
+      "title": "Front office, revenue, services and accounting: one system",
+      "subtitle": "From a small hotel to a large chain: switch on what you use, the rest stays hidden.",
       "qr": {
-        "title": "Room QR: the guest portal",
-        "body": "Guests order room service, book the spa, declare the minibar and see their bill from their phone — all on the room account."
+        "title": "The room's QR: the guest portal",
+        "body": "Room service, spa, minibar, requests and the live bill, no app: everything goes on the room's account."
       },
       "kds": {
         "title": "Kitchen and bar in real time",
         "body": "Each order goes to the right station, with a timer from the moment it was placed and automatic ticket printing."
       },
       "reports": {
-        "title": "Accounting and management reports",
-        "body": "Automatic vouchers, balance sheet, P&L by department, Persian monthly budgets, seasonal VAT and Excel export."
+        "title": "Accounting and management control",
+        "body": "Automatic entries, balance sheet, results per department, budgets, VAT, cheques and supplier payments."
       },
       "mockOrders": "Today's orders",
-      "mockRevenue": "Sales this week",
+      "mockRevenue": "Revenue this month",
       "mockDish1": "Koobideh kebab",
       "mockDish2": "Doogh",
       "mockDish3": "Shirazi salad",
@@ -245,6 +258,60 @@
           "title": "Hotels & room service",
           "body": "A QR code in every room: guests order, call housekeeping or the front desk, and the right team is notified."
         }
+      },
+      "planning": {
+        "title": "Front desk and room chart",
+        "body": "Bookings, arrivals, departures, room assignment, folios, payments and the night audit, with live occupancy, ADR and RevPAR."
+      },
+      "mods": {
+        "booking": {
+          "title": "Reservations",
+          "body": "Rate plans, breakfast, half board, guarantees, deposits and cancellations."
+        },
+        "revenue": {
+          "title": "Revenue management",
+          "body": "Prices by occupancy and date, 30-night forecast, channel mix."
+        },
+        "groups": {
+          "title": "Groups & events",
+          "body": "Room blocks by type, rooming list, automatic release."
+        },
+        "channels": {
+          "title": "Snapptrip, Alibaba, Jabama…",
+          "body": "Each booking keeps its platform and reference; commissions are booked."
+        },
+        "precheckin": {
+          "title": "Online pre-check-in",
+          "body": "SMS link: the registration card filled in on the phone, signature included."
+        },
+        "housekeeping": {
+          "title": "Housekeeping",
+          "body": "Every room's status, floor by floor, and guests' requests."
+        },
+        "wellness": {
+          "title": "Spa, pool, massage",
+          "body": "Slots, capacity, separate sessions, charged to the room."
+        },
+        "minibar": {
+          "title": "Minibar",
+          "body": "Declared by the guest or housekeeping, charged automatically."
+        },
+        "restaurant": {
+          "title": "Restaurant & room service",
+          "body": "Till, kitchen, tables and in-room orders posted to the bill."
+        },
+        "cheques": {
+          "title": "Cheques & company accounts",
+          "body": "Sayad cheques received and issued, due dates, company accounts and ageing."
+        },
+        "chain": {
+          "title": "Hotel chains",
+          "body": "Group console, central availability, consolidated accounts."
+        },
+        "offline": {
+          "title": "Internet down?",
+          "body": "The desktop app carries on over the hotel's network and syncs afterwards."
+        }
       }
     },
     "iran": {
@@ -278,23 +345,76 @@
       }
     },
     "howEyebrow": "Simple start",
-    "ctaDemo": "Try the demo"
+    "ctaDemo": "Try the demo",
+    "pmsMock": {
+      "tonight": "Occupancy tonight",
+      "arrivals": "Arrivals",
+      "departures": "Departures",
+      "adr": "ADR",
+      "revpar": "RevPAR",
+      "chart": "Room chart",
+      "occupancy": "Occupancy"
+    },
+    "howSteps": {
+      "rooms": {
+        "title": "Describe the hotel",
+        "body": "Floors and rooms, types, rate plans, weekend prices, spa and minibar."
+      },
+      "qr": {
+        "title": "Put the QR codes in the rooms",
+        "body": "Each room has its QR: room service, spa, minibar, Wi-Fi and the guest's bill."
+      },
+      "run": {
+        "title": "Run the hotel every day",
+        "body": "Bookings, check-in, check-out, night audit and accounting from one screen."
+      }
+    },
+    "hotelFaq": {
+      "app": {
+        "q": "Do guests need to install an app?",
+        "a": "No. They scan their room's QR with the camera and the portal opens in the browser."
+      },
+      "data": {
+        "q": "Where is our data hosted?",
+        "a": "On servers in Iran, backed up every day; each hotel only sees its own data."
+      },
+      "switch": {
+        "q": "How long does switching to Spotihotel take?",
+        "a": "A day for the essentials: rooms, rates and team. Future bookings are entered or imported next."
+      },
+      "channels": {
+        "q": "What about bookings from the platforms?",
+        "a": "Each booking keeps its platform (Snapptrip, Alibaba, Jabama, Eghamat24…) and reference; the commission is booked when the guest leaves."
+      },
+      "books": {
+        "q": "Does the accounting follow Iranian rules?",
+        "a": "Yes: Iranian chart of accounts, fiscal year from Farvardin, seasonal VAT, Sayad cheques, export for your accountant."
+      },
+      "chain": {
+        "q": "We have several hotels: is everything centralised?",
+        "a": "Yes. The group console shows each hotel's occupancy, ADR and RevPAR, central availability and consolidated accounts."
+      },
+      "offline": {
+        "q": "What if the Internet goes down?",
+        "a": "The Spotihotel desktop app carries on over the hotel's local network, and everything syncs when the Internet is back."
+      }
+    }
   },
   "auth": {
     "loginTitle": "Welcome back",
-    "loginSubtitle": "Sign in to your restaurant workspace.",
-    "signupTitle": "Create your restaurant",
+    "loginSubtitle": "Sign in to your hotel workspace.",
+    "signupTitle": "Create your hotel",
     "signupSubtitle": "It takes seconds. No credit card required.",
     "email": "Email",
     "password": "Password",
     "fullName": "Your name",
-    "restaurantName": "Restaurant name",
+    "restaurantName": "Hotel name",
     "passwordHint": "At least 10 characters.",
     "loginSubmit": "Sign in",
     "signupSubmit": "Create account",
     "noAccount": "No account yet?",
     "hasAccount": "Already have an account?",
-    "goSignup": "Create a restaurant",
+    "goSignup": "Create a hotel",
     "goLogin": "Sign in",
     "errors": {
       "invalid_credentials": "Incorrect email or password.",
@@ -309,10 +429,10 @@
     "overview": "Overview",
     "admin": "Administration",
     "adminOverview": "Platform",
-    "adminRestaurants": "Restaurants",
+    "adminRestaurants": "Hotels",
     "adminUsers": "Users",
-    "switchRestaurant": "Switch restaurant",
-    "myRestaurants": "My restaurants",
+    "switchRestaurant": "Switch hotel",
+    "myRestaurants": "My hotels",
     "tables": "Tables & QR",
     "team": "Team",
     "settings": "Settings",
@@ -341,7 +461,10 @@
       "finance": "Finance & reports",
       "manage": "Management",
       "hotel": "Hotel",
-      "hotelRestaurant": "Hotel restaurant"
+      "hotelRestaurant": "Restaurant & bar",
+      "frontOffice": "Front office",
+      "roomsServices": "Rooms & services",
+      "revenue": "Revenue & group"
     },
     "delivery": "Delivery",
     "reservations": "Bookings & queue",
@@ -375,11 +498,11 @@
   },
   "dashboard": {
     "welcome": "Hello {name}",
-    "overviewSubtitle": "Here is how your restaurant is doing.",
+    "overviewSubtitle": "Here is how your hotel is doing.",
     "setupTitle": "Getting started",
     "setupSubtitle": "Complete these steps to receive your first orders.",
     "setup": {
-      "profile": "Complete restaurant details",
+      "profile": "Complete the hotel's details",
       "tables": "Create your tables",
       "menu": "Create your menu (or import it from Excel)",
       "payments": "Configure payment methods",
@@ -393,11 +516,11 @@
       "members": "Team members"
     },
     "role": "Your role",
-    "suspendedTitle": "Restaurant suspended",
-    "suspendedBody": "This restaurant is temporarily suspended. Please contact Spotihotel support.",
-    "noRestaurantTitle": "No restaurant",
-    "noRestaurantBody": "Your account is not linked to any active restaurant.",
-    "pickRestaurant": "Choose a restaurant",
+    "suspendedTitle": "Hotel suspended",
+    "suspendedBody": "This hotel is temporarily suspended. Please contact Spotihotel support.",
+    "noRestaurantTitle": "No hotel",
+    "noRestaurantBody": "Your account is not linked to any active hotel.",
+    "pickRestaurant": "Choose a hotel",
     "today": "Today",
     "revenueToday": "Revenue today",
     "ordersToday": "Orders today",
@@ -463,6 +586,72 @@
       "noRooms": "Add your rooms to see them here.",
       "waitingTitle": "Waiting requests",
       "noWaiting": "No request waiting."
+    },
+    "home": {
+      "welcome": "Hello {name}",
+      "businessDate": "Business day: {day}",
+      "alerts": {
+        "auditLate": "Night audit of {day} still to run",
+        "requests": "{n, plural, one {# room request waiting} other {# room requests waiting}}",
+        "arrivals": "{n, plural, one {# arrival to check in} other {# arrivals to check in}}",
+        "departures": "{n, plural, one {# departure to check out} other {# departures to check out}}",
+        "dirty": "{n, plural, one {# room to clean} other {# rooms to clean}}"
+      },
+      "quickTitle": "Quick access",
+      "quick": {
+        "newBooking": "New booking",
+        "frontdesk": "Front desk",
+        "planning": "Room chart",
+        "guests": "Guests",
+        "rooms": "Housekeeping",
+        "requests": "Requests",
+        "wellness": "Spa & pool",
+        "ledger": "Accounting"
+      },
+      "tonight": "Occupancy tonight",
+      "roomsSold": "{sold} of {rooms} rooms sold",
+      "adr": "ADR",
+      "revpar": "RevPAR",
+      "guests": "Guests",
+      "next14": "Next 14 nights: {pct} on the books",
+      "arrivals": "Arrivals",
+      "departures": "Departures",
+      "inHouse": "Rooms occupied",
+      "precheckins": "{n} pre-registered",
+      "guestsN": "{n, plural, one {# guest} other {# guests}}",
+      "toClean": "To clean",
+      "cleaning": "{n} in progress",
+      "outOfOrder": "{n} out of order",
+      "setupTitle": "Setting up the hotel",
+      "setupSubtitle": "Finish these steps to take your first bookings.",
+      "setup": {
+        "profile": "Complete the hotel's details",
+        "roomTypes": "Create the room types",
+        "rooms": "Give every room its type",
+        "rates": "Create the rate plans",
+        "payments": "Set up payments (Zarinpal)",
+        "team": "Invite the team",
+        "firstBooking": "Enter a first booking"
+      },
+      "arrivalsTitle": "Today's arrivals",
+      "departuresTitle": "Today's departures",
+      "seeAll": "Front desk",
+      "nightsN": "{n, plural, one {# night} other {# nights}}",
+      "precheckedIn": "pre-registered",
+      "noArrivals": "No arrivals expected.",
+      "noDepartures": "No departures.",
+      "settled": "Settled",
+      "revenueTitle": "Today's revenue",
+      "revenueHint": "Charges posted to folios, per department.",
+      "books": "Accounting",
+      "total": "Total",
+      "collected": "Collected",
+      "noRevenue": "Nothing charged today yet.",
+      "lastAuditTitle": "Last closed day",
+      "forecast": "Forecast",
+      "occupancy": "Occupancy",
+      "totalRevenue": "Revenue",
+      "noAudit": "No night audit yet."
     }
   },
   "roles": {
@@ -474,8 +663,8 @@
     "title": "Platform",
     "subtitle": "Global view of Spotihotel.",
     "stats": {
-      "activeRestaurants": "Active restaurants",
-      "suspendedRestaurants": "Suspended restaurants",
+      "activeRestaurants": "Active hotels",
+      "suspendedRestaurants": "Suspended hotels",
       "newRestaurants": "New (30 d)",
       "users": "Users",
       "orders": "Orders",
@@ -483,7 +672,7 @@
     },
     "subscriptions": "Subscriptions by plan",
     "restaurants": {
-      "title": "Restaurants",
+      "title": "Hotels",
       "name": "Name",
       "organization": "Organization",
       "orders": "Orders",
@@ -492,13 +681,13 @@
       "open": "Open",
       "searchPlaceholder": "Name or slug…",
       "all": "All",
-      "empty": "No restaurant found"
+      "empty": "No hotel found"
     },
     "users": {
       "title": "Users",
       "name": "Name",
       "email": "Email",
-      "restaurants": "Restaurants",
+      "restaurants": "Hotels",
       "lastLogin": "Last sign-in",
       "superAdmin": "Super admin",
       "never": "Never",
@@ -521,7 +710,7 @@
     "plans": {
       "title": "Plans",
       "billingOn": "Subscription payment on (Spotihotel Zarinpal merchant set).",
-      "billingOff": "Subscription payment off: set BILLING_ZARINPAL_MERCHANT_ID to open it (14-day trial for new restaurants).",
+      "billingOff": "Subscription payment off: set BILLING_ZARINPAL_MERCHANT_ID to open it (14-day trial for new hotels).",
       "public": "Shown on /pricing",
       "name": "Name",
       "price": "Monthly price ({currency, select, IRR {tomans} other {{currency}}})",
@@ -544,24 +733,24 @@
       "apply": "Apply"
     },
     "growth": {
-      "active7d": "Active restaurants (7 d)",
-      "active30d": "Active restaurants (30 d)",
-      "lost30d": "Restaurants lost (30 d)",
+      "active7d": "Active hotels (7 d)",
+      "active30d": "Active hotels (30 d)",
+      "lost30d": "Hotels lost (30 d)",
       "lostHint": "Ordered the month before, nothing this month.",
       "ordersPerDay": "Orders per day (30 d)",
-      "restaurantsPerDay": "Restaurants with orders, per day",
+      "restaurantsPerDay": "Active hotels, per day",
       "orders": "{count, plural, one {# order} other {# orders}}",
-      "restaurants": "{count, plural, one {# restaurant} other {# restaurants}}",
+      "restaurants": "{count, plural, one {# hotel} other {# hotels}}",
       "signups": "Sign-ups per week",
       "weekOf": "Week of {date}",
       "atRisk": "At risk of leaving",
       "atRiskHint": "Last order 14 to 60 days ago: give them a call.",
-      "noRisk": "No restaurant at risk.",
+      "noRisk": "No hotel at risk.",
       "lastOrder": "last order {time}"
     },
     "audience": {
       "title": "Site audience",
-      "subtitle": "Visits to public pages (home, pricing, guide, restaurant pages) over 30 days. No cookie, no third party.",
+      "subtitle": "Visits to public pages (home, pricing, demo) over 30 days. No cookie, no third party.",
       "views": "Page views",
       "visitors": "Unique visitors",
       "visitorsHint": "Counted per day: a visitor coming back another day counts again.",
@@ -681,7 +870,7 @@
     "duplicate_coupon": "This code already exists.",
     "no_recipients": "Nobody in this group.",
     "owner_only": "Only the owner can open a branch.",
-    "other_organization": "This restaurant is not in your organization.",
+    "other_organization": "This hotel is not in your group.",
     "address_required": "Enter the delivery address.",
     "below_zone_minimum": "The order is below this zone’s minimum.",
     "nothing_to_settle": "Nothing to settle.",
@@ -863,7 +1052,7 @@
   },
   "team": {
     "title": "Team",
-    "subtitle": "Manage who can access the restaurant and what they can do.",
+    "subtitle": "Manage who can access the hotel and what they can do.",
     "add": "Add a member",
     "email": "Email",
     "fullName": "Full name",
@@ -883,8 +1072,8 @@
     "added": "Member added.",
     "addedNew": "Account created and member added.",
     "roleHelp": {
-      "admin": "Manages the whole restaurant except the audit log.",
-      "staff": "Service: orders, tables, payments."
+      "admin": "Manages the whole hotel except the audit log.",
+      "staff": "Service: front desk, rooms, orders and payments."
     },
     "jobs": {
       "label": "Job",
@@ -918,11 +1107,11 @@
         "roomService": "Room service"
       },
       "title": "Jobs",
-      "hint": "Name your jobs the way your place does (Cashier, Hookah, Front desk…) and pick their icon.",
+      "hint": "Name your jobs the way your hotel does (Front desk, Housekeeper, Porter…) and pick their icon.",
       "new": "New job",
       "worksAs": "Works as: {job}",
       "name": "Job name",
-      "namePlaceholder": "E.g. Hookah, Dishwashing, Front desk",
+      "namePlaceholder": "E.g. Housekeeper, Porter, Night auditor",
       "icon": "Icon",
       "base": "Works as",
       "baseHint": "What the job sees and can do.",
@@ -931,15 +1120,15 @@
     },
     "sections": {
       "title": "Sections",
-      "hint": "Create your sections (Hookah, Terrace, Bar…): each has its own access level and only receives its notifications.",
+      "hint": "Create your departments (Floors, Spa, Room service…): each has its own access level and only receives its notifications.",
       "new": "New section",
       "members": "{count, plural, =0 {No members} one {# member} other {# members}}",
       "accessCustom": "Section access: {count} permissions",
       "accessRole": "Access from each member’s role",
       "notifyNone": "No notifications",
-      "empty": "No sections yet. Example: a “Hookah” section that gets the charcoal requests.",
+      "empty": "No departments yet. Example: “Floors”, which gets the towel and cleaning requests.",
       "name": "Section name",
-      "namePlaceholder": "e.g. Hookah, Terrace, Bar",
+      "namePlaceholder": "e.g. Floors, Spa, Room service",
       "access": "Access level",
       "accessRoleLabel": "From the member’s role",
       "accessCustomLabel": "Section’s own access",
@@ -971,7 +1160,7 @@
       "title": "Guest menu bell",
       "hint": "Choose the options guests see on the menu’s bell and which section gets each request.",
       "label": "Option name",
-      "labelPlaceholder": "e.g. Hookah charcoal",
+      "labelPlaceholder": "e.g. Extra pillow",
       "icon": "Icon",
       "icons": {
         "hand": "Waiter",
@@ -1017,7 +1206,7 @@
   },
   "permissions": {
     "restaurant": {
-      "view": "View restaurant",
+      "view": "View hotel",
       "manage": "Edit settings"
     },
     "members": {
@@ -1089,7 +1278,7 @@
   "settings": {
     "title": "Settings",
     "subtitle": "Details, service, taxes and legal information.",
-    "profile": "Restaurant details",
+    "profile": "Hotel details",
     "profileHint": "Shown to guests and on invoices.",
     "name": "Name",
     "email": "Contact email",
@@ -1163,7 +1352,7 @@
     "requirePayment": "Payment before sending to the kitchen",
     "requirePaymentHint": "Orders go to the kitchen once paid.",
     "zarinpalMerchant": "Zarinpal merchant ID",
-    "zarinpalMerchantHint": "Copy it from your Zarinpal panel. Payments go straight to your restaurant's account.",
+    "zarinpalMerchantHint": "Copy it from your Zarinpal panel. Payments go straight to the hotel's account.",
     "zarinpalMerchantHintFallback": "Copy it from your Zarinpal panel so payments go straight to your account. If empty, the platform account is used.",
     "registrationNumber": "Registration number",
     "modules": "Modules",
@@ -1207,7 +1396,7 @@
       },
       "music": {
         "title": "Music",
-        "desc": "Playlist and radio for the dining room."
+        "desc": "Playlist and radio for the lobby, restaurant and spa."
       }
     },
     "printers": "Printers & kitchen flow",
@@ -1226,7 +1415,7 @@
       "windows": "Download for Windows",
       "mac": "Download for macOS",
       "soon": "Installers coming soon.",
-      "step1": "Install the app on the till PC (always on, on the restaurant's Wi-Fi).",
+      "step1": "Install the app on the till PC (always on, on the hotel's Wi-Fi).",
       "step2": "Open it, sign in with a manager account, then \"Activate this PC\".",
       "step3": "Network printers are picked up automatically; the print agent is no longer needed.",
       "linked": "Linked PCs",
@@ -1236,7 +1425,7 @@
       "neverSeen": "Never connected",
       "synced": "{n, plural, =0 {no offline order} one {# offline order synced} other {# offline orders synced}}",
       "revoke": "Remove",
-      "revokeConfirm": "Remove \"{name}\"? This PC will no longer work for the restaurant."
+      "revokeConfirm": "Remove \"{name}\"? This PC will no longer work for the hotel."
     },
     "security": "Security",
     "securityHint": "Prevent abusive orders and calls (a QR scanned once and reused from afar).",
@@ -1249,7 +1438,7 @@
     "table": "Table {label}",
     "welcome": "Welcome",
     "unavailableTitle": "Inactive QR code",
-    "unavailableBody": "This QR code is no longer valid. Please ask the restaurant staff for help.",
+    "unavailableBody": "This QR code is no longer valid. Please ask the front desk for help.",
     "menuSoon": "Online ordering is coming very soon to this table.",
     "you": "Guest {n}",
     "seatOf": "Table {table} · {who}",
@@ -1318,7 +1507,7 @@
     "fixCart": "Fix the flagged items before ordering.",
     "statusHint": {
       "pending_payment": "Pay your order to send it to the kitchen.",
-      "received": "The restaurant received your order.",
+      "received": "Your order has been received.",
       "accepted": "Your order was accepted.",
       "preparing": "The kitchen is on it!",
       "ready": "It's ready, coming your way.",
@@ -1379,7 +1568,7 @@
       "close": "Close",
       "unknownArtist": "Unknown artist",
       "upNext": "Up next",
-      "hint": "This is the music playing in the restaurant right now."
+      "hint": "This is the music playing right now."
     },
     "waiter": {
       "call": "Call the waiter",
@@ -1603,7 +1792,7 @@
     "compareAt": "Compare-at price (promotion)",
     "compareAtHint": "Optional. Previous price shown struck through, higher than the price.",
     "taxRate": "VAT rate",
-    "taxDefault": "Restaurant default rate",
+    "taxDefault": "Hotel default rate",
     "composition": "Ingredients & nutrition",
     "ingredients": "Ingredients",
     "allergens": "Allergens",
@@ -2121,12 +2310,20 @@
       "weekly": {
         "name": "Weekly playlist",
         "body": "A fresh playlist every Saturday.",
-        "features": ["30 new tracks every week", "No tiring repeats", "Plays on any device"]
+        "features": [
+          "30 new tracks every week",
+          "No tiring repeats",
+          "Plays on any device"
+        ]
       },
       "monthly": {
         "name": "Monthly playlist",
         "body": "A fresh playlist every month.",
-        "features": ["30 new tracks every month", "Ideal for calm venues", "Plays on any device"]
+        "features": [
+          "30 new tracks every month",
+          "Ideal for calm venues",
+          "Plays on any device"
+        ]
       }
     },
     "status": {
@@ -3018,7 +3215,7 @@
     },
     "doux": {
       "name": "Soft",
-      "desc": "Rounded and friendly, in the restaurant's brand color."
+      "desc": "Rounded and friendly, in your brand color."
     },
     "shortPrices": "Show prices in thousand tomans",
     "shortPricesHint": "e.g. 1,319 instead of 1,319,000 tomans; the unit is shown once per section."
@@ -3026,7 +3223,7 @@
   "printers": {
     "acceptance": "QR orders are accepted at the till first",
     "acceptanceHint": "Once accepted, the order goes to the kitchen and bar automatically, with sound and a printed ticket. Off: orders go straight to the kitchen.",
-    "agent": "Print agent (on a restaurant computer)",
+    "agent": "Print agent (on a hotel computer)",
     "agentOnline": "Connected",
     "agentSeen": "Last seen {when}",
     "agentWaiting": "Waiting for the first connection…",
@@ -3035,10 +3232,10 @@
     "download": "Download the agent",
     "connect": "Connect the print agent",
     "newToken": "New key",
-    "tokenOnce": "Run this command on the restaurant computer (the key is shown only once):",
+    "tokenOnce": "Run this command on the hotel computer (the key is shown only once):",
     "copy": "Copy",
     "copied": "Copied",
-    "step1": "Install Node.js on a computer of the restaurant network that stays on.",
+    "step1": "Install Node.js on a computer of the hotel network that stays on.",
     "step2": "Download the agent and run the command above in the same folder.",
     "step3": "Add the network thermal printers (port 9100) here and print a test.",
     "list": "Printers",
@@ -3591,8 +3788,8 @@
     "trialUntil": "Free trial until {date} ({days, plural, one {# day left} other {# days left}}).",
     "paidUntil": "Paid until {date} ({days, plural, one {# day left} other {# days left}}).",
     "noEnd": "No end date.",
-    "expiredSince": "Ended on {date}: your restaurant runs with the Free plan’s limits.",
-    "freeBody": "Free plan: 5 tables, 2 staff members.",
+    "expiredSince": "Ended on {date}: your hotel runs with the Free plan’s limits.",
+    "freeBody": "Free plan: 5 rooms, 2 team members.",
     "choose": "Choose or extend a plan",
     "chooseHint": "Secure payment by Zarinpal. The duration is added to the current period.",
     "disabledHint": "Online subscription payment opens very soon.",
@@ -3618,17 +3815,17 @@
     "paidWith": "Paid with Zarinpal · reference {ref} · card {card}",
     "paidManual": "Settled with Spotihotel.",
     "limits": {
-      "tables": "{count, plural, one {# table} other {Up to # tables}}",
-      "tablesUnlimited": "Unlimited tables",
+      "tables": "{count, plural, one {# room or table} other {Up to # rooms and tables}}",
+      "tablesUnlimited": "Unlimited rooms",
       "staff": "{count, plural, one {# staff member} other {# staff members}}",
       "staffUnlimited": "Unlimited staff",
-      "restaurants": "{count, plural, one {# venue} other {# venues}}",
-      "restaurantsUnlimited": "Unlimited venues",
-      "orders": "{count} orders / month",
+      "restaurants": "{count, plural, one {# hotel} other {# hotels}}",
+      "restaurantsUnlimited": "Unlimited hotels (chain)",
+      "orders": "{count} room-service and restaurant orders / month",
       "ordersUnlimited": "Unlimited orders"
     },
     "features": {
-      "online_payments": "Online payment at the table",
+      "online_payments": "Zarinpal online payment",
       "invoices_email": "Invoices by email",
       "analytics_advanced": "Advanced reports",
       "custom_branding": "Custom colours and logo",
@@ -3646,7 +3843,7 @@
   "pricing": {
     "metaTitle": "Pricing — Spotihotel",
     "title": "Simple pricing",
-    "subtitle": "QR menu, orders, till and kitchen: start free, move up as you grow.",
+    "subtitle": "Front desk, bookings, in-room QR and accounting: start free, move up as the hotel grows.",
     "yearly": "Pay 12 months, get 2 free. No commitment.",
     "trial": "{days}-day free trial, no card",
     "popular": "Most chosen",
@@ -3698,7 +3895,7 @@
     "label3": "OK",
     "label4": "Good",
     "label5": "Excellent!",
-    "whatWrong": "What went wrong? The restaurant will be told.",
+    "whatWrong": "What went wrong? The hotel will be told.",
     "commentPlaceholder": "A word for the team (optional)",
     "send": "Send",
     "thanks": "Thanks for your feedback!",

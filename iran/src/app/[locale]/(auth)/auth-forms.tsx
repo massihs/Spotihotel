@@ -1,7 +1,5 @@
 "use client";
 
-import { KindPicker } from "@/components/kind-picker";
-import { isRestaurantKind } from "@/lib/restaurant-kind";
 import { useTranslations } from "next-intl";
 import { useActionState, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";
@@ -69,7 +67,8 @@ export function SignupForm() {
         defaultValue={state.values?.restaurantName}
         error={err("restaurantName")}
       />
-      <KindPicker defaultValue={isRestaurantKind(state.values?.kind) ? state.values.kind : "hotel"} />
+      {/* Spotihotel opens hotels only. */}
+      <input type="hidden" name="kind" value="hotel" />
       <Field
         label={t("fullName")}
         name="fullName"

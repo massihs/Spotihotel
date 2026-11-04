@@ -21,11 +21,13 @@ COPY --chown=node:node public ./public
 COPY --chown=node:node drizzle ./drizzle
 COPY --chown=node:node messages ./messages
 COPY --chown=node:node dist/seed.mjs ./dist/seed.mjs
+COPY --chown=node:node dist/seed-parsian.mjs ./dist/seed-parsian.mjs
 COPY --chown=node:node next.config.ts ./
 COPY --chown=node:node scripts/migrate.mjs ./scripts/migrate.mjs
 COPY --chown=node:node scripts/demo-assets ./scripts/demo-assets
 RUN mkdir -p /app/.storage && chown node:node /app/.storage
 USER node
 EXPOSE 3000
-# 1. migrations  2. platform data (+ Brielle)  3. server
-CMD ["sh", "-c", "node scripts/migrate.mjs && node dist/seed.mjs && exec node_modules/.bin/next start -H 0.0.0.0 -p ${PORT}"]
+# 1. migrations  2. platform data  3. server (the Parsian test hotel, when asked, is built
+# in the background so the server answers Liara's health check at once)
+CMD ["sh", "-c", "node scripts/migrate.mjs && node dist/seed.mjs && { if [ \"$SEED_PARSIAN\" = true ]; then node dist/seed-parsian.mjs & fi; } && exec node_modules/.bin/next start -H 0.0.0.0 -p ${PORT}"]

@@ -1,48 +1,45 @@
 import { COMPANY } from "@/lib/company";
 import {
-  BedDouble,
   ArrowLeft,
+  BedDouble,
   BarChart3,
-  Bike,
-  Boxes,
   Building2,
   CalendarCheck,
   Calculator,
   Check,
-  ChefHat,
   ChevronDown,
-  Clock,
+  ConciergeBell,
   CreditCard,
-  Dices,
-  Gift,
+  Flower2,
+  Globe,
+  KeyRound,
+  Landmark,
   Languages,
   Mail,
   MapPin,
   MessageSquareText,
-  Music,
-  NotebookPen,
+  MonitorPlay,
+  MoonStar,
   Phone,
   QrCode,
   ReceiptText,
-  Salad,
-  ShoppingBag,
   Smartphone,
-  SquareMenu,
+  SprayCan,
   Store,
+  TrendingUp,
+  UsersRound,
   UtensilsCrossed,
   WifiOff,
+  Wine,
 } from "lucide-react";
 import type { Metadata } from "next";
-import { Suspense, type ReactNode } from "react";
-import { connection } from "next/server";
+import type { ReactNode } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { buttonClasses } from "@/components/ui/button";
 import { getPathname, Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
-import { getDirectory } from "@/server/modules/directory/cache";
-import { PlaceInitials } from "@/components/ui/place-initials";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]">): Promise<Metadata> {
   const { locale } = await params;
@@ -51,25 +48,25 @@ export async function generateMetadata({ params }: PageProps<"/[locale]">): Prom
 }
 
 const STEPS = [
-  { key: "menu", Icon: SquareMenu },
+  { key: "rooms", Icon: BedDouble },
   { key: "qr", Icon: QrCode },
-  { key: "serve", Icon: ChefHat },
+  { key: "run", Icon: KeyRound },
 ] as const;
 
 /** Every module of the platform (the big three have their own cards above). */
 const MODULES = [
-  { key: "pos", Icon: Calculator },
-  { key: "waiter", Icon: NotebookPen },
-  { key: "delivery", Icon: Bike },
-  { key: "reservations", Icon: CalendarCheck },
-  { key: "club", Icon: Gift },
-  { key: "inventory", Icon: Boxes },
-  { key: "branches", Icon: Building2 },
-  { key: "hotel", Icon: BedDouble },
+  { key: "booking", Icon: CalendarCheck },
+  { key: "revenue", Icon: TrendingUp },
+  { key: "groups", Icon: UsersRound },
+  { key: "channels", Icon: Globe },
+  { key: "precheckin", Icon: Smartphone },
+  { key: "housekeeping", Icon: SprayCan },
+  { key: "wellness", Icon: Flower2 },
+  { key: "minibar", Icon: Wine },
+  { key: "restaurant", Icon: UtensilsCrossed },
+  { key: "cheques", Icon: Landmark },
+  { key: "chain", Icon: Building2 },
   { key: "offline", Icon: WifiOff },
-  { key: "music", Icon: Music },
-  { key: "games", Icon: Dices },
-  { key: "nutrition", Icon: Salad },
 ] as const;
 
 const MADE_FOR_IRAN = [
@@ -82,15 +79,15 @@ const MADE_FOR_IRAN = [
 ] as const;
 
 const STATS = ["setup", "app", "langs", "modules"] as const;
-const FAQ = ["app", "pay", "cash", "hardware", "offline", "branches", "menu"] as const;
+const FAQ = ["app", "data", "switch", "channels", "books", "chain", "offline"] as const;
 
-/** Mock dishes shown in the phone preview (no restaurant named). */
-const MOCK = [
-  { img: "/landing/salmon.jpg", name: "بشقاب سالمون", price: "۲٬۴۰۰٬۰۰۰" },
-  { img: "/landing/rockshrimp.jpg", name: "راک شریمپ", price: "۱٬۳۱۹٬۰۰۰" },
-  { img: "/landing/baconavocado.jpg", name: "سالاد بیکن و آووکادو", price: "۱٬۲۰۰٬۰۰۰" },
-  { img: "/landing/pepperoni.jpg", name: "پیتزا پپرونی", price: "۹۸۰٬۰۰۰" },
-];
+/** What the guest portal offers from the room's QR (phone preview). */
+const PORTAL = [
+  { key: "roomService", Icon: ConciergeBell, tone: "bg-amber-100 text-amber-700" },
+  { key: "spa", Icon: Flower2, tone: "bg-fuchsia-100 text-fuchsia-700" },
+  { key: "minibar", Icon: Wine, tone: "bg-sky-100 text-sky-700" },
+  { key: "requests", Icon: SprayCan, tone: "bg-emerald-100 text-emerald-700" },
+] as const;
 
 export default async function LandingPage({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
@@ -152,11 +149,6 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
           </div>
         </section>
 
-        {/* ── Real restaurants on Spotihotel (read at request time: no database at build) ── */}
-        <Suspense fallback={null}>
-          <RestaurantsStrip locale={locale} />
-        </Suspense>
-
         {/* ── Stats strip ─────────────────────────────────── */}
         <section className="border-b border-border">
           <div className="mx-auto grid max-w-6xl grid-cols-2 sm:grid-cols-4">
@@ -187,27 +179,11 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
           <div className="mt-10 grid gap-4 sm:mt-14 lg:grid-cols-3">
             <BentoCard
               className="lg:col-span-2 lg:row-span-2"
-              Icon={QrCode}
-              title={t("platform.qr.title")}
-              body={t("platform.qr.body")}
+              Icon={KeyRound}
+              title={t("platform.planning.title")}
+              body={t("platform.planning.body")}
             >
-              <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:min-h-72 lg:flex-1 lg:grid-cols-2 lg:grid-rows-2">
-                {["salmon", "pepperoni", "baconavocado", "rockshrimp"].map((n, i) => (
-                  <div key={n} className="relative overflow-hidden rounded-2xl lg:min-h-0">
-                    <img
-                      src={`/landing/${n}.jpg`}
-                      alt=""
-                      loading="lazy"
-                      className="aspect-square w-full object-cover transition duration-500 hover:scale-105 lg:aspect-auto lg:h-full"
-                    />
-                    {i === 0 ? (
-                      <span className="absolute start-2 top-2 rounded-full bg-black/60 px-2 py-0.5 text-[11px] font-semibold text-white backdrop-blur">
-                        {t("mock.featured")}
-                      </span>
-                    ) : null}
-                  </div>
-                ))}
-              </div>
+              <PlanningMock t={t} />
               <div className="mt-4 flex flex-wrap gap-2">
                 {(["noApp", "zarinpal", "invoice"] as const).map((k) => (
                   <span
@@ -220,8 +196,17 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
                 ))}
               </div>
             </BentoCard>
-            <BentoCard Icon={ChefHat} title={t("platform.kds.title")} body={t("platform.kds.body")}>
-              <KitchenTicket t={t} className="mt-5" />
+            <BentoCard Icon={QrCode} title={t("platform.qr.title")} body={t("platform.qr.body")}>
+              <ul aria-hidden="true" className="mt-5 grid grid-cols-2 gap-2">
+                {PORTAL.map(({ key, Icon, tone }) => (
+                  <li key={key} className="flex items-center gap-2 rounded-xl bg-bg p-2.5 ring-1 ring-border">
+                    <span className={cn("grid size-8 shrink-0 place-items-center rounded-lg", tone)}>
+                      <Icon className="size-4" />
+                    </span>
+                    <span className="truncate text-xs font-semibold">{t(`mock.tiles.${key}`)}</span>
+                  </li>
+                ))}
+              </ul>
             </BentoCard>
             <BentoCard Icon={BarChart3} title={t("platform.reports.title")} body={t("platform.reports.body")}>
               <MiniChart label={t("platform.mockRevenue")} />
@@ -237,9 +222,9 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
                 <span className="grid size-11 place-items-center rounded-2xl bg-accent-soft text-accent-text transition group-hover:bg-accent group-hover:text-accent-fg">
                   <Icon className="size-5" aria-hidden="true" />
                 </span>
-                <h3 className="mt-4 font-bold">{t(`platform.modules.${key}.title`)}</h3>
+                <h3 className="mt-4 font-bold">{t(`platform.mods.${key}.title`)}</h3>
                 <p className="mt-1.5 text-xs leading-5 text-fg-muted sm:text-sm sm:leading-6">
-                  {t(`platform.modules.${key}.body`)}
+                  {t(`platform.mods.${key}.body`)}
                 </p>
               </li>
             ))}
@@ -263,8 +248,8 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
                       {i + 1}
                     </span>
                   </span>
-                  <h3 className="mt-5 text-lg font-bold">{t(`steps.${key}.title`)}</h3>
-                  <p className="mx-auto mt-2 max-w-xs leading-7 text-fg-muted">{t(`steps.${key}.body`)}</p>
+                  <h3 className="mt-5 text-lg font-bold">{t(`howSteps.${key}.title`)}</h3>
+                  <p className="mx-auto mt-2 max-w-xs leading-7 text-fg-muted">{t(`howSteps.${key}.body`)}</p>
                 </li>
               ))}
             </ol>
@@ -297,7 +282,7 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
           </div>
         </section>
 
-        {/* ── Guests vs restaurants ───────────────────────── */}
+        {/* ── Guests vs the hotel ─────────────────────────── */}
         <section className="mx-auto grid max-w-6xl gap-4 px-4 pb-14 sm:px-6 sm:pb-24 md:grid-cols-2">
           <BenefitCard
             title={t("split.guestTitle")}
@@ -323,12 +308,12 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
                 className="group rounded-2xl bg-surface px-6 py-5 ring-1 ring-border open:ring-accent/40 [&_summary::-webkit-details-marker]:hidden"
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold">
-                  {t(`faq.${k}.q`)}
+                  {t(`hotelFaq.${k}.q`)}
                   <span className="grid size-8 shrink-0 place-items-center rounded-full bg-surface-2 transition group-open:rotate-180 group-open:bg-accent group-open:text-accent-fg">
                     <ChevronDown className="size-4" aria-hidden="true" />
                   </span>
                 </summary>
-                <p className="mt-3 leading-7 text-fg-muted">{t(`faq.${k}.a`)}</p>
+                <p className="mt-3 leading-7 text-fg-muted">{t(`hotelFaq.${k}.a`)}</p>
               </details>
             ))}
           </div>
@@ -388,11 +373,11 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
                 {t("ctaPrimary")}
               </Link>
               <Link
-                href="/restaurants"
+                href="/demo"
                 className="inline-flex h-12 items-center gap-2 rounded-full bg-white/10 px-7 font-semibold text-white ring-1 ring-white/20 hover:bg-white/15"
               >
-                <MapPin className="size-4" aria-hidden="true" />
-                {t("ctaGuide")}
+                <MonitorPlay className="size-4" aria-hidden="true" />
+                {t("ctaDemo")}
               </Link>
             </div>
           </div>
@@ -406,57 +391,6 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
 
 /** Spotihotel's own contact details (the "Contact us" section and the footer). */
 const CONTACT = COMPANY;
-
-/** The real restaurants of the public guide (left out while there are fewer than two). */
-async function RestaurantsStrip({ locale }: { locale: string }) {
-  await connection();
-  const [t, all] = await Promise.all([getTranslations("landing"), getDirectory().catch(() => [])]);
-  const places = all.slice(0, 14);
-  if (places.length < 2) return null;
-  return (
-    <section className="border-b border-border bg-surface py-8">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 sm:px-6">
-        <p className="text-sm font-semibold text-fg-muted">{t("onSpotihotel.title")}</p>
-        <Link href="/restaurants" className="text-sm font-semibold text-accent-text hover:underline">
-          {t("onSpotihotel.all")}
-        </Link>
-      </div>
-      <div className="landing-marquee-mask mt-5 overflow-hidden" dir="ltr">
-        <ul className="landing-marquee flex w-max gap-3">
-          {[...places, ...places].map((r, i) => (
-            <li
-              key={`${r.id}-${i}`}
-              aria-hidden={i >= places.length ? true : undefined}
-              className={i >= places.length ? "landing-dup" : undefined}
-            >
-              <Link
-                href={`/r/${r.slug}`}
-                tabIndex={i >= places.length ? -1 : undefined}
-                className="flex items-center gap-3 rounded-2xl bg-bg py-2 ps-2 pe-4 ring-1 ring-border transition hover:ring-border-strong"
-              >
-                <span className="grid size-10 shrink-0 place-items-center overflow-hidden rounded-xl bg-white ring-1 ring-black/5">
-                  {r.logo ? (
-                    <img src={r.logo} alt="" loading="lazy" className="size-full object-contain p-0.5" />
-                  ) : (
-                    <PlaceInitials name={r.name} />
-                  )}
-                </span>
-                <span dir="auto" className="text-sm font-semibold whitespace-nowrap">
-                  {r.name}
-                  {r.city ? (
-                    <span className="block text-xs font-normal text-fg-muted">
-                      {locale === "fa" || locale === "ar" ? r.city.fa : r.city.en}
-                    </span>
-                  ) : null}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
-}
 
 function SectionTitle({
   eyebrow,
@@ -545,62 +479,91 @@ function BenefitCard({
 
 type T = Awaited<ReturnType<typeof getTranslations<"landing">>>;
 
-/** Hero illustration: the guest menu on a phone, with the kitchen ticket and live toasts around it. */
+/** Hero illustration: tonight's figures at the front desk, the guest's phone, live toasts. */
 function HeroVisual({ t }: { t: T }) {
   return (
     <div aria-hidden="true" className="relative mx-auto w-full max-w-md lg:me-0">
       <div className="landing-orb absolute inset-x-6 top-10 bottom-0 -z-10 rounded-full" />
-      <PhoneMock
-        table={t("mock.table")}
-        featured={t("mock.featured")}
-        cart={t("mock.cart")}
-        menu={t("mock.menu")}
-      />
-      <div className="landing-float absolute -start-2 top-24 hidden w-48 sm:block lg:-start-14">
-        <KitchenTicket t={t} />
+      <PhoneMock t={t} />
+      <div className="landing-float absolute -start-2 top-20 hidden w-52 sm:block lg:-start-16">
+        <TonightCard t={t} />
       </div>
       <div className="landing-float-slow absolute -end-1 top-24 flex items-center gap-2.5 rounded-2xl bg-white/95 px-3.5 py-2.5 text-[#141414] shadow-xl ring-1 ring-black/5 lg:-end-8">
         <span className="grid size-8 place-items-center rounded-full bg-emerald-500 text-white">
-          <Check className="size-4" strokeWidth={3} />
+          <KeyRound className="size-4" />
         </span>
         <span className="text-sm leading-tight font-bold">
-          {t("float.paid")}
-          <span className="block text-xs font-medium text-neutral-500">۳٬۶۰۰٬۰۰۰ تومان</span>
+          {t("float.checkin")}
+          <span className="block text-xs font-medium text-neutral-500">{t("float.checkinRoom")}</span>
         </span>
       </div>
       <div className="landing-float absolute -end-2 bottom-24 flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-bold text-accent-fg shadow-xl lg:-end-10">
-        <ChefHat className="size-4" />
-        {t("float.ready")} | {t("float.table")}
+        <MoonStar className="size-4" />
+        {t("float.audit")} ✓
       </div>
     </div>
   );
 }
 
-/** A kitchen display ticket with its running timer (decorative). */
-function KitchenTicket({ t, className }: { t: T; className?: string }) {
+/** Tonight's key figures, as the front desk sees them (decorative). */
+function TonightCard({ t, className }: { t: T; className?: string }) {
   return (
     <div className={cn("rounded-2xl bg-white p-3.5 text-[#141414] shadow-xl ring-1 ring-black/5", className)}>
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-[13px] font-black whitespace-nowrap">
-          #A-1042 <span className="font-semibold text-neutral-500">· {t("float.table")}</span>
-        </span>
-        <span className="inline-flex items-center gap-1 rounded-full bg-amber-500 px-2 py-0.5 text-xs font-bold text-white tabular-nums">
-          <Clock className="size-3" />
-          {t("float.minutes")}
-        </span>
+      <p className="text-[11px] font-semibold text-neutral-500">{t("pmsMock.tonight")}</p>
+      <p className="mt-0.5 text-2xl font-black tabular-nums">۸۶٪</p>
+      <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-neutral-100">
+        <span className="block h-full w-[86%] rounded-full bg-accent" />
       </div>
-      <ul className="mt-2.5 space-y-1.5 text-[13px]">
-        {(["mockDish1", "mockDish2", "mockDish3"] as const).map((k, i) => (
-          <li key={k} className="flex items-center gap-2">
-            <span className="grid size-5 place-items-center rounded-md bg-neutral-100 text-[11px] font-bold">
-              {i === 0 ? 2 : 1}
-            </span>
-            <span className="font-semibold">{t(`platform.${k}`)}</span>
-          </li>
+      <dl className="mt-3 grid grid-cols-2 gap-2 text-[11px]">
+        {(
+          [
+            ["arrivals", "۹۴"],
+            ["departures", "۸۱"],
+            ["adr", "۶٫۲ م"],
+            ["revpar", "۵٫۳ م"],
+          ] as const
+        ).map(([k, v]) => (
+          <div key={k} className="rounded-lg bg-neutral-50 px-2 py-1.5">
+            <dt className="text-neutral-500">{t(`pmsMock.${k}`)}</dt>
+            <dd className="font-black tabular-nums">{v}</dd>
+          </div>
         ))}
-      </ul>
-      <div className="mt-3 h-8 rounded-xl bg-[#141414] text-center text-xs leading-8 font-bold text-white">
-        {t("float.kitchen")} ✓
+      </dl>
+    </div>
+  );
+}
+
+/** A slice of the room chart: rooms down the side, nights across, bookings as bars (decorative). */
+function PlanningMock({ t }: { t: T }) {
+  const rows = [
+    { room: "۱۲۰۱", bars: [{ s: 0, l: 3, c: "bg-sky-500" }, { s: 4, l: 3, c: "bg-emerald-500" }] },
+    { room: "۱۲۰۲", bars: [{ s: 1, l: 2, c: "bg-violet-500" }, { s: 3, l: 4, c: "bg-sky-500" }] },
+    { room: "۱۲۰۳", bars: [{ s: 0, l: 6, c: "bg-amber-500" }] },
+    { room: "۱۲۰۴", bars: [{ s: 2, l: 2, c: "bg-emerald-500" }, { s: 5, l: 2, c: "bg-rose-500" }] },
+    { room: "۱۲۰۵", bars: [{ s: 0, l: 1, c: "bg-sky-500" }, { s: 1, l: 4, c: "bg-violet-500" }] },
+    { room: "۱۲۰۶", bars: [{ s: 3, l: 4, c: "bg-amber-500" }] },
+  ];
+  return (
+    <div aria-hidden="true" className="mt-6 overflow-hidden rounded-2xl bg-bg p-3 ring-1 ring-border sm:p-4">
+      <div className="flex items-center justify-between text-[11px] font-semibold text-fg-muted">
+        <span>{t("pmsMock.chart")}</span>
+        <span className="rounded-full bg-accent-soft px-2 py-0.5 text-accent-text">{t("pmsMock.occupancy")} ۸۶٪</span>
+      </div>
+      <div className="mt-3 space-y-1.5">
+        {rows.map((r) => (
+          <div key={r.room} className="flex items-center gap-2">
+            <span className="w-10 shrink-0 text-[11px] font-bold tabular-nums">{r.room}</span>
+            <div className="relative grid h-7 flex-1 grid-cols-7 gap-px overflow-hidden rounded-lg bg-surface-2">
+              {r.bars.map((b, i) => (
+                <span
+                  key={i}
+                  className={cn("rounded-md opacity-90", b.c)}
+                  style={{ gridColumn: `${b.s + 1} / span ${b.l}` }}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -626,18 +589,8 @@ function MiniChart({ label }: { label: string }) {
   );
 }
 
-/** Static phone preview of the guest menu (decorative). */
-function PhoneMock({
-  table,
-  featured,
-  cart,
-  menu,
-}: {
-  table: string;
-  featured: string;
-  cart: string;
-  menu: string;
-}) {
+/** Static phone preview of the guest portal opened from the room's QR (decorative). */
+function PhoneMock({ t }: { t: T }) {
   return (
     <div aria-hidden="true" className="relative mx-auto w-[16.5rem] sm:w-[17.5rem] lg:me-6">
       {/* iPhone: titanium frame, side buttons, Dynamic Island, status bar, home indicator. */}
@@ -671,41 +624,52 @@ function PhoneMock({
             <div className="bg-gradient-to-b from-accent-soft to-white px-4 pt-5 pb-7">
               <div className="flex items-center gap-3">
                 <div className="grid size-11 place-items-center rounded-xl bg-accent text-accent-fg">
-                  <UtensilsCrossed className="size-5" />
+                  <BedDouble className="size-5" />
                 </div>
                 <div>
-                  <p className="text-base font-bold">{menu}</p>
+                  <p className="text-base font-bold">{t("mock.portal")}</p>
                   <span className="rounded-full bg-white px-2 py-0.5 text-[11px] font-semibold ring-1 ring-black/5">
-                    {table}
+                    {t("mock.table")}
                   </span>
                 </div>
               </div>
             </div>
             <div className="-mt-4 flex flex-1 flex-col rounded-t-3xl bg-white px-4 pt-4 pb-3">
-              <div className="h-9 rounded-full bg-[#f3f3f3]" />
-              <p className="mt-4 text-sm font-bold">{featured}</p>
-              <div className="mt-2 space-y-3">
-                {MOCK.map((d) => (
-                  <div key={d.name} className="flex items-center gap-3">
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-[13px] font-bold">{d.name}</p>
-                      <p className="text-[12px] font-semibold text-[#555]">{d.price} تومان</p>
-                    </div>
-                    <div className="relative">
-                      <img src={d.img} alt="" className="size-16 rounded-xl bg-[#f3f3f3] object-cover" />
-                      <span className="absolute -end-1 -bottom-1 grid size-6 place-items-center rounded-full bg-white text-sm font-bold shadow">
-                        +
-                      </span>
-                    </div>
+              <div className="grid grid-cols-2 gap-2.5">
+                {PORTAL.map(({ key, Icon, tone }) => (
+                  <div key={key} className="rounded-2xl bg-[#f6f6f6] p-3">
+                    <span className={cn("grid size-9 place-items-center rounded-xl", tone)}>
+                      <Icon className="size-4" />
+                    </span>
+                    <p className="mt-2 text-[12px] leading-tight font-bold">{t(`mock.tiles.${key}`)}</p>
                   </div>
                 ))}
               </div>
+              <div className="mt-3 rounded-2xl bg-[#f6f6f6] p-3">
+                <div className="flex items-center justify-between text-[12px]">
+                  <span className="font-bold">{t("mock.bill")}</span>
+                  <span className="font-black">۲۸٬۴۰۰٬۰۰۰</span>
+                </div>
+                <div className="mt-2 space-y-1 text-[11px] text-[#555]">
+                  <p className="flex justify-between">
+                    <span>{t("mock.nights")}</span>
+                    <span>۲۴٬۰۰۰٬۰۰۰</span>
+                  </p>
+                  <p className="flex justify-between">
+                    <span>{t("mock.tiles.spa")}</span>
+                    <span>۳٬۵۰۰٬۰۰۰</span>
+                  </p>
+                  <p className="flex justify-between">
+                    <span>{t("mock.tiles.minibar")}</span>
+                    <span>۹۰۰٬۰۰۰</span>
+                  </p>
+                </div>
+              </div>
               <div className="mt-auto flex h-11 items-center gap-2 rounded-full bg-accent ps-1.5 pe-4 text-[13px] font-bold text-white">
                 <span className="grid size-8 place-items-center rounded-full bg-white/20">
-                  <ShoppingBag className="size-4" />
+                  <ConciergeBell className="size-4" />
                 </span>
-                <span className="flex-1">{cart}</span>
-                <span>۳٬۶۰۰٬۰۰۰</span>
+                <span className="flex-1">{t("mock.order")}</span>
               </div>
               <div className="mx-auto mt-3 h-[5px] w-28 rounded-full bg-[#141414]" />
             </div>

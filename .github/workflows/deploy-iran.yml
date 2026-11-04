@@ -44,6 +44,11 @@ jobs:
             --conditions=react-server --external:pg --external:@node-rs/argon2 --external:sharp \
             --banner:js="import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);" \
             --outfile=dist/seed.mjs --log-level=warning
+          # Test hotel "Parsian" (300 rooms, a month of activity), built when SEED_PARSIAN=true.
+          node_modules/.bin/esbuild scripts/seed-parsian.ts --bundle --platform=node --format=esm --target=node22 \
+            --conditions=react-server --external:pg --external:@node-rs/argon2 --external:sharp \
+            --banner:js="import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);" \
+            --outfile=dist/seed-parsian.mjs --log-level=warning
           rm -rf .next/cache
           # The Liara CLI always skips a folder named .next: ship it under another name.
           mv .next next-build

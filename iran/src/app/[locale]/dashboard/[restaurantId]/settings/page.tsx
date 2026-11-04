@@ -90,6 +90,9 @@ async function Settings({ params }: { params: Params }) {
   const rid = ctx.restaurant.id;
   const currencies = Array.from(new Set([r.currency, ...COMMON_CURRENCIES]));
   const timezones = Intl.supportedValuesOf("timeZone");
+  // A hotel has no place in the restaurant guide, no takeaway ordering and no kitchen targets.
+  const hotel = r.kind === "hotel";
+  const shown = (key: string) => !hotel || !HOTEL_HIDDEN.has(key);
 
   return (
     <>
@@ -99,7 +102,7 @@ async function Settings({ params }: { params: Params }) {
           aria-label={t("title")}
           className="-mx-4 flex [scrollbar-width:none] gap-2 overflow-x-auto px-4 lg:sticky lg:top-24 lg:mx-0 lg:flex-col lg:px-0"
         >
-          {SECTIONS.map(({ key, icon }) => (
+          {SECTIONS.filter((x) => shown(x.key)).map(({ key, icon }) => (
             <a
               key={key}
               href={`#${key === "desktopTitle" ? "desktop" : key}`}
@@ -143,16 +146,18 @@ async function Settings({ params }: { params: Params }) {
               />
             </div>
           </Card>
-          <Card id="listing" className="scroll-mt-24">
-            <CardHeader
-              title={<SectionTitle icon={<Store />}>{t("listing")}</SectionTitle>}
-              description={t("listingHint")}
-            />
-            <div className="space-y-6 p-5 sm:p-6">
-              <CoverPicker restaurantId={rid} disabled={readOnly} choices={cover} />
-              <ListingForm restaurantId={rid} disabled={readOnly} values={listing} />
-            </div>
-          </Card>
+          {shown("listing") ? (
+            <Card id="listing" className="scroll-mt-24">
+              <CardHeader
+                title={<SectionTitle icon={<Store />}>{t("listing")}</SectionTitle>}
+                description={t("listingHint")}
+              />
+              <div className="space-y-6 p-5 sm:p-6">
+                <CoverPicker restaurantId={rid} disabled={readOnly} choices={cover} />
+                <ListingForm restaurantId={rid} disabled={readOnly} values={listing} />
+              </div>
+            </Card>
+          ) : null}
           <Card id="modules" className="scroll-mt-24">
             <CardHeader
               title={<SectionTitle icon={<Blocks />}>{t("modules")}</SectionTitle>}
@@ -162,6 +167,7 @@ async function Settings({ params }: { params: Params }) {
               <ModulesForm
                 restaurantId={rid}
                 readOnly={readOnly}
+                hidden={hotel ? ["delivery", "branches", "music"] : []}
                 disabled={s.disabledModules.filter(isModule)}
               />
             </div>
@@ -239,33 +245,37 @@ async function Settings({ params }: { params: Params }) {
               />
             </div>
           </Card>
-          <Card id="goals" className="scroll-mt-24">
-            <CardHeader
-              title={<SectionTitle icon={<Target />}>{t("goals")}</SectionTitle>}
-              description={t("goalsHint")}
-            />
-            <div className="p-5 sm:p-6">
-              <GoalsForm restaurantId={rid} currency={r.currency} disabled={readOnly} values={goals} />
-            </div>
-          </Card>
-          <Card id="online" className="scroll-mt-24">
-            <CardHeader
-              title={<SectionTitle icon={<Globe />}>{t("online")}</SectionTitle>}
-              description={t("onlineHint")}
-            />
-            <div className="p-5 sm:p-6">
-              <OnlinePanel
-                restaurantId={rid}
-                url={`${env().APP_URL}/r/${r.slug}/order`}
-                hasZones={zones.length > 0}
-                disabled={readOnly}
-                values={online}
+          {shown("goals") ? (
+            <Card id="goals" className="scroll-mt-24">
+              <CardHeader
+                title={<SectionTitle icon={<Target />}>{t("goals")}</SectionTitle>}
+                description={t("goalsHint")}
               />
-              <div className="mt-4">
-                <KioskPanel restaurantId={rid} appUrl={env().APP_URL} disabled={readOnly} values={kiosk} />
+              <div className="p-5 sm:p-6">
+                <GoalsForm restaurantId={rid} currency={r.currency} disabled={readOnly} values={goals} />
               </div>
-            </div>
-          </Card>
+            </Card>
+          ) : null}
+          {shown("online") ? (
+            <Card id="online" className="scroll-mt-24">
+              <CardHeader
+                title={<SectionTitle icon={<Globe />}>{t("online")}</SectionTitle>}
+                description={t("onlineHint")}
+              />
+              <div className="p-5 sm:p-6">
+                <OnlinePanel
+                  restaurantId={rid}
+                  url={`${env().APP_URL}/r/${r.slug}/order`}
+                  hasZones={zones.length > 0}
+                  disabled={readOnly}
+                  values={online}
+                />
+                <div className="mt-4">
+                  <KioskPanel restaurantId={rid} appUrl={env().APP_URL} disabled={readOnly} values={kiosk} />
+                </div>
+              </div>
+            </Card>
+          ) : null}
           <Card id="security" className="scroll-mt-24">
             <CardHeader
               title={<SectionTitle icon={<ShieldCheck />}>{t("security")}</SectionTitle>}
@@ -334,6 +344,8 @@ async function Settings({ params }: { params: Params }) {
     </>
   );
 }
+
+const HOTEL_HIDDEN = new Set(["listing", "goals", "online"]);
 
 const SECTIONS = [
   { key: "profile", icon: <Building2 aria-hidden="true" /> },

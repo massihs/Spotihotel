@@ -25,6 +25,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { hotelToday } from "@/server/modules/hotel/requests";
 import { HotelOverview } from "@/components/hotel/hotel-overview";
+import { HotelHome } from "@/components/pms/hotel-home";
 import { KpiCard } from "@/components/dashboard/kpi-card";
 import { buttonClasses } from "@/components/ui/button";
 import { Card, CardHeader, StatCard, TONE_TILE, type Tone } from "@/components/ui/card";
@@ -90,6 +91,13 @@ async function Overview({ params }: { params: PageProps<"/[locale]/dashboard/[re
       : { kitchen: "kitchen", bar: "kitchen", cashier: "orders", waiter: "waiter" }
   )[ctx.job ?? ""];
   if (home) redirect({ href: `/dashboard/${ctx.restaurant.id}/${home}`, locale: await getLocale() });
+  // A hotel opens on its management dashboard (front office, revenue, housekeeping).
+  if (ctx.restaurant.kind === "hotel" && can(ctx, "frontdesk.view")) {
+    const locale = await getLocale();
+    return (
+      <HotelHome ctx={ctx} money={(c: number) => formatMoney(c, ctx.restaurant.currency, locale)} />
+    );
+  }
   const [t, tStatus, tRes, locale, overview, today, live, lowStock, newOrders, disabled] = await Promise.all([
     getTranslations("dashboard"),
     getTranslations("orderStatus"),

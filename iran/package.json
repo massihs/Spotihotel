@@ -16,7 +16,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "db:seed": "esbuild scripts/seed.ts --bundle --platform=node --format=esm --target=node22 --conditions=react-server --external:pg --external:@node-rs/argon2 --external:sharp --banner:js=\"import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);\" --outfile=dist/seed.mjs --log-level=warning && node dist/seed.mjs",
-    "postinstall": "next typegen || true"
+    "postinstall": "next typegen || true",
+    "db:seed-parsian": "esbuild scripts/seed-parsian.ts --bundle --platform=node --format=esm --target=node22 --conditions=react-server --external:pg --external:@node-rs/argon2 --external:sharp --banner:js=\"import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);\" --outfile=dist/seed-parsian.mjs --log-level=warning && SEED_PARSIAN=true node dist/seed-parsian.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1149.0",

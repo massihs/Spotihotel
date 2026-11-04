@@ -77,7 +77,8 @@ export function ProfileForm({
           defaultValue={values.name}
           error={err("name")}
         />
-        <KindPicker defaultValue={values.kind} />
+        {/* A hotel stays a hotel; an older venue can still become one. */}
+        {values.kind === "hotel" ? null : <KindPicker defaultValue={values.kind} />}
         <BrandPicker defaultValue={values.brandColor} />
         <MenuThemePicker
           defaultValue={values.menuTheme}

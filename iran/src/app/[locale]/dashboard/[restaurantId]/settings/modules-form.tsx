@@ -36,10 +36,13 @@ export function ModulesForm({
   restaurantId,
   disabled: initial,
   readOnly,
+  hidden = [],
 }: {
   restaurantId: string;
   disabled: ModuleKey[];
   readOnly: boolean;
+  /** Modules this kind of place never uses (a hotel: delivery, branches, music). */
+  hidden?: readonly string[];
 }) {
   const t = useTranslations("settings.moduleList");
   const tErr = useTranslations("errorCodes");
@@ -67,7 +70,7 @@ export function ModulesForm({
     <>
       {error ? <p className="mb-3 rounded-xl bg-danger-soft px-3 py-2 text-sm text-danger">{error}</p> : null}
       <ul className="grid gap-3 sm:grid-cols-2" aria-busy={pending}>
-        {MODULES.map((m) => {
+        {MODULES.filter((m) => !hidden.includes(m)).map((m) => {
           const on = !off.has(m);
           return (
             <li key={m}>
