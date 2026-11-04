@@ -2128,7 +2128,9 @@
       "pay_later": "Payer à table",
       "mock_online": "En ligne (simulé)",
       "stripe": "En ligne (Stripe)",
-      "zarinpal": "En ligne (Zarinpal)"
+      "zarinpal": "En ligne (Zarinpal)",
+      "room_charge": "Sur la note de la chambre",
+      "account": "Compte client (crédit)"
     },
     "tendered": "Montant remis",
     "tenderedHint": "Facultatif, pour calculer la monnaie.",

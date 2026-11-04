@@ -1,6 +1,7 @@
 "use client";
 
-import { ChevronDown, ChevronLeft, LayoutGrid, X } from "lucide-react";
+import { ChevronDown, ChevronLeft, LayoutGrid, LoaderCircle, X } from "lucide-react";
+import { useLinkStatus } from "next/link";
 import { useTranslations } from "next-intl";
 import { Fragment, useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
@@ -129,6 +130,16 @@ function Badge({ n, className }: { n?: number; className?: string }) {
   );
 }
 
+/**
+ * Spinner on the link just clicked while its page loads: a slow page never looks like a dead
+ * click (must sit inside the <Link>).
+ */
+function Pending({ className }: { className?: string }) {
+  const { pending } = useLinkStatus();
+  if (!pending) return null;
+  return <LoaderCircle className={cn("size-4 shrink-0 animate-spin", className)} aria-hidden="true" />;
+}
+
 function useActive() {
   const pathname = usePathname();
   return (item: NavItem) =>
@@ -205,6 +216,7 @@ export function SidebarNav({ items, label }: { items: NavItem[]; label: string }
                       {item.icon}
                     </span>
                     <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                    <Pending className="text-sidebar-fg" />
                     <Badge n={item.badge} className="animate-pop-in" />
                   </Link>
                 );
@@ -282,7 +294,7 @@ export function MobileTabBar({ items, sheet }: { items: NavItem[]; sheet: ReactN
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex h-16 flex-col items-center justify-center gap-1 text-[11px] font-medium",
+                  "relative flex h-16 flex-col items-center justify-center gap-1 text-[11px] font-medium",
                   active ? "text-accent-text" : "text-fg-subtle",
                 )}
               >
@@ -297,6 +309,7 @@ export function MobileTabBar({ items, sheet }: { items: NavItem[]; sheet: ReactN
                   <Badge n={item.badge} className="absolute -end-0.5 -top-1.5 ring-2 ring-surface" />
                 </span>
                 <span className="max-w-full truncate px-1">{item.label}</span>
+                <Pending className="absolute top-1 end-1 size-3 text-accent-text" />
               </Link>
             );
           })}
@@ -371,6 +384,7 @@ export function MobileTabBar({ items, sheet }: { items: NavItem[]; sheet: ReactN
                           >
                             {item.icon}
                             <Badge n={item.badge} className="absolute -end-3 -top-2" />
+                            <Pending className="absolute -start-2 -top-2 rounded-full bg-surface text-accent-text" />
                           </span>
                           {item.label}
                         </Link>

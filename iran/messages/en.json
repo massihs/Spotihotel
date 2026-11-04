@@ -2128,7 +2128,9 @@
       "pay_later": "Pay at the table",
       "mock_online": "Online (simulated)",
       "stripe": "Online (Stripe)",
-      "zarinpal": "Online (Zarinpal)"
+      "zarinpal": "Online (Zarinpal)",
+      "room_charge": "Charged to the room",
+      "account": "House account"
     },
     "tendered": "Amount given",
     "tenderedHint": "Optional, to compute the change.",

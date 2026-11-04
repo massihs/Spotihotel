@@ -2128,7 +2128,9 @@
       "pay_later": "الدفع على الطاولة",
       "mock_online": "إلكتروني (تجريبي)",
       "stripe": "إلكتروني (Stripe)",
-      "zarinpal": "إلكتروني (Zarinpal)"
+      "zarinpal": "إلكتروني (Zarinpal)",
+      "room_charge": "على حساب الغرفة",
+      "account": "حساب العميل (آجل)"
     },
     "tendered": "المبلغ المستلم",
     "tenderedHint": "اختياري، لحساب الباقي.",
