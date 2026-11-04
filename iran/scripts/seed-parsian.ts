@@ -12,6 +12,7 @@
 import "dotenv/config";
 import { randomBytes } from "node:crypto";
 import { pathToFileURL } from "node:url";
+import pg from "pg";
 import { and, count, eq, inArray, sql } from "drizzle-orm";
 import { db } from "@/server/db/client";
 import {
@@ -968,12 +969,29 @@ export async function seedParsian(ownerEmail: string, days = 30) {
   if (errors.size) console.log("  skipped:", Object.fromEntries(errors));
 }
 
+/**
+ * One build at a time: during a redeploy the old and the new container both start this script.
+ * A Postgres advisory lock, on its own connection, makes the second wait until the first is done
+ * (or its container is stopped, which releases the lock), then it finds the hotel finished or
+ * half-built and acts accordingly.
+ */
+async function withBuildLock<T>(run: () => Promise<T>) {
+  const lock = new pg.Client({ connectionString: process.env.DATABASE_URL });
+  await lock.connect();
+  try {
+    await lock.query("select pg_advisory_lock(hashtext('spotihotel:parsian-seed'))");
+    return await run();
+  } finally {
+    await lock.end().catch(() => {});
+  }
+}
+
 const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (isMain) {
   const owner =
     process.env.SEED_PARSIAN_OWNER || process.env.SEED_SUPERADMIN_EMAIL || "owner@demo.spotihotel.local";
   const days = Number(process.env.PARSIAN_DAYS ?? 30) || 30;
-  seedParsian(owner, days)
+  withBuildLock(() => seedParsian(owner, days))
     .then(() => process.exit(0))
     .catch((e) => {
       console.error("✗ Parsian seed failed", e);
