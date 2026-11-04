@@ -26,7 +26,11 @@
     "disabled": "Disabled",
     "selectAll": "Select all",
     "selectNone": "Select none",
-    "clear": "Clear"
+    "clear": "Clear",
+    "theme": {
+      "toDark": "Switch to night mode",
+      "toLight": "Switch to day mode"
+    }
   },
   "landing": {
     "metaTitle": "Spotihotel — hotel management for Iran: front desk, bookings, room QR and accounting",

@@ -1,6 +1,7 @@
 import { LogIn, MonitorPlay } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonClasses } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
 import { Link } from "@/i18n/navigation";
@@ -51,6 +52,7 @@ export async function SiteHeader({
             {t("ctaDemo")}
           </Link>
           <LanguageSwitcher className="hidden sm:inline-flex" />
+          <ThemeToggle />
           <Link
             href="/login"
             aria-label={t("ctaSecondary")}

@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { THEME_SCRIPT } from "@/lib/theme";
 import localFont from "next/font/local";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
@@ -83,7 +84,7 @@ export const viewport: Viewport = {
   viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+    { media: "(prefers-color-scheme: dark)", color: "#ffffff" },
   ],
 };
 
@@ -103,7 +104,13 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
       dir={localeDirection(locale)}
       className={`${sans.variable} ${persian.variable} ${persianDigits.variable} ${menuSerif.variable} ${menuKufi.variable}`}
       data-scroll-behavior="smooth"
+      // Day mode by default; a saved night mode is applied before paint by THEME_SCRIPT.
+      data-theme="light"
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="min-h-dvh">
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}

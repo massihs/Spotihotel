@@ -26,7 +26,11 @@
     "disabled": "Désactivé",
     "selectAll": "Tout sélectionner",
     "selectNone": "Tout désélectionner",
-    "clear": "Effacer"
+    "clear": "Effacer",
+    "theme": {
+      "toDark": "Passer en mode nuit",
+      "toLight": "Passer en mode jour"
+    }
   },
   "landing": {
     "metaTitle": "Spotihotel — gestion hôtelière : réception, réservations, QR en chambre et comptabilité",

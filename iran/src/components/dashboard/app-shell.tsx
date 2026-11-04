@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { logoutAction } from "@/app/[locale]/(auth)/actions";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Logo, LogoMark } from "@/components/ui/logo";
 import { Link } from "@/i18n/navigation";
 import { CommandPalette, type SearchEntry } from "./command-palette";
@@ -82,6 +83,7 @@ export async function AppShell({
       </div>
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <LanguageSwitcher />
+        <ThemeToggle />
         <form action={logoutAction}>
           <button
             type="submit"
@@ -186,6 +188,7 @@ export async function AppShell({
             <NavTrail items={nav} />
             <div className="ms-auto flex items-center gap-1.5">
               <LanguageSwitcher className="hidden lg:inline-flex" />
+              <ThemeToggle />
               <CommandPalette
                 entries={[
                   ...nav.map((n) => ({ href: n.href, label: n.label, hint: n.group, icon: n.icon })),
