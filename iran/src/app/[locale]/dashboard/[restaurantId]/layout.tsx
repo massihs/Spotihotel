@@ -1,4 +1,6 @@
 import { Suspense } from "react";
+import { TOOL_BUTTON } from "@/components/ui/tool-button";
+import { cn } from "@/lib/cn";
 import { sectionFilterOf } from "@/server/modules/team/sections";
 import { getTranslations } from "next-intl/server";
 import { AppShell, ShellSkeleton } from "@/components/dashboard/app-shell";
@@ -527,7 +529,7 @@ async function RestaurantShell({
                 href="/admin"
                 title={t("nav.admin")}
                 aria-label={t("nav.admin")}
-                className="grid size-10 place-items-center rounded-full bg-ink text-ink-fg hover:opacity-90"
+                className={cn(TOOL_BUTTON, "max-lg:hidden")}
               >
                 <Shield className="size-4" aria-hidden="true" />
               </Link>

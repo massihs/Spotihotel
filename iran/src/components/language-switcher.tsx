@@ -27,8 +27,8 @@ export function LanguageSwitcher({
   return (
     <label
       className={cn(
-        "relative inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-sm font-medium",
-        tone === "inverted" ? "bg-white/15 text-white" : "bg-surface-2 text-fg",
+        "relative inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium transition-colors",
+        tone === "inverted" ? "bg-white/15 text-white" : "text-fg-muted hover:bg-surface-2 hover:text-fg",
         pending && "opacity-60",
         className,
       )}

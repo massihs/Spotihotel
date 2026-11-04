@@ -16,10 +16,10 @@ const variants: Record<ButtonVariant, string> = {
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: "h-8 px-3 text-sm gap-1.5 rounded-full",
-  md: "h-10 px-4 text-sm gap-2 rounded-full",
-  lg: "h-12 px-6 text-base gap-2 rounded-full",
-  xl: "h-14 px-6 text-base gap-2 rounded-full",
+  sm: "h-8 px-3 text-[13px] gap-1.5 rounded-lg",
+  md: "h-10 px-4 text-sm gap-2 rounded-lg",
+  lg: "h-12 px-6 text-base gap-2 rounded-xl",
+  xl: "h-14 px-6 text-base gap-2 rounded-xl",
 };
 
 export function buttonClasses(
@@ -29,7 +29,8 @@ export function buttonClasses(
 ) {
   return cn(
     "inline-flex items-center justify-center font-semibold whitespace-nowrap select-none",
-    "transition-[background-color,box-shadow,transform,opacity] active:scale-[0.98]",
+    "transition-[background-color,box-shadow,transform,opacity,color] duration-150 active:scale-[0.98]",
+    "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[var(--ring)]",
     "disabled:pointer-events-none disabled:opacity-40",
     variants[variant],
     sizes[size],

@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { logoutAction } from "@/app/[locale]/(auth)/actions";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { NavProgress } from "./nav-progress";
 import { Logo, LogoMark } from "@/components/ui/logo";
 import { Link } from "@/i18n/navigation";
 import { CommandPalette, type SearchEntry } from "./command-palette";
@@ -130,6 +131,7 @@ export async function AppShell({
       data-kind={kind}
       className="min-h-dvh bg-bg lg:grid lg:grid-cols-[272px_1fr] print:block print:bg-white"
     >
+      <NavProgress />
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:start-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-surface focus:px-3 focus:py-2"
@@ -186,9 +188,9 @@ export async function AppShell({
               {subtitle ? <p className="truncate text-xs text-fg-muted">{subtitle}</p> : null}
             </div>
             <NavTrail items={nav} />
-            <div className="ms-auto flex items-center gap-1.5">
+            <div className="ms-auto flex items-center gap-0.5 sm:gap-1">
               <LanguageSwitcher className="hidden lg:inline-flex" />
-              <ThemeToggle />
+              <ThemeToggle className="max-lg:hidden" />
               <CommandPalette
                 entries={[
                   ...nav.map((n) => ({ href: n.href, label: n.label, hint: n.group, icon: n.icon })),

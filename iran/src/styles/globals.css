@@ -281,8 +281,8 @@
   --color-tone-lime: var(--tone-lime);
   --font-sans: var(--app-font);
   --font-mono: var(--font-mono-loaded), ui-monospace, monospace;
-  --radius-card: 0.875rem;
-  --shadow-soft: 0 1px 2px hsl(var(--shadow-color) / 0.05), 0 6px 18px -10px hsl(var(--shadow-color) / 0.12);
+  --radius-card: 0.75rem;
+  --shadow-soft: 0 1px 2px hsl(var(--shadow-color) / 0.05), 0 2px 8px -4px hsl(var(--shadow-color) / 0.06);
   --shadow-float: 0 22px 50px -14px hsl(var(--shadow-color) / 0.3);
   --shadow-accent: 0 10px 24px -10px oklch(var(--brand-l) var(--brand-c) var(--brand-h) / 0.65);
   --shadow-accent-sm: 0 1px 2px oklch(var(--brand-l) var(--brand-c) var(--brand-h) / 0.3);
@@ -374,6 +374,39 @@ html {
 }
 .animate-pop-in {
   animation: pop-in 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+}
+/* Each dashboard page eases in after a navigation (template.tsx). */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+.animate-page-in {
+  animation: page-in 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Top navigation bar: grows while the next page is on its way, then fills and fades. */
+@keyframes nav-progress {
+  from {
+    transform: scaleX(0.05);
+  }
+  to {
+    transform: scaleX(0.85);
+  }
+}
+.nav-progress {
+  transform-origin: var(--nav-progress-origin, left);
+  animation: nav-progress 6s cubic-bezier(0.1, 0.7, 0.2, 1) forwards;
+}
+:root[dir="rtl"] .nav-progress {
+  --nav-progress-origin: right;
+}
+.nav-progress-done {
+  transform: scaleX(1);
+  opacity: 0;
+  transition:
+    transform 0.18s ease-out,
+    opacity 0.3s ease-out 0.15s;
 }
 dialog[open]::backdrop {
   animation: fade-in 0.2s ease-out;

@@ -154,7 +154,6 @@ export function SidebarNav({ items, label }: { items: NavItem[]; label: string }
       .split(",")
       .filter(Boolean),
   );
-  let index = 0;
   return (
     <nav aria-label={label} className="space-y-0.5">
       {sections(items).map((section) => {
@@ -170,7 +169,7 @@ export function SidebarNav({ items, label }: { items: NavItem[]; label: string }
                 onClick={() => !hasActive && toggleCollapsed(section.key)}
                 aria-expanded={open}
                 aria-controls={id}
-                className="group/h flex w-full items-center gap-2 rounded-lg px-3 pt-4 pb-1.5 text-start text-[11px] font-semibold tracking-wide text-sidebar-muted/70 uppercase hover:text-sidebar-fg"
+                className="group/h flex w-full items-center gap-2 rounded-lg px-2.5 pt-5 pb-1.5 text-start text-[11px] font-semibold tracking-wider text-sidebar-muted/60 uppercase transition-colors hover:text-sidebar-fg"
               >
                 <span className="flex-1">{section.label}</span>
                 {!open && badge ? <Badge n={badge} /> : null}
@@ -187,29 +186,29 @@ export function SidebarNav({ items, label }: { items: NavItem[]; label: string }
             <div id={id} hidden={!open} className="space-y-0.5">
               {section.items.map((item) => {
                 const active = isActive(item);
-                const i = index++;
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "group relative flex h-10 items-center gap-3 rounded-xl px-2 text-sm font-medium transition-colors",
+                      "group relative flex h-9 items-center gap-3 rounded-lg px-2.5 text-[13.5px] font-medium transition-[background-color,color] duration-150",
                       active
-                        ? "bg-sidebar-2 text-sidebar-fg"
-                        : "text-sidebar-muted hover:bg-sidebar-2/60 hover:text-sidebar-fg",
+                        ? "bg-sidebar-2 text-sidebar-fg shadow-[inset_0_0_0_1px_var(--sidebar-border)]"
+                        : "text-sidebar-muted hover:bg-sidebar-2/55 hover:text-sidebar-fg",
                     )}
                   >
                     {active ? (
                       <span
-                        className="absolute inset-y-2 start-0 w-1 rounded-full bg-accent"
+                        className="absolute inset-y-2 start-0 w-[3px] rounded-full bg-accent"
                         aria-hidden="true"
                       />
                     ) : null}
+                    {/* One quiet icon colour: the active page alone stands out. */}
                     <span
                       className={cn(
-                        "grid size-7 shrink-0 place-items-center rounded-lg transition-transform group-hover:scale-105 [&_svg]:size-4",
-                        active ? "bg-accent text-accent-fg shadow-accent" : toneOf(item, i),
+                        "grid size-5 shrink-0 place-items-center transition-colors [&_svg]:size-[18px] [&_svg]:stroke-[1.75]",
+                        active ? "text-accent-soft-2" : "text-sidebar-muted group-hover:text-sidebar-fg",
                       )}
                       aria-hidden="true"
                     >
@@ -378,7 +377,7 @@ export function MobileTabBar({ items, sheet }: { items: NavItem[]; sheet: ReactN
                           <span
                             className={cn(
                               "relative grid size-11 place-items-center rounded-2xl [&_svg]:size-5",
-                              active ? "bg-accent text-accent-fg" : toneOf(item, items.indexOf(item)),
+                              active ? "bg-accent text-accent-fg" : "bg-surface text-fg-muted ring-1 ring-border",
                             )}
                             aria-hidden="true"
                           >

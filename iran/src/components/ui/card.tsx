@@ -5,7 +5,7 @@ export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-        "relative rounded-2xl border border-border bg-surface shadow-[var(--shadow-soft)]",
+        "relative rounded-xl border border-border bg-surface shadow-[var(--shadow-soft)]",
         className,
       )}
       {...props}
@@ -47,19 +47,6 @@ export const TONE_TILE = {
   lime: "bg-tone-lime/15 text-tone-lime",
 } as const;
 export type Tone = keyof typeof TONE_TILE;
-const TONE_GLOW: Record<Tone, string> = {
-  violet: "bg-tone-violet",
-  sky: "bg-tone-sky",
-  amber: "bg-tone-amber",
-  rose: "bg-tone-rose",
-  teal: "bg-tone-teal",
-  orange: "bg-tone-orange",
-  emerald: "bg-tone-emerald",
-  fuchsia: "bg-tone-fuchsia",
-  indigo: "bg-tone-indigo",
-  lime: "bg-tone-lime",
-};
-
 export function StatCard({
   label,
   value,
@@ -85,21 +72,12 @@ export function StatCard({
       )}
       style={tone === "gradient" ? { background: "var(--brand-gradient)" } : undefined}
     >
-      {colored ? (
-        <span
-          className={cn(
-            "pointer-events-none absolute -end-8 -top-8 size-24 rounded-full opacity-[0.08]",
-            TONE_GLOW[colored],
-          )}
-          aria-hidden="true"
-        />
-      ) : null}
       <div className="relative flex items-start justify-between gap-3">
         <p className={cn("text-sm font-medium", solid ? "opacity-80" : "text-fg-muted")}>{label}</p>
         {icon ? (
           <span
             className={cn(
-              "grid size-10 shrink-0 place-items-center rounded-xl [&_svg]:size-5",
+              "grid size-9 shrink-0 place-items-center rounded-lg [&_svg]:size-[18px]",
               solid ? "bg-white/18" : colored ? TONE_TILE[colored] : "bg-accent-soft text-accent-text",
             )}
             aria-hidden="true"
@@ -108,7 +86,7 @@ export function StatCard({
           </span>
         ) : null}
       </div>
-      <p className="relative mt-2 text-[28px] leading-tight font-bold tracking-tight tabular-nums">{value}</p>
+      <p className="relative mt-2 text-[26px] leading-tight font-bold tracking-tight tabular-nums">{value}</p>
       {hint ? (
         <p className={cn("relative mt-1 text-xs", solid ? "opacity-75" : "text-fg-subtle")}>{hint}</p>
       ) : null}

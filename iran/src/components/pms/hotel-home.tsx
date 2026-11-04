@@ -59,32 +59,32 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
       href: `${base}/frontdesk`,
       label: t("alerts.auditLate", { day: fmtDay(home.businessDate, { day: "numeric", month: "long" }) }),
       Icon: MoonStar,
-      className: "bg-danger text-white",
+      className: "bg-danger text-white ring-danger",
     },
     home.openRequests > 0 &&
       can(ctx, "orders.view") && {
         href: `${base}/requests`,
         label: t("alerts.requests", { n: home.openRequests }),
         Icon: ConciergeBell,
-        className: "bg-danger text-white",
+        className: "bg-danger-soft text-danger ring-danger/25",
       },
     checkedIn > 0 && {
       href: `${base}/frontdesk`,
       label: t("alerts.arrivals", { n: checkedIn }),
       Icon: LogIn,
-      className: "bg-info-soft text-info",
+      className: "bg-info-soft text-info ring-info/25",
     },
     home.departures.length > 0 && {
       href: `${base}/frontdesk`,
       label: t("alerts.departures", { n: home.departures.length }),
       Icon: LogOut,
-      className: "bg-warning-soft text-warning",
+      className: "bg-warning-soft text-warning ring-warning/30",
     },
     toClean > 0 && {
       href: `${base}/rooms`,
       label: t("alerts.dirty", { n: toClean }),
       Icon: SprayCan,
-      className: "bg-surface-2 text-fg",
+      className: "bg-surface text-fg-muted ring-border",
     },
   ].filter((x) => !!x);
 
@@ -157,13 +157,13 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
       />
 
       {alerts.length ? (
-        <div className="-mx-4 mb-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
+        <div className="-mx-4 mb-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0">
           {alerts.map(({ href, label, Icon, className }) => (
             <Link
               key={label}
               href={href}
               className={cn(
-                "inline-flex shrink-0 items-center gap-2 rounded-full px-3.5 py-2 text-sm font-semibold whitespace-nowrap transition-opacity hover:opacity-85",
+                "inline-flex h-8 shrink-0 snap-start items-center gap-1.5 rounded-lg px-3 text-[13px] font-semibold whitespace-nowrap ring-1 ring-inset transition-opacity duration-150 hover:opacity-85 [&_svg]:size-3.5",
                 className,
               )}
             >
@@ -177,10 +177,6 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
       {/* Tonight + the day's movements */}
       <section className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
         <Card className="overflow-hidden border-transparent bg-ink p-6 text-ink-fg shadow-[var(--shadow-float)]">
-          <div
-            className="pointer-events-none absolute -end-20 -top-24 size-72 rounded-full bg-white/[0.06]"
-            aria-hidden="true"
-          />
           <div className="relative flex items-start justify-between gap-3">
             <div>
               <p className="text-sm font-medium opacity-75">{t("tonight")}</p>
@@ -193,7 +189,7 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
               <BedDouble className="size-5" />
             </span>
           </div>
-          <dl className="relative mt-5 grid grid-cols-3 gap-3 border-t border-white/12 pt-4 text-sm">
+          <dl className="relative mt-5 grid grid-cols-2 gap-x-3 gap-y-3 border-t border-white/12 pt-4 text-sm sm:grid-cols-3">
             <Figure label={t("adr")} value={money(f.adrCents)} />
             <Figure label={t("revpar")} value={money(f.revparCents)} />
             <Figure label={t("guests")} value={String(f.guests)} />
@@ -486,8 +482,8 @@ const nights = (a: string, d: string) =>
 function Figure({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0">
-      <dt className="truncate text-xs opacity-70">{label}</dt>
-      <dd className="mt-0.5 truncate font-bold tabular-nums">{value}</dd>
+      <dt className="text-xs opacity-70">{label}</dt>
+      <dd className="mt-0.5 font-bold break-words tabular-nums">{value}</dd>
     </div>
   );
 }

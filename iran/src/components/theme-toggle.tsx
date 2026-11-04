@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useSyncExternalStore } from "react";
 import { cn } from "@/lib/cn";
 import { THEME_KEY } from "@/lib/theme";
+import { TOOL_BUTTON } from "@/components/ui/tool-button";
 
 const THEME_EVENT = "sh-theme-change";
 
@@ -39,10 +40,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       onClick={toggle}
       title={label}
       aria-label={label}
-      className={cn(
-        "inline-grid size-9 shrink-0 place-items-center rounded-full text-fg-muted ring-1 ring-border hover:bg-surface-2 hover:text-fg",
-        className,
-      )}
+      className={cn(TOOL_BUTTON, className)}
     >
       {dark ? <Sun className="size-4" aria-hidden="true" /> : <Moon className="size-4" aria-hidden="true" />}
     </button>

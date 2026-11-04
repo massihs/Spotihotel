@@ -1,5 +1,6 @@
 "use client";
 
+import { TOOL_BUTTON } from "@/components/ui/tool-button";
 import { formatMoney } from "@/lib/money";
 import { useTranslations, useLocale } from "next-intl";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
@@ -97,7 +98,7 @@ export function NotificationBell({
           setOpen((v) => !v);
           if (!open) load();
         }}
-        className="relative grid size-11 place-items-center rounded-full bg-surface-2 text-fg hover:bg-surface-3"
+        className={TOOL_BUTTON}
       >
         <svg
           viewBox="0 0 24 24"
@@ -110,7 +111,7 @@ export function NotificationBell({
           <path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0" />
         </svg>
         {unread > 0 ? (
-          <span className="absolute -end-1 -top-1 grid min-w-5 place-items-center rounded-full bg-accent px-1 text-[11px] leading-5 font-bold text-accent-fg tabular-nums ring-2 ring-bg">
+          <span className="absolute -end-0.5 -top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-danger px-1 text-[10px] leading-none font-bold text-white tabular-nums ring-2 ring-surface">
             {unread > 99 ? "99+" : unread}
           </span>
         ) : null}

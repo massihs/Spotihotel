@@ -1,5 +1,6 @@
 "use client";
 
+import { TOOL_BUTTON } from "@/components/ui/tool-button";
 import { BellOff, BellRing, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -205,10 +206,7 @@ export function OrderAlerts({
         aria-pressed={enabled}
         title={enabled ? t("on") : t("off")}
         aria-label={enabled ? t("on") : t("off")}
-        className={cn(
-          "grid size-10 place-items-center rounded-full transition-colors",
-          enabled ? "bg-accent-soft text-accent-text" : "bg-surface-2 text-fg-subtle",
-        )}
+        className={cn(TOOL_BUTTON, enabled ? "text-accent-text" : "text-fg-subtle")}
       >
         {enabled ? (
           <BellRing className="size-5" aria-hidden="true" />
