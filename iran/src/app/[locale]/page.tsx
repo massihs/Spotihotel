@@ -83,10 +83,10 @@ const FAQ = ["app", "data", "switch", "channels", "books", "chain", "offline"] a
 
 /** What the guest portal offers from the room's QR (phone preview). */
 const PORTAL = [
-  { key: "roomService", Icon: ConciergeBell, tone: "bg-amber-100 text-amber-700" },
-  { key: "spa", Icon: Flower2, tone: "bg-fuchsia-100 text-fuchsia-700" },
-  { key: "minibar", Icon: Wine, tone: "bg-sky-100 text-sky-700" },
-  { key: "requests", Icon: SprayCan, tone: "bg-emerald-100 text-emerald-700" },
+  { key: "roomService", Icon: ConciergeBell, tone: "bg-brand-100 text-brand-700" },
+  { key: "spa", Icon: Flower2, tone: "bg-brand-200 text-brand-800" },
+  { key: "minibar", Icon: Wine, tone: "bg-tone-sky/15 text-tone-sky" },
+  { key: "requests", Icon: SprayCan, tone: "bg-tone-amber/20 text-tone-orange" },
 ] as const;
 
 export default async function LandingPage({ params }: PageProps<"/[locale]">) {
@@ -489,7 +489,7 @@ function HeroVisual({ t }: { t: T }) {
         <TonightCard t={t} />
       </div>
       <div className="landing-float-slow absolute -end-1 top-24 flex items-center gap-2.5 rounded-2xl bg-white/95 px-3.5 py-2.5 text-[#141414] shadow-xl ring-1 ring-black/5 lg:-end-8">
-        <span className="grid size-8 place-items-center rounded-full bg-emerald-500 text-white">
+        <span className="grid size-8 place-items-center rounded-full bg-brand-600 text-white">
           <KeyRound className="size-4" />
         </span>
         <span className="text-sm leading-tight font-bold">
@@ -536,12 +536,12 @@ function TonightCard({ t, className }: { t: T; className?: string }) {
 /** A slice of the room chart: rooms down the side, nights across, bookings as bars (decorative). */
 function PlanningMock({ t }: { t: T }) {
   const rows = [
-    { room: "۱۲۰۱", bars: [{ s: 0, l: 3, c: "bg-sky-500" }, { s: 4, l: 3, c: "bg-emerald-500" }] },
-    { room: "۱۲۰۲", bars: [{ s: 1, l: 2, c: "bg-violet-500" }, { s: 3, l: 4, c: "bg-sky-500" }] },
-    { room: "۱۲۰۳", bars: [{ s: 0, l: 6, c: "bg-amber-500" }] },
-    { room: "۱۲۰۴", bars: [{ s: 2, l: 2, c: "bg-emerald-500" }, { s: 5, l: 2, c: "bg-rose-500" }] },
-    { room: "۱۲۰۵", bars: [{ s: 0, l: 1, c: "bg-sky-500" }, { s: 1, l: 4, c: "bg-violet-500" }] },
-    { room: "۱۲۰۶", bars: [{ s: 3, l: 4, c: "bg-amber-500" }] },
+    { room: "۱۲۰۱", bars: [{ s: 0, l: 3, c: "bg-brand-400" }, { s: 4, l: 3, c: "bg-brand-600" }] },
+    { room: "۱۲۰۲", bars: [{ s: 1, l: 2, c: "bg-tone-violet" }, { s: 3, l: 4, c: "bg-brand-400" }] },
+    { room: "۱۲۰۳", bars: [{ s: 0, l: 6, c: "bg-tone-amber" }] },
+    { room: "۱۲۰۴", bars: [{ s: 2, l: 2, c: "bg-brand-600" }, { s: 5, l: 2, c: "bg-brand-300" }] },
+    { room: "۱۲۰۵", bars: [{ s: 0, l: 1, c: "bg-brand-400" }, { s: 1, l: 4, c: "bg-tone-violet" }] },
+    { room: "۱۲۰۶", bars: [{ s: 3, l: 4, c: "bg-tone-amber" }] },
   ];
   return (
     <div aria-hidden="true" className="mt-6 overflow-hidden rounded-2xl bg-bg p-3 ring-1 ring-border sm:p-4">

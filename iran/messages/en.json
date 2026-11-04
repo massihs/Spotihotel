@@ -498,7 +498,8 @@
     "hotelSetup": "Hotel setup",
     "chain": "Hotel group",
     "blocks": "Groups & blocks",
-    "forecast": "Forecast & channels"
+    "forecast": "Forecast & channels",
+    "restaurantReports": "Restaurant reports"
   },
   "dashboard": {
     "welcome": "Hello {name}",
@@ -4903,7 +4904,20 @@
     "cashierName": "Cashier",
     "cashierHint": "The day's takings per person and method (front desk and restaurant): what each hands over at shift end.",
     "trevpar": "TRevPAR",
-    "goppar": "Profit per available room"
+    "goppar": "Profit per available room",
+    "groups": {
+      "steering": "Overview",
+      "entries": "Entries",
+      "statements": "Statements",
+      "parties": "Customers & suppliers",
+      "treasury": "Cash & bank",
+      "closing": "Tax & closing"
+    },
+    "mixTitle": "Results by department",
+    "mixHint": "Each department's revenue and costs, with its margin.",
+    "dailyTitle": "Revenue by day",
+    "dailyHint": "Closed days: rooms and other departments.",
+    "otherRevenue": "Other departments"
   },
   "portal": {
     "welcome": "Welcome",

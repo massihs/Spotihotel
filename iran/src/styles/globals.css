@@ -47,17 +47,6 @@
   --info: oklch(0.6 0.15 237);
   --info-soft: oklch(0.965 0.025 237);
 
-  /* Tones: icon tiles, charts, categories. */
-  --tone-violet: oklch(0.58 0.2 292);
-  --tone-sky: oklch(0.62 0.15 237);
-  --tone-amber: oklch(0.74 0.16 70);
-  --tone-rose: oklch(0.62 0.2 12);
-  --tone-teal: oklch(0.62 0.12 190);
-  --tone-orange: oklch(0.68 0.18 45);
-  --tone-emerald: oklch(0.62 0.15 158);
-  --tone-fuchsia: oklch(0.6 0.22 338);
-  --tone-indigo: oklch(0.55 0.19 268);
-  --tone-lime: oklch(0.72 0.17 128);
   --brass: oklch(0.72 0.1 80);
 
   --shadow-color: 220 30% 18%;
@@ -72,6 +61,28 @@
   --accent-soft: oklch(0.955 calc(var(--brand-c) * 0.2) var(--brand-h));
   --accent-soft-2: oklch(0.9 calc(var(--brand-c) * 0.4) var(--brand-h));
   --ring: oklch(var(--brand-l) var(--brand-c) var(--brand-h) / 0.3);
+  /* Shades of the hotel's own colour, light to deep: tinted surfaces, tiles, charts. */
+  --brand-50: oklch(0.977 calc(var(--brand-c) * 0.14) var(--brand-h));
+  --brand-100: oklch(0.952 calc(var(--brand-c) * 0.26) var(--brand-h));
+  --brand-200: oklch(0.9 calc(var(--brand-c) * 0.45) var(--brand-h));
+  --brand-300: oklch(0.82 calc(var(--brand-c) * 0.7) var(--brand-h));
+  --brand-400: oklch(0.7 max(var(--brand-c), 0.08) var(--brand-h));
+  --brand-500: oklch(0.58 max(var(--brand-c), 0.1) var(--brand-h));
+  --brand-600: oklch(0.49 max(var(--brand-c), 0.1) var(--brand-h));
+  --brand-700: oklch(0.41 var(--brand-c) var(--brand-h));
+  --brand-800: oklch(0.33 calc(var(--brand-c) * 0.9) var(--brand-h));
+  --brand-900: oklch(0.26 calc(var(--brand-c) * 0.8) var(--brand-h));
+  /* Tones: neighbouring hues of the brand colour (plus brass), so icons and charts stay in one family. */
+  --tone-indigo: oklch(0.5 max(var(--brand-c), 0.11) var(--brand-h));
+  --tone-violet: oklch(0.54 max(var(--brand-c), 0.11) calc(var(--brand-h) + 28));
+  --tone-fuchsia: oklch(0.57 0.1 calc(var(--brand-h) + 52));
+  --tone-rose: oklch(0.57 0.1 calc(var(--brand-h) + 72));
+  --tone-sky: oklch(0.6 max(var(--brand-c), 0.1) calc(var(--brand-h) - 22));
+  --tone-teal: oklch(0.6 0.085 calc(var(--brand-h) - 48));
+  --tone-emerald: oklch(0.6 0.085 calc(var(--brand-h) - 72));
+  --tone-lime: oklch(0.66 0.07 calc(var(--brand-h) - 96));
+  --tone-amber: oklch(0.72 0.1 80);
+  --tone-orange: oklch(0.64 0.1 62);
   --brand-gradient: linear-gradient(
     135deg,
     oklch(var(--brand-l) var(--brand-c) var(--brand-h)),
@@ -106,6 +117,26 @@
   }
   :root:not([data-theme="light"]),
   :root:not([data-theme="light"]) [data-brand] {
+    --brand-50: oklch(0.22 calc(var(--brand-c) * 0.3) var(--brand-h));
+    --brand-100: oklch(0.26 calc(var(--brand-c) * 0.4) var(--brand-h));
+    --brand-200: oklch(0.32 calc(var(--brand-c) * 0.55) var(--brand-h));
+    --brand-300: oklch(0.42 calc(var(--brand-c) * 0.7) var(--brand-h));
+    --brand-400: oklch(0.55 max(var(--brand-c), 0.08) var(--brand-h));
+    --brand-500: oklch(0.65 max(var(--brand-c), 0.1) var(--brand-h));
+    --brand-600: oklch(0.72 max(var(--brand-c), 0.1) var(--brand-h));
+    --brand-700: oklch(0.8 var(--brand-c) var(--brand-h));
+    --brand-800: oklch(0.87 calc(var(--brand-c) * 0.7) var(--brand-h));
+    --brand-900: oklch(0.93 calc(var(--brand-c) * 0.5) var(--brand-h));
+    --tone-indigo: oklch(0.7 max(var(--brand-c), 0.11) var(--brand-h));
+    --tone-violet: oklch(0.72 max(var(--brand-c), 0.11) calc(var(--brand-h) + 28));
+    --tone-fuchsia: oklch(0.74 0.1 calc(var(--brand-h) + 52));
+    --tone-rose: oklch(0.74 0.1 calc(var(--brand-h) + 72));
+    --tone-sky: oklch(0.74 max(var(--brand-c), 0.1) calc(var(--brand-h) - 22));
+    --tone-teal: oklch(0.74 0.085 calc(var(--brand-h) - 48));
+    --tone-emerald: oklch(0.74 0.085 calc(var(--brand-h) - 72));
+    --tone-lime: oklch(0.78 0.07 calc(var(--brand-h) - 96));
+    --tone-amber: oklch(0.8 0.1 80);
+    --tone-orange: oklch(0.74 0.1 62);
     --accent: oklch(max(var(--brand-l), 0.66) var(--brand-c) var(--brand-h));
     --accent-hover: oklch(max(calc(var(--brand-l) + 0.05), 0.71) var(--brand-c) var(--brand-h));
     --accent-text: oklch(0.8 var(--brand-c) var(--brand-h));
@@ -140,6 +171,26 @@
 }
 :root[data-theme="dark"],
 :root[data-theme="dark"] [data-brand] {
+  --brand-50: oklch(0.22 calc(var(--brand-c) * 0.3) var(--brand-h));
+  --brand-100: oklch(0.26 calc(var(--brand-c) * 0.4) var(--brand-h));
+  --brand-200: oklch(0.32 calc(var(--brand-c) * 0.55) var(--brand-h));
+  --brand-300: oklch(0.42 calc(var(--brand-c) * 0.7) var(--brand-h));
+  --brand-400: oklch(0.55 max(var(--brand-c), 0.08) var(--brand-h));
+  --brand-500: oklch(0.65 max(var(--brand-c), 0.1) var(--brand-h));
+  --brand-600: oklch(0.72 max(var(--brand-c), 0.1) var(--brand-h));
+  --brand-700: oklch(0.8 var(--brand-c) var(--brand-h));
+  --brand-800: oklch(0.87 calc(var(--brand-c) * 0.7) var(--brand-h));
+  --brand-900: oklch(0.93 calc(var(--brand-c) * 0.5) var(--brand-h));
+  --tone-indigo: oklch(0.7 max(var(--brand-c), 0.11) var(--brand-h));
+  --tone-violet: oklch(0.72 max(var(--brand-c), 0.11) calc(var(--brand-h) + 28));
+  --tone-fuchsia: oklch(0.74 0.1 calc(var(--brand-h) + 52));
+  --tone-rose: oklch(0.74 0.1 calc(var(--brand-h) + 72));
+  --tone-sky: oklch(0.74 max(var(--brand-c), 0.1) calc(var(--brand-h) - 22));
+  --tone-teal: oklch(0.74 0.085 calc(var(--brand-h) - 48));
+  --tone-emerald: oklch(0.74 0.085 calc(var(--brand-h) - 72));
+  --tone-lime: oklch(0.78 0.07 calc(var(--brand-h) - 96));
+  --tone-amber: oklch(0.8 0.1 80);
+  --tone-orange: oklch(0.74 0.1 62);
   --accent: oklch(max(var(--brand-l), 0.66) var(--brand-c) var(--brand-h));
   --accent-hover: oklch(max(calc(var(--brand-l) + 0.05), 0.71) var(--brand-c) var(--brand-h));
   --accent-text: oklch(0.8 var(--brand-c) var(--brand-h));
@@ -167,12 +218,13 @@
  * reads like front-desk software rather than a café menu. The brand accent stays the hotel's.
  */
 [data-kind="hotel"] {
-  --bg: oklch(0.972 0.0045 255);
+  /* Canvas, panels and lines take a whisper of the hotel's colour rather than plain grey. */
+  --bg: oklch(0.97 calc(var(--brand-c) * 0.12) var(--brand-h));
   --surface: oklch(1 0 0);
-  --surface-2: oklch(0.962 0.0065 255);
-  --surface-3: oklch(0.928 0.0095 255);
-  --border: oklch(0.915 0.009 255);
-  --border-strong: oklch(0.86 0.013 255);
+  --surface-2: oklch(0.958 calc(var(--brand-c) * 0.17) var(--brand-h));
+  --surface-3: oklch(0.922 calc(var(--brand-c) * 0.24) var(--brand-h));
+  --border: oklch(0.91 calc(var(--brand-c) * 0.16) var(--brand-h));
+  --border-strong: oklch(0.85 calc(var(--brand-c) * 0.24) var(--brand-h));
   --fg: oklch(0.22 0.03 262);
   --fg-muted: oklch(0.5 0.023 258);
   --fg-subtle: oklch(0.64 0.017 258);
@@ -269,6 +321,16 @@
   --color-sidebar-fg: var(--sidebar-fg);
   --color-sidebar-muted: var(--sidebar-muted);
   --color-sidebar-border: var(--sidebar-border);
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-300: var(--brand-300);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
   --color-tone-violet: var(--tone-violet);
   --color-tone-sky: var(--tone-sky);
   --color-tone-amber: var(--tone-amber);

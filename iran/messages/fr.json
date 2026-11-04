@@ -498,7 +498,8 @@
     "hotelSetup": "Configuration hôtel",
     "chain": "Groupe hôtelier",
     "blocks": "Groupes & allotements",
-    "forecast": "Prévisions & canaux"
+    "forecast": "Prévisions & canaux",
+    "restaurantReports": "Rapports du restaurant"
   },
   "dashboard": {
     "welcome": "Bonjour {name}",
@@ -4903,7 +4904,20 @@
     "cashierName": "Caissier / réceptionniste",
     "cashierHint": "Encaissements du jour par personne et par mode (réception et restaurant) : ce que chacun remet en fin de service.",
     "trevpar": "TRevPAR",
-    "goppar": "Résultat / ch. dispo"
+    "goppar": "Résultat / ch. dispo",
+    "groups": {
+      "steering": "Pilotage",
+      "entries": "Écritures",
+      "statements": "États financiers",
+      "parties": "Clients et fournisseurs",
+      "treasury": "Trésorerie",
+      "closing": "Fiscalité et clôture"
+    },
+    "mixTitle": "Résultat par service",
+    "mixHint": "Chiffre d'affaires et charges de chaque service, avec sa marge.",
+    "dailyTitle": "Chiffre d'affaires par jour",
+    "dailyHint": "Journées clôturées : hébergement et autres services.",
+    "otherRevenue": "Autres services"
   },
   "portal": {
     "welcome": "Bienvenue",

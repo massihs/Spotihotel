@@ -1,8 +1,22 @@
 import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { Banknote, Download, Landmark, Scale, TrendingDown, TrendingUp } from "lucide-react";
+import {
+  Banknote,
+  BookOpenText,
+  CalendarRange,
+  ChartColumn,
+  Download,
+  Gauge,
+  Landmark,
+  Lock,
+  Scale,
+  TrendingDown,
+  TrendingUp,
+  UsersRound,
+  Wallet,
+} from "lucide-react";
 import { PageHeader } from "@/components/dashboard/app-shell";
-import { StatCard } from "@/components/ui/card";
+import { Card, CardHeader, StatCard } from "@/components/ui/card";
 import { buttonClasses } from "@/components/ui/button";
 import {
   BudgetCell,
@@ -20,7 +34,7 @@ import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 import { requireRestaurant } from "@/server/auth/current";
 import { db } from "@/server/db/client";
-import { getMoney } from "@/lib/money-server";
+import { getMoney, getMoneyCompact } from "@/lib/money-server";
 import { localDay } from "@/lib/period";
 import { syncLedger } from "@/server/modules/ledger/sync";
 import {
@@ -65,6 +79,16 @@ const TABS = [
   "close",
 ] as const;
 type Tab = (typeof TABS)[number];
+
+/** The books in six rooms: each with its own pages, so no tab is ever hidden off-screen. */
+const GROUPS: { key: string; Icon: typeof Gauge; tabs: Tab[] }[] = [
+  { key: "steering", Icon: Gauge, tabs: ["overview"] },
+  { key: "entries", Icon: BookOpenText, tabs: ["journal", "ledger", "trial"] },
+  { key: "statements", Icon: ChartColumn, tabs: ["income", "balance"] },
+  { key: "parties", Icon: UsersRound, tabs: ["receivables", "payables", "cheques"] },
+  { key: "treasury", Icon: Wallet, tabs: ["cashier", "bank"] },
+  { key: "closing", Icon: Lock, tabs: ["tax", "chart", "close"] },
+];
 type Props = PageProps<"/[locale]/dashboard/[restaurantId]/ledger">;
 
 export default function LedgerPage({ params, searchParams }: Props) {
@@ -75,6 +99,17 @@ export default function LedgerPage({ params, searchParams }: Props) {
   );
 }
 
+/** Cheque status chips: shades of the hotel's colour while in progress, green or red once settled. */
+const CHEQUE_TONE: Record<string, string> = {
+  in_hand: "bg-brand-100 text-brand-800",
+  issued: "bg-brand-100 text-brand-800",
+  deposited: "bg-brand-200 text-brand-900",
+  cleared: "bg-success-soft text-success",
+  bounced: "bg-danger-soft text-danger",
+  returned: "bg-surface-3 text-fg-muted",
+  cancelled: "bg-surface-3 text-fg-muted",
+};
+
 const th = "px-3 py-2.5 text-start text-xs font-semibold text-fg-muted";
 const thEnd = "px-3 py-2.5 text-end text-xs font-semibold text-fg-muted";
 const td = "px-3 py-2";
@@ -82,9 +117,15 @@ const tdNum = "px-3 py-2 text-end tabular-nums";
 
 function Table({ children, min = 640 }: { children: React.ReactNode; min?: number }) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-border bg-surface">
+    <div className="overflow-x-auto rounded-xl border border-border bg-surface shadow-[var(--shadow-soft)]">
       <table
-        className="w-full text-sm [&_tbody_tr]:border-t [&_tbody_tr]:border-border"
+        className={cn(
+          "w-full text-sm [&_tbody_tr]:border-t [&_tbody_tr]:border-border",
+          // Header in a pale shade of the hotel's colour, rows lit on hover, figures aligned.
+          "[&_thead]:bg-brand-50 [&_thead_th]:text-brand-800 [&_thead_th]:font-semibold",
+          "[&_tbody_tr]:transition-colors [&_tbody_tr:hover]:bg-brand-50/60",
+          "[&_tfoot]:border-t-2 [&_tfoot]:border-brand-200 [&_tfoot]:bg-brand-50/70 [&_tfoot]:font-bold",
+        )}
         style={{ minWidth: min }}
       >
         {children}
@@ -107,9 +148,10 @@ async function Ledger({ params, searchParams }: Props) {
   // The books are brought up to date before any report is read.
   await syncLedger(db, ctx.restaurant);
   const locale = await getLocale();
-  const [t, money, accounts, state] = await Promise.all([
+  const [t, money, big, accounts, state] = await Promise.all([
     getTranslations("ledger"),
     getMoney(ctx.restaurant.currency),
+    getMoneyCompact(ctx.restaurant.currency),
     listLedgerAccounts(db, rid),
     ledgerState(db, rid),
   ]);
@@ -147,26 +189,26 @@ async function Ledger({ params, searchParams }: Props) {
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <StatCard
             label={t("revenue")}
-            value={money(pl.totals.revenue)}
+            value={<span title={money(pl.totals.revenue)}>{big(pl.totals.revenue)}</span>}
             hint={t("vsPrevious", { amount: money(pl.totals.previousRevenue) })}
             icon={<TrendingUp />}
             tone="ink"
           />
           <StatCard
             label={t("expenses")}
-            value={money(pl.totals.expense)}
+            value={<span title={money(pl.totals.expense)}>{big(pl.totals.expense)}</span>}
             icon={<TrendingDown />}
             tone="rose"
           />
           <StatCard
             label={t("netResult")}
-            value={money(pl.totals.net)}
+            value={<span title={money(pl.totals.net)}>{big(pl.totals.net)}</span>}
             icon={<Scale />}
             tone={pl.totals.net >= 0 ? "emerald" : "rose"}
           />
           <StatCard
             label={t("cash")}
-            value={money(cash.reduce((s, c) => s + c.closing, 0))}
+            value={<span title={money(cash.reduce((s, c) => s + c.closing, 0))}>{big(cash.reduce((s, c) => s + c.closing, 0))}</span>}
             hint={t("receivables", { amount: money(aged.totals.cityLedger) })}
             icon={<Landmark />}
             tone="indigo"
@@ -175,21 +217,120 @@ async function Ledger({ params, searchParams }: Props) {
         {inPeriod.length ? (
           <section>
             <h2 className="mb-2 font-semibold">{t("hotelKpis")}</h2>
-            <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
-              <StatCard
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">
+              <StatCard compact
                 label={t("occupancy")}
                 value={`${avail ? Math.round((sold / avail) * 1000) / 10 : 0}%`}
               />
-              <StatCard label={t("adr")} value={money(sold ? Math.round(roomRev / sold) : 0)} />
-              <StatCard label={t("revpar")} value={money(avail ? Math.round(roomRev / avail) : 0)} />
-              <StatCard
+              <StatCard compact label={t("adr")} value={big(sold ? Math.round(roomRev / sold) : 0)} />
+              <StatCard compact label={t("revpar")} value={big(avail ? Math.round(roomRev / avail) : 0)} />
+              <StatCard compact
                 label={t("trevpar")}
-                value={money(avail ? Math.round(pl.totals.revenue / avail) : 0)}
+                value={big(avail ? Math.round(pl.totals.revenue / avail) : 0)}
               />
-              <StatCard label={t("goppar")} value={money(avail ? Math.round(pl.totals.net / avail) : 0)} />
+              <StatCard compact label={t("goppar")} value={big(avail ? Math.round(pl.totals.net / avail) : 0)} />
             </div>
           </section>
         ) : null}
+        {/* At a glance: what each department brings and costs, and the takings day by day. */}
+        <div className="grid gap-4 lg:grid-cols-2">
+          <Card>
+            <CardHeader title={t("mixTitle")} description={t("mixHint")} />
+            <ul className="space-y-3.5 p-5">
+              {(() => {
+                const depts = pl.departments.filter((d) => d.revenue > 0 || d.expense > 0);
+                const max = Math.max(1, ...depts.map((d) => Math.max(d.revenue, d.expense)));
+                return depts.map((d) => (
+                  <li key={d.department}>
+                    <div className="flex items-baseline justify-between gap-3 text-sm">
+                      <span className="font-semibold">
+                        {t.has(`dept.${d.department}`) ? t(`dept.${d.department}`) : d.department}
+                      </span>
+                      <span className="text-xs text-fg-muted tabular-nums" title={money(d.profit)}>
+                        {big(d.revenue)}
+                        {d.revenue ? ` | ${Math.round((d.profit / d.revenue) * 100)}%` : ""}
+                      </span>
+                    </div>
+                    <div className="mt-1.5 space-y-1">
+                      <div className="h-2 overflow-hidden rounded-full bg-brand-50">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-l from-brand-500 to-brand-700 rtl:bg-gradient-to-r"
+                          style={{ width: `${(d.revenue / max) * 100}%` }}
+                        />
+                      </div>
+                      {d.expense ? (
+                        <div className="h-1.5 overflow-hidden rounded-full bg-brand-50">
+                          <div
+                            className="h-full rounded-full bg-brand-300"
+                            style={{ width: `${(d.expense / max) * 100}%` }}
+                          />
+                        </div>
+                      ) : null}
+                    </div>
+                  </li>
+                ));
+              })()}
+            </ul>
+            <div className="flex gap-4 border-t border-border px-5 py-3 text-xs text-fg-muted">
+              <span className="inline-flex items-center gap-1.5">
+                <span className="size-2.5 rounded-full bg-brand-600" aria-hidden="true" />
+                {t("revenue")}
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <span className="size-2.5 rounded-full bg-brand-300" aria-hidden="true" />
+                {t("expenses")}
+              </span>
+            </div>
+          </Card>
+          {inPeriod.length ? (
+            <Card>
+              <CardHeader title={t("dailyTitle")} description={t("dailyHint")} />
+              {(() => {
+                const days = [...inPeriod].sort((a, b) => a.businessDate.localeCompare(b.businessDate));
+                const max = Math.max(1, ...days.map((a) => a.totalRevenueCents));
+                return (
+                  <div className="p-5">
+                    <div className="flex h-44 items-end gap-[3px]" dir="ltr">
+                      {days.map((a) => (
+                        <div
+                          key={a.id}
+                          className="group relative flex h-full flex-1 flex-col justify-end"
+                          title={`${day(a.businessDate)} | ${money(a.totalRevenueCents)} | ${a.occupancyPct}%`}
+                        >
+                          <div
+                            className="flex w-full flex-col justify-end overflow-hidden rounded-t-[3px] bg-brand-200 transition-colors group-hover:bg-brand-300"
+                            style={{ height: `${(a.totalRevenueCents / max) * 100}%` }}
+                          >
+                            <div
+                              className="w-full rounded-t-[3px] bg-brand-600 transition-colors group-hover:bg-brand-700"
+                              style={{
+                                height: `${a.totalRevenueCents ? (a.roomRevenueCents / a.totalRevenueCents) * 100 : 0}%`,
+                              }}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-2 flex justify-between text-[11px] text-fg-subtle tabular-nums" dir="ltr">
+                      <span>{day(days[0]!.businessDate)}</span>
+                      <span>{day(days[days.length - 1]!.businessDate)}</span>
+                    </div>
+                    <div className="mt-3 flex gap-4 text-xs text-fg-muted">
+                      <span className="inline-flex items-center gap-1.5">
+                        <span className="size-2.5 rounded-full bg-brand-600" aria-hidden="true" />
+                        {t("roomRevenue")}
+                      </span>
+                      <span className="inline-flex items-center gap-1.5">
+                        <span className="size-2.5 rounded-full bg-brand-200" aria-hidden="true" />
+                        {t("otherRevenue")}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })()}
+            </Card>
+          ) : null}
+        </div>
         <section>
           <h2 className="mb-2 font-semibold">{t("byDepartment")}</h2>
           <Table>
@@ -598,9 +739,9 @@ async function Ledger({ params, searchParams }: Props) {
     body = (
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <StatCard label={t("cheque.receivedOpen")} value={money(reg.totals.receivedOpen)} tone="indigo" />
-          <StatCard label={t("cheque.issuedOpen")} value={money(reg.totals.issuedOpen)} tone="amber" />
-          <StatCard label={t("cheque.bounced")} value={money(reg.totals.bounced)} tone="rose" />
+          <StatCard label={t("cheque.receivedOpen")} value={<span title={money(reg.totals.receivedOpen)}>{big(reg.totals.receivedOpen)}</span>} tone="indigo" />
+          <StatCard label={t("cheque.issuedOpen")} value={<span title={money(reg.totals.issuedOpen)}>{big(reg.totals.issuedOpen)}</span>} tone="amber" />
+          <StatCard label={t("cheque.bounced")} value={<span title={money(reg.totals.bounced)}>{big(reg.totals.bounced)}</span>} tone="rose" />
           <StatCard label={t("cheque.dueWeek")} value={reg.totals.dueThisWeek} tone="teal" />
         </div>
         <Table min={900}>
@@ -622,13 +763,31 @@ async function Ledger({ params, searchParams }: Props) {
                 className={c.overdue ? "bg-danger-soft/40" : c.dueSoon ? "bg-warning-soft/40" : undefined}
               >
                 <td className={cn(td, "font-semibold whitespace-nowrap")}>{day(c.dueDate)}</td>
-                <td className={td}>{t(`cheque.${c.direction}`)}</td>
+                <td className={td}>
+                  <span
+                    className={cn(
+                      "inline-flex items-center gap-1 text-xs font-semibold",
+                      c.direction === "received" ? "text-brand-700" : "text-tone-orange",
+                    )}
+                  >
+                    {c.direction === "received" ? "↓" : "↑"} {t(`cheque.${c.direction}`)}
+                  </span>
+                </td>
                 <td className={td}>{c.party}</td>
                 <td className={cn(td, "font-mono text-xs")} dir="ltr">
                   {[c.sayadId, c.number, c.bank].filter(Boolean).join(" | ")}
                 </td>
                 <td className={tdNum}>{money(c.amountCents)}</td>
-                <td className={td}>{tStatus(c.status)}</td>
+                <td className={td}>
+                  <span
+                    className={cn(
+                      "inline-flex h-6 items-center rounded-md px-2 text-xs font-semibold",
+                      CHEQUE_TONE[c.status] ?? "bg-surface-2 text-fg-muted",
+                    )}
+                  >
+                    {tStatus(c.status)}
+                  </span>
+                </td>
                 <td className="px-2 py-1 text-end">
                   <ChequeActions
                     restaurantId={rid}
@@ -982,74 +1141,129 @@ async function Ledger({ params, searchParams }: Props) {
     );
   }
 
+  const group = GROUPS.find((g) => g.tabs.includes(tab)) ?? GROUPS[0]!;
+  const presets = [
+    { k: "thisMonth", f: monthStart(today), to: today },
+    {
+      k: "lastMonth",
+      f: monthStart(addDays(monthStart(today), -1)),
+      to: addDays(monthStart(today), -1),
+    },
+    { k: "fiscalYear", f: fiscalYearStart(today), to: today },
+  ];
+  const preset = presets.find((p) => p.f === from && p.to === to);
+
   return (
     <>
       <PageHeader title={t("title")} description={t("subtitle")} />
-      <div className="mb-4 flex flex-wrap items-end gap-2">
-        <form className="flex flex-wrap items-end gap-2">
-          <input type="hidden" name="tab" value={tab} />
-          {typeof sp.account === "string" ? <input type="hidden" name="account" value={sp.account} /> : null}
-          <label className="text-sm">
-            <span className="mb-1 block font-semibold">{t("from")}</span>
-            <DateInput
-              name="from"
-              defaultValue={from}
-              className="h-10 rounded-xl border border-border-strong bg-surface px-3"
-            />
-          </label>
-          <label className="text-sm">
-            <span className="mb-1 block font-semibold">{t("to")}</span>
-            <DateInput
-              name="to"
-              defaultValue={to}
-              className="h-10 rounded-xl border border-border-strong bg-surface px-3"
-            />
-          </label>
-          <button className={buttonClasses("secondary", "md")}>{t("apply")}</button>
-        </form>
-        <div className="flex flex-wrap gap-1.5 text-sm">
-          {[
-            { k: "thisMonth", f: monthStart(today), to: today },
-            {
-              k: "lastMonth",
-              f: monthStart(addDays(monthStart(today), -1)),
-              to: addDays(monthStart(today), -1),
-            },
-            { k: "fiscalYear", f: fiscalYearStart(today), to: today },
-          ].map((p) => (
+
+      {/* Rooms of the books, then the pages of the open room. */}
+      <nav aria-label={t("title")} className="mb-3">
+        <div className="-mx-4 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0">
+          <ul className="flex w-max min-w-full gap-1 rounded-xl bg-brand-50 p-1 ring-1 ring-brand-100 ring-inset">
+            {GROUPS.map((g) => {
+              const active = g.key === group.key;
+              return (
+                <li key={g.key} className="flex-1">
+                  <Link
+                    href={`${base}?${new URLSearchParams({ tab: g.tabs[0]!, from, to })}`}
+                    aria-current={active ? "true" : undefined}
+                    className={cn(
+                      "flex h-10 items-center justify-center gap-2 rounded-lg px-3.5 text-sm font-semibold whitespace-nowrap transition-[background-color,color,box-shadow] duration-150",
+                      active
+                        ? "bg-surface text-brand-800 shadow-[0_1px_3px_hsl(var(--shadow-color)/0.12)] ring-1 ring-brand-200"
+                        : "text-brand-700/80 hover:bg-brand-100 hover:text-brand-800",
+                    )}
+                  >
+                    <g.Icon
+                      className={cn("size-4 shrink-0", active ? "text-accent" : "opacity-70")}
+                      aria-hidden="true"
+                    />
+                    {t(`groups.${g.key}`)}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        {group.tabs.length > 1 ? (
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {group.tabs.map((k) => (
+              <Link
+                key={k}
+                href={`${base}?${new URLSearchParams({ tab: k, from, to })}`}
+                aria-current={k === tab ? "page" : undefined}
+                className={cn(
+                  "inline-flex h-8 items-center rounded-lg px-3 text-[13px] font-semibold transition-colors duration-150",
+                  k === tab
+                    ? "bg-brand-600 text-white"
+                    : "text-fg-muted ring-1 ring-border ring-inset hover:bg-brand-50 hover:text-brand-800",
+                )}
+              >
+                {t(`tabs.${k}`)}
+              </Link>
+            ))}
+          </div>
+        ) : null}
+      </nav>
+
+      {/* Period: three presets, or any range. */}
+      <div className="mb-5 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-surface p-2 shadow-[var(--shadow-soft)]">
+        <span className="flex items-center gap-1.5 px-2 text-sm font-semibold text-brand-800">
+          <CalendarRange className="size-4 text-brand-500" aria-hidden="true" />
+          <bdi>
+            {day(from)} – {day(to)}
+          </bdi>
+        </span>
+        <div className="flex flex-wrap gap-1">
+          {presets.map((p) => (
             <Link
               key={p.k}
               href={`${base}?${new URLSearchParams({ tab, from: p.f, to: p.to })}`}
               className={cn(
-                "rounded-full px-3 py-1.5 font-semibold ring-1 ring-border",
-                from === p.f && to === p.to ? "bg-accent text-accent-fg ring-accent" : "hover:bg-surface-2",
+                "inline-flex h-8 items-center rounded-lg px-3 text-[13px] font-semibold transition-colors duration-150",
+                preset?.k === p.k
+                  ? "bg-brand-100 text-brand-800 ring-1 ring-brand-200 ring-inset"
+                  : "text-fg-muted hover:bg-brand-50 hover:text-brand-800",
               )}
             >
               {t(`quick.${p.k}`)}
             </Link>
           ))}
         </div>
+        <form className="ms-auto flex flex-wrap items-center gap-1.5">
+          <input type="hidden" name="tab" value={tab} />
+          {typeof sp.account === "string" ? <input type="hidden" name="account" value={sp.account} /> : null}
+          <label className="sr-only" htmlFor="ledger-from">
+            {t("from")}
+          </label>
+          <DateInput
+            id="ledger-from"
+            name="from"
+            defaultValue={from}
+            className="h-8 rounded-lg border border-border bg-surface px-2.5 text-[13px]"
+          />
+          <span className="text-fg-subtle" aria-hidden="true">
+            →
+          </span>
+          <label className="sr-only" htmlFor="ledger-to">
+            {t("to")}
+          </label>
+          <DateInput
+            id="ledger-to"
+            name="to"
+            defaultValue={to}
+            className="h-8 rounded-lg border border-border bg-surface px-2.5 text-[13px]"
+          />
+          <button className={buttonClasses("secondary", "sm")}>{t("apply")}</button>
+        </form>
         {state?.lockedUntil ? (
-          <span className="ms-auto rounded-full bg-surface-2 px-3 py-1 text-xs font-semibold">
-            🔒 {t("lockedUntil", { day: day(state.lockedUntil) })}
+          <span className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-brand-50 px-3 text-xs font-semibold text-brand-800">
+            <Lock className="size-3.5" aria-hidden="true" />
+            {t("lockedUntil", { day: day(state.lockedUntil) })}
           </span>
         ) : null}
       </div>
-      <nav className="mb-5 flex gap-1 overflow-x-auto border-b border-border" aria-label={t("title")}>
-        {TABS.map((k) => (
-          <Link
-            key={k}
-            href={`${base}?${new URLSearchParams({ tab: k, from, to })}`}
-            aria-current={k === tab ? "page" : undefined}
-            className={cn(
-              "-mb-px border-b-2 px-3 py-2 text-sm font-semibold whitespace-nowrap",
-              k === tab ? "border-accent text-fg" : "border-transparent text-fg-muted hover:text-fg",
-            )}
-          >
-            {t(`tabs.${k}`)}
-          </Link>
-        ))}
-      </nav>
       {body}
     </>
   );

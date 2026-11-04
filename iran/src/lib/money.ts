@@ -103,6 +103,22 @@ export function formatMoney(cents: Cents, currency: string, locale = "fa"): stri
   return new Intl.NumberFormat(locale, { style: "currency", currency }).format(cents / 100);
 }
 
+/**
+ * Large amounts at a glance (dashboards): 20 081 783 989 tomans → "۲۰٫۰۸ میلیارد تومان" /
+ * "20.08B toman". Small amounts stay exact. The full figure belongs in a tooltip next to it.
+ */
+export function formatMoneyCompact(cents: Cents, currency: string, locale = "fa"): string {
+  const value = isToman(currency) ? cents / 1000 : cents / 100;
+  if (Math.abs(value) < 1_000_000) return formatMoney(cents, currency, locale);
+  const n = new Intl.NumberFormat(locale, {
+    notation: "compact",
+    compactDisplay: locale === "en" ? "short" : "long",
+    maximumFractionDigits: 2,
+  }).format(value);
+  if (isToman(currency)) return `${n} ${TOMAN_LABEL[lang(locale)] ?? TOMAN_LABEL.fa}`;
+  return `${n} ${currency}`;
+}
+
 /** Short menu price in thousand tomans: 1 319 000 tomans → "۱٬۳۱۹" (the unit is shown once). */
 export function formatThousandTomans(cents: Cents, locale = "fa"): string {
   return new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(cents / 1_000_000);

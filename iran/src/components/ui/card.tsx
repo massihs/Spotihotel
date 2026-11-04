@@ -23,7 +23,7 @@ export function CardHeader({
   action?: ReactNode;
 }) {
   return (
-    <div className="flex flex-wrap items-start justify-between gap-4 border-b border-border px-5 py-4">
+    <div className="flex flex-wrap items-start justify-between gap-4 rounded-t-[inherit] border-b border-border bg-brand-50/70 px-5 py-4">
       <div className="min-w-0">
         <h2 className="text-[15px] font-semibold text-fg">{title}</h2>
         {description ? <p className="mt-0.5 text-sm text-fg-muted">{description}</p> : null}
@@ -53,12 +53,15 @@ export function StatCard({
   hint,
   icon,
   tone = "default",
+  compact = false,
 }: {
   label: ReactNode;
   value: ReactNode;
   hint?: ReactNode;
   icon?: ReactNode;
   tone?: "default" | "ink" | "accent" | "gradient" | Tone;
+  /** Narrow cards (five in a row): a smaller figure that keeps its unit on the same line. */
+  compact?: boolean;
 }) {
   const solid = tone === "ink" || tone === "accent" || tone === "gradient";
   const colored = !solid && tone !== "default" ? (tone as Tone) : null;
@@ -86,7 +89,15 @@ export function StatCard({
           </span>
         ) : null}
       </div>
-      <p className="relative mt-2 text-[26px] leading-tight font-bold tracking-tight tabular-nums">{value}</p>
+      {/* Scales down in narrow cards so a figure with its unit stays on one line. */}
+      <p
+        className={cn(
+          "relative mt-2 leading-tight font-bold tracking-tight tabular-nums",
+          compact ? "text-[clamp(1.05rem,1.3vw,1.375rem)]" : "text-[clamp(1.2rem,1.75vw,1.625rem)]",
+        )}
+      >
+        {value}
+      </p>
       {hint ? (
         <p className={cn("relative mt-1 text-xs", solid ? "opacity-75" : "text-fg-subtle")}>{hint}</p>
       ) : null}

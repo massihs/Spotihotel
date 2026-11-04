@@ -29,12 +29,12 @@ export function useTime(timeZone: string) {
 
 const STATUS_TONE: Record<string, string> = {
   tentative: "bg-warning-soft text-fg",
-  confirmed: "bg-info-soft text-info",
-  in_house: "bg-success-soft text-success",
+  confirmed: "bg-brand-100 text-brand-700",
+  in_house: "bg-brand-700 text-white",
   checked_out: "bg-surface-3 text-fg-muted",
   cancelled: "bg-danger-soft text-danger",
   no_show: "bg-danger-soft text-danger",
-  booked: "bg-info-soft text-info",
+  booked: "bg-brand-100 text-brand-700",
   done: "bg-success-soft text-success",
   open: "bg-success-soft text-success",
   closed: "bg-surface-3 text-fg-muted",

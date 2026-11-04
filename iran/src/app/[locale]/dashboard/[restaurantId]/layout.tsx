@@ -85,6 +85,7 @@ const HOTEL_LAYOUT: [page: string, group: HotelGroup][] = [
   ["reservations", "restaurant"],
   ["menu", "restaurant"],
   ["inventory", "restaurant"],
+  ["reports", "restaurant"],
 ];
 type HotelGroup = "reception" | "rooms" | "revenue" | "restaurant";
 /** Restaurant-chain tools a hotel has no use for (the group console replaces branches). */
@@ -102,7 +103,7 @@ function arrangeForHotel(
   nav: NavItem[],
   base: string,
   labels: Record<HotelGroup, string>,
-  names: { roomService: string; roomsQr: string },
+  names: { roomService: string; roomsQr: string; reports: string },
 ) {
   const page = (i: NavItem) => (i.href === base ? "" : i.href.slice(base.length + 1));
   const kept = nav.filter((i) => !HOTEL_HIDDEN.includes(page(i)));
@@ -113,6 +114,8 @@ function arrangeForHotel(
     if (at) Object.assign(item, { groupKey: at.g, group: labels[at.g] });
     if (p === "orders") item.label = names.roomService;
     if (p === "tables") item.label = names.roomsQr;
+    // The till's sales report belongs to the restaurant; the hotel's books are the ledger.
+    if (p === "reports") item.label = names.reports;
     item.primary = HOTEL_PRIMARY.includes(p);
   }
   const rank = (i: NavItem) => {
@@ -480,7 +483,11 @@ async function RestaurantShell({
         revenue: t("nav.groups.revenue"),
         restaurant: t("nav.groups.hotelRestaurant"),
       },
-      { roomService: t("nav.roomService"), roomsQr: t("nav.roomsQr") },
+      {
+        roomService: t("nav.roomService"),
+        roomsQr: t("nav.roomsQr"),
+        reports: t("nav.restaurantReports"),
+      },
     );
 
   // Go-anywhere search also reaches the tabs inside pages and the settings sections.

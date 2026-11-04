@@ -36,9 +36,10 @@ export type PlanAvail = { id: string; code: string; days: { day: string; free: n
 const WEEKEND = EDITION === "iran" ? [4, 5] : [5, 6];
 
 const BAR: Record<string, string> = {
-  tentative: "bg-warning-soft text-fg ring-1 ring-warning/40",
-  confirmed: "bg-info text-white",
-  in_house: "bg-success text-white",
+  // Shades of the hotel's colour: pale for an option, mid for confirmed, deep for guests in house.
+  tentative: "bg-brand-100 text-brand-800 ring-1 ring-inset ring-brand-300 [background-image:repeating-linear-gradient(135deg,transparent_0_6px,var(--brand-200)_6px_8px)]",
+  confirmed: "bg-brand-400 text-white",
+  in_house: "bg-brand-700 text-white",
   checked_out: "bg-surface-3 text-fg-muted",
 };
 const HK: Record<string, string> = {

@@ -33,6 +33,7 @@ async function Reports({ params, searchParams }: Pick<Props, "params" | "searchP
   const tab = (TABS as readonly string[]).includes(String(sp.tab))
     ? (sp.tab as (typeof TABS)[number])
     : "overview";
+  const tNav = await getTranslations("nav");
   const [t, format, locale, data] = await Promise.all([
     getTranslations("reports"),
     getFormatter(),
@@ -57,7 +58,7 @@ async function Reports({ params, searchParams }: Pick<Props, "params" | "searchP
   return (
     <>
       <PageHeader
-        title={t("title")}
+        title={ctx.restaurant.kind === "hotel" ? tNav("restaurantReports") : t("title")}
         description={t("periodLabel", { from: day(period.first), to: day(period.last), days: period.days })}
         actions={
           tab === "expenses" ? (
