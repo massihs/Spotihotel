@@ -4918,7 +4918,15 @@
     "mixHint": "Each department's revenue and costs, with its margin.",
     "dailyTitle": "Revenue by day",
     "dailyHint": "Closed days: rooms and other departments.",
-    "otherRevenue": "Other departments"
+    "otherRevenue": "Other departments",
+    "outletsTitle": "Sales by outlet",
+    "outletsHint": "{orders} orders, {amount} over the period (cancellations excluded).",
+    "outlet": "Outlet",
+    "orders": "Orders",
+    "averageTicket": "Average ticket",
+    "share": "Share of sales",
+    "roomService": "Room service (rooms)",
+    "otherSales": "Counter, takeaway, delivery"
   },
   "portal": {
     "welcome": "Welcome",

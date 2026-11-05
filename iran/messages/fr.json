@@ -4918,7 +4918,15 @@
     "mixHint": "Chiffre d'affaires et charges de chaque service, avec sa marge.",
     "dailyTitle": "Chiffre d'affaires par jour",
     "dailyHint": "Journées clôturées : hébergement et autres services.",
-    "otherRevenue": "Autres services"
+    "otherRevenue": "Autres services",
+    "outletsTitle": "Ventes par point de vente",
+    "outletsHint": "{orders} commandes, {amount} sur la période (hors annulations).",
+    "outlet": "Point de vente",
+    "orders": "Commandes",
+    "averageTicket": "Ticket moyen",
+    "share": "Part des ventes",
+    "roomService": "Room service (chambres)",
+    "otherSales": "Comptoir, emporter, livraison"
   },
   "portal": {
     "welcome": "Bienvenue",

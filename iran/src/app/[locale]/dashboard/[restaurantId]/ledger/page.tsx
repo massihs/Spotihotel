@@ -54,6 +54,7 @@ import {
   trialBalance,
 } from "@/server/modules/ledger/reports";
 import { listNightAudits } from "@/server/modules/pms/night-audit";
+import { outletSales } from "@/server/modules/outlets/service";
 import { addDays, isDay } from "@/server/modules/pms/calc";
 import { fiscalYearMonths, fiscalYearStart, monthRange, monthStart } from "@/server/modules/ledger/periods";
 import { can } from "@/server/tenancy";
@@ -174,11 +175,13 @@ async function Ledger({ params, searchParams }: Props) {
   let body: React.ReactNode = null;
 
   if (tab === "overview") {
-    const [pl, cash, aged, audits] = await Promise.all([
+    const [pl, cash, aged, audits, sales, tOutlet] = await Promise.all([
       incomeStatement(db, ctx, from, to),
       cashSummary(db, ctx, from, to),
       agedReceivables(db, ctx, to),
       can(ctx, "frontdesk.view") ? listNightAudits(db, ctx, 31) : Promise.resolve([]),
+      outletSales(db, ctx, from, to),
+      getTranslations("outlets"),
     ]);
     const inPeriod = audits.filter((a) => a.businessDate >= from && a.businessDate <= to);
     const sold = inPeriod.reduce((s, a) => s + a.roomsSold, 0);
@@ -331,6 +334,62 @@ async function Ledger({ params, searchParams }: Props) {
             </Card>
           ) : null}
         </div>
+        {/* Restaurants, cafés and bars of the hotel, side by side. */}
+        {sales.lines.length ? (
+          <Card>
+            <CardHeader
+              title={t("outletsTitle")}
+              description={t("outletsHint", { orders: sales.orders, amount: big(sales.totalCents) })}
+            />
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[640px] text-sm">
+                <thead className="bg-brand-50 text-brand-800">
+                  <tr>
+                    <th className={th}>{t("outlet")}</th>
+                    <th className={thEnd}>{t("orders")}</th>
+                    <th className={thEnd}>{t("averageTicket")}</th>
+                    <th className={thEnd}>{t("revenue")}</th>
+                    <th className="w-[32%] px-3 py-2.5 text-start text-xs font-semibold">{t("share")}</th>
+                  </tr>
+                </thead>
+                <tbody className="[&_tr]:border-t [&_tr]:border-border">
+                  {sales.lines.map((l) => (
+                    <tr key={l.key} className="transition-colors hover:bg-brand-50/60">
+                      <td className={td}>
+                        <span className="font-semibold">
+                          {l.name ?? (l.kind === "room_service" ? t("roomService") : t("otherSales"))}
+                        </span>
+                        {l.name ? (
+                          <span className="ms-2 text-xs text-fg-muted">
+                            {tOutlet.has(`kinds.${l.kind}`) ? tOutlet(`kinds.${l.kind}`) : l.kind}
+                          </span>
+                        ) : null}
+                      </td>
+                      <td className={tdNum}>{l.orders}</td>
+                      <td className={tdNum}>{l.orders ? money(l.averageCents) : "—"}</td>
+                      <td className={cn(tdNum, "font-semibold")} title={money(l.cents)}>
+                        {big(l.cents)}
+                      </td>
+                      <td className="px-3 py-2">
+                        <div className="flex items-center gap-2">
+                          <div className="h-2 flex-1 overflow-hidden rounded-full bg-brand-50">
+                            <div
+                              className="h-full rounded-full bg-brand-500"
+                              style={{ width: `${Math.max(l.cents ? 2 : 0, l.share * 100)}%` }}
+                            />
+                          </div>
+                          <span className="w-10 text-end text-xs text-fg-muted tabular-nums">
+                            {Math.round(l.share * 100)}%
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        ) : null}
         <section>
           <h2 className="mb-2 font-semibold">{t("byDepartment")}</h2>
           <Table>

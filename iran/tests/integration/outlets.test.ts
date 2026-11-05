@@ -12,6 +12,7 @@ import {
   archiveOutlet,
   createOutlet,
   listOutlets,
+  outletSales,
   setOutletMenu,
   updateOutlet,
 } from "@/server/modules/outlets/service";
@@ -84,6 +85,17 @@ describe("hotel outlets (restaurants and cafés)", () => {
     const row = (id: string) => list.find((o) => o.id === id)!;
     expect(row(restaurant.id)).toMatchObject({ tables: 3, ordersToday: 1, salesToday: o1!.totalCents, categories: 1 });
     expect(row(cafe.id)).toMatchObject({ name: "Café Ferdowsi", tables: 4, ordersToday: 1, salesToday: o2!.totalCents });
+
+    // Accounting: sales per outlet over the day, with each one's share.
+    const { localDay } = await import("@/lib/period");
+    const day = localDay(new Date(), h.restaurant.timezone);
+    const sales = await outletSales(db, h, day, day);
+    const line = (key: string) => sales.lines.find((l) => l.key === key)!;
+    expect(line(restaurant.id)).toMatchObject({ orders: 1, cents: o1!.totalCents });
+    expect(line(cafe.id)).toMatchObject({ orders: 1, cents: o2!.totalCents, averageCents: o2!.totalCents });
+    expect(line(cafe2.id)).toMatchObject({ orders: 0, cents: 0 });
+    expect(sales.totalCents).toBe(o1!.totalCents + o2!.totalCents);
+    expect(line(restaurant.id).share + line(cafe.id).share).toBeCloseTo(1);
 
     // Closing an outlet keeps its tables and sales but takes it off the list.
     await archiveOutlet(db, h, cafe2.id);

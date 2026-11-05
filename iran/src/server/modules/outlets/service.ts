@@ -242,3 +242,56 @@ export async function setOutletMenu(
   });
   revalidate(menuTag(ctx.restaurant.id));
 }
+
+/**
+ * Sales per point of sale over a period (local days, inclusive): every restaurant, café and bar,
+ * room service (orders from rooms) and what no outlet took (counter, delivery…). Cancelled
+ * orders are left out.
+ */
+export async function outletSales(db: DbOrTx, ctx: RestaurantContext, from: string, to: string) {
+  assertCan(ctx, "accounting.manage");
+  const rid = ctx.restaurant.id;
+  const tz = ctx.restaurant.timezone;
+  const start = dayStart(from, tz).toISOString();
+  const [y, m, d] = to.split("-").map(Number);
+  const next = new Date(Date.UTC(y!, m! - 1, d! + 1)).toISOString().slice(0, 10);
+  const end = dayStart(next, tz).toISOString();
+  const rows = await db.execute<{ key: string; orders: number; cents: string; guests: number }>(sql`
+    select
+      case
+        when coalesce(o.outlet_id, t.outlet_id) is not null then coalesce(o.outlet_id, t.outlet_id)::text
+        when t.kind = 'room' then 'room_service'
+        else 'other'
+      end as key,
+      count(*)::int as orders,
+      coalesce(sum(o.total_cents), 0)::bigint as cents,
+      count(distinct o.table_session_id)::int as guests
+    from orders o
+    left join dining_tables t on t.id = o.table_id
+    where o.restaurant_id = ${rid} and o.status <> 'cancelled'
+      and o.created_at >= ${start} and o.created_at < ${end}
+    group by 1`);
+  const list = await db
+    .select({ id: outlets.id, name: outlets.name, kind: outlets.kind })
+    .from(outlets)
+    .where(eq(outlets.restaurantId, rid))
+    .orderBy(asc(outlets.sortOrder), asc(outlets.createdAt));
+  const by = new Map(rows.rows.map((r) => [r.key, r]));
+  const line = (key: string, name: string | null, kind: string) => {
+    const r = by.get(key);
+    const cents = Number(r?.cents ?? 0);
+    const orders = Number(r?.orders ?? 0);
+    return { key, name, kind, orders, cents, averageCents: orders ? Math.round(cents / orders) : 0 };
+  };
+  const lines = [
+    ...list.map((o) => line(o.id, o.name, o.kind)),
+    line("room_service", null, "room_service"),
+    line("other", null, "other"),
+  ].filter((l) => l.orders > 0 || list.some((o) => o.id === l.key));
+  const totalCents = lines.reduce((s, l) => s + l.cents, 0);
+  return {
+    lines: lines.map((l) => ({ ...l, share: totalCents ? l.cents / totalCents : 0 })),
+    totalCents,
+    orders: lines.reduce((s, l) => s + l.orders, 0),
+  };
+}
