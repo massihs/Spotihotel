@@ -9,6 +9,7 @@ import { db } from "@/server/db/client";
 import { getCartView } from "@/server/modules/cart/service";
 import { listGuestOrders } from "@/server/modules/orders/service";
 import { getPopularProductIds, getPublicMenu } from "@/server/modules/menu/public-cache";
+import { menuForOutlet } from "@/server/modules/menu/public";
 import { getStorefront } from "@/server/modules/guest/storefront";
 import { MenuApp } from "@/components/guest/menu-app";
 import { WelcomeSplash } from "@/components/guest/welcome-splash";
@@ -53,7 +54,7 @@ async function GuestMenu() {
   const guest = await getGuest();
   if (!guest) return <SessionExpired />;
   // Menu comes from the tag-invalidated cache; the cart is always read live.
-  const [menu, cart, orders, music, popularIds, store] = await Promise.all([
+  const [fullMenu, cart, orders, music, popularIds, store] = await Promise.all([
     getPublicMenu(guest.restaurant.id),
     getCartView(db, guest),
     listGuestOrders(db, guest),
@@ -61,6 +62,8 @@ async function GuestMenu() {
     getPopularProductIds(guest.restaurant.id),
     getStorefront(db, guest.restaurant.id),
   ]);
+  // A table of the hotel's café shows the café's menu (and what all outlets share).
+  const menu = menuForOutlet(fullMenu, guest.table.outletId);
   const t = await getTranslations("guest");
   const waitingText = guest.session.confirmed ? "" : t("waitingConfirm");
   const byProduct: Record<string, number> = {};

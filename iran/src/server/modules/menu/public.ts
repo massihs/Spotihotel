@@ -41,9 +41,25 @@ export type PublicMenu = {
     /** Resolved library icon key (chosen icon, else the template's, else a plate). */
     icon: string;
     productIds: string[];
+    /** Restaurants / cafés whose menu shows it; empty = every outlet. */
+    outletIds: string[];
   }[];
   products: Record<string, PublicProduct>;
 };
+
+/**
+ * The part of the menu an outlet serves: its own categories and the shared ones (no outlet).
+ * No outlet (a room, the main dining room, the whole hotel) → the full menu.
+ */
+export function menuForOutlet(menu: PublicMenu, outletId: string | null | undefined): PublicMenu {
+  if (!outletId) return menu;
+  const categories = menu.categories.filter((c) => !c.outletIds.length || c.outletIds.includes(outletId));
+  const ids = new Set(categories.flatMap((c) => c.productIds));
+  return {
+    categories,
+    products: Object.fromEntries(Object.entries(menu.products).filter(([id]) => ids.has(id))),
+  };
+}
 
 /**
  * Products as the guest may see/order them: active category, active and not deleted product.
@@ -54,6 +70,7 @@ export async function loadPublicMenu(db: DbOrTx, restaurantId: string): Promise<
     .select({
       id: categories.id,
       name: categories.name,
+      outletIds: categories.outletIds,
       description: categories.description,
       icon: categories.icon,
       templateKey: categories.templateKey,

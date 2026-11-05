@@ -1,4 +1,5 @@
 import { sql } from "drizzle-orm";
+import { outlets } from "./outlets";
 import { boolean, index, integer, pgTable, uniqueIndex, uuid, varchar } from "drizzle-orm/pg-core";
 import { pk, softDelete, timestamps, tstz } from "./_helpers";
 import { tableSessionStatus } from "./enums";
@@ -33,6 +34,8 @@ export const diningTables = pgTable(
     /** Hotel rooms: clean | dirty | cleaning | inspected | out_of_order. */
     housekeeping: varchar({ length: 16 }).notNull().default("clean"),
     housekeepingAt: tstz(),
+    /** The restaurant, café or bar of the establishment this table belongs to (null = main). */
+    outletId: uuid().references(() => outlets.id, { onDelete: "set null" }),
     /** Hotel rooms: the type it is sold as (PMS). */
     roomTypeId: uuid().references(() => roomTypes.id, { onDelete: "set null" }),
     ...timestamps,

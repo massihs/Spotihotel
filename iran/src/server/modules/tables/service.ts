@@ -21,6 +21,7 @@ export async function listTables(db: Database, ctx: RestaurantContext) {
       number: diningTables.number,
       capacity: diningTables.capacity,
       zone: diningTables.zone,
+      outletId: diningTables.outletId,
       qrToken: diningTables.qrToken,
       qrEnabled: diningTables.qrEnabled,
       qrRegeneratedAt: diningTables.qrRegeneratedAt,
@@ -97,7 +98,13 @@ export async function createTable(db: Database, ctx: RestaurantContext, raw: Tab
 }
 
 /** Creates "Table from…to" in one go. Labels that already exist are skipped, not duplicated. */
-export async function bulkCreateTables(db: Database, ctx: RestaurantContext, raw: BulkTablesInput) {
+export async function bulkCreateTables(
+  db: Database,
+  ctx: RestaurantContext,
+  raw: BulkTablesInput,
+  /** The restaurant or café of the establishment the new tables belong to. */
+  opts: { outletId?: string | null } = {},
+) {
   assertCan(ctx, "tables.manage");
   const input = bulkTablesSchema.parse(raw);
   const wanted = Array.from({ length: input.to - input.from + 1 }, (_, i) => {
@@ -125,6 +132,7 @@ export async function bulkCreateTables(db: Database, ctx: RestaurantContext, raw
         capacity: input.capacity ?? null,
         zone: input.zone ?? null,
         kind: input.kind,
+        outletId: opts.outletId ?? null,
         qrToken: randomToken(),
         sortOrder: start + i,
       })),

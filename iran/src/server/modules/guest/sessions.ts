@@ -159,7 +159,7 @@ export type GuestContext = {
   /** `confirmed`: the table may order and call (see guestOrdersNeedStaff). */
   session: { id: string; openedAt: Date; confirmed: boolean };
   /** kind: "table" or "room" (a hotel room). */
-  table: { id: string; label: string; kind: string };
+  table: { id: string; label: string; kind: string; outletId: string | null };
   restaurant: {
     id: string;
     name: string;
@@ -207,6 +207,7 @@ export async function loadGuestContext(
         id: diningTables.id,
         label: diningTables.label,
         kind: diningTables.kind,
+        outletId: diningTables.outletId,
         qrEnabled: diningTables.qrEnabled,
         deletedAt: diningTables.deletedAt,
       },
@@ -255,7 +256,12 @@ export async function loadGuestContext(
       openedAt: row.session.openedAt,
       confirmed: row.session.confirmedAt != null,
     },
-    table: { id: row.table.id, label: row.table.label, kind: row.table.kind },
+    table: {
+      id: row.table.id,
+      label: row.table.label,
+      kind: row.table.kind,
+      outletId: row.table.outletId,
+    },
     restaurant,
   };
 }

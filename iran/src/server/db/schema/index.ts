@@ -1,6 +1,7 @@
 export * from "./enums";
 export * from "./platform";
 export * from "./restaurant";
+export * from "./outlets";
 export * from "./tables";
 export * from "./menu";
 export * from "./orders";

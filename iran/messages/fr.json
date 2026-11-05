@@ -499,7 +499,8 @@
     "chain": "Groupe hôtelier",
     "blocks": "Groupes & allotements",
     "forecast": "Prévisions & canaux",
-    "restaurantReports": "Rapports du restaurant"
+    "restaurantReports": "Rapports du restaurant",
+    "outlets": "Restaurants et cafés"
   },
   "dashboard": {
     "welcome": "Bonjour {name}",
@@ -5034,5 +5035,58 @@
     "signatureHint": "Prénom Nom",
     "accept": "Je certifie l'exactitude de ces informations, transmises aux autorités comme la loi l'exige, et j'accepte le règlement de l'hôtel.",
     "submit": "Valider ma fiche"
+  },
+  "outlets": {
+    "title": "Restaurants et cafés",
+    "subtitle": "Chaque point de vente de l'hôtel avec ses tables, sa carte, sa caisse et ses ventes.",
+    "quickAdd": "Ajouter en un clic :",
+    "tablesN": "{n} tables",
+    "presets": {
+      "restaurant": "Restaurant principal",
+      "cafe": "Café du lobby",
+      "bar": "Bar",
+      "pool_bar": "Bar de la piscine",
+      "pastry": "Pâtisserie"
+    },
+    "kinds": {
+      "restaurant": "Restaurant",
+      "cafe": "Café",
+      "bar": "Bar",
+      "lounge": "Salon / lounge",
+      "pool_bar": "Bar de piscine",
+      "pastry": "Pâtisserie"
+    },
+    "new": "Nouveau restaurant ou café",
+    "name": "Nom",
+    "namePlaceholder": "Ex. Restaurant panoramique",
+    "kind": "Type",
+    "location": "Emplacement",
+    "locationPlaceholder": "Ex. Rez-de-chaussée, terrasse",
+    "hours": "Horaires",
+    "tables": "Tables",
+    "seats": "Places par table",
+    "prefix": "Préfixe",
+    "prefixHint": "C → C1, C2…",
+    "create": "Créer avec ses tables et QR codes",
+    "tablesLabel": "Tables occupées",
+    "ordersToday": "Commandes du jour",
+    "salesToday": "Ventes du jour",
+    "openTill": "Caisse",
+    "qr": "Tables et QR",
+    "menu": "Carte",
+    "menuTitle": "Carte de {name}",
+    "menuHint": "Cochez les rubriques servies ici. Une rubrique cochée nulle part est servie partout.",
+    "shared": "partout",
+    "otherOutlets": "{n, plural, one {# autre point de vente} other {# autres points de vente}}",
+    "noCategories": "Créez d'abord les rubriques de la carte dans « Menu ».",
+    "save": "Enregistrer",
+    "addTables": "Tables",
+    "addTablesTitle": "Ajouter des tables à {name}",
+    "edit": "Modifier",
+    "archive": "Fermer ce point de vente",
+    "archiveConfirm": "Fermer « {name} » ? Ses tables et ses ventes passées sont conservées.",
+    "emptyTitle": "Aucun restaurant ni café pour l'instant",
+    "emptyBody": "Ajoutez-les en un clic ci-dessus : chacun reçoit ses tables, leurs QR codes et sa caisse.",
+    "allOutlets": "Tout l'hôtel"
   }
 }

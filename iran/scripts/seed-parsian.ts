@@ -20,6 +20,7 @@ import {
   diningTables,
   nightAudits,
   organizations,
+  outlets,
   plans,
   pmsSettings,
   products,
@@ -57,6 +58,7 @@ import { createExpense } from "@/server/modules/reports/service";
 import { createPurchase, createStockItem, createSupplier } from "@/server/modules/inventory/service";
 import { paySupplier, setChequeStatus } from "@/server/modules/ledger/finance";
 import { openRequest } from "@/server/modules/hotel/requests";
+import { createOutlet, setOutletMenu } from "@/server/modules/outlets/service";
 import { syncLedger } from "@/server/modules/ledger/sync";
 import { localDay } from "@/lib/period";
 import { cheques } from "@/server/db/schema";
@@ -209,6 +211,55 @@ type Planned = {
   id?: string;
 };
 
+/**
+ * Parsian's points of sale: the traditional restaurant (tables R…), the lobby café (L…), a
+ * rooftop restaurant and a pool café, each with its tables and its menu. Also run on a hotel
+ * built before outlets existed: its tables are attached and its past orders follow them.
+ * Returns how many outlets were added (0 when they already exist).
+ */
+async function ensureParsianOutlets(ctx: RestaurantContext) {
+  const rid = ctx.restaurant.id;
+  const [{ n } = { n: 0 }] = await db.select({ n: count() }).from(outlets).where(eq(outlets.restaurantId, rid));
+  if (n > 0) return 0;
+  const attach = async (name: string, kind: "restaurant" | "cafe", label: RegExp, location: string, hours: string) => {
+    const o = await createOutlet(db, ctx, { name, kind, location, hours, tables: 0 });
+    const ids = (await listTables(db, ctx)).filter((t) => t.kind !== "room" && label.test(t.label)).map((t) => t.id);
+    if (ids.length) await db.update(diningTables).set({ outletId: o.id, zone: name }).where(inArray(diningTables.id, ids));
+    return o;
+  };
+  const shahrzad = await attach("رستوران سنتی شهرزاد", "restaurant", /^R\d+$/, "طبقه همکف", "12:00 – 23:30");
+  const lobby = await attach("کافه لابی", "cafe", /^L\d+$/, "لابی", "07:00 – 24:00");
+  const rooftop = await createOutlet(db, ctx, {
+    name: "رستوران گردان آسمان",
+    kind: "restaurant",
+    location: "طبقه ۱۵",
+    hours: "19:00 – 01:00",
+    tables: 16,
+    seats: 4,
+  });
+  const pool = await createOutlet(db, ctx, {
+    name: "کافه کنار استخر",
+    kind: "pool_bar",
+    location: "طبقه منفی دو",
+    hours: "08:00 – 22:00",
+    tables: 8,
+    seats: 2,
+  });
+  // Menu: dishes in the restaurants, desserts in the cafés, drinks everywhere.
+  const cats = await db.select({ id: categories.id, name: categories.name }).from(categories).where(eq(categories.restaurantId, rid));
+  const idOf = (name: string) => cats.filter((c) => c.name === name).map((c) => c.id);
+  const kitchen = [...idOf("پیش‌غذا"), ...idOf("غذای اصلی")];
+  await setOutletMenu(db, ctx, shahrzad.id, kitchen);
+  await setOutletMenu(db, ctx, rooftop.id, [...kitchen, ...idOf("دسر")]);
+  await setOutletMenu(db, ctx, lobby.id, idOf("دسر"));
+  await setOutletMenu(db, ctx, pool.id, idOf("دسر"));
+  // Past orders follow their table's outlet.
+  await db.execute(
+    sql`update orders o set outlet_id = t.outlet_id from dining_tables t where t.id = o.table_id and o.restaurant_id = ${rid} and o.outlet_id is null and t.outlet_id is not null`,
+  );
+  return 4;
+}
+
 export async function seedParsian(ownerEmail: string, days = 30) {
   const [owner] = await db.select().from(users).where(sql`lower(${users.email}) = ${ownerEmail.toLowerCase()}`);
   if (!owner) throw new Error(`owner ${ownerEmail} not found`);
@@ -220,7 +271,13 @@ export async function seedParsian(ownerEmail: string, days = 30) {
       .from(nightAudits)
       .where(eq(nightAudits.restaurantId, existing.id));
     if ((done?.n ?? 0) >= days) {
-      console.log("✓ Parsian test hotel already present — skipping");
+      const ctx = await loadRestaurantContext(db, { ...owner, locale: owner.locale }, existing.id);
+      const added = await ensureParsianOutlets(ctx);
+      console.log(
+        added
+          ? `✓ Parsian test hotel present — ${added} restaurants and cafés added`
+          : "✓ Parsian test hotel already present — skipping",
+      );
       return;
     }
     console.log("! Parsian test hotel incomplete — rebuilding");
@@ -313,7 +370,7 @@ export async function seedParsian(ownerEmail: string, days = 30) {
   await bulkCreateTables(db, ownerCtx, { from: 1, to: 10, prefix: "L", kind: "table", zone: "کافی‌شاپ لابی", capacity: 2 });
   const places = await listTables(db, ownerCtx);
   const rooms = places.filter((p) => p.kind === "room");
-  const restaurantTables = places.filter((p) => p.kind !== "room");
+  let restaurantTables = places.filter((p) => p.kind !== "room");
 
   await updatePmsSettings(db, ownerCtx, {
     checkInTime: "14:00",
@@ -415,6 +472,9 @@ export async function seedParsian(ownerEmail: string, days = 30) {
       dishes.push({ id: p!.id, price: toman });
     }
   }
+  // The hotel's restaurants and cafés, with their tables and their part of the menu.
+  await ensureParsianOutlets(ownerCtx);
+  restaurantTables = (await listTables(db, ownerCtx)).filter((p) => p.kind !== "room");
   const suppliers = [];
   for (const [name, phone] of [
     ["پخش مواد غذایی کاله", "02144000001"],

@@ -48,6 +48,8 @@ export const posOrderSchema = z.object({
   deliveryZoneId: z.uuid().nullable().optional(),
   saveAddress: z.boolean().default(true),
   tableId: z.uuid().nullable().optional(),
+  /** Restaurant, café or bar of the establishment ringing the sale up. */
+  outletId: z.uuid().nullable().optional(),
   lines: z
     .array(
       z.object({
@@ -114,11 +116,16 @@ export async function createPosOrder(db: Database, ctx: RestaurantContext, raw: 
   }
 
   return db.transaction(async (tx) => {
-    let table: { id: string; label: string; kind: string } | null = null;
+    let table: { id: string; label: string; kind: string; outletId: string | null } | null = null;
     let sessionId: string | null = null;
     if (input.channel === "dine_in" && input.tableId) {
       const [t] = await tx
-        .select({ id: diningTables.id, label: diningTables.label, kind: diningTables.kind })
+        .select({
+          id: diningTables.id,
+          label: diningTables.label,
+          kind: diningTables.kind,
+          outletId: diningTables.outletId,
+        })
         .from(diningTables)
         .where(
           and(
@@ -204,6 +211,8 @@ export async function createPosOrder(db: Database, ctx: RestaurantContext, raw: 
         seq,
         channel: input.channel,
         tableId: table?.id ?? null,
+        // The table's restaurant or café, else the outlet the till was opened on.
+        outletId: table?.outletId ?? input.outletId ?? null,
         tableSessionId: sessionId,
         tableLabel: table?.label ?? null,
         placeKind: table?.kind === "room" ? "room" : null,

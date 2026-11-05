@@ -168,6 +168,7 @@ export async function placeOrder(
         seq,
         channel: "dine_in",
         tableId: guest.table.id,
+        outletId: guest.table.outletId,
         tableSessionId: guest.session.id,
         participantId: guest.participant.id,
         tableLabel: guest.table.label,

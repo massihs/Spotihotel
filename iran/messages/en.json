@@ -499,7 +499,8 @@
     "chain": "Hotel group",
     "blocks": "Groups & blocks",
     "forecast": "Forecast & channels",
-    "restaurantReports": "Restaurant reports"
+    "restaurantReports": "Restaurant reports",
+    "outlets": "Restaurants & cafés"
   },
   "dashboard": {
     "welcome": "Hello {name}",
@@ -5034,5 +5035,58 @@
     "signatureHint": "First Last",
     "accept": "I certify this information is correct, passed on to the authorities as the law requires, and I accept the hotel's rules.",
     "submit": "Submit my card"
+  },
+  "outlets": {
+    "title": "Restaurants & cafés",
+    "subtitle": "Each outlet of the hotel with its tables, menu, till and sales.",
+    "quickAdd": "Add in one click:",
+    "tablesN": "{n} tables",
+    "presets": {
+      "restaurant": "Main restaurant",
+      "cafe": "Lobby café",
+      "bar": "Bar",
+      "pool_bar": "Pool bar",
+      "pastry": "Pastry shop"
+    },
+    "kinds": {
+      "restaurant": "Restaurant",
+      "cafe": "Café",
+      "bar": "Bar",
+      "lounge": "Lounge",
+      "pool_bar": "Pool bar",
+      "pastry": "Pastry"
+    },
+    "new": "New restaurant or café",
+    "name": "Name",
+    "namePlaceholder": "e.g. Rooftop restaurant",
+    "kind": "Type",
+    "location": "Location",
+    "locationPlaceholder": "e.g. Ground floor, terrace",
+    "hours": "Opening hours",
+    "tables": "Tables",
+    "seats": "Seats per table",
+    "prefix": "Prefix",
+    "prefixHint": "C → C1, C2…",
+    "create": "Create with its tables and QR codes",
+    "tablesLabel": "Tables in use",
+    "ordersToday": "Orders today",
+    "salesToday": "Sales today",
+    "openTill": "Till",
+    "qr": "Tables & QR",
+    "menu": "Menu",
+    "menuTitle": "{name} menu",
+    "menuHint": "Tick the categories served here. A category ticked nowhere is served everywhere.",
+    "shared": "everywhere",
+    "otherOutlets": "{n, plural, one {# other outlet} other {# other outlets}}",
+    "noCategories": "Create the menu categories in “Menu” first.",
+    "save": "Save",
+    "addTables": "Tables",
+    "addTablesTitle": "Add tables to {name}",
+    "edit": "Edit",
+    "archive": "Close this outlet",
+    "archiveConfirm": "Close “{name}”? Its tables and past sales are kept.",
+    "emptyTitle": "No restaurant or café yet",
+    "emptyBody": "Add them in one click above: each gets its tables, their QR codes and its till.",
+    "allOutlets": "Whole hotel"
   }
 }

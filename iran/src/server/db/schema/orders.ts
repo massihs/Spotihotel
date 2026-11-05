@@ -1,4 +1,5 @@
 import { sql } from "drizzle-orm";
+import { outlets } from "./outlets";
 import type { Nutrition } from "@/lib/nutrition";
 import {
   boolean,
@@ -78,6 +79,8 @@ export const orders = pgTable(
     seq: integer().notNull(),
     channel: orderChannel().notNull().default("dine_in"),
     tableId: uuid().references(() => diningTables.id, { onDelete: "set null" }),
+    /** Restaurant, café or bar that took the order (from its table, or chosen at the till). */
+    outletId: uuid().references(() => outlets.id, { onDelete: "set null" }),
     tableSessionId: uuid().references(() => tableSessions.id, { onDelete: "set null" }),
     participantId: uuid().references(() => sessionParticipants.id, { onDelete: "set null" }),
     /** Snapshot of the table label at order time. */

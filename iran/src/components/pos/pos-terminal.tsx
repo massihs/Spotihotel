@@ -61,7 +61,10 @@ export function PosTerminal({
   zones,
   initialPhone = "",
   initialChannel,
+  outletId = null,
 }: {
+  /** The hotel restaurant / café this till is ringing up for (stamped on every sale). */
+  outletId?: string | null;
   /** Call centre: opened for a caller (phone and sales type prefilled). */
   initialPhone?: string;
   initialChannel?: "takeaway" | "dine_in" | "delivery";
@@ -224,6 +227,7 @@ export function PosTerminal({
       const res = await createPosOrderAction(restaurantId, {
         channel,
         tableId: channel === "dine_in" && tableId ? tableId : null,
+        outletId,
         deliveryAddress: channel === "delivery" ? address : "",
         deliveryZoneId: channel === "delivery" && zoneId ? zoneId : null,
         lines: lines.map((l) => ({
