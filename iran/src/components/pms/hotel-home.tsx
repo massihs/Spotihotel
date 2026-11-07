@@ -16,6 +16,8 @@ import {
   SprayCan,
   Users,
   Check,
+  Globe,
+  Wand2,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -30,6 +32,8 @@ import { db } from "@/server/db/client";
 import { can, type RestaurantContext } from "@/server/tenancy";
 import { hotelHome } from "@/server/modules/pms/home";
 import { getSetupOverview } from "@/server/modules/dashboard/service";
+import { CheckInButton } from "./check-in-wizard";
+import { DEFAULT_LOCALE } from "@/i18n/config";
 
 /**
  * A hotel's home page, built for the general manager and the front office: tonight's occupancy,
@@ -37,9 +41,10 @@ import { getSetupOverview } from "@/server/modules/dashboard/service";
  * revenue and what is left to set up.
  */
 export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money: (c: number) => string }) {
-  const [t, tDept, locale, home, setup] = await Promise.all([
+  const [t, tDept, tSource, locale, home, setup] = await Promise.all([
     getTranslations("dashboard.home"),
     getTranslations("pms.dept"),
+    getTranslations("pms.source"),
     getLocale(),
     hotelHome(db, ctx),
     getSetupOverview(db, ctx),
@@ -53,6 +58,7 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
   const pct = (n: number) => `${Math.round(n)}%`;
   const checkedIn = home.arrivals.length;
   const toClean = home.rooms.dirty;
+  const canDesk = can(ctx, "frontdesk.manage");
 
   const alerts = [
     home.auditLate && {
@@ -86,6 +92,13 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
       Icon: SprayCan,
       className: "bg-surface text-fg-muted ring-border",
     },
+    home.unassignedSoon > 0 &&
+      can(ctx, "frontdesk.manage") && {
+        href: `${base}/planning`,
+        label: t("alerts.unassigned", { n: home.unassignedSoon }),
+        Icon: Wand2,
+        className: "border-brand-200 bg-brand-50 text-brand-800",
+      },
   ].filter((x) => !!x);
 
   const quick: { href: string; label: string; Icon: typeof KeyRound; tone: Tone; show: boolean }[] = [
@@ -153,6 +166,15 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
         }
         actions={
           <div className="flex flex-wrap gap-2">
+            <a
+              href={`${locale === DEFAULT_LOCALE ? "" : `/${locale}`}/h/${ctx.restaurant.slug}`}
+              target="_blank"
+              rel="noopener"
+              className={buttonClasses("secondary")}
+            >
+              <Globe className="size-4" aria-hidden="true" />
+              {t("bookingPage")}
+            </a>
             <Link href={`${base}/frontdesk`} className={buttonClasses("secondary")}>
               <KeyRound className="size-4" aria-hidden="true" />
               {t("quick.frontdesk")}
@@ -294,6 +316,48 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
           ))}
       </nav>
 
+      {/* Bookings taken today, per channel: what the hotel's own page brings in */}
+      <Card className="mt-4">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3 px-5 py-4">
+          <div className="min-w-0">
+            <p className="text-sm text-fg-muted">{t("bookedToday")}</p>
+            <p className="text-2xl font-bold tabular-nums">
+              {home.bookedToday.count}
+              {home.bookedToday.cents ? (
+                <span className="ms-2 text-sm font-semibold text-fg-muted">
+                  {money(home.bookedToday.cents)}
+                </span>
+              ) : null}
+            </p>
+          </div>
+          <ul className="flex min-w-0 flex-1 flex-wrap gap-1.5">
+            {home.bookedToday.bySource.map((b) => (
+              <li
+                key={b.source}
+                className={cn(
+                  "rounded-full px-2.5 py-1 text-xs font-semibold",
+                  b.source === "website" ? "bg-success-soft text-success" : "bg-surface-2 text-fg-muted",
+                )}
+              >
+                {tSource.has(b.source as "direct") ? tSource(b.source as "direct") : b.source} · {b.count}
+              </li>
+            ))}
+            {home.bookedToday.count === 0 ? (
+              <li className="text-sm text-fg-muted">{t("noBookingsToday")}</li>
+            ) : null}
+          </ul>
+          <a
+            href={`${locale === DEFAULT_LOCALE ? "" : `/${locale}`}/h/${ctx.restaurant.slug}`}
+            target="_blank"
+            rel="noopener"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 hover:underline"
+          >
+            <Globe className="size-4" aria-hidden="true" />
+            {t("bookingPageHint")}
+          </a>
+        </div>
+      </Card>
+
       {doneCount < steps.length ? (
         <Card className="mt-4">
           <CardHeader
@@ -344,10 +408,10 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
           {home.arrivals.length ? (
             <ul className="divide-y divide-border">
               {home.arrivals.slice(0, 6).map((s) => (
-                <li key={s.id}>
+                <li key={s.id} className="flex items-center">
                   <Link
                     href={`${base}/stays/${s.id}`}
-                    className="flex items-center gap-3 px-5 py-3 transition-colors hover:bg-surface-2"
+                    className="flex min-w-0 flex-1 items-center gap-3 py-3 ps-5 pe-2 transition-colors hover:bg-surface-2"
                   >
                     <RoomBadge label={s.roomLabel} code={s.typeCode} />
                     <span className="min-w-0 flex-1">
@@ -372,6 +436,17 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
                       </bdi>
                     ) : null}
                   </Link>
+                  {canDesk ? (
+                    <span className="shrink-0 pe-4">
+                      <CheckInButton
+                        restaurantId={ctx.restaurant.id}
+                        currency={ctx.restaurant.currency}
+                        stayId={s.id}
+                        label={t("checkIn")}
+                        variant="secondary"
+                      />
+                    </span>
+                  ) : null}
                 </li>
               ))}
             </ul>

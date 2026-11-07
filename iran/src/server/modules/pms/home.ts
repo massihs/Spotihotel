@@ -2,9 +2,10 @@ import { and, count, desc, eq, inArray, isNotNull, isNull, sql } from "drizzle-o
 import type { Database } from "@/server/db/client";
 import { diningTables, folioLines, nightAudits, ratePlans, roomTypes, stays } from "@/server/db/schema";
 import { assertCan, type RestaurantContext } from "@/server/tenancy";
-import { localDay } from "@/lib/period";
+import { dayStart, localDay } from "@/lib/period";
 import { countOpenRequests } from "@/server/modules/hotel/requests";
 import { forecast } from "./revenue";
+import { addDays } from "./calc";
 import { frontDesk } from "./stays";
 
 /**
@@ -17,57 +18,82 @@ export async function hotelHome(db: Database, ctx: RestaurantContext, now = new 
   const rid = ctx.restaurant.id;
   const desk = await frontDesk(db, ctx);
   const day = desk.businessDate;
-  const [ahead, revenue, [lastAudit], [rooms], [setup], openRequests] = await Promise.all([
-    forecast(db, ctx, day, 14),
-    db
-      .select({
-        department: folioLines.department,
-        kind: folioLines.kind,
-        cents: sql<number>`coalesce(sum(${folioLines.amountCents}),0)::bigint`.mapWith(Number),
-      })
-      .from(folioLines)
-      .where(
-        and(
-          eq(folioLines.restaurantId, rid),
-          eq(folioLines.businessDate, day),
-          isNull(folioLines.voidedAt),
-          inArray(folioLines.kind, ["charge", "adjustment", "payment"]),
+  const today = localDay(now, ctx.restaurant.timezone);
+  const since = dayStart(today, ctx.restaurant.timezone);
+  const [ahead, revenue, [lastAudit], [rooms], [setup], openRequests, bookedToday, [unassigned]] =
+    await Promise.all([
+      forecast(db, ctx, day, 14),
+      db
+        .select({
+          department: folioLines.department,
+          kind: folioLines.kind,
+          cents: sql<number>`coalesce(sum(${folioLines.amountCents}),0)::bigint`.mapWith(Number),
+        })
+        .from(folioLines)
+        .where(
+          and(
+            eq(folioLines.restaurantId, rid),
+            eq(folioLines.businessDate, day),
+            isNull(folioLines.voidedAt),
+            inArray(folioLines.kind, ["charge", "adjustment", "payment"]),
+          ),
+        )
+        .groupBy(folioLines.department, folioLines.kind),
+      db
+        .select()
+        .from(nightAudits)
+        .where(eq(nightAudits.restaurantId, rid))
+        .orderBy(desc(nightAudits.businessDate))
+        .limit(1),
+      db
+        .select({
+          total: count(),
+          typed: sql<number>`count(${diningTables.roomTypeId})::int`,
+          dirty: sql<number>`count(*) filter (where ${diningTables.housekeeping} = 'dirty')::int`,
+          cleaning: sql<number>`count(*) filter (where ${diningTables.housekeeping} = 'cleaning')::int`,
+          outOfOrder: sql<number>`count(*) filter (where ${diningTables.housekeeping} = 'out_of_order')::int`,
+        })
+        .from(diningTables)
+        .where(
+          and(
+            eq(diningTables.restaurantId, rid),
+            eq(diningTables.kind, "room"),
+            isNull(diningTables.deletedAt),
+          ),
         ),
-      )
-      .groupBy(folioLines.department, folioLines.kind),
-    db
-      .select()
-      .from(nightAudits)
-      .where(eq(nightAudits.restaurantId, rid))
-      .orderBy(desc(nightAudits.businessDate))
-      .limit(1),
-    db
-      .select({
-        total: count(),
-        typed: sql<number>`count(${diningTables.roomTypeId})::int`,
-        dirty: sql<number>`count(*) filter (where ${diningTables.housekeeping} = 'dirty')::int`,
-        cleaning: sql<number>`count(*) filter (where ${diningTables.housekeeping} = 'cleaning')::int`,
-        outOfOrder: sql<number>`count(*) filter (where ${diningTables.housekeeping} = 'out_of_order')::int`,
-      })
-      .from(diningTables)
-      .where(
-        and(
-          eq(diningTables.restaurantId, rid),
-          eq(diningTables.kind, "room"),
-          isNull(diningTables.deletedAt),
+      db
+        .select({
+          roomTypes: sql<number>`(select count(*)::int from ${roomTypes} where ${roomTypes.restaurantId} = ${rid})`,
+          ratePlans: sql<number>`(select count(*)::int from ${ratePlans} where ${ratePlans.restaurantId} = ${rid})`,
+          bookings: sql<number>`(select count(*)::int from ${stays} where ${stays.restaurantId} = ${rid})`,
+          precheckins: count(),
+        })
+        .from(stays)
+        .where(and(eq(stays.restaurantId, rid), isNotNull(stays.precheckinAt), eq(stays.arrival, day))),
+      countOpenRequests(db, rid),
+      // Bookings taken since midnight, per channel (the hotel's own page, phone, desk, platforms).
+      db
+        .select({
+          source: stays.source,
+          n: count(),
+          cents: sql<number>`coalesce(sum(${stays.totalCents}),0)::bigint`.mapWith(Number),
+        })
+        .from(stays)
+        .where(and(eq(stays.restaurantId, rid), sql`${stays.createdAt} >= ${since.toISOString()}`))
+        .groupBy(stays.source),
+      // Bookings of the coming week still without a room (the planning can allocate them at once).
+      db
+        .select({ n: count() })
+        .from(stays)
+        .where(
+          and(
+            eq(stays.restaurantId, rid),
+            inArray(stays.status, ["tentative", "confirmed"]),
+            isNull(stays.roomId),
+            sql`${stays.arrival} >= ${day} and ${stays.arrival} < ${addDays(day, 7)}`,
+          ),
         ),
-      ),
-    db
-      .select({
-        roomTypes: sql<number>`(select count(*)::int from ${roomTypes} where ${roomTypes.restaurantId} = ${rid})`,
-        ratePlans: sql<number>`(select count(*)::int from ${ratePlans} where ${ratePlans.restaurantId} = ${rid})`,
-        bookings: sql<number>`(select count(*)::int from ${stays} where ${stays.restaurantId} = ${rid})`,
-        precheckins: count(),
-      })
-      .from(stays)
-      .where(and(eq(stays.restaurantId, rid), isNotNull(stays.precheckinAt), eq(stays.arrival, day))),
-    countOpenRequests(db, rid),
-  ]);
+    ]);
 
   const byDepartment = new Map<string, number>();
   let paymentsCents = 0;
@@ -96,6 +122,13 @@ export async function hotelHome(db: Database, ctx: RestaurantContext, now = new 
       outOfOrder: rooms?.outOfOrder ?? 0,
     },
     openRequests,
+    bookedToday: {
+      count: bookedToday.reduce((sum, r) => sum + r.n, 0),
+      cents: bookedToday.reduce((sum, r) => sum + r.cents, 0),
+      website: bookedToday.find((r) => r.source === "website")?.n ?? 0,
+      bySource: bookedToday.map((r) => ({ source: r.source, count: r.n })).sort((a, b) => b.count - a.count),
+    },
+    unassignedSoon: unassigned?.n ?? 0,
     ahead: ahead.rows.map((r) => ({
       day: r.day,
       occupancyPct: r.occupancyPct,

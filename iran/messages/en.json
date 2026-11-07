@@ -603,7 +603,8 @@
         "requests": "{n, plural, one {# room request waiting} other {# room requests waiting}}",
         "arrivals": "{n, plural, one {# arrival to check in} other {# arrivals to check in}}",
         "departures": "{n, plural, one {# departure to check out} other {# departures to check out}}",
-        "dirty": "{n, plural, one {# room to clean} other {# rooms to clean}}"
+        "dirty": "{n, plural, one {# room to clean} other {# rooms to clean}}",
+        "unassigned": "{n, plural, one {# booking this week without a room} other {# bookings this week without a room}}"
       },
       "quickTitle": "Quick access",
       "quick": {
@@ -659,7 +660,12 @@
       "forecast": "Forecast",
       "occupancy": "Occupancy",
       "totalRevenue": "Revenue",
-      "noAudit": "No night audit yet."
+      "noAudit": "No night audit yet.",
+      "bookingPage": "Booking page",
+      "bookingPageHint": "Open the online booking page",
+      "bookedToday": "Bookings taken today",
+      "noBookingsToday": "None yet",
+      "checkIn": "Check in"
     }
   },
   "roles": {

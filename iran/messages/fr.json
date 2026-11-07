@@ -603,7 +603,8 @@
         "requests": "{n, plural, one {# demande de chambre en attente} other {# demandes de chambre en attente}}",
         "arrivals": "{n, plural, one {# arrivée à accueillir} other {# arrivées à accueillir}}",
         "departures": "{n, plural, one {# départ à faire} other {# départs à faire}}",
-        "dirty": "{n, plural, one {# chambre à nettoyer} other {# chambres à nettoyer}}"
+        "dirty": "{n, plural, one {# chambre à nettoyer} other {# chambres à nettoyer}}",
+        "unassigned": "{n, plural, one {# réservation de la semaine sans chambre} other {# réservations de la semaine sans chambre}}"
       },
       "quickTitle": "Accès rapide",
       "quick": {
@@ -659,7 +660,12 @@
       "forecast": "Prévisions",
       "occupancy": "Occupation",
       "totalRevenue": "Chiffre d'affaires",
-      "noAudit": "Aucune clôture de journée pour l'instant."
+      "noAudit": "Aucune clôture de journée pour l'instant.",
+      "bookingPage": "Page de réservation",
+      "bookingPageHint": "Ouvrir la page de réservation en ligne",
+      "bookedToday": "Réservations prises aujourd'hui",
+      "noBookingsToday": "Aucune pour l'instant",
+      "checkIn": "Check-in"
     }
   },
   "roles": {

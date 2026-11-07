@@ -89,6 +89,9 @@ describe("hotel home dashboard", () => {
     expect(home.departments).toEqual([{ department: "minibar", cents: 300 }]);
     expect(home.revenueCents).toBe(300);
     expect(home.paymentsCents).toBe(200);
+    // Two bookings taken today at the desk; Karimi's still has no room for this week.
+    expect(home.bookedToday).toMatchObject({ count: 2, website: 0, bySource: [{ source: "direct", count: 2 }] });
+    expect(home.unassignedSoon).toBe(1);
     expect(home.ahead).toHaveLength(14);
     expect(home.ahead[0]).toMatchObject({ day: today, sold: 2, rooms: 4 });
     expect(home.setup).toMatchObject({ roomTypes: 1, ratePlans: 1, rooms: 4, roomsTyped: true, bookings: 2 });
