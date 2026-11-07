@@ -50,6 +50,8 @@ jobs:
             --banner:js="import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);" \
             --outfile=dist/seed-parsian.mjs --log-level=warning
           rm -rf .next/cache
+          # Server source maps only serve stack traces in development: ~45 MB less to upload and copy.
+          find .next -name '*.map' -delete
           # The Liara CLI always skips a folder named .next: ship it under another name.
           mv .next next-build
           # .next/node_modules holds Turbopack's links to external packages (pg, sharp, argon2…);

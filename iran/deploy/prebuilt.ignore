@@ -12,3 +12,6 @@ playwright-report
 .env.*
 !.env.example
 tsconfig.tsbuildinfo
+# Not in the image (Dockerfile.prebuilt copies the build, not the sources): less to upload.
+/src
+/drizzle/meta/*_snapshot.json
