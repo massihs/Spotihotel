@@ -1276,6 +1276,11 @@ export async function seedParsian(ownerEmail: string, days = 30) {
     if ((done?.n ?? 0) >= days) {
       const ctx = await loadRestaurantContext(db, { ...owner, locale: owner.locale }, existing.id);
       const added = await ensureParsianOutlets(ctx);
+      // The corporate rate is negotiated: never on the hotel's public booking page.
+      await db
+        .update(ratePlans)
+        .set({ bookableOnline: false })
+        .where(and(eq(ratePlans.restaurantId, existing.id), eq(ratePlans.code, "CORP")));
       if (added) console.log(`✓ Parsian test hotel: ${added} restaurants and cafés added`);
       if (await catchUp(await loadWorld(existing, owner))) return;
       console.log("! Parsian test hotel too far behind — rebuilding");
@@ -1461,6 +1466,7 @@ export async function seedParsian(ownerEmail: string, days = 30) {
         mealPlan: "BB",
         adjustBps: -1500,
         adjustCents: T(650_000),
+        bookableOnline: false,
       })
     ).id,
   };

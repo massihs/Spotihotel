@@ -114,6 +114,8 @@ export const ratePlans = pgTable(
     minStay: integer().notNull().default(1),
     isDefault: boolean().notNull().default(false),
     active: boolean().notNull().default(true),
+    /** Sold to guests on the hotel's own booking page (off for corporate or negotiated rates). */
+    bookableOnline: boolean().notNull().default(true),
     ...timestamps,
     ...softDelete,
   },

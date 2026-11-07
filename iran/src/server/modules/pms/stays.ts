@@ -314,9 +314,13 @@ async function bookedCounts(
 /** Free rooms per type and night (the availability grid of the booking screen). */
 export async function availabilityGrid(db: DbOrTx, ctx: RestaurantContext, from: string, days: number) {
   assertCan(ctx, "frontdesk.view");
+  return availabilityOf(db, ctx.restaurant.id, from, days);
+}
+
+/** Rooms free per type and night (the grid above, for callers that checked access themselves). */
+export async function availabilityOf(db: DbOrTx, rid: string, from: string, days: number) {
   const n = Math.max(1, Math.min(days, 62));
   const to = addDays(from, n);
-  const rid = ctx.restaurant.id;
   const [types, counts, booked, rates, held] = await Promise.all([
     db
       .select()

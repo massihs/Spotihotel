@@ -332,6 +332,7 @@ type Plan = {
   minStay: number;
   isDefault: boolean;
   active: boolean;
+  bookableOnline: boolean;
 };
 
 export function RatePlansPanel({
@@ -388,6 +389,7 @@ export function RatePlansPanel({
                 {p.adjustCents ? `${p.adjustCents > 0 ? "+" : ""}${money(p.adjustCents)} ` : ""}·{" "}
                 {p.refundable ? t("refundable", { h: p.cancelHours }) : t("nonRefundable")}
                 {p.minStay > 1 ? ` | ${t("minStay", { n: p.minStay })}` : ""}
+                {p.bookableOnline ? "" : ` | ${t("notOnline")}`}
               </p>
             </Row>
           ))}
@@ -434,6 +436,7 @@ function PlanForm({
               minStay: Number(fd.get("minStay") || 1),
               isDefault: fd.get("isDefault") === "on",
               active: fd.get("active") === "on",
+              bookableOnline: fd.get("bookableOnline") === "on",
             }),
           done,
         );
@@ -531,6 +534,15 @@ function PlanForm({
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" name="active" defaultChecked={plan?.active ?? true} className="size-4" />{" "}
         {t("active")}
+      </label>
+      <label className="flex items-center gap-2 text-sm">
+        <input
+          type="checkbox"
+          name="bookableOnline"
+          defaultChecked={plan?.bookableOnline ?? true}
+          className="size-4"
+        />{" "}
+        {t("bookableOnline")}
       </label>
       <div className="col-span-2 space-y-2">
         <FormError error={r.error} />

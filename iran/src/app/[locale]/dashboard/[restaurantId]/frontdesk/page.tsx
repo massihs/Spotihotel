@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { and, eq, isNull } from "drizzle-orm";
 import { getLocale, getTranslations } from "next-intl/server";
-import { BedDouble, CalendarPlus, FileDown, Gauge, TrendingUp, Users } from "lucide-react";
+import { BedDouble, CalendarPlus, FileDown, Gauge, Globe, TrendingUp, Users } from "lucide-react";
 import { DEFAULT_LOCALE } from "@/i18n/config";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { StatCard } from "@/components/ui/card";
@@ -73,6 +73,16 @@ async function FrontDesk({ params }: Pick<Props, "params">) {
             >
               <FileDown className="size-4" aria-hidden="true" />
               {t("travellers")}
+            </a>
+            {/* The hotel's own booking page, to share on its site and social pages. */}
+            <a
+              href={`${locale === DEFAULT_LOCALE ? "" : `/${locale}`}/h/${ctx.restaurant.slug}`}
+              target="_blank"
+              rel="noopener"
+              className={buttonClasses("secondary", "md")}
+            >
+              <Globe className="size-4" aria-hidden="true" />
+              {t("onlineBooking")}
             </a>
             {can(ctx, "frontdesk.manage") ? (
               <Link href={`/dashboard/${rid}/stays/new`} className={buttonClasses("primary", "md")}>

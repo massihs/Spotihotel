@@ -10,7 +10,7 @@ import { guestFields, nationalCodeOk, nationalCodeRule } from "./guests";
 import { assertCan, type RestaurantContext } from "@/server/tenancy";
 import { isDay, nightsBetween } from "./calc";
 import { getPmsSettings, listRatePlans } from "./setup";
-import { ACTIVE_STAY, availabilityGrid, getStay, quoteStay } from "./stays";
+import { ACTIVE_STAY, availabilityOf, getStay, quoteStay } from "./stays";
 
 export const bookingSearchSchema = z
   .object({
@@ -35,13 +35,26 @@ export async function bookingOptions(
   raw: z.input<typeof bookingSearchSchema>,
 ) {
   assertCan(ctx, "frontdesk.view");
+  return computeBookingOptions(db, ctx, raw);
+}
+
+/**
+ * The offers behind the desk's booking screen and the hotel's own booking page (`onlineOnly`:
+ * only the rate plans sold online, no corporate or negotiated rates).
+ */
+export async function computeBookingOptions(
+  db: DbOrTx,
+  ctx: Pick<RestaurantContext, "restaurant">,
+  raw: z.input<typeof bookingSearchSchema>,
+  opts: { onlineOnly?: boolean } = {},
+) {
   const q = bookingSearchSchema.parse(raw);
   const rid = ctx.restaurant.id;
   const nights = nightsBetween(q.arrival, q.departure);
   const { businessDate } = await getPmsSettings(db, rid, ctx.restaurant.timezone);
   if (q.arrival < businessDate) throw validation("arrival_in_past", { field: "arrival" });
-  const [grid, plans, types] = await Promise.all([
-    availabilityGrid(db, ctx, q.arrival, nights),
+  const [grid, allPlans, types] = await Promise.all([
+    availabilityOf(db, rid, q.arrival, nights),
     listRatePlans(db, rid, true),
     db
       .select()
@@ -49,6 +62,7 @@ export async function bookingOptions(
       .where(and(eq(roomTypes.restaurantId, rid), isNull(roomTypes.deletedAt)))
       .orderBy(asc(roomTypes.sortOrder), asc(roomTypes.baseRateCents)),
   ]);
+  const plans = opts.onlineOnly ? allPlans.filter((p) => p.bookableOnline) : allPlans;
   const byId = new Map(types.map((t) => [t.id, t]));
   const options = await Promise.all(
     grid.types.map(async (g) => {
@@ -56,7 +70,8 @@ export async function bookingOptions(
       const available = g.days.length ? Math.min(...g.days.map((d) => d.free)) : 0;
       const closed = g.days.some((d) => d.closed);
       const quotes = await Promise.all(
-        (plans.length ? plans : [null]).map(async (p) => {
+        // No plan at all: the room type's own rate. Plans, but none sold online: no offer online.
+        (plans.length ? plans : allPlans.length ? [] : [null]).map(async (p) => {
           const res = await quoteStay(db, rid, {
             roomTypeId: g.id,
             ratePlanId: p?.id ?? null,

@@ -16,6 +16,8 @@ import {
   updateGuestIdentity,
 } from "@/server/modules/pms/booking";
 import { searchGuests } from "@/server/modules/pms/guests";
+import { onlineBook, onlineHotel, onlineOffers } from "@/server/modules/pms/online";
+import { getStay } from "@/server/modules/pms/stays";
 import { addDays } from "@/server/modules/pms/calc";
 import { isIranNationalCode } from "@/lib/iran-id";
 import { createOwnerWithRestaurant } from "../helpers/factories";
@@ -260,5 +262,69 @@ describe("automatic room allocation", () => {
       assigned: 0,
       left: 0,
     });
+  });
+});
+
+describe("online booking page", () => {
+  it("sells the online plans of the free rooms and books for the guest, with the pre-check-in link", async () => {
+    const { h, dbl, today } = await hotel("Online Hotel");
+    const corp = await createRatePlan(db, h, {
+      code: "CORP",
+      name: "Corporate",
+      adjustBps: -2000,
+      bookableOnline: false,
+    });
+    const slug = h.restaurant.slug;
+    expect(await onlineHotel(db, "no-such-hotel")).toBeNull();
+
+    const offers = await onlineOffers(db, slug, { arrival: today, departure: addDays(today, 2), adults: 2 });
+    const d = offers.types.find((t) => t.id === dbl.id)!;
+    // The corporate rate is never shown; cheapest offer first.
+    expect(d.offers.map((o) => o.name)).toEqual(["Room only", "Bed & breakfast"]);
+    expect(d.offers[0]).toMatchObject({ totalCents: 20_000, refundable: true });
+    expect(d.left).toBe(2);
+
+    const guest = {
+      arrival: today,
+      departure: addDays(today, 2),
+      adults: 2,
+      roomTypeId: dbl.id,
+      firstName: "Leila",
+      lastName: "Navabi",
+      phone: "۰۹۱۲ ۳۴۵ ۶۷۸۹",
+    };
+    await expect(onlineBook(db, slug, { ...guest, ratePlanId: corp.id })).rejects.toThrow();
+    await expect(
+      onlineBook(db, slug, { ...guest, ratePlanId: d.offers[0]!.ratePlanId, website: "x" }),
+    ).rejects.toThrow();
+    await expect(
+      onlineBook(db, slug, { ...guest, ratePlanId: d.offers[0]!.ratePlanId, nationalCode: "0012345678" }),
+    ).rejects.toThrow();
+
+    const booked = await onlineBook(db, slug, {
+      ...guest,
+      ratePlanId: d.offers[0]!.ratePlanId,
+      nationalCode: "0012345679",
+      eta: "15:30",
+    });
+    expect(booked).toMatchObject({ totalCents: 20_000, refundable: true });
+    expect(booked.precheckin).toBe(`/precheckin/${booked.code}`);
+    const [row] = await db.select().from(stays).where(eq(stays.code, booked.code));
+    const card = await getStay(db, h, row!.id);
+    expect(card.stay).toMatchObject({
+      source: "website",
+      status: "confirmed",
+      eta: "15:30",
+      createdByUserId: null,
+    });
+    expect(card.guest).toMatchObject({
+      phone: "09123456789",
+      nationality: "IR",
+      documentNumber: "0012345679",
+    });
+
+    // One double left for those nights.
+    const after = await onlineOffers(db, slug, { arrival: today, departure: addDays(today, 2), adults: 2 });
+    expect(after.types.find((t) => t.id === dbl.id)!.left).toBe(1);
   });
 });

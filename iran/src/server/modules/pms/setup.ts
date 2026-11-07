@@ -267,6 +267,7 @@ export const ratePlanSchema = z.object({
   minStay: z.coerce.number().int().min(1).max(60).default(1),
   isDefault: z.coerce.boolean().default(false),
   active: z.coerce.boolean().default(true),
+  bookableOnline: z.coerce.boolean().default(true),
 });
 
 export async function listRatePlans(db: DbOrTx, restaurantId: string, activeOnly = false) {

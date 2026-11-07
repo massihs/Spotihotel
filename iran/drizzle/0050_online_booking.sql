@@ -1,0 +1,1 @@
+ALTER TABLE "rate_plans" ADD COLUMN "bookable_online" boolean DEFAULT true NOT NULL;
