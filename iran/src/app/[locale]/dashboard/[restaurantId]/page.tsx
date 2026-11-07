@@ -94,9 +94,7 @@ async function Overview({ params }: { params: PageProps<"/[locale]/dashboard/[re
   // A hotel opens on its management dashboard (front office, revenue, housekeeping).
   if (ctx.restaurant.kind === "hotel" && can(ctx, "frontdesk.view")) {
     const locale = await getLocale();
-    return (
-      <HotelHome ctx={ctx} money={(c: number) => formatMoney(c, ctx.restaurant.currency, locale)} />
-    );
+    return <HotelHome ctx={ctx} money={(c: number) => formatMoney(c, ctx.restaurant.currency, locale)} />;
   }
   const [t, tStatus, tRes, locale, overview, today, live, lowStock, newOrders, disabled] = await Promise.all([
     getTranslations("dashboard"),

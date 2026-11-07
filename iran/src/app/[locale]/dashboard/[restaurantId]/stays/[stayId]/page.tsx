@@ -24,17 +24,18 @@ import { EDITION } from "@/config/edition";
 
 type Props = PageProps<"/[locale]/dashboard/[restaurantId]/stays/[stayId]">;
 
-export default function StayPage({ params }: Props) {
+export default function StayPage({ params, searchParams }: Props) {
   return (
     <Suspense fallback={<div className="h-80 animate-pulse rounded-2xl bg-surface-2" />}>
-      <Stay params={params} />
+      <Stay params={params} searchParams={searchParams} />
     </Suspense>
   );
 }
 
 /** The reservation card: guest, dates, room, nights, folios and every front desk action. */
-async function Stay({ params }: Pick<Props, "params">) {
+async function Stay({ params, searchParams }: Pick<Props, "params" | "searchParams">) {
   const { restaurantId, stayId } = await params;
+  const autoCheckIn = (await searchParams).checkin === "1";
   const ctx = await requireRestaurant(restaurantId, "frontdesk.view");
   const rid = ctx.restaurant.id;
   const card = await getStay(db, ctx, stayId);
@@ -112,6 +113,7 @@ async function Stay({ params }: Pick<Props, "params">) {
             minibar={minibar.map((m) => ({ id: m.id, name: m.name, priceCents: m.priceCents }))}
             canManage={can(ctx, "frontdesk.manage")}
             canPost={can(ctx, "folio.post")}
+            autoCheckIn={autoCheckIn}
           />
         }
       />

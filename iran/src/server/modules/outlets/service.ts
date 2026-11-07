@@ -64,9 +64,10 @@ export async function listOutlets(db: DbOrTx, ctx: RestaurantContext, now = new 
       openTables: sql<number>`(select count(distinct s.table_id)::int from table_sessions s join dining_tables t on t.id = s.table_id where t.outlet_id = outlets.id and s.status = 'open')`,
       categories: sql<number>`(select count(*)::int from categories c where c.restaurant_id = ${rid} and c.deleted_at is null and outlets.id = any(c.outlet_ids))`,
       ordersToday: sql<number>`(select count(*)::int from orders o left join dining_tables t on t.id = o.table_id where o.restaurant_id = ${rid} and coalesce(o.outlet_id, t.outlet_id) = outlets.id and o.created_at >= ${since.toISOString()} and o.status <> 'cancelled')`,
-      salesToday: sql<number>`(select coalesce(sum(o.total_cents),0)::bigint from orders o left join dining_tables t on t.id = o.table_id where o.restaurant_id = ${rid} and coalesce(o.outlet_id, t.outlet_id) = outlets.id and o.created_at >= ${since.toISOString()} and o.status <> 'cancelled')`.mapWith(
-        Number,
-      ),
+      salesToday:
+        sql<number>`(select coalesce(sum(o.total_cents),0)::bigint from orders o left join dining_tables t on t.id = o.table_id where o.restaurant_id = ${rid} and coalesce(o.outlet_id, t.outlet_id) = outlets.id and o.created_at >= ${since.toISOString()} and o.status <> 'cancelled')`.mapWith(
+          Number,
+        ),
     })
     .from(outlets)
     .where(and(eq(outlets.restaurantId, rid), isNull(outlets.deletedAt)))
@@ -89,7 +90,8 @@ async function freePrefix(db: DbOrTx, restaurantId: string, wanted: string) {
     .select({ label: sql<string>`lower(${diningTables.label})` })
     .from(diningTables)
     .where(and(eq(diningTables.restaurantId, restaurantId), isNull(diningTables.deletedAt)));
-  const taken = (p: string) => labels.some((l) => l.label.startsWith(p.toLowerCase()) && /^\d+$/.test(l.label.slice(p.length)));
+  const taken = (p: string) =>
+    labels.some((l) => l.label.startsWith(p.toLowerCase()) && /^\d+$/.test(l.label.slice(p.length)));
   if (!taken(wanted)) return wanted;
   for (let n = 2; n < 100; n++) if (!taken(`${wanted}${n}-`)) return `${wanted}${n}-`;
   return `${wanted}${Date.now() % 1000}-`;
@@ -99,7 +101,11 @@ async function freePrefix(db: DbOrTx, restaurantId: string, wanted: string) {
  * Opens a restaurant, café or bar of the hotel in one step: the outlet and its tables (each with
  * its QR code), numbered with their own prefix.
  */
-export async function createOutlet(db: Database, ctx: RestaurantContext, raw: z.input<typeof newOutletSchema>) {
+export async function createOutlet(
+  db: Database,
+  ctx: RestaurantContext,
+  raw: z.input<typeof newOutletSchema>,
+) {
   assertCan(ctx, "tables.manage");
   const input = newOutletSchema.parse(raw);
   const rid = ctx.restaurant.id;

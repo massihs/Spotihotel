@@ -536,18 +536,44 @@ function TonightCard({ t, className }: { t: T; className?: string }) {
 /** A slice of the room chart: rooms down the side, nights across, bookings as bars (decorative). */
 function PlanningMock({ t }: { t: T }) {
   const rows = [
-    { room: "۱۲۰۱", bars: [{ s: 0, l: 3, c: "bg-brand-400" }, { s: 4, l: 3, c: "bg-brand-600" }] },
-    { room: "۱۲۰۲", bars: [{ s: 1, l: 2, c: "bg-tone-violet" }, { s: 3, l: 4, c: "bg-brand-400" }] },
+    {
+      room: "۱۲۰۱",
+      bars: [
+        { s: 0, l: 3, c: "bg-brand-400" },
+        { s: 4, l: 3, c: "bg-brand-600" },
+      ],
+    },
+    {
+      room: "۱۲۰۲",
+      bars: [
+        { s: 1, l: 2, c: "bg-tone-violet" },
+        { s: 3, l: 4, c: "bg-brand-400" },
+      ],
+    },
     { room: "۱۲۰۳", bars: [{ s: 0, l: 6, c: "bg-tone-amber" }] },
-    { room: "۱۲۰۴", bars: [{ s: 2, l: 2, c: "bg-brand-600" }, { s: 5, l: 2, c: "bg-brand-300" }] },
-    { room: "۱۲۰۵", bars: [{ s: 0, l: 1, c: "bg-brand-400" }, { s: 1, l: 4, c: "bg-tone-violet" }] },
+    {
+      room: "۱۲۰۴",
+      bars: [
+        { s: 2, l: 2, c: "bg-brand-600" },
+        { s: 5, l: 2, c: "bg-brand-300" },
+      ],
+    },
+    {
+      room: "۱۲۰۵",
+      bars: [
+        { s: 0, l: 1, c: "bg-brand-400" },
+        { s: 1, l: 4, c: "bg-tone-violet" },
+      ],
+    },
     { room: "۱۲۰۶", bars: [{ s: 3, l: 4, c: "bg-tone-amber" }] },
   ];
   return (
     <div aria-hidden="true" className="mt-6 overflow-hidden rounded-2xl bg-bg p-3 ring-1 ring-border sm:p-4">
       <div className="flex items-center justify-between text-[11px] font-semibold text-fg-muted">
         <span>{t("pmsMock.chart")}</span>
-        <span className="rounded-full bg-accent-soft px-2 py-0.5 text-accent-text">{t("pmsMock.occupancy")} ۸۶٪</span>
+        <span className="rounded-full bg-accent-soft px-2 py-0.5 text-accent-text">
+          {t("pmsMock.occupancy")} ۸۶٪
+        </span>
       </div>
       <div className="mt-3 space-y-1.5">
         {rows.map((r) => (

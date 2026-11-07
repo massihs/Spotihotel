@@ -94,9 +94,82 @@ const at = (day: string, hh: number, mm = 0) =>
 const key = () => randomBytes(12).toString("hex");
 
 // ─── People ──────────────────────────────────────────────────────────────────
-const MEN = ["علی", "محمد", "حسین", "رضا", "مهدی", "امیر", "حامد", "سعید", "مجید", "کامران", "بهرام", "داریوش", "فرهاد", "پویا", "آرش", "نیما", "سینا", "مسعود", "جواد", "کیوان"];
-const WOMEN = ["فاطمه", "زهرا", "مریم", "سارا", "نرگس", "لیلا", "مینا", "شیرین", "پریسا", "نازنین", "الهام", "آزاده", "مهسا", "سمیرا", "نگار", "رویا", "ترانه", "هستی", "یاسمن", "گلاره"];
-const LAST = ["محمدی", "حسینی", "احمدی", "رضایی", "کریمی", "موسوی", "جعفری", "صادقی", "هاشمی", "رحیمی", "قاسمی", "اکبری", "نوری", "طاهری", "شریفی", "عباسی", "کاظمی", "زارعی", "یزدانی", "فراهانی", "تهرانی", "شیرازی", "اصفهانی", "مشهدی", "تبریزی", "کرمانی", "بهرامی", "نادری", "سلطانی", "امینی"];
+const MEN = [
+  "علی",
+  "محمد",
+  "حسین",
+  "رضا",
+  "مهدی",
+  "امیر",
+  "حامد",
+  "سعید",
+  "مجید",
+  "کامران",
+  "بهرام",
+  "داریوش",
+  "فرهاد",
+  "پویا",
+  "آرش",
+  "نیما",
+  "سینا",
+  "مسعود",
+  "جواد",
+  "کیوان",
+];
+const WOMEN = [
+  "فاطمه",
+  "زهرا",
+  "مریم",
+  "سارا",
+  "نرگس",
+  "لیلا",
+  "مینا",
+  "شیرین",
+  "پریسا",
+  "نازنین",
+  "الهام",
+  "آزاده",
+  "مهسا",
+  "سمیرا",
+  "نگار",
+  "رویا",
+  "ترانه",
+  "هستی",
+  "یاسمن",
+  "گلاره",
+];
+const LAST = [
+  "محمدی",
+  "حسینی",
+  "احمدی",
+  "رضایی",
+  "کریمی",
+  "موسوی",
+  "جعفری",
+  "صادقی",
+  "هاشمی",
+  "رحیمی",
+  "قاسمی",
+  "اکبری",
+  "نوری",
+  "طاهری",
+  "شریفی",
+  "عباسی",
+  "کاظمی",
+  "زارعی",
+  "یزدانی",
+  "فراهانی",
+  "تهرانی",
+  "شیرازی",
+  "اصفهانی",
+  "مشهدی",
+  "تبریزی",
+  "کرمانی",
+  "بهرامی",
+  "نادری",
+  "سلطانی",
+  "امینی",
+];
 const FOREIGN = [
   { first: "Ahmed", last: "Al-Saadi", nat: "IQ" },
   { first: "Mehmet", last: "Yilmaz", nat: "TR" },
@@ -163,10 +236,49 @@ function typeOfRoom(floor: number, n: number): TypeCode {
 }
 
 const MENU: [category: string, items: [name: string, toman: number][]][] = [
-  ["پیش‌غذا", [["سوپ جو", 420_000], ["کشک بادمجان", 480_000], ["میرزا قاسمی", 460_000], ["سالاد سزار", 690_000], ["ماست و موسیر", 180_000]]],
-  ["غذای اصلی", [["چلوکباب سلطانی", 1_950_000], ["چلو جوجه کباب", 1_250_000], ["کباب کوبیده", 980_000], ["زرشک‌پلو با مرغ", 1_150_000], ["قورمه‌سبزی", 890_000], ["فسنجان", 1_050_000], ["باقالی‌پلو با ماهیچه", 2_200_000], ["ماهی قزل‌آلا", 1_450_000], ["استیک فیله", 2_600_000]]],
-  ["دسر", [["بستنی سنتی", 320_000], ["فالوده شیرازی", 280_000], ["کیک شکلاتی", 390_000]]],
-  ["نوشیدنی", [["چای و نبات", 150_000], ["قهوه اسپرسو", 190_000], ["کاپوچینو", 260_000], ["دوغ محلی", 120_000], ["آبمیوه طبیعی", 290_000], ["آب معدنی", 60_000]]],
+  [
+    "پیش‌غذا",
+    [
+      ["سوپ جو", 420_000],
+      ["کشک بادمجان", 480_000],
+      ["میرزا قاسمی", 460_000],
+      ["سالاد سزار", 690_000],
+      ["ماست و موسیر", 180_000],
+    ],
+  ],
+  [
+    "غذای اصلی",
+    [
+      ["چلوکباب سلطانی", 1_950_000],
+      ["چلو جوجه کباب", 1_250_000],
+      ["کباب کوبیده", 980_000],
+      ["زرشک‌پلو با مرغ", 1_150_000],
+      ["قورمه‌سبزی", 890_000],
+      ["فسنجان", 1_050_000],
+      ["باقالی‌پلو با ماهیچه", 2_200_000],
+      ["ماهی قزل‌آلا", 1_450_000],
+      ["استیک فیله", 2_600_000],
+    ],
+  ],
+  [
+    "دسر",
+    [
+      ["بستنی سنتی", 320_000],
+      ["فالوده شیرازی", 280_000],
+      ["کیک شکلاتی", 390_000],
+    ],
+  ],
+  [
+    "نوشیدنی",
+    [
+      ["چای و نبات", 150_000],
+      ["قهوه اسپرسو", 190_000],
+      ["کاپوچینو", 260_000],
+      ["دوغ محلی", 120_000],
+      ["آبمیوه طبیعی", 290_000],
+      ["آب معدنی", 60_000],
+    ],
+  ],
 ];
 
 const MINIBAR = [
@@ -219,12 +331,24 @@ type Planned = {
  */
 async function ensureParsianOutlets(ctx: RestaurantContext) {
   const rid = ctx.restaurant.id;
-  const [{ n } = { n: 0 }] = await db.select({ n: count() }).from(outlets).where(eq(outlets.restaurantId, rid));
+  const [{ n } = { n: 0 }] = await db
+    .select({ n: count() })
+    .from(outlets)
+    .where(eq(outlets.restaurantId, rid));
   if (n > 0) return 0;
-  const attach = async (name: string, kind: "restaurant" | "cafe", label: RegExp, location: string, hours: string) => {
+  const attach = async (
+    name: string,
+    kind: "restaurant" | "cafe",
+    label: RegExp,
+    location: string,
+    hours: string,
+  ) => {
     const o = await createOutlet(db, ctx, { name, kind, location, hours, tables: 0 });
-    const ids = (await listTables(db, ctx)).filter((t) => t.kind !== "room" && label.test(t.label)).map((t) => t.id);
-    if (ids.length) await db.update(diningTables).set({ outletId: o.id, zone: name }).where(inArray(diningTables.id, ids));
+    const ids = (await listTables(db, ctx))
+      .filter((t) => t.kind !== "room" && label.test(t.label))
+      .map((t) => t.id);
+    if (ids.length)
+      await db.update(diningTables).set({ outletId: o.id, zone: name }).where(inArray(diningTables.id, ids));
     return o;
   };
   const shahrzad = await attach("رستوران سنتی شهرزاد", "restaurant", /^R\d+$/, "طبقه همکف", "12:00 – 23:30");
@@ -246,7 +370,10 @@ async function ensureParsianOutlets(ctx: RestaurantContext) {
     seats: 2,
   });
   // Menu: dishes in the restaurants, desserts in the cafés, drinks everywhere.
-  const cats = await db.select({ id: categories.id, name: categories.name }).from(categories).where(eq(categories.restaurantId, rid));
+  const cats = await db
+    .select({ id: categories.id, name: categories.name })
+    .from(categories)
+    .where(eq(categories.restaurantId, rid));
   const idOf = (name: string) => cats.filter((c) => c.name === name).map((c) => c.id);
   const kitchen = [...idOf("پیش‌غذا"), ...idOf("غذای اصلی")];
   await setOutletMenu(db, ctx, shahrzad.id, kitchen);
@@ -261,7 +388,10 @@ async function ensureParsianOutlets(ctx: RestaurantContext) {
 }
 
 export async function seedParsian(ownerEmail: string, days = 30) {
-  const [owner] = await db.select().from(users).where(sql`lower(${users.email}) = ${ownerEmail.toLowerCase()}`);
+  const [owner] = await db
+    .select()
+    .from(users)
+    .where(sql`lower(${users.email}) = ${ownerEmail.toLowerCase()}`);
   if (!owner) throw new Error(`owner ${ownerEmail} not found`);
 
   const [existing] = await db.select().from(restaurants).where(eq(restaurants.slug, SLUG));
@@ -348,7 +478,10 @@ export async function seedParsian(ownerEmail: string, days = 30) {
     const email = `parsian.staff${i + 1}@parsian-test.local`;
     let [u] = await db.select().from(users).where(eq(users.email, email));
     if (!u)
-      [u] = await db.insert(users).values({ email, passwordHash: staffPassword, fullName: p.name }).returning();
+      [u] = await db
+        .insert(users)
+        .values({ email, passwordHash: staffPassword, fullName: p.name })
+        .returning();
     await db.insert(restaurantMembers).values({ restaurantId: rid, userId: u!.id, role: p.role, job: p.job });
     team.push(await loadRestaurantContext(db, sessionOf(u!), rid));
   }
@@ -366,8 +499,22 @@ export async function seedParsian(ownerEmail: string, days = 30) {
       zone: `طبقه ${floor}`,
       capacity: 2,
     });
-  await bulkCreateTables(db, ownerCtx, { from: 1, to: 24, prefix: "R", kind: "table", zone: "رستوران سنتی", capacity: 4 });
-  await bulkCreateTables(db, ownerCtx, { from: 1, to: 10, prefix: "L", kind: "table", zone: "کافی‌شاپ لابی", capacity: 2 });
+  await bulkCreateTables(db, ownerCtx, {
+    from: 1,
+    to: 24,
+    prefix: "R",
+    kind: "table",
+    zone: "رستوران سنتی",
+    capacity: 4,
+  });
+  await bulkCreateTables(db, ownerCtx, {
+    from: 1,
+    to: 10,
+    prefix: "L",
+    kind: "table",
+    zone: "کافی‌شاپ لابی",
+    capacity: 2,
+  });
   const places = await listTables(db, ownerCtx);
   const rooms = places.filter((p) => p.kind === "room");
   let restaurantTables = places.filter((p) => p.kind !== "room");
@@ -408,9 +555,25 @@ export async function seedParsian(ownerEmail: string, days = 30) {
     await assignRoomType(db, ownerCtx, ids, typeId.get(t.code)!);
   }
   const planId = {
-    BB: (await createRatePlan(db, ownerCtx, { code: "BB", name: "اقامت با صبحانه", mealPlan: "BB", adjustCents: T(650_000), isDefault: true })).id,
+    BB: (
+      await createRatePlan(db, ownerCtx, {
+        code: "BB",
+        name: "اقامت با صبحانه",
+        mealPlan: "BB",
+        adjustCents: T(650_000),
+        isDefault: true,
+      })
+    ).id,
     RO: (await createRatePlan(db, ownerCtx, { code: "RO", name: "فقط اتاق", mealPlan: "RO" })).id,
-    HB: (await createRatePlan(db, ownerCtx, { code: "HB", name: "نیم‌پانسیون", mealPlan: "HB", adjustCents: T(1_700_000), minStay: 2 })).id,
+    HB: (
+      await createRatePlan(db, ownerCtx, {
+        code: "HB",
+        name: "نیم‌پانسیون",
+        mealPlan: "HB",
+        adjustCents: T(1_700_000),
+        minStay: 2,
+      })
+    ).id,
     NRF: (
       await createRatePlan(db, ownerCtx, {
         code: "NRF",
@@ -434,13 +597,76 @@ export async function seedParsian(ownerEmail: string, days = 30) {
   };
 
   for (const s of [
-    { kind: "pool", name: "استخر سرپوشیده", durationMin: 60, priceCents: 0, capacity: 30, opensAt: "07:00", closesAt: "22:00", slotStepMin: 60 },
-    { kind: "sauna", name: "سونا خشک و بخار", durationMin: 45, priceCents: 0, capacity: 10, opensAt: "07:00", closesAt: "22:00", slotStepMin: 45 },
-    { kind: "massage", name: "ماساژ آرامش ۶۰ دقیقه", durationMin: 60, priceCents: T(3_500_000), capacity: 3, opensAt: "10:00", closesAt: "21:00", slotStepMin: 30 },
-    { kind: "massage", name: "ماساژ سنگ داغ ۹۰ دقیقه", durationMin: 90, priceCents: T(5_200_000), capacity: 2, opensAt: "10:00", closesAt: "20:00", slotStepMin: 30 },
-    { kind: "hammam", name: "حمام سنتی و کیسه", durationMin: 90, priceCents: T(2_500_000), capacity: 4, opensAt: "10:00", closesAt: "20:00", slotStepMin: 30 },
-    { kind: "gym", name: "باشگاه بدنسازی", durationMin: 60, priceCents: 0, capacity: 20, opensAt: "06:00", closesAt: "23:00", slotStepMin: 60 },
-    { kind: "beauty", name: "سالن زیبایی", durationMin: 60, priceCents: T(1_800_000), capacity: 2, opensAt: "10:00", closesAt: "20:00", slotStepMin: 60 },
+    {
+      kind: "pool",
+      name: "استخر سرپوشیده",
+      durationMin: 60,
+      priceCents: 0,
+      capacity: 30,
+      opensAt: "07:00",
+      closesAt: "22:00",
+      slotStepMin: 60,
+    },
+    {
+      kind: "sauna",
+      name: "سونا خشک و بخار",
+      durationMin: 45,
+      priceCents: 0,
+      capacity: 10,
+      opensAt: "07:00",
+      closesAt: "22:00",
+      slotStepMin: 45,
+    },
+    {
+      kind: "massage",
+      name: "ماساژ آرامش ۶۰ دقیقه",
+      durationMin: 60,
+      priceCents: T(3_500_000),
+      capacity: 3,
+      opensAt: "10:00",
+      closesAt: "21:00",
+      slotStepMin: 30,
+    },
+    {
+      kind: "massage",
+      name: "ماساژ سنگ داغ ۹۰ دقیقه",
+      durationMin: 90,
+      priceCents: T(5_200_000),
+      capacity: 2,
+      opensAt: "10:00",
+      closesAt: "20:00",
+      slotStepMin: 30,
+    },
+    {
+      kind: "hammam",
+      name: "حمام سنتی و کیسه",
+      durationMin: 90,
+      priceCents: T(2_500_000),
+      capacity: 4,
+      opensAt: "10:00",
+      closesAt: "20:00",
+      slotStepMin: 30,
+    },
+    {
+      kind: "gym",
+      name: "باشگاه بدنسازی",
+      durationMin: 60,
+      priceCents: 0,
+      capacity: 20,
+      opensAt: "06:00",
+      closesAt: "23:00",
+      slotStepMin: 60,
+    },
+    {
+      kind: "beauty",
+      name: "سالن زیبایی",
+      durationMin: 60,
+      priceCents: T(1_800_000),
+      capacity: 2,
+      opensAt: "10:00",
+      closesAt: "20:00",
+      slotStepMin: 60,
+    },
   ] as const)
     await saveService(db, ownerCtx, null, { ...s, guestBookable: true, active: true });
   const services = await listServices(db, rid);
@@ -450,24 +676,59 @@ export async function seedParsian(ownerEmail: string, days = 30) {
     return all.filter((t) => t >= "11:00").length ? all.filter((t) => t >= "11:00") : all;
   };
   const minibar = [];
-  for (const [name, toman] of MINIBAR) minibar.push(await saveMinibarItem(db, ownerCtx, null, { name, priceCents: T(toman), parQty: 2 }));
+  for (const [name, toman] of MINIBAR)
+    minibar.push(await saveMinibarItem(db, ownerCtx, null, { name, priceCents: T(toman), parQty: 2 }));
 
   const accounts = [
-    await saveAccount(db, ownerCtx, null, { name: "شرکت ملی نفت ایران", kind: "company", paymentTermsDays: 30, creditLimitCents: T(900_000_000) }),
-    await saveAccount(db, ownerCtx, null, { name: "ایران‌خودرو", kind: "company", paymentTermsDays: 30, creditLimitCents: T(800_000_000) }),
-    await saveAccount(db, ownerCtx, null, { name: "بانک ملت — امور اداری", kind: "company", paymentTermsDays: 15, creditLimitCents: T(800_000_000) }),
-    await saveAccount(db, ownerCtx, null, { name: "آژانس مسافرتی پرواز آسمان", kind: "agency", paymentTermsDays: 15, creditLimitCents: T(600_000_000), commissionBps: 1000 }),
+    await saveAccount(db, ownerCtx, null, {
+      name: "شرکت ملی نفت ایران",
+      kind: "company",
+      paymentTermsDays: 30,
+      creditLimitCents: T(900_000_000),
+    }),
+    await saveAccount(db, ownerCtx, null, {
+      name: "ایران‌خودرو",
+      kind: "company",
+      paymentTermsDays: 30,
+      creditLimitCents: T(800_000_000),
+    }),
+    await saveAccount(db, ownerCtx, null, {
+      name: "بانک ملت — امور اداری",
+      kind: "company",
+      paymentTermsDays: 15,
+      creditLimitCents: T(800_000_000),
+    }),
+    await saveAccount(db, ownerCtx, null, {
+      name: "آژانس مسافرتی پرواز آسمان",
+      kind: "agency",
+      paymentTermsDays: 15,
+      creditLimitCents: T(600_000_000),
+      commissionBps: 1000,
+    }),
   ];
 
   // Restaurant: menu and stock.
-  const [vat] = await db.select().from(taxRates).where(and(eq(taxRates.restaurantId, rid), eq(taxRates.rateBps, 1000)));
+  const [vat] = await db
+    .select()
+    .from(taxRates)
+    .where(and(eq(taxRates.restaurantId, rid), eq(taxRates.rateBps, 1000)));
   const dishes: { id: string; price: number }[] = [];
   for (const [ci, [cat, items]] of MENU.entries()) {
-    const [c] = await db.insert(categories).values({ restaurantId: rid, name: cat, sortOrder: ci }).returning();
+    const [c] = await db
+      .insert(categories)
+      .values({ restaurantId: rid, name: cat, sortOrder: ci })
+      .returning();
     for (const [pi, [name, toman]] of items.entries()) {
       const [p] = await db
         .insert(products)
-        .values({ restaurantId: rid, categoryId: c!.id, name, priceCents: T(toman), taxRateId: vat?.id, sortOrder: pi })
+        .values({
+          restaurantId: rid,
+          categoryId: c!.id,
+          name,
+          priceCents: T(toman),
+          taxRateId: vat?.id,
+          sortOrder: pi,
+        })
         .returning();
       dishes.push({ id: p!.id, price: toman });
     }
@@ -484,7 +745,8 @@ export async function seedParsian(ownerEmail: string, days = 30) {
   ] as const)
     suppliers.push(await createSupplier(db, ownerCtx, { name, phone }));
   const stock: { id: string }[] = [];
-  for (const [name, unit] of STOCK) stock.push(await createStockItem(db, ownerCtx, { name, unit, lowStockThreshold: 5 }));
+  for (const [name, unit] of STOCK)
+    stock.push(await createStockItem(db, ownerCtx, { name, unit, lowStockThreshold: 5 }));
 
   await savePricingRule(db, ownerCtx, null, { minOccupancyPct: 75, adjustBps: 800 });
   await savePricingRule(db, ownerCtx, null, { minOccupancyPct: 90, adjustBps: 2000 });
@@ -516,8 +778,18 @@ export async function seedParsian(ownerEmail: string, days = 30) {
   const guestIds: string[] = [];
 
   // A conference already picked up (rooming list) and one coming, held as a block.
-  const pastBlock = { arrival: addDays(day0, 9), departure: addDays(day0, 12), rooms: 18, type: "DLX" as TypeCode };
-  const futureBlock = { arrival: addDays(today, 6), departure: addDays(today, 9), rooms: 15, type: "STE" as TypeCode };
+  const pastBlock = {
+    arrival: addDays(day0, 9),
+    departure: addDays(day0, 12),
+    rooms: 18,
+    type: "DLX" as TypeCode,
+  };
+  const futureBlock = {
+    arrival: addDays(today, 6),
+    departure: addDays(today, 9),
+    rooms: 15,
+    type: "STE" as TypeCode,
+  };
   for (let x = futureBlock.arrival; x < futureBlock.departure; x = addDays(x, 1))
     sold.set(soldKey(futureBlock.type, x), room(futureBlock.type, x) + futureBlock.rooms);
   for (let i = 0; i < pastBlock.rooms; i++) take(pastBlock.type, pastBlock.arrival, pastBlock.departure);
@@ -530,10 +802,19 @@ export async function seedParsian(ownerEmail: string, days = 30) {
     for (const t of TYPES) {
       const cap = typeCount.get(t.code)!;
       const typeAdj = t.code === "PRS" ? -0.35 : t.code === "STE" ? -0.12 : 0;
-      const target = Math.round(cap * Math.min(0.97, Math.max(0.1, base + typeAdj + (rnd() - 0.5) * 0.12)) * onBooks);
+      const target = Math.round(
+        cap * Math.min(0.97, Math.max(0.1, base + typeAdj + (rnd() - 0.5) * 0.12)) * onBooks,
+      );
       let guard = 0;
       while (room(t.code, a) < target && guard++ < cap) {
-        let los = weighted([[1, 30], [2, 30], [3, 20], [4, 10], [5, 5], [7, 5]] as const);
+        let los = weighted([
+          [1, 30],
+          [2, 30],
+          [3, 20],
+          [4, 10],
+          [5, 5],
+          [7, 5],
+        ] as const);
         while (los > 1) {
           let ok = true;
           for (let i = 0; i < los; i++) if (room(t.code, addDays(a, i)) >= cap) ok = false;
@@ -543,16 +824,54 @@ export async function seedParsian(ownerEmail: string, days = 30) {
         if (room(t.code, a) >= cap) break;
         const departure = addDays(a, los);
         take(t.code, a, departure);
-        const source = weighted([["direct", 24], ["phone", 12], ["website", 9], ["walk_in", 5], ["snapptrip", 18], ["alibaba", 13], ["jabama", 8], ["eghamat24", 7], ["flytoday", 4]] as const);
+        const source = weighted([
+          ["direct", 24],
+          ["phone", 12],
+          ["website", 9],
+          ["walk_in", 5],
+          ["snapptrip", 18],
+          ["alibaba", 13],
+          ["jabama", 8],
+          ["eghamat24", 7],
+          ["flytoday", 4],
+        ] as const);
         const corporate = chance(0.16);
         const account = corporate ? between(0, 2) : chance(0.03) ? 3 : null;
         const planCode = corporate
           ? "CORP"
-          : weighted([["BB", 60], ["RO", 12], ["HB", los >= 2 ? 10 : 0], ["NRF", 18]] as const);
-        const lead = weighted([[0, 8], [1, 10], [3, 15], [7, 25], [14, 25], [25, 17]] as const);
+          : weighted([
+              ["BB", 60],
+              ["RO", 12],
+              ["HB", los >= 2 ? 10 : 0],
+              ["NRF", 18],
+            ] as const);
+        const lead = weighted([
+          [0, 8],
+          [1, 10],
+          [3, 15],
+          [7, 25],
+          [14, 25],
+          [25, 17],
+        ] as const);
         const bookingDay = a < addDays(day0, lead) ? day0 : addDays(a, -lead);
-        const guarantee = account !== null ? "company" : planCode === "NRF" ? "deposit" : weighted([["none", 45], ["card", 25], ["deposit", 30]] as const);
-        const adults = Math.min(t.max, weighted([[1, 25], [2, 65], [3, 10]] as const));
+        const guarantee =
+          account !== null
+            ? "company"
+            : planCode === "NRF"
+              ? "deposit"
+              : weighted([
+                  ["none", 45],
+                  ["card", 25],
+                  ["deposit", 30],
+                ] as const);
+        const adults = Math.min(
+          t.max,
+          weighted([
+            [1, 25],
+            [2, 65],
+            [3, 10],
+          ] as const),
+        );
         const cancel = chance(0.06) && nightsBetween(bookingDay, a) >= 2;
         plan.push({
           type: t.code,
@@ -566,12 +885,15 @@ export async function seedParsian(ownerEmail: string, days = 30) {
           guarantee,
           account,
           status: ahead > 2 && chance(0.06) ? "tentative" : "confirmed",
-          cancelOn: cancel ? addDays(bookingDay, between(1, Math.max(1, nightsBetween(bookingDay, a) - 1))) : null,
+          cancelOn: cancel
+            ? addDays(bookingDay, between(1, Math.max(1, nightsBetween(bookingDay, a) - 1)))
+            : null,
           noShow: !cancel && guarantee !== "company" && chance(0.025),
           repeat: chance(0.1),
           eta: chance(0.4) ? `${between(13, 22)}:${pick(["00", "30"])}` : null,
         });
-        if (cancel) for (let x = a; x < departure; x = addDays(x, 1)) sold.set(soldKey(t.code, x), room(t.code, x) - 1);
+        if (cancel)
+          for (let x = a; x < departure; x = addDays(x, 1)) sold.set(soldKey(t.code, x), room(t.code, x) - 1);
       }
     }
   }
@@ -630,25 +952,61 @@ export async function seedParsian(ownerEmail: string, days = 30) {
   /** Rows written since `since` (real time) are moved to the simulated business day. */
   const backdate = async (since: Date, day: string) => {
     const ts = (from: number, spanH: number) =>
-      sql.raw(`(('${day}'::date + time '${String(from).padStart(2, "0")}:00') + random() * interval '${spanH} hours') at time zone '${TZ}'`);
+      sql.raw(
+        `(('${day}'::date + time '${String(from).padStart(2, "0")}:00') + random() * interval '${spanH} hours') at time zone '${TZ}'`,
+      );
     const iso = since.toISOString();
-    await db.execute(sql`update stays set created_at = ${ts(8, 14)} where restaurant_id = ${rid} and created_at >= ${iso}`);
-    await db.execute(sql`update stays set checked_in_at = ${ts(14, 8)} where restaurant_id = ${rid} and checked_in_at >= ${iso}`);
-    await db.execute(sql`update stays set checked_out_at = ${ts(7, 5)} where restaurant_id = ${rid} and checked_out_at >= ${iso}`);
-    await db.execute(sql`update stays set cancelled_at = ${ts(9, 10)} where restaurant_id = ${rid} and cancelled_at >= ${iso}`);
-    await db.execute(sql`update stays set updated_at = greatest(created_at, coalesce(checked_out_at, checked_in_at, cancelled_at, created_at)) where restaurant_id = ${rid} and updated_at >= ${iso}`);
-    await db.execute(sql`update hotel_guests set created_at = ${ts(8, 14)}, updated_at = ${ts(8, 14)} where restaurant_id = ${rid} and created_at >= ${iso}`);
-    await db.execute(sql`update folio_lines set created_at = ${ts(7, 16)} where restaurant_id = ${rid} and created_at >= ${iso}`);
-    await db.execute(sql`update orders set placed_at = ${ts(12, 11)}, status = 'served' where restaurant_id = ${rid} and placed_at >= ${iso}`);
-    await db.execute(sql`update orders set created_at = placed_at, updated_at = placed_at + interval '40 minutes', accepted_at = placed_at + interval '2 minutes', ready_at = placed_at + interval '22 minutes' where restaurant_id = ${rid} and created_at >= ${iso}`);
-    await db.execute(sql`update payments set succeeded_at = ${ts(12, 11)} where restaurant_id = ${rid} and succeeded_at >= ${iso}`);
-    await db.execute(sql`update payments set created_at = coalesce(succeeded_at, created_at), updated_at = coalesce(succeeded_at, updated_at) where restaurant_id = ${rid} and created_at >= ${iso}`);
-    await db.execute(sql`update table_sessions s set status = 'closed', closed_at = ${ts(15, 8)} from dining_tables t where t.id = s.table_id and t.kind <> 'room' and s.restaurant_id = ${rid} and s.status = 'open'`);
-    await db.execute(sql`update table_sessions set opened_at = ${ts(12, 4)} where restaurant_id = ${rid} and opened_at >= ${iso}`);
-    await db.execute(sql`update purchases set purchased_at = ${ts(9, 6)} where restaurant_id = ${rid} and purchased_at >= ${iso}`);
-    await db.execute(sql`update service_bookings set created_at = ${ts(8, 12)} where restaurant_id = ${rid} and created_at >= ${iso}`);
-    await db.execute(sql`update cheques set created_at = ${ts(9, 9)} where restaurant_id = ${rid} and created_at >= ${iso}`);
-    await db.execute(sql`update audit_logs set created_at = ${ts(7, 16)} where restaurant_id = ${rid} and created_at >= ${iso}`);
+    await db.execute(
+      sql`update stays set created_at = ${ts(8, 14)} where restaurant_id = ${rid} and created_at >= ${iso}`,
+    );
+    await db.execute(
+      sql`update stays set checked_in_at = ${ts(14, 8)} where restaurant_id = ${rid} and checked_in_at >= ${iso}`,
+    );
+    await db.execute(
+      sql`update stays set checked_out_at = ${ts(7, 5)} where restaurant_id = ${rid} and checked_out_at >= ${iso}`,
+    );
+    await db.execute(
+      sql`update stays set cancelled_at = ${ts(9, 10)} where restaurant_id = ${rid} and cancelled_at >= ${iso}`,
+    );
+    await db.execute(
+      sql`update stays set updated_at = greatest(created_at, coalesce(checked_out_at, checked_in_at, cancelled_at, created_at)) where restaurant_id = ${rid} and updated_at >= ${iso}`,
+    );
+    await db.execute(
+      sql`update hotel_guests set created_at = ${ts(8, 14)}, updated_at = ${ts(8, 14)} where restaurant_id = ${rid} and created_at >= ${iso}`,
+    );
+    await db.execute(
+      sql`update folio_lines set created_at = ${ts(7, 16)} where restaurant_id = ${rid} and created_at >= ${iso}`,
+    );
+    await db.execute(
+      sql`update orders set placed_at = ${ts(12, 11)}, status = 'served' where restaurant_id = ${rid} and placed_at >= ${iso}`,
+    );
+    await db.execute(
+      sql`update orders set created_at = placed_at, updated_at = placed_at + interval '40 minutes', accepted_at = placed_at + interval '2 minutes', ready_at = placed_at + interval '22 minutes' where restaurant_id = ${rid} and created_at >= ${iso}`,
+    );
+    await db.execute(
+      sql`update payments set succeeded_at = ${ts(12, 11)} where restaurant_id = ${rid} and succeeded_at >= ${iso}`,
+    );
+    await db.execute(
+      sql`update payments set created_at = coalesce(succeeded_at, created_at), updated_at = coalesce(succeeded_at, updated_at) where restaurant_id = ${rid} and created_at >= ${iso}`,
+    );
+    await db.execute(
+      sql`update table_sessions s set status = 'closed', closed_at = ${ts(15, 8)} from dining_tables t where t.id = s.table_id and t.kind <> 'room' and s.restaurant_id = ${rid} and s.status = 'open'`,
+    );
+    await db.execute(
+      sql`update table_sessions set opened_at = ${ts(12, 4)} where restaurant_id = ${rid} and opened_at >= ${iso}`,
+    );
+    await db.execute(
+      sql`update purchases set purchased_at = ${ts(9, 6)} where restaurant_id = ${rid} and purchased_at >= ${iso}`,
+    );
+    await db.execute(
+      sql`update service_bookings set created_at = ${ts(8, 12)} where restaurant_id = ${rid} and created_at >= ${iso}`,
+    );
+    await db.execute(
+      sql`update cheques set created_at = ${ts(9, 9)} where restaurant_id = ${rid} and created_at >= ${iso}`,
+    );
+    await db.execute(
+      sql`update audit_logs set created_at = ${ts(7, 16)} where restaurant_id = ${rid} and created_at >= ${iso}`,
+    );
   };
 
   // ── Day by day ────────────────────────────────────────────────────────────
@@ -658,7 +1016,9 @@ export async function seedParsian(ownerEmail: string, days = 30) {
 
     // Bookings made today (those booked before the window are made on the first day).
     for (const p of byBookingDay.get(d) ?? []) await createPlanned(p);
-    for (const p of d === day0 ? [...byBookingDay.entries()].filter(([k]) => k < day0).flatMap(([, v]) => v) : [])
+    for (const p of d === day0
+      ? [...byBookingDay.entries()].filter(([k]) => k < day0).flatMap(([, v]) => v)
+      : [])
       await createPlanned(p);
 
     if (d === day0) {
@@ -753,7 +1113,13 @@ export async function seedParsian(ownerEmail: string, days = 30) {
           continue;
         }
         const ctx = receptionist();
-        const method = weighted([["card", 58], ["cash", 12], ["transfer", 14], ["online", 10], ["cheque", 6]] as const);
+        const method = weighted([
+          ["card", 58],
+          ["cash", 12],
+          ["transfer", 14],
+          ["online", 10],
+          ["cheque", 6],
+        ] as const);
         for (let attempt = 0; ; attempt++) {
           const view = await getStay(db, ctx, s.id);
           for (const f of view.folios) {
@@ -856,8 +1222,16 @@ export async function seedParsian(ownerEmail: string, days = 30) {
           ).catch((e) => fail("spa", e));
         }
         if (chance(0.15 * activity) && s.roomId) {
-          const lines = Array.from({ length: between(1, 3) }, () => ({ productId: pick(dishes).id, quantity: between(1, 2) }));
-          await createPosOrder(db, cashier, { channel: "dine_in", tableId: s.roomId, lines, idempotencyKey: key() });
+          const lines = Array.from({ length: between(1, 3) }, () => ({
+            productId: pick(dishes).id,
+            quantity: between(1, 2),
+          }));
+          await createPosOrder(db, cashier, {
+            channel: "dine_in",
+            tableId: s.roomId,
+            lines,
+            idempotencyKey: key(),
+          });
           await chargeRoomOrders(db, ownerCtx, s.id);
         }
         if (chance(0.04 * activity))
@@ -889,7 +1263,10 @@ export async function seedParsian(ownerEmail: string, days = 30) {
     const walkIns = Math.round(between(22, 40) * activity);
     for (let i = 0; i < walkIns; i++) {
       try {
-        const lines = Array.from({ length: between(1, 4) }, () => ({ productId: pick(dishes).id, quantity: between(1, 3) }));
+        const lines = Array.from({ length: between(1, 4) }, () => ({
+          productId: pick(dishes).id,
+          quantity: between(1, 3),
+        }));
         const dineIn = chance(0.85);
         await createPosOrder(db, cashier, {
           channel: dineIn ? "dine_in" : "takeaway",
@@ -914,7 +1291,11 @@ export async function seedParsian(ownerEmail: string, days = 30) {
           lines: stock
             .filter(() => chance(0.5))
             .slice(0, 5)
-            .map((s, i) => ({ stockItemId: s.id, quantity: between(5, 40), unitCostCents: T(STOCK[stock.indexOf(s)]![2]) + i })),
+            .map((s, i) => ({
+              stockItemId: s.id,
+              quantity: between(5, 40),
+              unitCostCents: T(STOCK[stock.indexOf(s)]![2]) + i,
+            })),
         }).catch((e) => fail("purchase", e));
       if (n % 7 === 5)
         for (const s of suppliers.slice(0, 2 + (n % 2))) {
@@ -925,25 +1306,67 @@ export async function seedParsian(ownerEmail: string, days = 30) {
             method: cheque ? "cheque" : "transfer",
             paidOn: d,
             reference: cheque ? null : `TRF-${digits(8)}`,
-            cheque: cheque ? { sayadId: sayadId(), number: digits(6), bank: "پارسیان", dueDate: addDays(d, pick([10, 20, 30])) } : undefined,
+            cheque: cheque
+              ? {
+                  sayadId: sayadId(),
+                  number: digits(6),
+                  bank: "پارسیان",
+                  dueDate: addDays(d, pick([10, 20, 30])),
+                }
+              : undefined,
           }).catch((e) => fail("supplier", e));
         }
       await createExpense(db, accountant, {
         category: pick(["supplies", "maintenance", "other"] as const),
         amountCents: T(between(3, 25) * 1_000_000),
-        description: pick(["تعمیرات تأسیسات", "لوازم نظافت", "گل‌آرایی لابی", "خرید لوازم اداری", "سرویس آسانسور"]),
+        description: pick([
+          "تعمیرات تأسیسات",
+          "لوازم نظافت",
+          "گل‌آرایی لابی",
+          "خرید لوازم اداری",
+          "سرویس آسانسور",
+        ]),
         method: chance(0.5) ? "cash" : "transfer",
         paidAt: at(d, 13),
       });
       if (n === 1)
-        await createExpense(db, accountant, { category: "salaries", amountCents: T(6_800_000_000), description: "حقوق و دستمزد کارکنان — ماه گذشته", method: "transfer", paidAt: at(d, 10) });
+        await createExpense(db, accountant, {
+          category: "salaries",
+          amountCents: T(6_800_000_000),
+          description: "حقوق و دستمزد کارکنان — ماه گذشته",
+          method: "transfer",
+          paidAt: at(d, 10),
+        });
       if (n === 8)
-        for (const [description, toman] of [["قبض برق", 420_000_000], ["قبض گاز", 260_000_000], ["قبض آب", 95_000_000], ["اینترنت و تلفن", 48_000_000]] as const)
-          await createExpense(db, accountant, { category: "utilities", amountCents: T(toman), description, method: "transfer", paidAt: at(d, 11) });
+        for (const [description, toman] of [
+          ["قبض برق", 420_000_000],
+          ["قبض گاز", 260_000_000],
+          ["قبض آب", 95_000_000],
+          ["اینترنت و تلفن", 48_000_000],
+        ] as const)
+          await createExpense(db, accountant, {
+            category: "utilities",
+            amountCents: T(toman),
+            description,
+            method: "transfer",
+            paidAt: at(d, 11),
+          });
       if (n === 12)
-        await createExpense(db, accountant, { category: "marketing", amountCents: T(180_000_000), description: "تبلیغات در اسنپ‌تریپ و اینستاگرام", method: "transfer", paidAt: at(d, 12) });
+        await createExpense(db, accountant, {
+          category: "marketing",
+          amountCents: T(180_000_000),
+          description: "تبلیغات در اسنپ‌تریپ و اینستاگرام",
+          method: "transfer",
+          paidAt: at(d, 12),
+        });
       if (n === 20)
-        await createExpense(db, accountant, { category: "taxes", amountCents: T(350_000_000), description: "عوارض شهرداری و مالیات فصل", method: "transfer", paidAt: at(d, 12) });
+        await createExpense(db, accountant, {
+          category: "taxes",
+          amountCents: T(350_000_000),
+          description: "عوارض شهرداری و مالیات فصل",
+          method: "transfer",
+          paidAt: at(d, 12),
+        });
     } catch (e) {
       fail("finance", e);
     }
@@ -956,7 +1379,7 @@ export async function seedParsian(ownerEmail: string, days = 30) {
           const v = await folioView(db, rid, folio.id);
           if (v.balanceCents <= 0) continue;
           // One transfer or cheque per installment (a single payment is capped at 1,000 billion rials).
-          for (let left = v.balanceCents; left > 0; ) {
+          for (let left = v.balanceCents; left > 0;) {
             const amount = Math.min(left, T(800_000_000));
             left -= amount;
             const byCheque = chance(0.4);
@@ -965,7 +1388,13 @@ export async function seedParsian(ownerEmail: string, days = 30) {
               method: byCheque ? "cheque" : "transfer",
               reference: byCheque ? null : `SATNA-${digits(8)}`,
               cheque: byCheque
-                ? { sayadId: sayadId(), number: digits(6), bank: pick(BANKS), party: a.name, dueDate: addDays(d, pick([10, 20, 30])) }
+                ? {
+                    sayadId: sayadId(),
+                    number: digits(6),
+                    bank: pick(BANKS),
+                    party: a.name,
+                    dueDate: addDays(d, pick([10, 20, 30])),
+                  }
                 : undefined,
             });
           }
@@ -978,11 +1407,18 @@ export async function seedParsian(ownerEmail: string, days = 30) {
     const due = await db
       .select()
       .from(cheques)
-      .where(and(eq(cheques.restaurantId, rid), sql`${cheques.dueDate} <= ${d}`, inArray(cheques.status, ["in_hand", "deposited", "issued"])));
+      .where(
+        and(
+          eq(cheques.restaurantId, rid),
+          sql`${cheques.dueDate} <= ${d}`,
+          inArray(cheques.status, ["in_hand", "deposited", "issued"]),
+        ),
+      );
     for (const c of due) {
       try {
         if (c.status === "in_hand") await setChequeStatus(db, accountant, c.id, "deposited", d);
-        else if (c.status === "deposited") await setChequeStatus(db, accountant, c.id, chance(0.08) ? "bounced" : "cleared", d);
+        else if (c.status === "deposited")
+          await setChequeStatus(db, accountant, c.id, chance(0.08) ? "bounced" : "cleared", d);
         else if (c.status === "issued") await setChequeStatus(db, accountant, c.id, "cleared", d);
       } catch (e) {
         fail("cheque", e);
@@ -997,10 +1433,17 @@ export async function seedParsian(ownerEmail: string, days = 30) {
         fail("audit", e);
         console.error(`  audit ${d} failed`, e);
       }
-      await db.execute(sql`update night_audits set created_at = ${at(d, 23, 50).toISOString()} where restaurant_id = ${rid} and business_date = ${d}`);
-      await db.execute(sql`update audit_logs set created_at = ${at(d, 23, 50).toISOString()} where restaurant_id = ${rid} and created_at >= ${t0.toISOString()}`);
+      await db.execute(
+        sql`update night_audits set created_at = ${at(d, 23, 50).toISOString()} where restaurant_id = ${rid} and business_date = ${d}`,
+      );
+      await db.execute(
+        sql`update audit_logs set created_at = ${at(d, 23, 50).toISOString()} where restaurant_id = ${rid} and created_at >= ${t0.toISOString()}`,
+      );
     }
-    const [{ n: inh } = { n: 0 }] = await db.select({ n: count() }).from(stays).where(and(eq(stays.restaurantId, rid), eq(stays.status, "in_house")));
+    const [{ n: inh } = { n: 0 }] = await db
+      .select({ n: count() })
+      .from(stays)
+      .where(and(eq(stays.restaurantId, rid), eq(stays.status, "in_house")));
     console.log(`  ${d}: ${inh} rooms in house (${Math.round((Date.now() - started) / 1000)} s)`);
   }
 
@@ -1020,12 +1463,21 @@ export async function seedParsian(ownerEmail: string, days = 30) {
       label: null,
       note: chance(0.3) ? "لطفاً سریع‌تر" : null,
     });
-  await db.execute(sql`update stays set precheckin_at = now() where restaurant_id = ${rid} and status = 'confirmed' and arrival between ${today} and ${addDays(today, 2)} and random() < 0.3`);
-  await db.execute(sql`update dining_tables set housekeeping = 'out_of_order' where id in (select id from dining_tables t where t.restaurant_id = ${rid} and t.kind = 'room' and t.deleted_at is null and not exists (select 1 from stays s where s.room_id = t.id and s.status = 'in_house') order by t.label desc limit 2)`);
+  await db.execute(
+    sql`update stays set precheckin_at = now() where restaurant_id = ${rid} and status = 'confirmed' and arrival between ${today} and ${addDays(today, 2)} and random() < 0.3`,
+  );
+  await db.execute(
+    sql`update dining_tables set housekeeping = 'out_of_order' where id in (select id from dining_tables t where t.restaurant_id = ${rid} and t.kind = 'room' and t.deleted_at is null and not exists (select 1 from stays s where s.room_id = t.id and s.status = 'in_house') order by t.label desc limit 2)`,
+  );
   await syncLedger(db, hotel);
 
-  const [{ n: total } = { n: 0 }] = await db.select({ n: count() }).from(stays).where(eq(stays.restaurantId, rid));
-  console.log(`✓ Parsian test hotel: 300 rooms, ${total} bookings, ${days} closed days (${Math.round((Date.now() - started) / 1000)} s)`);
+  const [{ n: total } = { n: 0 }] = await db
+    .select({ n: count() })
+    .from(stays)
+    .where(eq(stays.restaurantId, rid));
+  console.log(
+    `✓ Parsian test hotel: 300 rooms, ${total} bookings, ${days} closed days (${Math.round((Date.now() - started) / 1000)} s)`,
+  );
   if (errors.size) console.log("  skipped:", Object.fromEntries(errors));
 }
 

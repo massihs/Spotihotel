@@ -90,7 +90,9 @@ export async function seedDemoHotel(ownerId: string) {
     autoChargeRoomService: true,
     minibarSelfService: true,
     chargeNoShows: true,
-    channelCommissions: fa ? { snapptrip: 1500, alibaba: 1200, jabama: 1000, eghamat24: 1200 } : { booking: 1700, expedia: 1800 },
+    channelCommissions: fa
+      ? { snapptrip: 1500, alibaba: 1200, jabama: 1000, eghamat24: 1200 }
+      : { booking: 1700, expedia: 1800 },
     wifiName: "HotelDemo-Guests",
     wifiPassword: fa ? "welcome1405" : "welcome2026",
     guestInfo: L(

@@ -27,12 +27,20 @@ describe("hotel outlets (restaurants and cafés)", () => {
     const h = { ...ctx, restaurant: { ...ctx.restaurant, kind: "hotel" as const } };
 
     // One step: the outlet and its numbered tables, each with a QR code.
-    const restaurant = await createOutlet(db, h, { name: "Restaurant Shiraz", kind: "restaurant", tables: 3 });
+    const restaurant = await createOutlet(db, h, {
+      name: "Restaurant Shiraz",
+      kind: "restaurant",
+      tables: 3,
+    });
     const cafe = await createOutlet(db, h, { name: "Lobby café", kind: "cafe", tables: 2, seats: 2 });
     const cafe2 = await createOutlet(db, h, { name: "Roof café", kind: "cafe", tables: 1 });
     expect([restaurant.prefix, cafe.prefix, cafe2.prefix]).toEqual(["R", "C", "C2-"]);
     const tables = await db.select().from(diningTables).where(eq(diningTables.restaurantId, h.restaurant.id));
-    const of = (id: string) => tables.filter((t) => t.outletId === id).map((t) => t.label).sort();
+    const of = (id: string) =>
+      tables
+        .filter((t) => t.outletId === id)
+        .map((t) => t.label)
+        .sort();
     expect(of(restaurant.id)).toEqual(["R1", "R2", "R3"]);
     expect(of(cafe.id)).toEqual(["C1", "C2"]);
     expect(of(cafe2.id)).toEqual(["C2-1"]);
@@ -55,7 +63,10 @@ describe("hotel outlets (restaurants and cafés)", () => {
     await setOutletMenu(db, h, restaurant.id, [kebabs.id]);
     await setOutletMenu(db, h, cafe.id, [coffee.id]);
     const menu = await loadPublicMenu(db, h.restaurant.id);
-    const names = (outletId: string | null) => menuForOutlet(menu, outletId).categories.map((x) => x.name).sort();
+    const names = (outletId: string | null) =>
+      menuForOutlet(menu, outletId)
+        .categories.map((x) => x.name)
+        .sort();
     expect(names(restaurant.id)).toEqual(["Kebab", "Water"]);
     expect(names(cafe.id)).toEqual(["Coffee", "Water"]);
     expect(names(null)).toEqual(["Coffee", "Kebab", "Water"]);
@@ -83,8 +94,18 @@ describe("hotel outlets (restaurants and cafés)", () => {
 
     const list = await listOutlets(db, h);
     const row = (id: string) => list.find((o) => o.id === id)!;
-    expect(row(restaurant.id)).toMatchObject({ tables: 3, ordersToday: 1, salesToday: o1!.totalCents, categories: 1 });
-    expect(row(cafe.id)).toMatchObject({ name: "Café Ferdowsi", tables: 4, ordersToday: 1, salesToday: o2!.totalCents });
+    expect(row(restaurant.id)).toMatchObject({
+      tables: 3,
+      ordersToday: 1,
+      salesToday: o1!.totalCents,
+      categories: 1,
+    });
+    expect(row(cafe.id)).toMatchObject({
+      name: "Café Ferdowsi",
+      tables: 4,
+      ordersToday: 1,
+      salesToday: o2!.totalCents,
+    });
 
     // Accounting: sales per outlet over the day, with each one's share.
     const { localDay } = await import("@/lib/period");

@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { CheckInHost } from "@/components/pms/check-in-wizard";
 import { TOOL_BUTTON } from "@/components/ui/tool-button";
 import { cn } from "@/lib/cn";
 import { sectionFilterOf } from "@/server/modules/team/sections";
@@ -589,6 +590,7 @@ async function RestaurantShell({
       >
         {notice ? <SubscriptionBanner restaurantId={ctx.restaurant.id} notice={notice} /> : null}
         {children}
+        {hotel ? <CheckInHost /> : null}
       </AppShell>
     </LiveProvider>
   );

@@ -1,4 +1,5 @@
 import { and, asc, desc, eq, ilike, or, sql } from "drizzle-orm";
+import { normalizeDigits } from "@/lib/money";
 import { z } from "zod";
 import type { Database, DbOrTx } from "@/server/db/client";
 import { hotelAccounts, hotelGuests, stays } from "@/server/db/schema";
@@ -132,7 +133,8 @@ export async function getGuest(db: DbOrTx, ctx: RestaurantContext, id: string) {
 /** Search by name, phone, email or document number (front desk lookup). */
 export async function searchGuests(db: DbOrTx, ctx: RestaurantContext, q: string, limit = 30) {
   assertCan(ctx, "frontdesk.view");
-  const term = q.trim().slice(0, 80);
+  // Persian / Arabic digits typed at the desk match the Latin ones stored (phones, national codes).
+  const term = normalizeDigits(q).trim().slice(0, 80);
   const like = `%${term.replace(/[%_\\]/g, (c) => `\\${c}`)}%`;
   return db
     .select({
@@ -157,6 +159,9 @@ export async function searchGuests(db: DbOrTx, ctx: RestaurantContext, q: string
               ilike(hotelGuests.phone, like),
               ilike(hotelGuests.email, like),
               ilike(hotelGuests.documentNumber, like),
+              // "سارا محمدی" or "محمدی سارا": the full name in either order.
+              sql`(${hotelGuests.firstName} || ' ' || ${hotelGuests.lastName}) ilike ${like}`,
+              sql`(${hotelGuests.lastName} || ' ' || ${hotelGuests.firstName}) ilike ${like}`,
             )
           : undefined,
       ),

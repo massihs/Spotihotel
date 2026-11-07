@@ -99,7 +99,13 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
     { href: `${base}/frontdesk`, label: t("quick.frontdesk"), Icon: KeyRound, tone: "indigo", show: true },
     { href: `${base}/planning`, label: t("quick.planning"), Icon: CalendarRange, tone: "sky", show: true },
     { href: `${base}/guests`, label: t("quick.guests"), Icon: Contact, tone: "violet", show: true },
-    { href: `${base}/rooms`, label: t("quick.rooms"), Icon: BedDouble, tone: "teal", show: can(ctx, "tables.view") },
+    {
+      href: `${base}/rooms`,
+      label: t("quick.rooms"),
+      Icon: BedDouble,
+      tone: "teal",
+      show: can(ctx, "tables.view"),
+    },
     {
       href: `${base}/requests`,
       label: t("quick.requests"),
@@ -136,7 +142,12 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
         description={
           <span>
             {t("businessDate", {
-              day: fmtDay(home.businessDate, { weekday: "long", day: "numeric", month: "long", year: "numeric" }),
+              day: fmtDay(home.businessDate, {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              }),
             })}
           </span>
         }
@@ -157,13 +168,13 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
       />
 
       {alerts.length ? (
-        <div className="-mx-4 mb-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0">
+        <div className="-mx-4 mb-4 flex snap-x [scrollbar-width:none] gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
           {alerts.map(({ href, label, Icon, className }) => (
             <Link
               key={label}
               href={href}
               className={cn(
-                "inline-flex h-8 shrink-0 snap-start items-center gap-1.5 rounded-lg px-3 text-[13px] font-semibold whitespace-nowrap ring-1 ring-inset transition-opacity duration-150 hover:opacity-85 [&_svg]:size-3.5",
+                "inline-flex h-8 shrink-0 snap-start items-center gap-1.5 rounded-lg px-3 text-[13px] font-semibold whitespace-nowrap ring-1 transition-opacity duration-150 ring-inset hover:opacity-85 [&_svg]:size-3.5",
                 className,
               )}
             >
@@ -185,7 +196,10 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
               </p>
               <p className="mt-1 text-sm opacity-80">{t("roomsSold", { sold: f.sold, rooms: f.rooms })}</p>
             </div>
-            <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-white/12" aria-hidden="true">
+            <span
+              className="grid size-11 shrink-0 place-items-center rounded-2xl bg-white/12"
+              aria-hidden="true"
+            >
               <BedDouble className="size-5" />
             </span>
           </div>
@@ -225,7 +239,12 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
             />
           </StatLink>
           <StatLink href={`${base}/frontdesk`}>
-            <StatCard label={t("departures")} value={home.departures.length} icon={<LogOut />} tone="orange" />
+            <StatCard
+              label={t("departures")}
+              value={home.departures.length}
+              icon={<LogOut />}
+              tone="orange"
+            />
           </StatLink>
           <StatLink href={`${base}/stays`}>
             <StatCard
@@ -318,7 +337,10 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
       {/* The day's lists */}
       <div className="mt-4 grid gap-4 lg:grid-cols-2">
         <Card className="flex flex-col">
-          <CardHeader title={t("arrivalsTitle")} action={<SeeAll href={`${base}/frontdesk`} label={t("seeAll")} />} />
+          <CardHeader
+            title={t("arrivalsTitle")}
+            action={<SeeAll href={`${base}/frontdesk`} label={t("seeAll")} />}
+          />
           {home.arrivals.length ? (
             <ul className="divide-y divide-border">
               {home.arrivals.slice(0, 6).map((s) => (
@@ -331,7 +353,9 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
                     <span className="min-w-0 flex-1">
                       <span className="block truncate font-semibold">
                         {name(s)}
-                        {s.vip ? <span className="ms-1.5 text-[11px] font-bold text-warning">VIP</span> : null}
+                        {s.vip ? (
+                          <span className="ms-1.5 text-[11px] font-bold text-warning">VIP</span>
+                        ) : null}
                       </span>
                       <span className="block truncate text-xs text-fg-muted">
                         {t("nightsN", { n: nights(s.arrival, s.departure) })}
@@ -418,7 +442,9 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
                   <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-surface-2">
                     <div
                       className="h-full rounded-full bg-accent"
-                      style={{ width: `${Math.max(2, (d.cents / Math.max(1, home.departments[0]!.cents)) * 100)}%` }}
+                      style={{
+                        width: `${Math.max(2, (d.cents / Math.max(1, home.departments[0]!.cents)) * 100)}%`,
+                      }}
                     />
                   </div>
                 </div>
@@ -513,7 +539,10 @@ function RoomBadge({ label, code }: { label: string | null; code: string }) {
 
 function SeeAll({ href, label }: { href: string; label: string }) {
   return (
-    <Link href={href} className="inline-flex items-center gap-1 text-sm font-semibold text-accent-text hover:underline">
+    <Link
+      href={href}
+      className="inline-flex items-center gap-1 text-sm font-semibold text-accent-text hover:underline"
+    >
       {label}
       <ArrowRight className="size-3.5 rtl:rotate-180" aria-hidden="true" />
     </Link>

@@ -308,7 +308,7 @@ export function MobileTabBar({ items, sheet }: { items: NavItem[]; sheet: ReactN
                   <Badge n={item.badge} className="absolute -end-0.5 -top-1.5 ring-2 ring-surface" />
                 </span>
                 <span className="max-w-full truncate px-1">{item.label}</span>
-                <Pending className="absolute top-1 end-1 size-3 text-accent-text" />
+                <Pending className="absolute end-1 top-1 size-3 text-accent-text" />
               </Link>
             );
           })}
@@ -377,7 +377,9 @@ export function MobileTabBar({ items, sheet }: { items: NavItem[]; sheet: ReactN
                           <span
                             className={cn(
                               "relative grid size-11 place-items-center rounded-2xl [&_svg]:size-5",
-                              active ? "bg-accent text-accent-fg" : "bg-surface text-fg-muted ring-1 ring-border",
+                              active
+                                ? "bg-accent text-accent-fg"
+                                : "bg-surface text-fg-muted ring-1 ring-border",
                             )}
                             aria-hidden="true"
                           >

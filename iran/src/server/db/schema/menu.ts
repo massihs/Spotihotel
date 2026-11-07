@@ -45,7 +45,10 @@ export const categories = pgTable(
     /** Set when created from a global template (keeps analytics comparable across tenants). */
     templateKey: varchar({ length: 48 }),
     /** Outlets (restaurants, cafés…) whose menu shows this category; empty = all of them. */
-    outletIds: uuid().array().notNull().default(sql`'{}'::uuid[]`),
+    outletIds: uuid()
+      .array()
+      .notNull()
+      .default(sql`'{}'::uuid[]`),
     /** Kitchen station preparing this category (null = every screen). */
     stationId: uuid(),
     sortOrder: integer().notNull().default(0),

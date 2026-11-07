@@ -51,7 +51,11 @@ export async function hotelHome(db: Database, ctx: RestaurantContext, now = new 
       })
       .from(diningTables)
       .where(
-        and(eq(diningTables.restaurantId, rid), eq(diningTables.kind, "room"), isNull(diningTables.deletedAt)),
+        and(
+          eq(diningTables.restaurantId, rid),
+          eq(diningTables.kind, "room"),
+          isNull(diningTables.deletedAt),
+        ),
       ),
     db
       .select({

@@ -1,5 +1,6 @@
 "use client";
 
+import { CheckInButton } from "./check-in-wizard";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,6 @@ import {
   precheckinLinkAction,
   chargeMinibarAction,
   chargeRoomOrdersAction,
-  checkInAction,
   checkOutAction,
   confirmStayAction,
 } from "@/app/[locale]/dashboard/[restaurantId]/hotel-actions";
@@ -35,7 +35,10 @@ export function StayActions({
   businessDate,
   canManage,
   canPost,
+  autoCheckIn = false,
 }: {
+  /** Opened from a booking whose instant check-in needs the desk: start the guided check-in. */
+  autoCheckIn?: boolean;
   restaurantId: string;
   currency: string;
   stay: {
@@ -80,9 +83,13 @@ export function StayActions({
         </RunButton>
       ) : null}
       {canManage && arriving && s.arrival <= businessDate ? (
-        <RunButton variant="primary" run={() => checkInAction(restaurantId, s.id, s.roomId)}>
-          {t("checkIn")}
-        </RunButton>
+        <CheckInButton
+          restaurantId={restaurantId}
+          currency={currency}
+          stayId={s.id}
+          label={t("checkIn")}
+          autoOpen={autoCheckIn}
+        />
       ) : null}
       {canManage && inHouse ? (
         <>

@@ -82,6 +82,14 @@ import {
   type pricingRuleSchema,
 } from "@/server/modules/pms/revenue";
 import { sendPrecheckinLink } from "@/server/modules/pms/precheckin";
+import {
+  availableRooms,
+  bookingOptions,
+  checkInContext,
+  updateGuestIdentity,
+  type bookingSearchSchema,
+  type identitySchema,
+} from "@/server/modules/pms/booking";
 import type { z } from "zod";
 
 type In<T extends z.ZodType> = z.input<T>;
@@ -277,3 +285,21 @@ export const cancellationFeeAction = async (rid: string, stayId: string) =>
   runAction(async () => cancellationFee(db, await actionContext(rid, "frontdesk.view"), stayId));
 export const precheckinLinkAction = async (rid: string, stayId: string) =>
   runAction(async () => sendPrecheckinLink(db, await actionContext(rid, "frontdesk.manage"), stayId));
+
+// Express booking & guided check-in
+export const bookingOptionsAction = async (rid: string, input: In<typeof bookingSearchSchema>) =>
+  runAction(async () => bookingOptions(db, await actionContext(rid, "frontdesk.view"), input));
+export const availableRoomsAction = async (
+  rid: string,
+  q: { roomTypeId?: string | null; arrival: string; departure: string; excludeStayId?: string | null },
+) =>
+  runAction(async () => {
+    const ctx = await actionContext(rid, "frontdesk.view");
+    return availableRooms(db, ctx.restaurant.id, q);
+  });
+export const checkInContextAction = async (rid: string, stayId: string) =>
+  runAction(async () => checkInContext(db, await actionContext(rid, "frontdesk.view"), stayId));
+export const updateIdentityAction = async (rid: string, guestId: string, input: In<typeof identitySchema>) =>
+  runAction(async () =>
+    updateGuestIdentity(db, await actionContext(rid, "frontdesk.manage"), guestId, input),
+  );

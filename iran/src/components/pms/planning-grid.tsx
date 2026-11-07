@@ -37,7 +37,8 @@ const WEEKEND = EDITION === "iran" ? [4, 5] : [5, 6];
 
 const BAR: Record<string, string> = {
   // Shades of the hotel's colour: pale for an option, mid for confirmed, deep for guests in house.
-  tentative: "bg-brand-100 text-brand-800 ring-1 ring-inset ring-brand-300 [background-image:repeating-linear-gradient(135deg,transparent_0_6px,var(--brand-200)_6px_8px)]",
+  tentative:
+    "bg-brand-100 text-brand-800 ring-1 ring-inset ring-brand-300 [background-image:repeating-linear-gradient(135deg,transparent_0_6px,var(--brand-200)_6px_8px)]",
   confirmed: "bg-brand-400 text-white",
   in_house: "bg-brand-700 text-white",
   checked_out: "bg-surface-3 text-fg-muted",
@@ -121,26 +122,28 @@ export function PlanningGrid({
             <ChevronDown className="size-4 transition group-open:rotate-180" aria-hidden="true" />
           </summary>
           <ul className="mt-3 max-h-80 space-y-2 overflow-y-auto pe-1">
-            {[...unassigned].sort((a, b) => a.arrival.localeCompare(b.arrival)).map((s) => (
-              <li key={s.id} className="flex flex-wrap items-center gap-3 text-sm">
-                <Link
-                  href={`/dashboard/${restaurantId}/stays/${s.id}`}
-                  className="font-semibold hover:underline"
-                >
-                  #{s.number} {s.lastName}
-                </Link>
-                <span className="text-fg-muted">
-                  {s.typeCode} | {day(s.arrival)} → {day(s.departure)}
-                </span>
-                {canManage ? (
-                  <Assign
-                    restaurantId={restaurantId}
-                    stayId={s.id}
-                    rooms={rooms.filter((r) => r.roomTypeId === s.roomTypeId)}
-                  />
-                ) : null}
-              </li>
-            ))}
+            {[...unassigned]
+              .sort((a, b) => a.arrival.localeCompare(b.arrival))
+              .map((s) => (
+                <li key={s.id} className="flex flex-wrap items-center gap-3 text-sm">
+                  <Link
+                    href={`/dashboard/${restaurantId}/stays/${s.id}`}
+                    className="font-semibold hover:underline"
+                  >
+                    #{s.number} {s.lastName}
+                  </Link>
+                  <span className="text-fg-muted">
+                    {s.typeCode} | {day(s.arrival)} → {day(s.departure)}
+                  </span>
+                  {canManage ? (
+                    <Assign
+                      restaurantId={restaurantId}
+                      stayId={s.id}
+                      rooms={rooms.filter((r) => r.roomTypeId === s.roomTypeId)}
+                    />
+                  ) : null}
+                </li>
+              ))}
           </ul>
         </details>
       ) : null}

@@ -27,7 +27,9 @@ export const updateOutletAction = async (rid: string, id: string, input: z.input
 
 export const addOutletTablesAction = async (rid: string, id: string, tables: number, seats: number) =>
   runAction(async () =>
-    done((await addOutletTables(db, await actionContext(rid, "tables.manage"), id, { tables, seats })).created),
+    done(
+      (await addOutletTables(db, await actionContext(rid, "tables.manage"), id, { tables, seats })).created,
+    ),
   );
 
 export const archiveOutletAction = async (rid: string, id: string) =>

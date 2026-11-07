@@ -15,10 +15,13 @@ export function Sheet({
   title,
   onClose,
   children,
+  wide = false,
 }: {
   title: string;
   onClose: () => void;
   children: React.ReactNode;
+  /** A larger panel for multi-part forms (guided check-in…). */
+  wide?: boolean;
 }) {
   return (
     <div
@@ -28,7 +31,9 @@ export function Sheet({
       aria-label={title}
     >
       <button type="button" aria-label="×" className="absolute inset-0 bg-black/30" onClick={onClose} />
-      <div className="animate-sheet-up relative max-h-[90dvh] w-full overflow-y-auto rounded-t-3xl bg-surface p-5 sm:max-w-lg sm:rounded-3xl">
+      <div
+        className={`animate-sheet-up relative max-h-[92dvh] w-full overflow-y-auto rounded-t-3xl bg-surface p-5 sm:rounded-3xl ${wide ? "sm:max-w-3xl sm:p-6" : "sm:max-w-lg"}`}
+      >
         <div className="mb-4 flex items-center justify-between">
           <p className="text-lg font-bold">{title}</p>
           <button

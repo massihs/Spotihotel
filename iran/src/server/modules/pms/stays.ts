@@ -772,10 +772,17 @@ export async function suggestRoom(db: DbOrTx, restaurantId: string, stay: typeof
       .where(
         and(
           eq(stays.roomId, r.id),
-          inArray(stays.status, [...ACTIVE_STAY]),
-          lt(stays.arrival, stay.departure),
-          gt(stays.departure, stay.arrival),
           ne(stays.id, stay.id),
+          or(
+            // Booked over the same nights…
+            and(
+              inArray(stays.status, [...ACTIVE_STAY]),
+              lt(stays.arrival, stay.departure),
+              gt(stays.departure, stay.arrival),
+            ),
+            // …or a guest still in the room (a late departure not checked out yet).
+            eq(stays.status, "in_house"),
+          ),
         ),
       )
       .limit(1);

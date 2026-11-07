@@ -66,7 +66,13 @@ export type OutletView = {
 };
 
 /** One click: a typical outlet with its tables, renamed afterwards if needed. */
-export function QuickAdd({ restaurantId, presets }: { restaurantId: string; presets: { kind: Kind; name: string; tables: number }[] }) {
+export function QuickAdd({
+  restaurantId,
+  presets,
+}: {
+  restaurantId: string;
+  presets: { kind: Kind; name: string; tables: number }[];
+}) {
   const t = useTranslations("outlets");
   const r = useRun();
   return (
@@ -79,7 +85,9 @@ export function QuickAdd({ restaurantId, presets }: { restaurantId: string; pres
             key={p.kind}
             type="button"
             disabled={r.pending}
-            onClick={() => r.run(() => createOutletAction(restaurantId, { name: p.name, kind: p.kind, tables: p.tables }))}
+            onClick={() =>
+              r.run(() => createOutletAction(restaurantId, { name: p.name, kind: p.kind, tables: p.tables }))
+            }
             className="inline-flex h-9 items-center gap-2 rounded-lg bg-surface px-3 text-sm font-semibold ring-1 ring-border transition-colors ring-inset hover:bg-brand-50 hover:ring-brand-200 disabled:opacity-50"
           >
             <span className={cn("grid size-6 place-items-center rounded-md", KIND_TILE[p.kind])}>
@@ -105,7 +113,14 @@ function OutletFields({ values }: { values?: Partial<OutletView> }) {
     <>
       <label className="block">
         <Label>{t("name")}</Label>
-        <input name="name" required minLength={2} defaultValue={values?.name} className={inputCls} placeholder={t("namePlaceholder")} />
+        <input
+          name="name"
+          required
+          minLength={2}
+          defaultValue={values?.name}
+          className={inputCls}
+          placeholder={t("namePlaceholder")}
+        />
       </label>
       <fieldset>
         <Label>{t("kind")}</Label>
@@ -117,7 +132,13 @@ function OutletFields({ values }: { values?: Partial<OutletView> }) {
                 key={k}
                 className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold ring-1 ring-border ring-inset has-[:checked]:bg-brand-50 has-[:checked]:ring-2 has-[:checked]:ring-brand-500"
               >
-                <input type="radio" name="kind" value={k} defaultChecked={(values?.kind ?? "restaurant") === k} className="sr-only" />
+                <input
+                  type="radio"
+                  name="kind"
+                  value={k}
+                  defaultChecked={(values?.kind ?? "restaurant") === k}
+                  className="sr-only"
+                />
                 <Icon className="size-4 text-brand-600" aria-hidden="true" />
                 {t(`kinds.${k}`)}
               </label>
@@ -128,11 +149,22 @@ function OutletFields({ values }: { values?: Partial<OutletView> }) {
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="block">
           <Label>{t("location")}</Label>
-          <input name="location" defaultValue={values?.location ?? ""} className={inputCls} placeholder={t("locationPlaceholder")} />
+          <input
+            name="location"
+            defaultValue={values?.location ?? ""}
+            className={inputCls}
+            placeholder={t("locationPlaceholder")}
+          />
         </label>
         <label className="block">
           <Label>{t("hours")}</Label>
-          <input name="hours" defaultValue={values?.hours ?? ""} className={inputCls} placeholder="07:00 – 23:00" dir="ltr" />
+          <input
+            name="hours"
+            defaultValue={values?.hours ?? ""}
+            className={inputCls}
+            placeholder="07:00 – 23:00"
+            dir="ltr"
+          />
         </label>
       </div>
     </>
@@ -309,7 +341,11 @@ export function OutletCard({
         </Link>
         {canManage ? (
           <>
-            <SheetAction label={t("menu")} icon={<SquareMenu aria-hidden="true" />} title={t("menuTitle", { name: outlet.name })}>
+            <SheetAction
+              label={t("menu")}
+              icon={<SquareMenu aria-hidden="true" />}
+              title={t("menuTitle", { name: outlet.name })}
+            >
               {(close) => (
                 <form
                   className="space-y-4"
@@ -351,7 +387,11 @@ export function OutletCard({
                 </form>
               )}
             </SheetAction>
-            <SheetAction label={t("addTables")} icon={<Plus aria-hidden="true" />} title={t("addTablesTitle", { name: outlet.name })}>
+            <SheetAction
+              label={t("addTables")}
+              icon={<Plus aria-hidden="true" />}
+              title={t("addTablesTitle", { name: outlet.name })}
+            >
               {(close) => (
                 <form
                   className="space-y-4"
@@ -359,7 +399,13 @@ export function OutletCard({
                     e.preventDefault();
                     const fd = new FormData(e.currentTarget);
                     add.run(
-                      () => addOutletTablesAction(restaurantId, outlet.id, Number(str(fd, "tables")), Number(str(fd, "seats") || 4)),
+                      () =>
+                        addOutletTablesAction(
+                          restaurantId,
+                          outlet.id,
+                          Number(str(fd, "tables")),
+                          Number(str(fd, "seats") || 4),
+                        ),
                       close,
                     );
                   }}
@@ -367,11 +413,25 @@ export function OutletCard({
                   <div className="grid grid-cols-2 gap-3">
                     <label className="block">
                       <Label>{t("tables")}</Label>
-                      <input name="tables" type="number" min={1} max={200} defaultValue={4} className={inputCls} />
+                      <input
+                        name="tables"
+                        type="number"
+                        min={1}
+                        max={200}
+                        defaultValue={4}
+                        className={inputCls}
+                      />
                     </label>
                     <label className="block">
                       <Label>{t("seats")}</Label>
-                      <input name="seats" type="number" min={1} max={30} defaultValue={4} className={inputCls} />
+                      <input
+                        name="seats"
+                        type="number"
+                        min={1}
+                        max={30}
+                        defaultValue={4}
+                        className={inputCls}
+                      />
                     </label>
                   </div>
                   <FormError error={add.error} />

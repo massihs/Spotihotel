@@ -123,7 +123,7 @@ function Table({ children, min = 640 }: { children: React.ReactNode; min?: numbe
         className={cn(
           "w-full text-sm [&_tbody_tr]:border-t [&_tbody_tr]:border-border",
           // Header in a pale shade of the hotel's colour, rows lit on hover, figures aligned.
-          "[&_thead]:bg-brand-50 [&_thead_th]:text-brand-800 [&_thead_th]:font-semibold",
+          "[&_thead]:bg-brand-50 [&_thead_th]:font-semibold [&_thead_th]:text-brand-800",
           "[&_tbody_tr]:transition-colors [&_tbody_tr:hover]:bg-brand-50/60",
           "[&_tfoot]:border-t-2 [&_tfoot]:border-brand-200 [&_tfoot]:bg-brand-50/70 [&_tfoot]:font-bold",
         )}
@@ -211,7 +211,11 @@ async function Ledger({ params, searchParams }: Props) {
           />
           <StatCard
             label={t("cash")}
-            value={<span title={money(cash.reduce((s, c) => s + c.closing, 0))}>{big(cash.reduce((s, c) => s + c.closing, 0))}</span>}
+            value={
+              <span title={money(cash.reduce((s, c) => s + c.closing, 0))}>
+                {big(cash.reduce((s, c) => s + c.closing, 0))}
+              </span>
+            }
             hint={t("receivables", { amount: money(aged.totals.cityLedger) })}
             icon={<Landmark />}
             tone="indigo"
@@ -221,17 +225,23 @@ async function Ledger({ params, searchParams }: Props) {
           <section>
             <h2 className="mb-2 font-semibold">{t("hotelKpis")}</h2>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">
-              <StatCard compact
+              <StatCard
+                compact
                 label={t("occupancy")}
                 value={`${avail ? Math.round((sold / avail) * 1000) / 10 : 0}%`}
               />
               <StatCard compact label={t("adr")} value={big(sold ? Math.round(roomRev / sold) : 0)} />
               <StatCard compact label={t("revpar")} value={big(avail ? Math.round(roomRev / avail) : 0)} />
-              <StatCard compact
+              <StatCard
+                compact
                 label={t("trevpar")}
                 value={big(avail ? Math.round(pl.totals.revenue / avail) : 0)}
               />
-              <StatCard compact label={t("goppar")} value={big(avail ? Math.round(pl.totals.net / avail) : 0)} />
+              <StatCard
+                compact
+                label={t("goppar")}
+                value={big(avail ? Math.round(pl.totals.net / avail) : 0)}
+              />
             </div>
           </section>
         ) : null}
@@ -314,7 +324,10 @@ async function Ledger({ params, searchParams }: Props) {
                         </div>
                       ))}
                     </div>
-                    <div className="mt-2 flex justify-between text-[11px] text-fg-subtle tabular-nums" dir="ltr">
+                    <div
+                      className="mt-2 flex justify-between text-[11px] text-fg-subtle tabular-nums"
+                      dir="ltr"
+                    >
                       <span>{day(days[0]!.businessDate)}</span>
                       <span>{day(days[days.length - 1]!.businessDate)}</span>
                     </div>
@@ -798,9 +811,21 @@ async function Ledger({ params, searchParams }: Props) {
     body = (
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <StatCard label={t("cheque.receivedOpen")} value={<span title={money(reg.totals.receivedOpen)}>{big(reg.totals.receivedOpen)}</span>} tone="indigo" />
-          <StatCard label={t("cheque.issuedOpen")} value={<span title={money(reg.totals.issuedOpen)}>{big(reg.totals.issuedOpen)}</span>} tone="amber" />
-          <StatCard label={t("cheque.bounced")} value={<span title={money(reg.totals.bounced)}>{big(reg.totals.bounced)}</span>} tone="rose" />
+          <StatCard
+            label={t("cheque.receivedOpen")}
+            value={<span title={money(reg.totals.receivedOpen)}>{big(reg.totals.receivedOpen)}</span>}
+            tone="indigo"
+          />
+          <StatCard
+            label={t("cheque.issuedOpen")}
+            value={<span title={money(reg.totals.issuedOpen)}>{big(reg.totals.issuedOpen)}</span>}
+            tone="amber"
+          />
+          <StatCard
+            label={t("cheque.bounced")}
+            value={<span title={money(reg.totals.bounced)}>{big(reg.totals.bounced)}</span>}
+            tone="rose"
+          />
           <StatCard label={t("cheque.dueWeek")} value={reg.totals.dueThisWeek} tone="teal" />
         </div>
         <Table min={900}>
@@ -1218,7 +1243,7 @@ async function Ledger({ params, searchParams }: Props) {
 
       {/* Rooms of the books, then the pages of the open room. */}
       <nav aria-label={t("title")} className="mb-3">
-        <div className="-mx-4 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0">
+        <div className="-mx-4 [scrollbar-width:none] overflow-x-auto px-4 sm:mx-0 sm:px-0">
           <ul className="flex w-max min-w-full gap-1 rounded-xl bg-brand-50 p-1 ring-1 ring-brand-100 ring-inset">
             {GROUPS.map((g) => {
               const active = g.key === group.key;

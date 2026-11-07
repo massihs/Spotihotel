@@ -25,8 +25,8 @@ npm run dev                       # http://localhost:3000 (en persan)
 
 Comptes de démonstration (seed) :
 
-| Rôle         | Email                        | Mot de passe                                    |
-| ------------ | ---------------------------- | ----------------------------------------------- |
+| Rôle         | Email                         | Mot de passe                                    |
+| ------------ | ----------------------------- | ----------------------------------------------- |
 | Super admin  | `admin@spotihotel.local`      | `ChangeMe!2026` (variables `SEED_SUPERADMIN_*`) |
 | Propriétaire | `owner@demo.spotihotel.local` | `DemoOwner!2026`                                |
 | Équipe       | `staff@demo.spotihotel.local` | `DemoStaff!2026`                                |

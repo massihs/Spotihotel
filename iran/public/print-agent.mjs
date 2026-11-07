@@ -11,7 +11,8 @@
  */
 import net from "node:net";
 
-const [server = process.env.SPOTIHOTEL_URL, token = process.env.SPOTIHOTEL_PRINT_TOKEN] = process.argv.slice(2);
+const [server = process.env.SPOTIHOTEL_URL, token = process.env.SPOTIHOTEL_PRINT_TOKEN] =
+  process.argv.slice(2);
 if (!server || !token) {
   console.error("Usage: node print-agent.mjs <server address> <agent token>");
   process.exit(1);

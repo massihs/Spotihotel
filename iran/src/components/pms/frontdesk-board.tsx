@@ -1,18 +1,12 @@
 "use client";
 
+import { CheckInButton } from "./check-in-wizard";
 import { BedDouble, LogIn, LogOut, MoonStar, Star } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { useMoney } from "@/components/ui/use-money";
-import { useRun } from "@/components/ui/sheet-kit";
-import { Button } from "@/components/ui/button";
-import {
-  checkInAction,
-  checkOutAction,
-  nightAuditAction,
-} from "@/app/[locale]/dashboard/[restaurantId]/hotel-actions";
-import { Empty, FormError, RunButton, SheetButton, StatusPill, inputCls, useDay } from "./kit";
+import { checkOutAction, nightAuditAction } from "@/app/[locale]/dashboard/[restaurantId]/hotel-actions";
+import { Empty, RunButton, StatusPill, useDay } from "./kit";
 
 export type DeskStay = {
   id: string;
@@ -49,7 +43,7 @@ export function FrontDeskBoard({
   arrivals,
   departures,
   inHouse,
-  rooms,
+  rooms: _rooms,
   preflight,
   canManage,
 }: {
@@ -101,10 +95,11 @@ export function FrontDeskBoard({
               </span>
             ) : null}
             {canManage ? (
-              <CheckIn
+              <CheckInButton
                 restaurantId={restaurantId}
-                stay={s}
-                rooms={rooms.filter((r) => r.roomTypeId === s.roomTypeId)}
+                currency={currency}
+                stayId={s.id}
+                label={t("checkIn")}
               />
             ) : null}
           </li>
@@ -213,44 +208,6 @@ function Column({
       </h2>
       {items.length ? <ul className="divide-y divide-border">{items}</ul> : <Empty>{empty}</Empty>}
     </section>
-  );
-}
-
-function CheckIn({ restaurantId, stay, rooms }: { restaurantId: string; stay: DeskStay; rooms: DeskRoom[] }) {
-  const t = useTranslations("pms.desk");
-  const tHk = useTranslations("pms.housekeeping");
-  const free = rooms.filter((r) => !r.occupied && r.housekeeping !== "out_of_order");
-  const [roomId, setRoomId] = useState(stay.roomId ?? "");
-  const r = useRun();
-  const chosen = free.find((x) => x.id === roomId);
-  const dirty = chosen && !["clean", "inspected"].includes(chosen.housekeeping);
-  return (
-    <SheetButton label={t("checkIn")} title={t("checkInTitle", { name: stay.lastName })} variant="primary">
-      {(close) => (
-        <div className="space-y-4">
-          <label className="block">
-            <span className="mb-1 block text-sm font-semibold">{t("room")}</span>
-            <select className={inputCls} value={roomId} onChange={(e) => setRoomId(e.target.value)}>
-              <option value="">{t("autoRoom")}</option>
-              {free.map((x) => (
-                <option key={x.id} value={x.id}>
-                  {x.label} | {tHk(x.housekeeping)}
-                </option>
-              ))}
-            </select>
-          </label>
-          {dirty ? <p className="rounded-xl bg-warning-soft px-3 py-2 text-sm">{t("dirtyWarning")}</p> : null}
-          <FormError error={r.error} />
-          <Button
-            className="w-full"
-            disabled={r.pending}
-            onClick={() => r.run(() => checkInAction(restaurantId, stay.id, roomId || null, !!dirty), close)}
-          >
-            {t("confirmCheckIn")}
-          </Button>
-        </div>
-      )}
-    </SheetButton>
   );
 }
 

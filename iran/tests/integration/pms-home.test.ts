@@ -25,7 +25,13 @@ describe("hotel home dashboard", () => {
 
     // A bare hotel: nothing set up, nothing sold.
     const empty = await hotelHome(db, h);
-    expect(empty.setup).toMatchObject({ roomTypes: 0, ratePlans: 0, rooms: 0, roomsTyped: false, bookings: 0 });
+    expect(empty.setup).toMatchObject({
+      roomTypes: 0,
+      ratePlans: 0,
+      rooms: 0,
+      roomsTyped: false,
+      bookings: 0,
+    });
     expect(empty.lastAudit).toBeNull();
 
     await bulkCreateTables(db, h, { from: 101, to: 104, kind: "room" });
