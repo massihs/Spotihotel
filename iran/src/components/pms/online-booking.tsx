@@ -17,6 +17,7 @@ import {
 import { useTranslations } from "next-intl";
 import { useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { DateInput } from "@/components/ui/date-input";
 import { useMoney } from "@/components/ui/use-money";
 import { cn } from "@/lib/cn";
@@ -328,7 +329,11 @@ function Shell({
     <div className="min-h-dvh bg-bg">
       <header className="bg-[var(--sidebar)] text-[var(--sidebar-fg)]">
         <div className="mx-auto max-w-4xl px-4 pt-8 pb-14 sm:px-6">
-          <p className="text-xs tracking-[0.2em] text-[var(--brass)] uppercase">{t("eyebrow")}</p>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs tracking-[0.2em] text-[var(--brass)] uppercase">{t("eyebrow")}</p>
+            {/* Foreign guests book too: Persian, English or Arabic. */}
+            <LanguageSwitcher className="bg-white/10 text-[var(--sidebar-fg)] ring-1 ring-white/15 hover:bg-white/15" />
+          </div>
           <h1 className="mt-1 text-3xl font-bold">{hotel.name}</h1>
           <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm opacity-80">
             {hotel.address || hotel.city ? (
