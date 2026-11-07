@@ -1240,7 +1240,7 @@ async function catchUp(w: World) {
   sayad = 100_000 + issued;
   console.log(`  Parsian: catching up ${gap} day(s), ${from} → ${today}`);
   const horizon = addDays(today, 14);
-  for (const t of TYPES)
+  for (const t of TYPES.filter((x) => w.typeId.has(x.code)))
     await setRateRange(db, w.ownerCtx, {
       roomTypeId: w.typeId.get(t.code)!,
       from,
@@ -1304,7 +1304,10 @@ export async function seedParsian(ownerEmail: string, days = 30, opts: { build?:
       .select({ n: count() })
       .from(nightAudits)
       .where(eq(nightAudits.restaurantId, existing.id));
-    if ((done?.n ?? 0) >= days) {
+    const complete = (done?.n ?? 0) >= days;
+    // A finished hotel is kept up to date; so is an unfinished one (a build cut short) when no
+    // rebuild is asked: the days it is missing are played through, up to today.
+    if (complete || !build) {
       const ctx = await loadRestaurantContext(db, { ...ownerUser, locale: ownerUser.locale }, existing.id);
       const added = await ensureParsianOutlets(ctx);
       for (const [name, icon] of Object.entries(MENU_ICONS))
@@ -1326,13 +1329,7 @@ export async function seedParsian(ownerEmail: string, days = 30, opts: { build?:
         return;
       }
       console.log("! Parsian test hotel too far behind — rebuilding");
-    } else {
-      if (!build) {
-        console.log("! Parsian test hotel incomplete: set SEED_PARSIAN=true to rebuild it");
-        return;
-      }
-      console.log("! Parsian test hotel incomplete — rebuilding");
-    }
+    } else console.log("! Parsian test hotel incomplete — rebuilding");
     await db.delete(restaurants).where(eq(restaurants.id, existing.id));
     await db.delete(organizations).where(eq(organizations.id, existing.organizationId));
   }
