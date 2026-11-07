@@ -24,6 +24,7 @@ import {
   hotelGuests,
   minibarItems,
   nightAudits,
+  organizationMembers,
   organizations,
   outlets,
   plans,
@@ -1268,21 +1269,43 @@ async function catchUp(w: World) {
   return true;
 }
 
-export async function seedParsian(ownerEmail: string, days = 30) {
-  const [owner] = await db
+/**
+ * `build`: build the hotel when it is missing or half-built (SEED_PARSIAN=true). Without it the
+ * script only keeps an existing test hotel up to date, and does nothing on a site without one.
+ */
+export async function seedParsian(ownerEmail: string, days = 30, opts: { build?: boolean } = {}) {
+  const build = opts.build ?? true;
+  const [existing] = await db.select().from(restaurants).where(eq(restaurants.slug, SLUG));
+  if (!existing && !build) return;
+  // The configured owner, else the owner of the hotel's organization.
+  const [byEmail] = await db
     .select()
     .from(users)
     .where(sql`lower(${users.email}) = ${ownerEmail.toLowerCase()}`);
-  if (!owner) throw new Error(`owner ${ownerEmail} not found`);
+  const [orgOwner] =
+    byEmail || !existing
+      ? []
+      : await db
+          .select({ user: users })
+          .from(organizationMembers)
+          .innerJoin(users, eq(users.id, organizationMembers.userId))
+          .where(
+            and(
+              eq(organizationMembers.organizationId, existing.organizationId),
+              eq(organizationMembers.role, "owner"),
+            ),
+          )
+          .limit(1);
+  const ownerUser = byEmail ?? orgOwner?.user;
+  if (!ownerUser) throw new Error(`owner ${ownerEmail} not found`);
 
-  const [existing] = await db.select().from(restaurants).where(eq(restaurants.slug, SLUG));
   if (existing) {
     const [done] = await db
       .select({ n: count() })
       .from(nightAudits)
       .where(eq(nightAudits.restaurantId, existing.id));
     if ((done?.n ?? 0) >= days) {
-      const ctx = await loadRestaurantContext(db, { ...owner, locale: owner.locale }, existing.id);
+      const ctx = await loadRestaurantContext(db, { ...ownerUser, locale: ownerUser.locale }, existing.id);
       const added = await ensureParsianOutlets(ctx);
       for (const [name, icon] of Object.entries(MENU_ICONS))
         await db
@@ -1297,13 +1320,24 @@ export async function seedParsian(ownerEmail: string, days = 30) {
         .set({ bookableOnline: false })
         .where(and(eq(ratePlans.restaurantId, existing.id), eq(ratePlans.code, "CORP")));
       if (added) console.log(`✓ Parsian test hotel: ${added} restaurants and cafés added`);
-      if (await catchUp(await loadWorld(existing, owner))) return;
+      if (await catchUp(await loadWorld(existing, ownerUser))) return;
+      if (!build) {
+        console.log("! Parsian test hotel too far behind: set SEED_PARSIAN=true to rebuild it");
+        return;
+      }
       console.log("! Parsian test hotel too far behind — rebuilding");
-    } else console.log("! Parsian test hotel incomplete — rebuilding");
+    } else {
+      if (!build) {
+        console.log("! Parsian test hotel incomplete: set SEED_PARSIAN=true to rebuild it");
+        return;
+      }
+      console.log("! Parsian test hotel incomplete — rebuilding");
+    }
     await db.delete(restaurants).where(eq(restaurants.id, existing.id));
     await db.delete(organizations).where(eq(organizations.id, existing.organizationId));
   }
   const started = Date.now();
+  const owner = ownerUser;
 
   // ── Organization, hotel, plan ─────────────────────────────────────────────
   const hotel = await db.transaction(async (tx) => {
@@ -1804,7 +1838,8 @@ if (isMain) {
   const owner =
     process.env.SEED_PARSIAN_OWNER || process.env.SEED_SUPERADMIN_EMAIL || "owner@demo.spotihotel.local";
   const days = Number(process.env.PARSIAN_DAYS ?? 30) || 30;
-  withBuildLock(() => seedParsian(owner, days))
+  // Building the hotel is asked for; keeping an existing one up to date always happens.
+  withBuildLock(() => seedParsian(owner, days, { build: process.env.SEED_PARSIAN === "true" }))
     .then(() => process.exit(0))
     .catch((e) => {
       console.error("✗ Parsian seed failed", e);
