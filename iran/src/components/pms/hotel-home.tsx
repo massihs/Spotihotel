@@ -321,16 +321,15 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3 px-5 py-4">
           <div className="min-w-0">
             <p className="text-sm text-fg-muted">{t("bookedToday")}</p>
-            <p className="text-2xl font-bold tabular-nums">
-              {home.bookedToday.count}
-              {home.bookedToday.cents ? (
-                <span className="ms-2 text-sm font-semibold text-fg-muted">
-                  {money(home.bookedToday.cents)}
-                </span>
-              ) : null}
-            </p>
+            <p className="text-2xl font-bold tabular-nums">{home.bookedToday.count}</p>
+            {home.bookedToday.cents ? (
+              <p className="text-sm font-semibold text-fg-muted tabular-nums">
+                {money(home.bookedToday.cents)}
+              </p>
+            ) : null}
           </div>
-          <ul className="flex min-w-0 flex-1 flex-wrap gap-1.5">
+          {/* Phone: the channels take the full width under the figure instead of a narrow column. */}
+          <ul className="flex min-w-0 basis-full flex-wrap gap-1.5 sm:flex-1 sm:basis-0">
             {home.bookedToday.bySource.map((b) => (
               <li
                 key={b.source}
