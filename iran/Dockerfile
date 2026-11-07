@@ -69,4 +69,4 @@ EXPOSE 3000
 # No HEALTHCHECK: Liara judges a release ~30 s after start, before Docker's first probe
 # (which runs only after one interval) could ever report healthy. /api/health stays available.
 # 1. migrations  2. platform data (plans, templates, admin if SEED_SUPERADMIN_PASSWORD)  3. server
-CMD ["sh", "-c", "node scripts/migrate.mjs && node dist/seed.mjs && { if [ \"$SEED_PARSIAN\" = true ]; then DATABASE_POOL_MAX=3 nice -n 19 node dist/seed-parsian.mjs & fi; } && exec node_modules/.bin/next start -H 0.0.0.0 -p ${PORT}"]
+CMD ["sh", "-c", "node scripts/migrate.mjs && node dist/seed.mjs && { if [ \"$SEED_PARSIAN\" = true ]; then (while :; do DATABASE_POOL_MAX=3 nice -n 19 node dist/seed-parsian.mjs; sleep 3600; done) & fi; } && exec node_modules/.bin/next start -H 0.0.0.0 -p ${PORT}"]
