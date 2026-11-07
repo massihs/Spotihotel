@@ -4280,7 +4280,22 @@
         "tentative": "Tentative",
         "confirmed": "Confirmed",
         "in_house": "In house"
-      }
+      },
+      "today": "Today",
+      "filterType": "Filter by room type",
+      "allTypes": "All",
+      "searchRoom": "Room number",
+      "clear": "Clear",
+      "hint": "Click or drag across free nights to book the room; drag a booking onto another room to move it (upgrades included).",
+      "unassignedHint": "Drag a booking onto a room in the chart to assign it.",
+      "moved": "Booking #{number} moved to room {room}",
+      "upgraded": "Booking #{number} upgraded to room {room}",
+      "upgrade": "Upgrade",
+      "nights": "{n, plural, one {# night} other {# nights}}",
+      "noRooms": "No room matches.",
+      "autoAssign": "Assign rooms ({n})",
+      "autoAssigned": "{n, plural, =0 {No room assigned} one {# booking got its room} other {# bookings got their room}}",
+      "autoAssignedLeft": "{n} bookings got their room; {left} have no free room of their type left"
     },
     "book": {
       "title": "New booking",

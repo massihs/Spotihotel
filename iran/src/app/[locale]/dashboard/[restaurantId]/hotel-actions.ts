@@ -83,12 +83,13 @@ import {
 } from "@/server/modules/pms/revenue";
 import { sendPrecheckinLink } from "@/server/modules/pms/precheckin";
 import {
+  autoAssignRooms,
   availableRooms,
   bookingOptions,
   checkInContext,
-  updateGuestIdentity,
   type bookingSearchSchema,
   type identitySchema,
+  updateGuestIdentity,
 } from "@/server/modules/pms/booking";
 import type { z } from "zod";
 
@@ -156,6 +157,10 @@ export const createStayAction = async (rid: string, input: In<typeof staySchema>
 export const amendStayAction = async (rid: string, id: string, input: In<typeof amendSchema>) =>
   runAction(async () =>
     done((await amendStay(db, await actionContext(rid, "frontdesk.manage"), id, input)).id),
+  );
+export const autoAssignRoomsAction = async (rid: string, from: string, to: string) =>
+  runAction(async () =>
+    done(await autoAssignRooms(db, await actionContext(rid, "frontdesk.manage"), { from, to })),
   );
 export const assignRoomAction = async (rid: string, id: string, roomId: string | null) =>
   runAction(async () => done(await assignRoom(db, await actionContext(rid, "frontdesk.manage"), id, roomId)));

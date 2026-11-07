@@ -4288,7 +4288,22 @@
         "tentative": "Option",
         "confirmed": "Confirmée",
         "in_house": "Présent"
-      }
+      },
+      "today": "Aujourd'hui",
+      "filterType": "Filtrer par type de chambre",
+      "allTypes": "Toutes",
+      "searchRoom": "N° de chambre",
+      "clear": "Effacer",
+      "hint": "Cliquez ou glissez sur des nuits libres pour réserver la chambre ; faites glisser une réservation vers une autre chambre pour la déplacer (surclassement compris).",
+      "unassignedHint": "Faites glisser une réservation sur une chambre du planning pour la lui attribuer.",
+      "moved": "Réservation n° {number} placée en chambre {room}",
+      "upgraded": "Réservation n° {number} surclassée en chambre {room}",
+      "upgrade": "Surclassement",
+      "nights": "{n, plural, one {# nuit} other {# nuits}}",
+      "noRooms": "Aucune chambre ne correspond.",
+      "autoAssign": "Attribuer les chambres ({n})",
+      "autoAssigned": "{n, plural, =0 {Aucune chambre attribuée} one {# réservation a reçu sa chambre} other {# réservations ont reçu leur chambre}}",
+      "autoAssignedLeft": "{n} réservations ont reçu leur chambre ; {left} restent sans chambre libre de leur type"
     },
     "book": {
       "title": "Nouvelle réservation",

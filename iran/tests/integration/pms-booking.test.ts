@@ -1,12 +1,13 @@
 import { eq } from "drizzle-orm";
 import { describe, expect, it } from "vitest";
 import { db } from "@/server/db/client";
-import { restaurants } from "@/server/db/schema";
+import { restaurants, stays } from "@/server/db/schema";
 import { bulkCreateTables, listTables } from "@/server/modules/tables/service";
 import { assignRoomType, createRatePlan, createRoomType, getPmsSettings } from "@/server/modules/pms/setup";
 import { checkIn, createStay } from "@/server/modules/pms/stays";
 import { runNightAudit } from "@/server/modules/pms/night-audit";
 import {
+  autoAssignRooms,
   availableRooms,
   bookingOptions,
   checkInContext,
@@ -205,5 +206,52 @@ describe("guided check-in", () => {
     expect(ctx3.rooms.find((r) => r.number === 101)?.occupiedNow).toBe(true);
     const checked = await checkIn(db, h, walkIn.id, { allowDirty: true });
     expect(checked.roomId).not.toBe(room(101).id);
+  });
+});
+
+describe("automatic room allocation", () => {
+  it("gives every booking of the period a room of its type, packed without overlaps", async () => {
+    const { h, dbl, ste, today, room } = await hotel("Allocation Hotel");
+    const book = (lastName: string, roomTypeId: string, a: number, d: number) =>
+      createStay(db, h, {
+        guest: { firstName: "Test", lastName },
+        roomTypeId,
+        arrival: addDays(today, a),
+        departure: addDays(today, d),
+      });
+    // Two doubles for four bookings: they only fit when packed end to end.
+    const a = await book("A", dbl.id, 0, 2);
+    const c = await book("C", dbl.id, 0, 1);
+    const d = await book("D", dbl.id, 1, 3);
+    const b = await book("B", dbl.id, 2, 4);
+    const s = await book("S", ste.id, 5, 6);
+    // Outside the period: left alone.
+    const late = await book("Late", ste.id, 9, 10);
+
+    const res = await autoAssignRooms(db, h, { from: today, to: addDays(today, 7) });
+    expect(res).toEqual({ assigned: 5, left: 0 });
+    const rooms = await db
+      .select({ id: stays.id, roomId: stays.roomId, arrival: stays.arrival, departure: stays.departure })
+      .from(stays)
+      .where(eq(stays.restaurantId, h.restaurant.id));
+    const of = (id: string) => rooms.find((r) => r.id === id)!.roomId;
+    expect(
+      [of(a.id), of(c.id), of(d.id), of(b.id)].every((r) => r === room(101).id || r === room(102).id),
+    ).toBe(true);
+    expect(of(a.id)).not.toBe(of(c.id));
+    expect(of(c.id)).toBe(of(d.id));
+    expect(of(a.id)).toBe(of(b.id));
+    expect(of(s.id)).toBe(room(103).id);
+    expect(of(late.id)).toBeNull();
+    for (const x of rooms)
+      for (const y of rooms)
+        if (x.id !== y.id && x.roomId && x.roomId === y.roomId)
+          expect(x.arrival < y.departure && x.departure > y.arrival).toBe(false);
+
+    // Nothing left to do: a second run assigns nothing.
+    expect(await autoAssignRooms(db, h, { from: today, to: addDays(today, 7) })).toEqual({
+      assigned: 0,
+      left: 0,
+    });
   });
 });

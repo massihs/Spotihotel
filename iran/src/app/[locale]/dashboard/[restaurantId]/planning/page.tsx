@@ -47,6 +47,7 @@ async function Planning({ params, searchParams }: Props) {
         today={settings.businessDate}
         prevHref={`${base}?from=${addDays(from, -7)}`}
         nextHref={`${base}?from=${addDays(from, 7)}`}
+        todayHref={base}
         canManage={can(ctx, "frontdesk.manage")}
       />
     </>

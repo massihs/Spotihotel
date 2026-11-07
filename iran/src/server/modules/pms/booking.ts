@@ -1,8 +1,9 @@
-import { and, asc, eq, inArray, isNull, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gt, gte, inArray, isNotNull, isNull, lt, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { Database, DbOrTx } from "@/server/db/client";
 import { diningTables, hotelGuests, roomTypes, stays } from "@/server/db/schema";
 import { notFound, validation } from "@/server/errors";
+import { recordAudit } from "@/server/audit";
 import { normalizeDigits } from "@/lib/money";
 import { isIranNationalCode } from "@/lib/iran-id";
 import { guestFields, nationalCodeOk, nationalCodeRule } from "./guests";
@@ -272,4 +273,145 @@ export async function checkInContext(db: DbOrTx, ctx: RestaurantContext, stayId:
     firstNightCents: card.nights[0]?.rateCents ?? 0,
     rooms,
   };
+}
+
+// ─── Automatic room allocation ───────────────────────────────────────────────
+
+export const autoAssignSchema = z
+  .object({
+    from: z.string().refine(isDay, "invalid_date"),
+    to: z.string().refine(isDay, "invalid_date"),
+  })
+  .refine((v) => v.to > v.from && nightsBetween(v.from, v.to) <= 62, {
+    message: "invalid_range",
+    path: ["to"],
+  });
+
+/**
+ * Gives a room to every booking arriving in [from, to) that has none: a free room of its type for
+ * the whole stay, packed tight (the room whose previous guest leaves closest to the arrival, so
+ * free nights stay together and long stays still fit), clean rooms and lower floors first. A guest
+ * arriving today never gets a room someone is still in. Types are locked meanwhile, so a booking
+ * made at the same time cannot take the same room.
+ */
+export async function autoAssignRooms(
+  db: Database,
+  ctx: RestaurantContext,
+  raw: z.input<typeof autoAssignSchema>,
+) {
+  assertCan(ctx, "frontdesk.manage");
+  const q = autoAssignSchema.parse(raw);
+  const rid = ctx.restaurant.id;
+  const { businessDate } = await getPmsSettings(db, rid, ctx.restaurant.timezone);
+  const from = q.from < businessDate ? businessDate : q.from;
+  if (q.to <= from) return { assigned: 0, left: 0 };
+  return db.transaction(async (tx) => {
+    const pending = await tx
+      .select({
+        id: stays.id,
+        roomTypeId: stays.roomTypeId,
+        arrival: stays.arrival,
+        departure: stays.departure,
+      })
+      .from(stays)
+      .where(
+        and(
+          eq(stays.restaurantId, rid),
+          inArray(stays.status, ["tentative", "confirmed"]),
+          isNull(stays.roomId),
+          gte(stays.arrival, from),
+          lt(stays.arrival, q.to),
+        ),
+      )
+      // Longest stays first on each day: they are the hardest to fit.
+      .orderBy(asc(stays.arrival), desc(stays.departure));
+    if (!pending.length) return { assigned: 0, left: 0 };
+    const typeIds = [...new Set(pending.map((s) => s.roomTypeId))].sort();
+    for (const id of typeIds)
+      await tx.select({ id: roomTypes.id }).from(roomTypes).where(eq(roomTypes.id, id)).for("update");
+    const lastDeparture = pending.reduce(
+      (m, s) => (s.departure > m ? s.departure : m),
+      pending[0]!.departure,
+    );
+    const [rooms, taken] = await Promise.all([
+      tx
+        .select({ id: diningTables.id, roomTypeId: diningTables.roomTypeId })
+        .from(diningTables)
+        .where(
+          and(
+            eq(diningTables.restaurantId, rid),
+            eq(diningTables.kind, "room"),
+            isNull(diningTables.deletedAt),
+            sql`${diningTables.housekeeping} <> 'out_of_order'`,
+            inArray(diningTables.roomTypeId, typeIds),
+          ),
+        )
+        .orderBy(
+          sql`${diningTables.housekeeping} in ('clean','inspected') desc`,
+          asc(diningTables.number),
+          asc(diningTables.label),
+        ),
+      tx
+        .select({
+          roomId: stays.roomId,
+          arrival: stays.arrival,
+          departure: stays.departure,
+          status: stays.status,
+        })
+        .from(stays)
+        .where(
+          and(
+            eq(stays.restaurantId, rid),
+            inArray(stays.status, ["tentative", "confirmed", "in_house"]),
+            isNotNull(stays.roomId),
+            lt(stays.arrival, lastDeparture),
+            gt(stays.departure, from < businessDate ? from : businessDate),
+          ),
+        ),
+    ]);
+    const busy = new Map<string, { a: string; d: string }[]>();
+    const occupiedNow = new Set<string>();
+    for (const t of taken) {
+      busy.set(t.roomId!, [...(busy.get(t.roomId!) ?? []), { a: t.arrival, d: t.departure }]);
+      if (t.status === "in_house") occupiedNow.add(t.roomId!);
+    }
+    let assigned = 0;
+    for (const s of pending) {
+      let best: string | null = null;
+      let bestGap = Infinity;
+      for (const r of rooms) {
+        if (r.roomTypeId !== s.roomTypeId) continue;
+        if (s.arrival <= businessDate && occupiedNow.has(r.id)) continue;
+        const list = busy.get(r.id) ?? [];
+        if (list.some((x) => x.a < s.departure && x.d > s.arrival)) continue;
+        const before = list.reduce<string | null>(
+          (m, x) => (x.d <= s.arrival && (!m || x.d > m) ? x.d : m),
+          null,
+        );
+        const gap = before ? nightsBetween(before, s.arrival) : 10_000;
+        if (gap < bestGap) {
+          best = r.id;
+          bestGap = gap;
+          if (gap === 0) break;
+        }
+      }
+      if (!best) continue;
+      busy.set(best, [...(busy.get(best) ?? []), { a: s.arrival, d: s.departure }]);
+      await tx
+        .update(stays)
+        .set({ roomId: best })
+        .where(and(eq(stays.id, s.id), isNull(stays.roomId)));
+      assigned++;
+    }
+    if (assigned)
+      await recordAudit(tx, {
+        action: "stay.rooms_auto_assigned",
+        actorUserId: ctx.user.id,
+        restaurantId: rid,
+        entityType: "restaurant",
+        entityId: rid,
+        metadata: { from, to: q.to, assigned },
+      });
+    return { assigned, left: pending.length - assigned };
+  });
 }

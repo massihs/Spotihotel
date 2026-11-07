@@ -70,6 +70,7 @@ import { chargeRoomOrders } from "@/server/modules/pms/room-charges";
 import { addDays, nightsBetween, serviceSlots } from "@/server/modules/pms/calc";
 import { cancellationFee, savePricingRule } from "@/server/modules/pms/revenue";
 import { createBlock } from "@/server/modules/pms/blocks";
+import { autoAssignRooms } from "@/server/modules/pms/booking";
 import { runNightAudit } from "@/server/modules/pms/night-audit";
 import { createPosOrder } from "@/server/modules/pos/service";
 import { createExpense } from "@/server/modules/reports/service";
@@ -1165,6 +1166,16 @@ async function simulateDay(
   console.log(`  ${d}: ${inh} rooms in house (${Math.round((Date.now() - started) / 1000)} s)`);
 }
 
+/** The desk's morning routine: rooms given to the bookings of the next ten days (the planning fills up). */
+async function allocate(w: World, today: string) {
+  try {
+    const r = await autoAssignRooms(db, w.ownerCtx, { from: today, to: addDays(today, 10) });
+    console.log(`  Parsian: rooms given to ${r.assigned} bookings of the next 10 days (${r.left} left)`);
+  } catch (e) {
+    console.error("  room allocation failed", e);
+  }
+}
+
 /** Today's loose ends: a few requests from rooms, pre-registrations, two rooms out of order. */
 async function looseEnds(w: World, today: string, outOfOrder: boolean) {
   const { rid } = w;
@@ -1240,6 +1251,7 @@ async function catchUp(w: World) {
   for (let d = from; d <= today; d = addDays(d, 1))
     await simulateDay(w, sim, d, { isToday: d === today, resume: d === from });
   await looseEnds(w, today, false);
+  await allocate(w, today);
   await syncLedger(db, w.hotel);
   console.log(
     `✓ Parsian test hotel brought up to ${today}: ${plan.length} new bookings (${Math.round((Date.now() - sim.started) / 1000)} s)`,
@@ -1736,6 +1748,7 @@ export async function seedParsian(ownerEmail: string, days = 30) {
   }
 
   await looseEnds(w, today, true);
+  await allocate(w, today);
   await syncLedger(db, hotel);
 
   const [{ n: total } = { n: 0 }] = await db

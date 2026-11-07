@@ -836,8 +836,11 @@ export function BookingDesk({
                 <option value="">{t("roomAuto")}</option>
                 {rooms.map((r) => (
                   <option key={r.id} value={r.id}>
-                    {r.label} | {tHk(r.housekeeping)}
-                    {r.occupiedNow ? ` | ${t("stillOccupied")}` : ""}
+                    {r.label}
+                    {/* Cleaning and the guest still in the room only matter for an arrival today. */}
+                    {arrival === today
+                      ? ` | ${tHk(r.housekeeping)}${r.occupiedNow ? ` | ${t("stillOccupied")}` : ""}`
+                      : ""}
                   </option>
                 ))}
               </select>
