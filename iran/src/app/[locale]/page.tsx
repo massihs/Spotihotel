@@ -20,7 +20,10 @@ import {
   MessageSquareText,
   MonitorPlay,
   MoonStar,
+  MousePointerClick,
   Phone,
+  Timer,
+  X,
   QrCode,
   ReceiptText,
   Smartphone,
@@ -77,6 +80,19 @@ const MADE_FOR_IRAN = [
   { key: "offline", Icon: WifiOff },
   { key: "sms", Icon: MessageSquareText },
 ] as const;
+
+/** The four daily tasks that take the front desk's time, each with what it now takes. */
+const SPEED = [
+  { key: "booking", Icon: Timer },
+  { key: "checkin", Icon: KeyRound },
+  { key: "planning", Icon: MousePointerClick },
+  { key: "engine", Icon: Globe },
+] as const;
+
+/** Spotihotel next to a classic desktop hotel program, row by row. */
+const COMPARE = ["access", "booking", "engine", "portal", "allInOne", "iran", "chain", "updates"] as const;
+/** Rows where the classic program has nothing to show. */
+const COMPARE_NONE = new Set<string>(["engine", "portal", "chain"]);
 
 const STATS = ["setup", "app", "langs", "modules"] as const;
 const FAQ = ["app", "data", "switch", "channels", "books", "chain", "offline"] as const;
@@ -167,6 +183,32 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* ── Speed: the four tasks of every day ──────────── */}
+        <section className="mx-auto max-w-6xl px-4 pt-14 sm:px-6 sm:pt-24">
+          <SectionTitle
+            eyebrow={t("speed.eyebrow")}
+            title={t("speed.title")}
+            subtitle={t("speed.subtitle")}
+          />
+          <ul className="mt-10 grid gap-4 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4">
+            {SPEED.map(({ key, Icon }) => (
+              <li
+                key={key}
+                className="flex flex-col rounded-3xl bg-surface p-5 ring-1 ring-border transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-float)]"
+              >
+                <span className="grid size-11 place-items-center rounded-2xl bg-accent-soft text-accent-text">
+                  <Icon className="size-5" aria-hidden="true" />
+                </span>
+                <p className="mt-5 text-2xl font-black tracking-tight text-accent-text">
+                  {t(`speed.items.${key}.metric`)}
+                </p>
+                <h3 className="mt-1 font-bold">{t(`speed.items.${key}.title`)}</h3>
+                <p className="mt-2 text-sm leading-6 text-fg-muted">{t(`speed.items.${key}.body`)}</p>
+              </li>
+            ))}
+          </ul>
         </section>
 
         {/* ── Platform (bento) ────────────────────────────── */}
@@ -279,6 +321,55 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
                 </li>
               ))}
             </ul>
+          </div>
+        </section>
+
+        {/* ── Compared with a classic hotel program ───────── */}
+        <section className="mx-auto max-w-5xl px-4 pb-14 sm:px-6 sm:pb-24">
+          <SectionTitle eyebrow={t("compare.eyebrow")} title={t("compare.title")} />
+          <div className="mt-10 overflow-x-auto rounded-3xl bg-surface ring-1 ring-border">
+            <table className="w-full min-w-[36rem] text-sm">
+              <thead>
+                <tr className="border-b border-border text-start">
+                  <th scope="col" className="w-1/3 px-5 py-4 text-start font-semibold text-fg-muted">
+                    <span className="sr-only">{t("compare.feature")}</span>
+                  </th>
+                  <th scope="col" className="bg-accent-soft px-5 py-4 text-start font-bold text-accent-text">
+                    {t("compare.us")}
+                  </th>
+                  <th scope="col" className="px-5 py-4 text-start font-semibold text-fg-muted">
+                    {t("compare.them")}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {COMPARE.map((k) => (
+                  <tr key={k} className="border-b border-border last:border-b-0">
+                    <th scope="row" className="px-5 py-3.5 text-start font-semibold">
+                      {t(`compare.rows.${k}.label`)}
+                    </th>
+                    <td className="bg-accent-soft/50 px-5 py-3.5">
+                      <span className="flex items-start gap-2">
+                        <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-success text-white">
+                          <Check className="size-3" strokeWidth={3} aria-hidden="true" />
+                        </span>
+                        {t(`compare.rows.${k}.us`)}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3.5 text-fg-muted">
+                      <span className="flex items-start gap-2">
+                        {COMPARE_NONE.has(k) ? (
+                          <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-surface-3 text-fg-subtle">
+                            <X className="size-3" strokeWidth={3} aria-hidden="true" />
+                          </span>
+                        ) : null}
+                        {t(`compare.rows.${k}.them`)}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </section>
 

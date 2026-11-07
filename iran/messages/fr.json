@@ -33,10 +33,10 @@
     }
   },
   "landing": {
-    "metaTitle": "Spotihotel — gestion hôtelière : réception, réservations, QR en chambre et comptabilité",
-    "metaDescription": "Réception et réservations, planning, notes clients, spa et piscine, room service et minibar par QR, comptabilité en partie double.",
-    "badge": "Logiciel hôtelier conçu pour l'Iran",
-    "subtitle": "Spotihotel réunit réception, réservations, planning, ménage, spa et piscine, restaurant et room service, minibar et comptabilité de l'hôtel — le client scanne simplement le QR de sa chambre.",
+    "metaTitle": "Spotihotel — logiciel hôtelier : réservation express, check-in, réservation en ligne et comptabilité",
+    "metaDescription": "Réserver en 30 secondes, accueillir en une minute : planning au glisser-déposer, fiche Amaken, réservation directe sans commission, QR en chambre, restaurants, spa, calendrier persan et comptabilité.",
+    "badge": "Le logiciel hôtelier conçu pour l'Iran",
+    "subtitle": "Réservation express, check-in guidé avec la fiche Amaken, planning au glisser-déposer, réservation directe sans commission, QR en chambre, restaurants et cafés, spa et comptabilité : tout dans un seul logiciel, en calendrier persan.",
     "ctaPrimary": "Créer mon hôtel",
     "ctaSecondary": "Se connecter",
     "nav": {
@@ -171,7 +171,7 @@
       "address": "Adresse",
       "addressValue": "Téhéran, 1er district, Tour Park Center"
     },
-    "titleRich": "Le client scanne, réserve, commande — <hl>tout va sur la note de la chambre.</hl>",
+    "titleRich": "Réserver en <hl>30 secondes</hl>, accueillir en une minute.",
     "ctaGuide": "Guide des restaurants",
     "float": {
       "newOrder": "Nouvelle commande",
@@ -265,7 +265,7 @@
       },
       "planning": {
         "title": "Réception et planning des chambres",
-        "body": "Réservations, arrivées, départs, attribution des chambres, notes, encaissements et clôture de journée, avec occupation, prix moyen et RevPAR en direct."
+        "body": "Réservations, arrivées et départs, planning au glisser-déposer, attribution automatique des chambres, notes et clôture de journée, avec occupation, prix moyen et RevPAR en direct."
       },
       "mods": {
         "booking": {
@@ -401,6 +401,82 @@
       "offline": {
         "q": "Et si Internet est coupé ?",
         "a": "Le logiciel Spotihotel pour ordinateur continue sur le réseau local de l'hôtel, et tout se synchronise au retour d'Internet."
+      }
+    },
+    "speed": {
+      "eyebrow": "Pensé pour la vitesse",
+      "title": "Les quatre tâches qui prennent le temps de la réception, en quelques secondes",
+      "subtitle": "Dans le navigateur, sur l'ordinateur de la réception comme sur mobile, sans installation ni longue formation.",
+      "items": {
+        "booking": {
+          "metric": "30 secondes",
+          "title": "Réservation express",
+          "body": "Dates et personnes : tous les types de chambre avec leurs disponibilités et le prix de chaque tarif sur un écran ; un client déjà venu est retrouvé par son nom, son téléphone ou son code national."
+        },
+        "checkin": {
+          "metric": "3 étapes",
+          "title": "Check-in guidé",
+          "body": "Identité pour Amaken avec code national vérifié, chambre propre ou surclassement, acompte ; puis carte de bienvenue avec le Wi-Fi et fiche de police à imprimer."
+        },
+        "planning": {
+          "metric": "Glisser-déposer",
+          "title": "Planning des chambres",
+          "body": "Glissez sur des nuits libres pour réserver, déplacez une réservation ou surclassez-la, et attribuez les chambres de la semaine d'un clic."
+        },
+        "engine": {
+          "metric": "0 % de commission",
+          "title": "Réservation directe en ligne",
+          "body": "La page de réservation de votre hôtel pour votre site et Instagram : le client choisit chambre et tarif, la réservation apparaît aussitôt à la réception et il reçoit par SMS le lien de pré-enregistrement."
+        }
+      }
+    },
+    "compare": {
+      "eyebrow": "Comparatif",
+      "title": "Spotihotel face aux logiciels hôteliers traditionnels",
+      "feature": "Fonction",
+      "us": "Spotihotel",
+      "them": "Logiciels traditionnels",
+      "rows": {
+        "access": {
+          "label": "Accès",
+          "us": "Navigateur, ordinateur et mobile",
+          "them": "Installé sur le poste de la réception"
+        },
+        "booking": {
+          "label": "Réservation et check-in",
+          "us": "Un écran, moins d'une minute",
+          "them": "Plusieurs formulaires à la suite"
+        },
+        "engine": {
+          "label": "Réservation directe en ligne",
+          "us": "Page de réservation de l'hôtel, sans commission",
+          "them": "Absente ou module en plus"
+        },
+        "portal": {
+          "label": "Portail client par QR",
+          "us": "Room service, spa, minibar, note",
+          "them": "Absent"
+        },
+        "allInOne": {
+          "label": "Restaurants, cafés, spa et comptabilité",
+          "us": "Dans le même logiciel, sans double saisie",
+          "them": "Logiciels séparés, saisies en double"
+        },
+        "iran": {
+          "label": "Calendrier persan, Amaken, chèques Sayad",
+          "us": "Tout, dès le premier jour",
+          "them": "En partie"
+        },
+        "chain": {
+          "label": "Plusieurs hôtels (chaîne)",
+          "us": "Console de groupe et chiffres consolidés",
+          "them": "Absent"
+        },
+        "updates": {
+          "label": "Mises à jour",
+          "us": "Automatiques, sans frais d'installation",
+          "them": "Nouvelle version payante, installation à la main"
+        }
       }
     }
   },

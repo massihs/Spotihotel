@@ -33,8 +33,8 @@
     }
   },
   "landing": {
-    "metaTitle": "Spotihotel — hotel management for Iran: front desk, bookings, room QR and accounting",
-    "metaDescription": "Front desk and room bookings, room planning, guest bills, spa and pool, room service and minibar by QR, police travellers list, Persian calendar and double-entry accounting.",
+    "metaTitle": "Spotihotel — hotel PMS: express booking, check-in, online booking engine and accounting",
+    "metaDescription": "Book in 30 seconds, check in within a minute: drag-and-drop room chart, police register, commission-free online booking, in-room QR, restaurants, spa, Persian calendar and double-entry accounting.",
     "nav": {
       "features": "Features",
       "how": "How it works",
@@ -45,8 +45,8 @@
       "contact": "Contact us",
       "pricing": "Pricing"
     },
-    "badge": "Hotel software made for Iran",
-    "subtitle": "Spotihotel brings the front desk, bookings, room planning, housekeeping, spa and pool, restaurant and room service, minibar and the hotel's accounting together — guests just scan their room's QR code.",
+    "badge": "The hotel PMS built for Iran",
+    "subtitle": "Express booking, guided check-in with the police register, a drag-and-drop room chart, commission-free online booking, in-room QR, restaurants and cafés, spa and accounting: one platform, Persian calendar included.",
     "ctaPrimary": "Set up my hotel",
     "ctaSecondary": "Log in",
     "trust": {
@@ -171,7 +171,7 @@
       "address": "Address",
       "addressValue": "Tehran, District 1, Park Center Tower"
     },
-    "titleRich": "Guests scan, book and order — <hl>everything on the room bill.</hl>",
+    "titleRich": "Book in <hl>30 seconds</hl>, check in within a minute.",
     "ctaGuide": "Restaurant guide",
     "float": {
       "newOrder": "New order",
@@ -265,7 +265,7 @@
       },
       "planning": {
         "title": "Front desk and room chart",
-        "body": "Bookings, arrivals, departures, room assignment, folios, payments and the night audit, with live occupancy, ADR and RevPAR."
+        "body": "Bookings, arrivals and departures, a drag-and-drop room chart, automatic room assignment, folios and day closing, with live occupancy, ADR and RevPAR."
       },
       "mods": {
         "booking": {
@@ -401,6 +401,82 @@
       "offline": {
         "q": "What if the Internet goes down?",
         "a": "The Spotihotel desktop app carries on over the hotel's local network, and everything syncs when the Internet is back."
+      }
+    },
+    "speed": {
+      "eyebrow": "Built for speed",
+      "title": "The four tasks that eat the front desk's day, done in seconds",
+      "subtitle": "In the browser, on the front desk computer or a phone, with nothing to install and no long training.",
+      "items": {
+        "booking": {
+          "metric": "30 seconds",
+          "title": "Express booking",
+          "body": "Enter dates and guests: every room type with its availability and the price of each rate on one screen; returning guests are found by name, phone or national code."
+        },
+        "checkin": {
+          "metric": "3 steps",
+          "title": "Guided check-in",
+          "body": "Police-register identity with a checked national code, a clean room or an upgrade, the deposit; then a welcome card with the Wi-Fi and a printable registration card."
+        },
+        "planning": {
+          "metric": "Drag and drop",
+          "title": "Room chart",
+          "body": "Drag across free nights to book, move a booking to another room or upgrade it, and assign the week's rooms in one click."
+        },
+        "engine": {
+          "metric": "0% commission",
+          "title": "Online booking engine",
+          "body": "Your hotel's own booking page for your site and Instagram: guests pick a room and a rate, the booking shows at the front desk at once and they get the online pre-check-in link by text."
+        }
+      }
+    },
+    "compare": {
+      "eyebrow": "Comparison",
+      "title": "Spotihotel next to classic hotel software",
+      "feature": "Feature",
+      "us": "Spotihotel",
+      "them": "Classic software",
+      "rows": {
+        "access": {
+          "label": "Access",
+          "us": "Browser, computer and phone",
+          "them": "Installed on the front desk PC"
+        },
+        "booking": {
+          "label": "Booking and check-in",
+          "us": "One screen, under a minute",
+          "them": "Several forms in a row"
+        },
+        "engine": {
+          "label": "Direct online booking",
+          "us": "The hotel's booking page, no commission",
+          "them": "None, or an extra module"
+        },
+        "portal": {
+          "label": "Guest portal by QR",
+          "us": "Room service, spa, minibar, bill",
+          "them": "None"
+        },
+        "allInOne": {
+          "label": "Restaurants, cafés, spa and accounting",
+          "us": "In the same software, no double entry",
+          "them": "Separate programs, data typed twice"
+        },
+        "iran": {
+          "label": "Persian calendar, police register, Sayad cheques",
+          "us": "All of it, from day one",
+          "them": "Partly"
+        },
+        "chain": {
+          "label": "Several hotels (chain)",
+          "us": "Group console and consolidated figures",
+          "them": "None"
+        },
+        "updates": {
+          "label": "Updates",
+          "us": "Automatic, no install fees",
+          "them": "Paid new versions, installed by hand"
+        }
       }
     }
   },
