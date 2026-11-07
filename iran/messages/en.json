@@ -1618,7 +1618,9 @@
       "note": "Details",
       "notePlaceholder": "Optional: e.g. 2 shirts, wake me at 7, taxi to the airport",
       "back": "Back",
-      "send": "Send request"
+      "send": "Send request",
+      "shortRoom": "Reception",
+      "callRoom": "Ask reception for something"
     },
     "popular": "Popular",
     "inCart": "{n} in your cart",
@@ -5278,5 +5280,19 @@
     "precheckinTitle": "Save time at arrival",
     "precheckinBody": "Fill in the registration card now (identity, signature): at the hotel, you just pick up your key.",
     "precheckinCta": "Online pre-check-in"
+  },
+  "concierge": {
+    "title": "Your room",
+    "leaving": "Check-out {day}, by {time}",
+    "roomService": "Room service",
+    "minibar": "Minibar",
+    "spa": "Spa & pool",
+    "requests": "Housekeeping & requests",
+    "bill": "My bill",
+    "wifi": "Wi-Fi",
+    "network": "Network",
+    "password": "Password",
+    "copy": "Copy",
+    "copied": "Copied"
   }
 }

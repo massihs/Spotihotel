@@ -8,6 +8,7 @@ import { NavProgress } from "./nav-progress";
 import { Logo, LogoMark } from "@/components/ui/logo";
 import { Link } from "@/i18n/navigation";
 import { CommandPalette, type SearchEntry } from "./command-palette";
+import { initialsOf } from "@/components/ui/place-initials";
 import { MobileTabBar, NavTrail, SidebarNav, type NavItem } from "./sidebar-nav";
 
 /** Shared chrome for the restaurant dashboard and the super-admin console. */
@@ -48,11 +49,7 @@ export async function AppShell({
   const identity = (
     <div className="flex min-w-0 items-center gap-3">
       <span className="grid size-11 shrink-0 place-items-center overflow-hidden rounded-xl bg-white text-base font-bold text-accent-text ring-2 ring-accent/60">
-        {avatar ? (
-          <img src={avatar} alt="" className="size-full object-contain p-0.5" />
-        ) : (
-          ([...title.trim()][0] ?? "S")
-        )}
+        {avatar ? <img src={avatar} alt="" className="size-full object-contain p-0.5" /> : initialsOf(title)}
       </span>
       <div className="min-w-0">
         <p className="truncate text-sm font-semibold">{title}</p>

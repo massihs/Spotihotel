@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { initialsOf } from "@/components/ui/place-initials";
 
 const SHOW_MS = 3000;
 const EXIT_MS = 450;
@@ -46,7 +47,7 @@ export function WelcomeSplash({
   }, [phase]);
 
   if (phase === "gone") return null;
-  const initial = [...name.trim()][0] ?? "S";
+  const initial = initialsOf(name);
   return (
     <div
       data-brand={brand}

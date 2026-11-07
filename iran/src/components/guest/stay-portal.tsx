@@ -100,6 +100,8 @@ export function StayPortal({
         </p>
       </header>
 
+      {stay && !verified ? <Verify /> : null}
+
       {settings.wifiName ? (
         <Card icon={<Wifi />} title={t("wifi")}>
           <p className="text-sm" dir="ltr">
@@ -152,9 +154,7 @@ export function StayPortal({
 
       {!stay ? (
         <p className="rounded-2xl bg-surface-2 p-4 text-sm text-fg-muted">{t("noStay")}</p>
-      ) : !verified ? (
-        <Verify />
-      ) : (
+      ) : !verified ? null : (
         <>
           {services.length ? (
             <Spa
@@ -177,13 +177,15 @@ function Card({
   icon,
   title,
   children,
+  id,
 }: {
   icon: React.ReactNode;
   title: string;
   children: React.ReactNode;
+  id?: string;
 }) {
   return (
-    <section className="rounded-2xl border border-border bg-surface p-4">
+    <section id={id} className="scroll-mt-4 rounded-2xl border border-border bg-surface p-4">
       <h2 className="mb-2 flex items-center gap-2 font-semibold">
         <span className="grid size-8 place-items-center rounded-lg bg-accent-soft text-accent-text [&_svg]:size-4">
           {icon}
@@ -200,7 +202,7 @@ function Verify() {
   const [name, setName] = useState("");
   const r = useRun();
   return (
-    <Card icon={<KeyRound />} title={t("verifyTitle")}>
+    <Card id="verify" icon={<KeyRound />} title={t("verifyTitle")}>
       <p className="mb-3 text-sm text-fg-muted">{t("verifyHint")}</p>
       <form className="flex gap-2" action={() => r.run(() => verifyStayAction(name))}>
         <input
@@ -264,7 +266,7 @@ function Spa({
   const svc = services.find((s) => s.id === serviceId)!;
   const upcoming = bookings.filter((b) => b.status === "booked");
   return (
-    <Card icon={<Flower2 />} title={t("spa")}>
+    <Card id="spa" icon={<Flower2 />} title={t("spa")}>
       <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
         {services.map((s) => (
           <button
@@ -399,7 +401,7 @@ function Minibar({
     0,
   );
   return (
-    <Card icon={<Wine />} title={t("minibar")}>
+    <Card id="minibar" icon={<Wine />} title={t("minibar")}>
       <p className="mb-2 text-sm text-fg-muted">{t("minibarHint")}</p>
       <ul className="divide-y divide-border">
         {items.map((i) => (
@@ -464,7 +466,7 @@ function Bill({
   const label = useLineLabel();
   const balance = folios.reduce((s, f) => s + f.balanceCents, 0);
   return (
-    <Card icon={<Receipt />} title={t("bill")}>
+    <Card id="bill" icon={<Receipt />} title={t("bill")}>
       {folios.flatMap((f) => f.lines).length ? (
         <ul className="space-y-1.5 text-sm">
           {folios.flatMap((f) =>

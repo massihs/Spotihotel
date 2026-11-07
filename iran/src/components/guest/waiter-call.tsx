@@ -31,10 +31,13 @@ export function WaiterCall({
   options,
   room = false,
   className,
+  children,
 }: {
   options: CallOption[];
   room?: boolean;
   className?: string;
+  /** Another trigger (a tile of the room's concierge): replaces the bell pill. */
+  children?: React.ReactNode;
 }) {
   const t = useTranslations("guest.waiter");
   const [open, setOpen] = useState(false);
@@ -56,15 +59,23 @@ export function WaiterCall({
       <button
         type="button"
         onClick={() => (setOpen(true), setSent(null), setError(null), setPicked(null), setNote(""))}
-        className={cn(
-          "inline-flex h-11 shrink-0 items-center gap-2 rounded-full bg-accent ps-3.5 pe-4 text-sm font-semibold text-accent-fg shadow-accent",
-          "atelier:bg-transparent atelier:text-fg atelier:shadow-none atelier:ring-1 atelier:ring-border-strong nuit:shadow-none",
-          className,
-        )}
-        title={t("call")}
+        className={
+          children
+            ? className
+            : cn(
+                "inline-flex h-11 shrink-0 items-center gap-2 rounded-full bg-accent ps-3.5 pe-4 text-sm font-semibold text-accent-fg shadow-accent",
+                "atelier:bg-transparent atelier:text-fg atelier:shadow-none atelier:ring-1 atelier:ring-border-strong nuit:shadow-none",
+                className,
+              )
+        }
+        title={room ? t("callRoom") : t("call")}
       >
-        <BellRing className="size-[18px]" aria-hidden="true" />
-        {t("short")}
+        {children ?? (
+          <>
+            <BellRing className="size-[18px]" aria-hidden="true" />
+            {room ? t("shortRoom") : t("short")}
+          </>
+        )}
       </button>
       {open ? (
         <div

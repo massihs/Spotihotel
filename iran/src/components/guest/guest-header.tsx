@@ -13,6 +13,7 @@ import type { GuestContext } from "@/server/modules/guest/sessions";
 import { logoUrl } from "@/server/modules/restaurants/settings";
 import { db } from "@/server/db/client";
 import { guestCallsOf } from "@/server/modules/team/sections";
+import { initialsOf } from "@/components/ui/place-initials";
 
 type Store = { open: OpenState; address: string | null };
 
@@ -47,6 +48,8 @@ export async function GuestHeader({
     }),
   );
   const bell = calls.length ? <WaiterCall options={calls} room={guest.table.kind === "room"} /> : null;
+  // Table games keep a party busy while the kitchen cooks; a hotel room has no use for them.
+  const games = guest.table.kind === "room" ? null : <GamesButton />;
 
   const actions = (
     <div className="flex items-center justify-end gap-2">
@@ -73,7 +76,7 @@ export async function GuestHeader({
         <img src={logo} alt="" width={64} height={64} className="size-full object-contain p-1" />
       ) : (
         <span className="text-2xl font-bold text-neutral-800" aria-hidden="true">
-          {[...name.trim()][0] ?? "S"}
+          {initialsOf(name)}
         </span>
       )}
     </div>
@@ -83,10 +86,13 @@ export async function GuestHeader({
       <span className="inline-flex items-center rounded-full bg-accent-soft px-2.5 py-0.5 font-semibold text-accent-text">
         {t(guest.table.kind === "room" ? "tableBadgeRoom" : "tableBadge", { table: guest.table.label })}
       </span>
-      <span className="inline-flex min-w-0 items-center gap-1 text-fg-muted">
-        <UserRound className="size-3.5 shrink-0" aria-hidden="true" />
-        <span className="truncate">{who}</span>
-      </span>
+      {/* At a table, who is who in the party; a hotel room has one party. */}
+      {guest.table.kind === "room" ? null : (
+        <span className="inline-flex min-w-0 items-center gap-1 text-fg-muted">
+          <UserRound className="size-3.5 shrink-0" aria-hidden="true" />
+          <span className="truncate">{who}</span>
+        </span>
+      )}
       <OpenBadge t={t} store={store} />
     </>
   );
@@ -97,7 +103,7 @@ export async function GuestHeader({
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             {bell}
-            <GamesButton />
+            {games}
           </div>
           {actions}
         </div>
@@ -143,7 +149,7 @@ export async function GuestHeader({
               <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px]">{guestLine}</div>
             </div>
             <div className="flex items-center gap-2">
-              <GamesButton />
+              {games}
               {bell}
             </div>
           </div>
@@ -180,7 +186,7 @@ export async function GuestHeader({
             <p className="mt-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[13px]">{guestLine}</p>
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            <GamesButton />
+            {games}
             {bell}
           </div>
         </div>

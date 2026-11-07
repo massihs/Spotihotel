@@ -1594,7 +1594,9 @@
       "note": "Précisions",
       "notePlaceholder": "Facultatif : ex. 2 chemises, réveil à 7 h, taxi pour l’aéroport",
       "back": "Retour",
-      "send": "Envoyer la demande"
+      "send": "Envoyer la demande",
+      "shortRoom": "Réception",
+      "callRoom": "Demander quelque chose à la réception"
     },
     "tableBadge": "Table {table}",
     "quickAdd": "Ajouter {name} au panier",
@@ -5286,5 +5288,19 @@
     "precheckinTitle": "Gagnez du temps à l'arrivée",
     "precheckinBody": "Remplissez dès maintenant la fiche de police (identité, signature) : à l'hôtel, il ne reste qu'à prendre la clé.",
     "precheckinCta": "Pré-enregistrement en ligne"
+  },
+  "concierge": {
+    "title": "Votre chambre",
+    "leaving": "Départ {day}, avant {time}",
+    "roomService": "Room service",
+    "minibar": "Minibar",
+    "spa": "Spa et piscine",
+    "requests": "Ménage et demandes",
+    "bill": "Ma note",
+    "wifi": "Wi-Fi",
+    "network": "Réseau",
+    "password": "Mot de passe",
+    "copy": "Copier",
+    "copied": "Copié"
   }
 }

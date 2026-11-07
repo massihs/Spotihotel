@@ -1,6 +1,4 @@
 import { Suspense } from "react";
-import { BedDouble, ChevronRight } from "lucide-react";
-import { Link } from "@/i18n/navigation";
 import { menuThemeOf } from "@/lib/menu-themes";
 import { NowPlaying } from "@/components/guest/now-playing";
 import { hasActiveMusic, restaurantNowPlaying } from "@/server/modules/music/service";
@@ -18,6 +16,10 @@ import { getTranslations } from "next-intl/server";
 import { GuestHeader } from "@/components/guest/guest-header";
 import { SessionExpired, GuestSkeleton } from "@/components/guest/states";
 import { LiveProvider, LiveRefresh } from "@/components/realtime/live";
+import { RoomConcierge } from "@/components/guest/room-concierge";
+import { guestCallsOf } from "@/server/modules/team/sections";
+import { getPmsSettings } from "@/server/modules/pms/setup";
+import { inHouseStayOfRoom } from "@/server/modules/pms/stays";
 
 /** The guest cookie is per request: the page streams behind its own boundary (instant navigations). */
 export default function GuestMenuPage({ searchParams }: PageProps<"/[locale]/table">) {
@@ -69,6 +71,15 @@ async function GuestMenu() {
   const byProduct: Record<string, number> = {};
   for (const l of cart.lines) byProduct[l.productId] = (byProduct[l.productId] ?? 0) + l.quantity;
   const playing = music ? await restaurantNowPlaying(db, guest.restaurant.id) : null;
+  // A hotel room: the concierge (room, day of departure, services, Wi-Fi) comes before the menu.
+  const room = guest.table.kind === "room";
+  const [pms, inRoom, calls] = room
+    ? await Promise.all([
+        getPmsSettings(db, guest.restaurant.id, guest.restaurant.timezone),
+        inHouseStayOfRoom(db, guest.restaurant.id, guest.table.id),
+        guestCallsOf(db, guest.restaurant.id, { room: true }),
+      ])
+    : [null, null, []];
   // Cover: the first featured dish with a photo, else any dish with a photo.
   const dishes = Object.values(menu.products);
   const cover =
@@ -87,26 +98,20 @@ async function GuestMenu() {
             popularIds={popularIds}
             restaurantName={guest.restaurant.name}
             tableLabel={guest.table.label}
-            room={guest.table.kind === "room"}
+            room={room}
             theme={menuThemeOf(guest.restaurant.menuTheme)}
             shortPrices={guest.restaurant.menuShortPrices}
             header={
               <>
                 <GuestHeader guest={guest} orderCount={orders.length} cover={cover} store={store} />
-                {guest.table.kind === "room" ? (
-                  <Link
-                    href="/table/stay"
-                    className="mx-4 mt-3 flex items-center gap-3 rounded-2xl border border-accent/25 bg-accent-soft px-4 py-3"
-                  >
-                    <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-accent text-accent-fg">
-                      <BedDouble className="size-5" aria-hidden="true" />
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="font-bold text-accent-text">{t("myStay")}</p>
-                      <p className="text-sm text-fg-muted">{t("myStayHint")}</p>
-                    </div>
-                    <ChevronRight className="size-5 text-accent-text rtl:rotate-180" aria-hidden="true" />
-                  </Link>
+                {room && pms ? (
+                  <RoomConcierge
+                    room={guest.table.label}
+                    departure={inRoom?.departure ?? null}
+                    checkOutTime={pms.checkOutTime}
+                    wifi={pms.wifiName ? { name: pms.wifiName, password: pms.wifiPassword } : null}
+                    calls={calls.map(({ key, label, icon }) => ({ key, label, icon }))}
+                  />
                 ) : null}
                 {guest.session.confirmed ? null : (
                   <p

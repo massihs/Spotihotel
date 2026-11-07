@@ -300,6 +300,14 @@ const MENU: [category: string, items: [name: string, toman: number][]][] = [
   ],
 ];
 
+/** The menu's sections, each with its icon (the guest menu shows it on dishes without a photo). */
+const MENU_ICONS: Record<string, string> = {
+  پیش‌غذا: "salad",
+  "غذای اصلی": "flame",
+  دسر: "dessert",
+  نوشیدنی: "coffee",
+};
+
 const MINIBAR = [
   ["آب معدنی", 120_000],
   ["نوشابه", 180_000],
@@ -1276,6 +1284,13 @@ export async function seedParsian(ownerEmail: string, days = 30) {
     if ((done?.n ?? 0) >= days) {
       const ctx = await loadRestaurantContext(db, { ...owner, locale: owner.locale }, existing.id);
       const added = await ensureParsianOutlets(ctx);
+      for (const [name, icon] of Object.entries(MENU_ICONS))
+        await db
+          .update(categories)
+          .set({ icon })
+          .where(
+            and(eq(categories.restaurantId, existing.id), eq(categories.name, name), isNull(categories.icon)),
+          );
       // The corporate rate is negotiated: never on the hotel's public booking page.
       await db
         .update(ratePlans)
@@ -1586,7 +1601,7 @@ export async function seedParsian(ownerEmail: string, days = 30) {
   for (const [ci, [cat, items]] of MENU.entries()) {
     const [c] = await db
       .insert(categories)
-      .values({ restaurantId: rid, name: cat, sortOrder: ci })
+      .values({ restaurantId: rid, name: cat, sortOrder: ci, icon: MENU_ICONS[cat] ?? null })
       .returning();
     for (const [pi, [name, toman]] of items.entries()) {
       const [p] = await db
