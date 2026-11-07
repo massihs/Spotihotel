@@ -500,7 +500,9 @@
     "blocks": "Groups & blocks",
     "forecast": "Forecast & channels",
     "restaurantReports": "Restaurant reports",
-    "outlets": "Restaurants & cafés"
+    "outlets": "Restaurants & cafés",
+    "searchPlaceholderHotel": "Guest, booking or room number, page…",
+    "searchingStays": "Searching bookings…"
   },
   "dashboard": {
     "welcome": "Hello {name}",

@@ -539,6 +539,7 @@ async function RestaurantShell({
         kind={ctx.restaurant.kind}
         nav={nav}
         search={search}
+        staysOf={hotel && can(ctx, "frontdesk.view") ? ctx.restaurant.id : undefined}
         user={ctx.user}
         headerExtra={
           <>

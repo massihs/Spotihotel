@@ -500,7 +500,9 @@
     "blocks": "المجموعات والحجوزات المجمّعة",
     "forecast": "التوقعات والقنوات",
     "restaurantReports": "تقارير المطعم",
-    "outlets": "المطاعم والمقاهي"
+    "outlets": "المطاعم والمقاهي",
+    "searchPlaceholderHotel": "النزيل، رقم الحجز أو الغرفة، الصفحات…",
+    "searchingStays": "جارٍ البحث في الحجوزات…"
   },
   "dashboard": {
     "welcome": "مرحبًا {name}",

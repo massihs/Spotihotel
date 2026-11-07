@@ -12,6 +12,7 @@ import {
   bookingOptions,
   checkInContext,
   identityComplete,
+  searchStays,
   updateGuestIdentity,
 } from "@/server/modules/pms/booking";
 import { searchGuests } from "@/server/modules/pms/guests";
@@ -247,6 +248,12 @@ describe("automatic room allocation", () => {
       for (const y of rooms)
         if (x.id !== y.id && x.roomId && x.roomId === y.roomId)
           expect(x.arrival < y.departure && x.departure > y.arrival).toBe(false);
+
+    // Ctrl K finds a booking by guest, by booking number and by room number.
+    expect((await searchStays(db, h, "late")).map((x) => x.id)).toEqual([late.id]);
+    expect((await searchStays(db, h, `#${s.number}`)).map((x) => x.id)).toContain(s.id);
+    expect((await searchStays(db, h, "103")).map((x) => x.id)).toContain(s.id);
+    expect(await searchStays(db, h, "x")).toEqual([]);
 
     // Nothing left to do: a second run assigns nothing.
     expect(await autoAssignRooms(db, h, { from: today, to: addDays(today, 7) })).toEqual({

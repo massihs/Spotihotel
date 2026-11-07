@@ -1,8 +1,10 @@
 "use client";
 
-import { CornerDownLeft, Search, X } from "lucide-react";
+import { BedDouble, CornerDownLeft, LoaderCircle, Search, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { searchStaysAction } from "@/app/[locale]/dashboard/[restaurantId]/hotel-actions";
+import { useDay } from "@/components/pms/kit";
 import { useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 
@@ -26,9 +28,26 @@ function fold(s: string) {
     .replace(/‌/g, " ");
 }
 
-/** Go-anywhere search for the dashboard: Ctrl/⌘ + K, or the search button in the top bar. */
-export function CommandPalette({ entries }: { entries: SearchEntry[] }) {
+type StayHit = {
+  id: string;
+  number: number;
+  status: string;
+  arrival: string;
+  departure: string;
+  firstName: string;
+  lastName: string;
+  room: string | null;
+  typeCode: string | null;
+};
+
+/**
+ * Go-anywhere search for the dashboard: Ctrl/⌘ + K, or the search button in the top bar. In a
+ * hotel it also finds bookings (guest, booking or room number, phone, national code).
+ */
+export function CommandPalette({ entries, staysOf }: { entries: SearchEntry[]; staysOf?: string }) {
   const t = useTranslations("nav");
+  const tStatus = useTranslations("pms.status");
+  const day = useDay();
   const router = useRouter();
   const dialog = useRef<HTMLDialogElement>(null);
   const list = useRef<HTMLUListElement>(null);
@@ -54,11 +73,47 @@ export function CommandPalette({ entries }: { entries: SearchEntry[] }) {
     if (!open && el.open) el.close();
   }, [open]);
 
+  // Bookings, asked to the server as the desk types (a short pause first).
+  const [hits, setHits] = useState<{ q: string; list: StayHit[] }>({ q: "", list: [] });
+  const term = q.trim();
+  const wantStays = !!staysOf && open && term.length >= 2;
+  useEffect(() => {
+    if (!wantStays || !staysOf) return;
+    let live = true;
+    const id = setTimeout(async () => {
+      const res = await searchStaysAction(staysOf, term);
+      if (live && res?.ok) setHits({ q: term, list: (res.data ?? []) as StayHit[] });
+    }, 180);
+    return () => {
+      live = false;
+      clearTimeout(id);
+    };
+  }, [wantStays, staysOf, term]);
+  const searching = wantStays && hits.q !== term;
+  const stayEntries: SearchEntry[] =
+    wantStays && hits.q === term
+      ? hits.list.map((h) => ({
+          href: `/dashboard/${staysOf}/stays/${h.id}`,
+          label: `${h.firstName} ${h.lastName} · #${h.number}`,
+          hint: [
+            tStatus.has(h.status as "confirmed") ? tStatus(h.status as "confirmed") : h.status,
+            h.room ?? h.typeCode,
+            `${day(h.arrival)} → ${day(h.departure)}`,
+          ]
+            .filter(Boolean)
+            .join(" | "),
+          icon: <BedDouble />,
+        }))
+      : [];
+
   const words = fold(q).split(/\s+/).filter(Boolean);
-  const results = entries.filter((e) => {
-    const hay = fold(`${e.label} ${e.hint ?? ""}`);
-    return words.every((w) => hay.includes(w));
-  });
+  const results = [
+    ...stayEntries,
+    ...entries.filter((e) => {
+      const hay = fold(`${e.label} ${e.hint ?? ""}`);
+      return words.every((w) => hay.includes(w));
+    }),
+  ];
   const active = Math.min(cursor, Math.max(0, results.length - 1));
 
   const close = () => {
@@ -93,7 +148,9 @@ export function CommandPalette({ entries }: { entries: SearchEntry[] }) {
         className="flex h-9 items-center gap-2 rounded-lg bg-surface-2 px-3 text-sm text-fg-subtle ring-1 ring-border transition-colors duration-150 ring-inset hover:bg-surface hover:text-fg hover:ring-border-strong max-sm:w-9 max-sm:justify-center max-sm:bg-transparent max-sm:px-0 max-sm:ring-0 sm:w-56 lg:w-72"
       >
         <Search className="size-4 shrink-0" aria-hidden="true" />
-        <span className="flex-1 truncate text-start max-sm:hidden">{t("searchPlaceholder")}</span>
+        <span className="flex-1 truncate text-start max-sm:hidden">
+          {staysOf ? t("searchPlaceholderHotel") : t("searchPlaceholder")}
+        </span>
         <kbd
           className="rounded-md bg-surface px-1.5 py-0.5 font-sans text-[11px] text-fg-subtle ring-1 ring-border max-lg:hidden"
           dir="ltr"
@@ -119,7 +176,7 @@ export function CommandPalette({ entries }: { entries: SearchEntry[] }) {
                   setQ(e.target.value);
                   setCursor(0);
                 }}
-                placeholder={t("searchPlaceholder")}
+                placeholder={staysOf ? t("searchPlaceholderHotel") : t("searchPlaceholder")}
                 aria-label={t("search")}
                 role="combobox"
                 aria-expanded="true"
@@ -168,7 +225,13 @@ export function CommandPalette({ entries }: { entries: SearchEntry[] }) {
                   {e.hint ? <span className="shrink-0 truncate text-xs text-fg-subtle">{e.hint}</span> : null}
                 </li>
               ))}
-              {results.length === 0 ? (
+              {searching ? (
+                <li className="flex items-center justify-center gap-2 px-3 py-3 text-sm text-fg-subtle">
+                  <LoaderCircle className="size-4 animate-spin" aria-hidden="true" />
+                  {t("searchingStays")}
+                </li>
+              ) : null}
+              {results.length === 0 && !searching ? (
                 <li className="px-3 py-10 text-center text-sm text-fg-subtle">{t("noResults")}</li>
               ) : null}
             </ul>

@@ -500,7 +500,9 @@
     "blocks": "گروه‌ها و بلوک‌ها",
     "forecast": "پیش‌بینی و کانال‌ها",
     "restaurantReports": "گزارش فروش رستوران",
-    "outlets": "رستوران‌ها و کافه‌ها"
+    "outlets": "رستوران‌ها و کافه‌ها",
+    "searchPlaceholderHotel": "مهمان، شماره رزرو یا اتاق، بخش‌ها…",
+    "searchingStays": "جستجو در رزروها…"
   },
   "dashboard": {
     "welcome": "سلام {name}",

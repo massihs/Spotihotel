@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, gt, gte, inArray, isNotNull, isNull, lt, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gt, gte, ilike, inArray, isNotNull, isNull, lt, or, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { Database, DbOrTx } from "@/server/db/client";
 import { diningTables, hotelGuests, roomTypes, stays } from "@/server/db/schema";
@@ -414,4 +414,63 @@ export async function autoAssignRooms(
       });
     return { assigned, left: pending.length - assigned };
   });
+}
+
+// ─── Search from anywhere (Ctrl K) ───────────────────────────────────────────
+
+/**
+ * Bookings matching what the desk types: guest name (either order), phone, national code or
+ * passport, booking number, room number or the platform's reference. Guests in house first, then
+ * coming arrivals (soonest first), then the rest (latest first).
+ */
+export async function searchStays(db: DbOrTx, ctx: RestaurantContext, raw: string, limit = 8) {
+  assertCan(ctx, "frontdesk.view");
+  const term = normalizeDigits(raw).trim().replace(/^#/, "").slice(0, 80);
+  if (term.length < 2) return [];
+  const like = `%${term.replace(/[%_\\]/g, (c) => `\\${c}`)}%`;
+  const num = /^\d{1,9}$/.test(term) ? Number(term) : null;
+  const rid = ctx.restaurant.id;
+  const { businessDate } = await getPmsSettings(db, rid, ctx.restaurant.timezone);
+  return db
+    .select({
+      id: stays.id,
+      number: stays.number,
+      status: stays.status,
+      arrival: stays.arrival,
+      departure: stays.departure,
+      firstName: hotelGuests.firstName,
+      lastName: hotelGuests.lastName,
+      room: diningTables.label,
+      typeCode: roomTypes.code,
+    })
+    .from(stays)
+    .innerJoin(hotelGuests, eq(hotelGuests.id, stays.guestId))
+    .leftJoin(diningTables, eq(diningTables.id, stays.roomId))
+    .leftJoin(roomTypes, eq(roomTypes.id, stays.roomTypeId))
+    .where(
+      and(
+        eq(stays.restaurantId, rid),
+        or(
+          ilike(hotelGuests.lastName, like),
+          ilike(hotelGuests.firstName, like),
+          sql`(${hotelGuests.firstName} || ' ' || ${hotelGuests.lastName}) ilike ${like}`,
+          sql`(${hotelGuests.lastName} || ' ' || ${hotelGuests.firstName}) ilike ${like}`,
+          ilike(hotelGuests.phone, like),
+          ilike(hotelGuests.documentNumber, like),
+          ilike(stays.channelRef, like),
+          num !== null ? eq(stays.number, num) : undefined,
+          num !== null ? eq(diningTables.label, term) : undefined,
+        ),
+      ),
+    )
+    .orderBy(
+      // A booking or room number typed exactly comes before phones that merely contain it.
+      ...(num !== null
+        ? [sql`case when ${stays.number} = ${num} or ${diningTables.label} = ${term} then 0 else 1 end`]
+        : []),
+      sql`case when ${stays.status} = 'in_house' then 0 when ${stays.status} in ('confirmed','tentative') and ${stays.departure} >= ${businessDate} then 1 else 2 end`,
+      sql`case when ${stays.status} in ('confirmed','tentative') then ${stays.arrival} end asc nulls last`,
+      desc(stays.arrival),
+    )
+    .limit(Math.min(limit, 20));
 }

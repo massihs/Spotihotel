@@ -22,10 +22,13 @@ export async function AppShell({
   brand,
   kind,
   search,
+  staysOf,
   children,
 }: {
   /** Extra go-anywhere entries (tabs, settings sections) on top of the navigation. */
   search?: SearchEntry[];
+  /** A hotel's id: the search also finds its bookings. */
+  staysOf?: string;
   /** Restaurant brand color key: scopes the accent (data-brand). */
   brand?: string;
   /** Establishment kind: hotels get their own, quieter navy theme (data-kind). */
@@ -196,6 +199,7 @@ export async function AppShell({
                   ...nav.map((n) => ({ href: n.href, label: n.label, hint: n.group, icon: n.icon })),
                   ...(search ?? []),
                 ]}
+                staysOf={staysOf}
               />
               {headerExtra}
             </div>
