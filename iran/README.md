@@ -6,6 +6,7 @@ Ce dossier est une application **indépendante** : vous pouvez la modifier sans 
 
 - Architecture : [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - Avancement : [`docs/ROADMAP.md`](docs/ROADMAP.md)
+- PMS hôtelier (écrans, code, hôtel de démo, déploiement) : [`docs/PMS.md`](docs/PMS.md)
 
 ## Stack
 
