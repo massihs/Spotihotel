@@ -18,6 +18,8 @@ import {
 import { searchGuests } from "@/server/modules/pms/guests";
 import { onlineBook, onlineHotel, onlineOffers } from "@/server/modules/pms/online";
 import { getStay } from "@/server/modules/pms/stays";
+import { setRateRange } from "@/server/modules/pms/setup";
+import { createCoupon } from "@/server/modules/customers/service";
 import { addDays } from "@/server/modules/pms/calc";
 import { isIranNationalCode } from "@/lib/iran-id";
 import { createOwnerWithRestaurant } from "../helpers/factories";
@@ -326,5 +328,79 @@ describe("online booking page", () => {
     // One double left for those nights.
     const after = await onlineOffers(db, slug, { arrival: today, departure: addDays(today, 2), adults: 2 });
     expect(after.types.find((t) => t.id === dbl.id)!.left).toBe(1);
+  });
+});
+
+describe("rate restrictions and promotion codes", () => {
+  it("refuses closed arrivals, departures and too long stays, and takes a promotion code off once", async () => {
+    const { h, dbl, today } = await hotel("Restriction Hotel");
+    await setRateRange(db, h, {
+      roomTypeId: dbl.id,
+      from: today,
+      to: today,
+      rateCents: null,
+      closedToArrival: true,
+    });
+    await setRateRange(db, h, {
+      roomTypeId: dbl.id,
+      from: addDays(today, 3),
+      to: addDays(today, 3),
+      rateCents: null,
+      closedToDeparture: true,
+    });
+    await setRateRange(db, h, {
+      roomTypeId: dbl.id,
+      from: addDays(today, 1),
+      to: addDays(today, 1),
+      rateCents: null,
+      maxStay: 1,
+    });
+    const issues = async (a: number, d: number) =>
+      (await bookingOptions(db, h, { arrival: addDays(today, a), departure: addDays(today, d) })).types
+        .find((t) => t.id === dbl.id)!
+        .quotes.find((q) => q.code === "RO")!.issues;
+    expect(await issues(0, 1)).toContain("closed_to_arrival");
+    expect(await issues(2, 3)).toContain("closed_to_departure");
+    expect(await issues(1, 3)).toContain("max_stay");
+    expect(await issues(1, 2)).toEqual([]);
+    await expect(
+      createStay(db, h, {
+        guest: { lastName: "X" },
+        roomTypeId: dbl.id,
+        arrival: today,
+        departure: addDays(today, 1),
+      }),
+    ).rejects.toMatchObject({ message: "closed_to_arrival" });
+
+    await createCoupon(db, h, { code: "SUMMER10", kind: "percent", value: 10, maxUses: 1 });
+    const offers = await bookingOptions(db, h, {
+      arrival: addDays(today, 4),
+      departure: addDays(today, 6),
+      promoCode: "summer10",
+    });
+    expect(offers.promo).toEqual({ code: "SUMMER10", valid: true });
+    const ro = offers.types.find((t) => t.id === dbl.id)!.quotes.find((q) => q.code === "RO")!;
+    expect(ro).toMatchObject({ totalCents: 18_000, discountCents: 2_000 });
+
+    const stay = await createStay(db, h, {
+      guest: { lastName: "Promo" },
+      roomTypeId: dbl.id,
+      arrival: addDays(today, 4),
+      departure: addDays(today, 6),
+      promoCode: "summer10",
+    });
+    expect(stay).toMatchObject({ totalCents: 18_000, discountCents: 2_000, promoCode: "SUMMER10" });
+    const card = await getStay(db, h, stay.id);
+    expect(card.nights.reduce((sum, n) => sum + n.rateCents, 0)).toBe(18_000);
+    // One use only: the next booking cannot use it.
+    await expect(
+      createStay(db, h, {
+        guest: { lastName: "Again" },
+        roomTypeId: dbl.id,
+        arrival: addDays(today, 4),
+        departure: addDays(today, 6),
+        promoCode: "SUMMER10",
+      }),
+    ).rejects.toMatchObject({ message: "coupon_invalid" });
   });
 });

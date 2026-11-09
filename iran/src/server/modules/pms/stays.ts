@@ -3,6 +3,7 @@ import { and, asc, eq, gt, gte, inArray, isNull, lt, lte, ne, or, sql } from "dr
 import { z } from "zod";
 import type { Database, DbOrTx } from "@/server/db/client";
 import {
+  coupons,
   diningTables,
   folios,
   pricingRules,
@@ -23,7 +24,9 @@ import { emit, topics } from "@/server/infra/realtime";
 import { conflict, notFound, validation } from "@/server/errors";
 import { assertCan, type RestaurantContext } from "@/server/tenancy";
 import { isUuid, randomToken } from "@/lib/ids";
-import { addDays, eachNight, isDay, keyFigures, nightPrice, nightsBetween } from "./calc";
+import { addDays, eachNight, isDay, keyFigures, nightPrice, nightsBetween, spreadDiscount } from "./calc";
+import { findUsableCoupon } from "@/server/modules/customers/service";
+import { couponDiscount } from "@/lib/coupon";
 import { createGuest, guestFields, nationalCodeOk, nationalCodeRule } from "./guests";
 import { getPmsSettings } from "./setup";
 import {
@@ -144,17 +147,22 @@ export async function quoteStay(
   const type = await loadType(db, restaurantId, q.roomTypeId);
   const plan = await loadPlan(db, restaurantId, q.ratePlanId);
   const nights = eachNight(q.arrival, q.departure);
+  // The departure day too: it can be closed to departures.
   const days = nights.length
     ? await db
         .select()
         .from(rateDays)
-        .where(and(eq(rateDays.roomTypeId, type.id), inArray(rateDays.day, nights)))
+        .where(and(eq(rateDays.roomTypeId, type.id), inArray(rateDays.day, [...nights, q.departure])))
     : [];
   const byDay = new Map(days.map((d) => [d.day, d]));
   const issues: string[] = [];
   if (nights.some((d) => byDay.get(d)?.closed)) issues.push("closed");
+  if (byDay.get(q.arrival)?.closedToArrival) issues.push("closed_to_arrival");
+  if (byDay.get(q.departure)?.closedToDeparture) issues.push("closed_to_departure");
   const minStay = Math.max(plan?.minStay ?? 1, byDay.get(q.arrival)?.minStay ?? 1);
   if (nights.length < minStay) issues.push("min_stay");
+  const maxStay = byDay.get(q.arrival)?.maxStay ?? null;
+  if (maxStay != null && nights.length > maxStay) issues.push("max_stay");
   if (q.adults > type.maxOccupancy) issues.push("too_many_guests");
   // Revenue management: the night's occupancy on the books picks the price adjustment.
   const rules =
@@ -209,6 +217,7 @@ export async function quoteStay(
     adjustments: priced.filter((n) => n.adjustBps).map(({ day, adjustBps }) => ({ day, adjustBps })),
     totalCents: priced.reduce((s, n) => s + n.rateCents, 0),
     minStay,
+    maxStay,
     issues,
   };
 }
@@ -478,6 +487,14 @@ export const staySchema = z
     /** Negotiated price per night (replaces the calculated rate). */
     fixedRateCents: z.coerce.number().int().min(0).max(1_000_000_000_000).nullable().optional(),
     notes: optText(2000),
+    /** Promotion code (the hotel's coupons): a share or an amount off the stay. */
+    promoCode: z
+      .string()
+      .trim()
+      .max(32)
+      .transform((v) => v.toUpperCase() || null)
+      .nullable()
+      .optional(),
     /** Book even though a day is closed / under the minimum stay (manager's decision). */
     override: z.coerce.boolean().default(false),
   })
@@ -521,6 +538,28 @@ export async function createStay(db: Database, ctx: RestaurantContext, raw: z.in
       input.accountId ??= block.accountId;
     }
     const quote = await quoteStay(tx, rid, { ...input, today: settings.businessDate });
+    // A promotion code takes its share off, spread over the nights; its use is counted once.
+    let nights = quote.nights;
+    let discountCents = 0;
+    let promoCode: string | null = null;
+    if (input.promoCode) {
+      const coupon = await findUsableCoupon(tx, rid, input.promoCode);
+      if (!coupon) throw validation("coupon_invalid", { field: "promoCode" });
+      if (quote.totalCents < coupon.minOrderCents)
+        throw validation("coupon_min_order", { field: "promoCode", amountCents: coupon.minOrderCents });
+      const spread = spreadDiscount(quote.nights, couponDiscount(coupon, quote.totalCents));
+      const used = await tx
+        .update(coupons)
+        .set({ usedCount: sql`${coupons.usedCount} + 1` })
+        .where(
+          and(eq(coupons.id, coupon.id), or(isNull(coupons.maxUses), lt(coupons.usedCount, coupons.maxUses))),
+        )
+        .returning({ id: coupons.id });
+      if (!used.length) throw validation("coupon_invalid", { field: "promoCode" });
+      nights = spread.nights;
+      discountCents = spread.discountCents;
+      promoCode = coupon.code;
+    }
     if (quote.issues.includes("too_many_guests")) throw validation("too_many_guests", { field: "adults" });
     if (quote.issues.length && !input.override) throw conflict(quote.issues[0]!, { minStay: quote.minStay });
     if (input.override && quote.issues.length) assertCan(ctx, "rates.manage");
@@ -568,14 +607,14 @@ export async function createStay(db: Database, ctx: RestaurantContext, raw: z.in
         channelRef: input.channelRef ?? null,
         eta: input.eta ?? null,
         guarantee: input.guarantee,
-        totalCents: quote.totalCents,
+        totalCents: quote.totalCents - discountCents,
+        promoCode,
+        discountCents,
         notes: input.notes ?? null,
         createdByUserId: ctx.user.id,
       })
       .returning();
-    await tx
-      .insert(stayNights)
-      .values(quote.nights.map((n) => ({ stayId: created!.id, restaurantId: rid, ...n })));
+    await tx.insert(stayNights).values(nights.map((n) => ({ stayId: created!.id, restaurantId: rid, ...n })));
     await mainFolioOf(tx, rid, created!.id);
     await recordAudit(tx, {
       action: "stay.created",

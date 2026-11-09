@@ -34,6 +34,7 @@ type Offer = {
   cancelHours: number;
   totalCents: number;
   perNightCents: number;
+  discountCents: number;
 };
 type RoomType = {
   id: string;
@@ -45,10 +46,17 @@ type RoomType = {
   fits: boolean;
   closed: boolean;
   minStay: number;
+  restricted: boolean;
   offers: Offer[];
   fromCents: number | null;
 };
-type Results = { arrival: string; departure: string; nights: number; types: RoomType[] };
+type Results = {
+  arrival: string;
+  departure: string;
+  nights: number;
+  types: RoomType[];
+  promo: { code: string; valid: boolean } | null;
+};
 type Booked = {
   number: number;
   arrival: string;
@@ -90,6 +98,7 @@ export function OnlineBooking({
   const [nights, setNights] = useState(1);
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
+  const [promo, setPromo] = useState("");
   const departure = add(arrival, nights);
 
   const [results, setResults] = useState<Results | null>(null);
@@ -99,7 +108,13 @@ export function OnlineBooking({
     const id = setTimeout(
       () =>
         startSearch(async () => {
-          const res = await hotelOffersAction(slug, { arrival, departure, adults, children });
+          const res = await hotelOffersAction(slug, {
+            arrival,
+            departure,
+            adults,
+            children,
+            promoCode: promo.trim() || undefined,
+          });
           if (!res) return;
           if (!res.ok) {
             setSearchError(res.error);
@@ -111,7 +126,7 @@ export function OnlineBooking({
       200,
     );
     return () => clearTimeout(id);
-  }, [slug, arrival, departure, adults, children]);
+  }, [slug, arrival, departure, adults, children, promo]);
 
   const [picked, setPicked] = useState<{ type: RoomType; offer: Offer } | null>(null);
   const [booked, setBooked] = useState<Booked | null>(null);
@@ -187,6 +202,16 @@ export function OnlineBooking({
             icon={<Users className="size-3.5" />}
           />
           <Stepper label={t("children")} value={children} min={0} max={8} onChange={setChildren} />
+          <label className="min-w-32 flex-1 sm:max-w-44">
+            <Label>{t("promoCode")}</Label>
+            <input
+              value={promo}
+              onChange={(e) => setPromo(e.target.value)}
+              maxLength={32}
+              dir="ltr"
+              className={cn(inputCls, results?.promo && !results.promo.valid && "border-danger")}
+            />
+          </label>
         </div>
       </section>
 
@@ -200,6 +225,7 @@ export function OnlineBooking({
           nights={nights}
           adults={adults}
           kids={children}
+          promoCode={results?.promo?.valid ? results.promo.code : ""}
           currency={currency}
           back={() => setPicked(null)}
           done={setBooked}
@@ -219,6 +245,11 @@ export function OnlineBooking({
               </span>
             ) : null}
           </div>
+          {results?.promo ? (
+            <p className={cn("text-sm font-semibold", results.promo.valid ? "text-success" : "text-danger")}>
+              {results.promo.valid ? t("promoApplied", { code: results.promo.code }) : t("promoInvalid")}
+            </p>
+          ) : null}
           {searchError ? (
             <FormError error={tErr.has(searchError) ? tErr(searchError) : tErr("internal")} />
           ) : null}
@@ -286,6 +317,11 @@ export function OnlineBooking({
                         </div>
                         <div className="flex items-center gap-3">
                           <div className="text-end">
+                            {o.discountCents ? (
+                              <p className="text-xs text-fg-subtle tabular-nums line-through">
+                                {money(o.totalCents + o.discountCents)}
+                              </p>
+                            ) : null}
                             <p className="text-lg font-bold tabular-nums">{money(o.totalCents)}</p>
                             <p className="text-xs text-fg-muted">
                               {t("perNight", { price: money(o.perNightCents) })}
@@ -304,7 +340,9 @@ export function OnlineBooking({
                       ? t("tooMany", { n: rt.maxOccupancy })
                       : rt.minStay
                         ? t("minStay", { n: rt.minStay })
-                        : t("soldOut")}
+                        : rt.restricted
+                          ? t("restricted")
+                          : t("soldOut")}
                   </p>
                 )}
               </article>
@@ -373,6 +411,7 @@ function GuestStep({
   nights,
   adults,
   kids,
+  promoCode,
   currency,
   back,
   done,
@@ -385,6 +424,7 @@ function GuestStep({
   nights: number;
   adults: number;
   kids: number;
+  promoCode: string;
   currency: string;
   back: () => void;
   done: (b: Booked) => void;
@@ -422,6 +462,7 @@ function GuestStep({
             eta: String(fd.get("eta") ?? ""),
             notes: String(fd.get("notes") ?? ""),
             website: String(fd.get("website") ?? ""),
+            promoCode,
           });
           if (!res) return;
           if (!res.ok) {

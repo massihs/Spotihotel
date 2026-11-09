@@ -1076,7 +1076,10 @@
     "room_booked_in_period": "A booking has this room over the period: move it first.",
     "no_housekeeper": "Pick at least one person.",
     "member_not_found": "This person is not on the team.",
-    "room_required": "Pick the room to take out of order."
+    "room_required": "Pick the room to take out of order.",
+    "closed_to_arrival": "No arrival on that day.",
+    "closed_to_departure": "No departure on that day.",
+    "max_stay": "Stay longer than allowed."
   },
   "tables": {
     "title": "Tables & QR codes",
@@ -4435,7 +4438,10 @@
       "issue": {
         "closed": "One of the nights is closed to sale.",
         "min_stay": "Minimum stay: {n} nights.",
-        "too_many_guests": "Too many guests for this room type."
+        "too_many_guests": "Too many guests for this room type.",
+        "closed_to_arrival": "No arrival on that day.",
+        "closed_to_departure": "No departure on that day.",
+        "max_stay": "Longest stay: {n} nights."
       },
       "override": "Override (manager's decision)",
       "submit": "Confirm the booking",
@@ -4479,7 +4485,10 @@
       "pickOffer": "Pick a room and a rate.",
       "submitCheckIn": "Book and check in now",
       "allRates": "All rates ({n})",
-      "fewerRates": "Fewer rates"
+      "fewerRates": "Fewer rates",
+      "promoCode": "Promo code",
+      "promoApplied": "Code applied to the prices shown",
+      "promoInvalid": "Unknown, expired or used-up code"
     },
     "stays": {
       "title": "Bookings",
@@ -4776,7 +4785,10 @@
       "ruleWithin": "only within {n} days of arrival",
       "noRules": "No rules: prices follow the calendar.",
       "bookableOnline": "Sold online (hotel booking page)",
-      "notOnline": "not online"
+      "notOnline": "not online",
+      "maxStayLabel": "Max. stay (nights)",
+      "closedToArrival": "Closed to arrival",
+      "closedToDeparture": "Closed to departure"
     },
     "blocks": {
       "title": "Groups & blocks",
@@ -5382,7 +5394,11 @@
     "cancellation": "Cancellation",
     "precheckinTitle": "Save time at arrival",
     "precheckinBody": "Fill in the registration card now (identity, signature): at the hotel, you just pick up your key.",
-    "precheckinCta": "Online pre-check-in"
+    "precheckinCta": "Online pre-check-in",
+    "promoCode": "Promo code",
+    "promoApplied": "Code {code} applied",
+    "promoInvalid": "This code is not valid.",
+    "restricted": "Not available for these arrival or departure dates"
   },
   "concierge": {
     "title": "Your room",

@@ -1076,7 +1076,10 @@
     "room_booked_in_period": "Une réservation occupe cette chambre sur la période : déplacez-la d'abord.",
     "no_housekeeper": "Choisissez au moins une personne.",
     "member_not_found": "Cette personne ne fait pas partie de l'équipe.",
-    "room_required": "Choisissez la chambre à mettre hors service."
+    "room_required": "Choisissez la chambre à mettre hors service.",
+    "closed_to_arrival": "Pas d'arrivée possible ce jour-là.",
+    "closed_to_departure": "Pas de départ possible ce jour-là.",
+    "max_stay": "Séjour plus long que la durée maximale."
   },
   "tables": {
     "title": "Tables & QR codes",
@@ -4443,7 +4446,10 @@
       "issue": {
         "closed": "Une des nuits est fermée à la vente.",
         "min_stay": "Durée minimale : {n} nuits.",
-        "too_many_guests": "Trop de personnes pour ce type de chambre."
+        "too_many_guests": "Trop de personnes pour ce type de chambre.",
+        "closed_to_arrival": "Pas d'arrivée possible ce jour-là.",
+        "closed_to_departure": "Pas de départ possible ce jour-là.",
+        "max_stay": "Durée maximale : {n} nuits."
       },
       "override": "Forcer (décision du responsable)",
       "submit": "Confirmer la réservation",
@@ -4487,7 +4493,10 @@
       "pickOffer": "Choisissez une chambre et un tarif.",
       "submitCheckIn": "Réserver et faire le check-in maintenant",
       "allRates": "Tous les tarifs ({n})",
-      "fewerRates": "Moins de tarifs"
+      "fewerRates": "Moins de tarifs",
+      "promoCode": "Code promo",
+      "promoApplied": "Code appliqué aux prix affichés",
+      "promoInvalid": "Code inconnu, expiré ou épuisé"
     },
     "stays": {
       "title": "Réservations",
@@ -4784,7 +4793,10 @@
       "ruleWithin": "seulement à moins de {n} jours de l'arrivée",
       "noRules": "Aucune règle : les prix suivent le calendrier.",
       "bookableOnline": "Vendu en ligne (page de réservation de l'hôtel)",
-      "notOnline": "pas en ligne"
+      "notOnline": "pas en ligne",
+      "maxStayLabel": "Séjour max. (nuits)",
+      "closedToArrival": "Fermé à l'arrivée",
+      "closedToDeparture": "Fermé au départ"
     },
     "blocks": {
       "title": "Groupes & allotements",
@@ -5390,7 +5402,11 @@
     "cancellation": "Annulation",
     "precheckinTitle": "Gagnez du temps à l'arrivée",
     "precheckinBody": "Remplissez dès maintenant la fiche de police (identité, signature) : à l'hôtel, il ne reste qu'à prendre la clé.",
-    "precheckinCta": "Pré-enregistrement en ligne"
+    "precheckinCta": "Pré-enregistrement en ligne",
+    "promoCode": "Code promo",
+    "promoApplied": "Code {code} appliqué",
+    "promoInvalid": "Ce code n'est pas valable.",
+    "restricted": "Pas disponible pour ces dates d'arrivée ou de départ"
   },
   "concierge": {
     "title": "Votre chambre",

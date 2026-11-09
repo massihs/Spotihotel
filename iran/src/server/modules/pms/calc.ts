@@ -73,3 +73,20 @@ export function serviceSlots(opensAt: string, closesAt: string, stepMin: number,
   }
   return out;
 }
+
+/**
+ * A discount on a stay spread over its nights in proportion to their price (the last night takes
+ * the rounding), so each night's revenue stays right in the books.
+ */
+export function spreadDiscount<T extends { rateCents: number }>(nights: T[], discountCents: number) {
+  const total = nights.reduce((s, n) => s + n.rateCents, 0);
+  const discount = Math.max(0, Math.min(discountCents, total));
+  if (!discount || !total) return { nights, discountCents: 0 };
+  let left = discount;
+  const out = nights.map((n, i) => {
+    const cut = i === nights.length - 1 ? left : Math.min(left, Math.round((n.rateCents * discount) / total));
+    left -= cut;
+    return { ...n, rateCents: n.rateCents - cut };
+  });
+  return { nights: out, discountCents: discount };
+}

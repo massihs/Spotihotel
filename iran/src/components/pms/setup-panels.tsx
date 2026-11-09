@@ -594,6 +594,9 @@ export function RatesPanel({
               rateCents: rate ? parseMoneyInput(rate, currency) : null,
               closed,
               minStay: fd.get("minStay") ? Number(fd.get("minStay")) : null,
+              maxStay: fd.get("maxStay") ? Number(fd.get("maxStay")) : null,
+              closedToArrival: fd.get("cta") === "on",
+              closedToDeparture: fd.get("ctd") === "on",
               weekdays,
             }),
           );
@@ -623,6 +626,16 @@ export function RatesPanel({
         <label>
           <Label>{t("minStayLabel")}</Label>
           <input name="minStay" type="number" min={1} max={60} className={inputCls} />
+        </label>
+        <label>
+          <Label>{t("maxStayLabel")}</Label>
+          <input name="maxStay" type="number" min={1} max={365} className={inputCls} />
+        </label>
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" name="cta" className="size-4" /> {t("closedToArrival")}
+        </label>
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" name="ctd" className="size-4" /> {t("closedToDeparture")}
         </label>
         <fieldset className="flex flex-wrap items-center gap-3 text-sm sm:col-span-4">
           <legend className="sr-only">{t("weekdays")}</legend>

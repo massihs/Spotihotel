@@ -360,6 +360,9 @@ export const rateRangeSchema = z
     rateCents: cents.nullable(),
     closed: z.coerce.boolean().default(false),
     minStay: z.coerce.number().int().min(1).max(60).nullable().default(null),
+    closedToArrival: z.coerce.boolean().default(false),
+    closedToDeparture: z.coerce.boolean().default(false),
+    maxStay: z.coerce.number().int().min(1).max(365).nullable().default(null),
     /** 0 = Sunday … 6 = Saturday; empty = every day. */
     weekdays: z.array(z.coerce.number().int().min(0).max(6)).max(7).default([]),
   })
@@ -388,7 +391,13 @@ export async function setRateRange(
     (d) => !input.weekdays.length || input.weekdays.includes(new Date(`${d}T12:00:00Z`).getUTCDay()),
   );
   if (!days.length) throw validation("invalid_range", { field: "to" });
-  const plain = input.rateCents == null && !input.closed && input.minStay == null;
+  const plain =
+    input.rateCents == null &&
+    !input.closed &&
+    input.minStay == null &&
+    !input.closedToArrival &&
+    !input.closedToDeparture &&
+    input.maxStay == null;
   await db.transaction(async (tx) => {
     if (plain) {
       await tx
@@ -406,6 +415,9 @@ export async function setRateRange(
           rateCents: input.rateCents,
           closed: input.closed,
           minStay: input.minStay,
+          closedToArrival: input.closedToArrival,
+          closedToDeparture: input.closedToDeparture,
+          maxStay: input.maxStay,
         })),
       )
       .onConflictDoUpdate({
@@ -414,6 +426,9 @@ export async function setRateRange(
           rateCents: sql`excluded.rate_cents`,
           closed: sql`excluded.closed`,
           minStay: sql`excluded.min_stay`,
+          closedToArrival: sql`excluded.closed_to_arrival`,
+          closedToDeparture: sql`excluded.closed_to_departure`,
+          maxStay: sql`excluded.max_stay`,
         },
       });
   });

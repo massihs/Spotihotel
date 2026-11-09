@@ -56,6 +56,7 @@ export const onlineSearchSchema = z.object({
   departure: z.string().refine(isDay, "invalid_date"),
   adults: z.coerce.number().int().min(1).max(8).default(2),
   children: z.coerce.number().int().min(0).max(8).default(0),
+  promoCode: z.string().trim().max(32).optional(),
 });
 
 /** Room types with the offers a guest can book online for the dates (cheapest first). */
@@ -79,11 +80,16 @@ export async function onlineOffers(db: DbOrTx, slug: string, raw: z.input<typeof
           cancelHours: x.cancelHours,
           totalCents: x.totalCents,
           perNightCents: x.perNightCents,
+          discountCents: x.discountCents,
         }))
         .sort((a, b) => a.totalCents - b.totalCents);
       const minStay = Math.max(
         0,
         ...t.quotes.filter((x) => x.issues.includes("min_stay")).map((x) => x.minStay),
+      );
+      // Closed to arrival or departure that day, or longer than allowed: not bookable as asked.
+      const restricted = t.quotes.some((x) =>
+        x.issues.some((i) => ["closed_to_arrival", "closed_to_departure", "max_stay"].includes(i)),
       );
       return {
         id: t.id,
@@ -96,6 +102,7 @@ export async function onlineOffers(db: DbOrTx, slug: string, raw: z.input<typeof
         fits: t.fits,
         closed: t.closed,
         minStay: offers.length ? 0 : minStay,
+        restricted: !offers.length && restricted,
         offers: t.available > 0 && t.fits ? offers : [],
         fromCents: offers[0]?.totalCents ?? null,
       };
@@ -112,6 +119,7 @@ export async function onlineOffers(db: DbOrTx, slug: string, raw: z.input<typeof
     nights: o.nights,
     today: o.businessDate,
     types,
+    promo: o.promo,
   };
 }
 
@@ -232,6 +240,7 @@ export async function onlineBook(db: Database, slug: string, raw: z.input<typeof
     guarantee: "none",
     eta: input.eta ?? null,
     notes: input.notes ?? null,
+    promoCode: input.promoCode || null,
   });
   const link = precheckinLink(stay.code);
   // A text with the booking number and the online registration link (logged only without a provider).

@@ -6,6 +6,8 @@ import { notFound, validation } from "@/server/errors";
 import { recordAudit } from "@/server/audit";
 import { normalizeDigits } from "@/lib/money";
 import { isIranNationalCode } from "@/lib/iran-id";
+import { couponDiscount } from "@/lib/coupon";
+import { findUsableCoupon } from "@/server/modules/customers/service";
 import { guestFields, nationalCodeOk, nationalCodeRule } from "./guests";
 import { assertCan, type RestaurantContext } from "@/server/tenancy";
 import { isDay, nightsBetween } from "./calc";
@@ -18,6 +20,8 @@ export const bookingSearchSchema = z
     departure: z.string().refine(isDay, "invalid_date"),
     adults: z.coerce.number().int().min(1).max(20).default(2),
     children: z.coerce.number().int().min(0).max(20).default(0),
+    /** A promotion code to price the offers with. */
+    promoCode: z.string().trim().max(32).optional(),
   })
   .refine((v) => v.departure > v.arrival && nightsBetween(v.arrival, v.departure) <= 60, {
     message: "invalid_range",
@@ -94,6 +98,8 @@ export async function computeBookingOptions(
             adjusted: res.adjustments.length > 0,
             issues: res.issues,
             minStay: res.minStay,
+            maxStay: res.maxStay,
+            discountCents: 0,
           };
         }),
       );
@@ -115,7 +121,26 @@ export async function computeBookingOptions(
       };
     }),
   );
-  return { ...q, nights, businessDate, types: options };
+  // A promotion code: every bookable offer shows its price after the code.
+  let promo: { code: string; valid: boolean } | null = null;
+  if (q.promoCode) {
+    const coupon = await findUsableCoupon(db, rid, q.promoCode);
+    promo = { code: q.promoCode.toUpperCase(), valid: !!coupon };
+    if (coupon)
+      for (const t of options)
+        for (const x of t.quotes) {
+          if (x.issues.length || x.totalCents < coupon.minOrderCents) continue;
+          const cut = couponDiscount(coupon, x.totalCents);
+          x.discountCents = cut;
+          x.totalCents -= cut;
+          x.perNightCents = nights ? Math.round(x.totalCents / nights) : x.totalCents;
+        }
+    for (const t of options) {
+      const sellable = t.quotes.filter((x) => !x.issues.length);
+      t.fromCents = sellable.length ? Math.min(...sellable.map((x) => x.totalCents)) : null;
+    }
+  }
+  return { ...q, nights, businessDate, types: options, promo };
 }
 
 /**

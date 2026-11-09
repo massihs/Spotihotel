@@ -51,6 +51,8 @@ type Quote = {
   adjusted: boolean;
   issues: string[];
   minStay: number;
+  maxStay: number | null;
+  discountCents: number;
 };
 type Option = {
   id: string;
@@ -159,13 +161,22 @@ export function BookingDesk({
   const [nationalCode, setNationalCode] = useState("");
   const [saving, startSave] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const [promo, setPromo] = useState("");
+  const [promoState, setPromoState] = useState<{ code: string; valid: boolean } | null>(null);
 
   // Live availability and prices for the dates and party.
   useEffect(() => {
     startSearch(async () => {
-      const res = await bookingOptionsAction(restaurantId, { arrival, departure, adults, children });
+      const res = await bookingOptionsAction(restaurantId, {
+        arrival,
+        departure,
+        adults,
+        children,
+        promoCode: promo.trim() || undefined,
+      });
       if (res?.ok && res.data) {
         setSearchErrorKey(null);
+        setPromoState(res.data.promo ?? null);
         const list = res.data.types as Option[];
         setOptions(list);
         setPick((p) => {
@@ -189,7 +200,7 @@ export function BookingDesk({
         );
       }
     });
-  }, [restaurantId, arrival, departure, adults, children, initial?.roomTypeId]);
+  }, [restaurantId, arrival, departure, adults, children, initial?.roomTypeId, promo]);
   const searchError = searchErrorKey
     ? tErr.has(searchErrorKey)
       ? tErr(searchErrorKey)
@@ -294,6 +305,7 @@ export function BookingDesk({
         guarantee: (str(fd, "guarantee") || "none") as "none",
         accountId: str(fd, "accountId") || null,
         notes: str(fd, "notes"),
+        promoCode: promoState?.valid ? promoState.code : null,
         fixedRateCents,
         override: !!fd.get("override"),
       });
@@ -517,7 +529,9 @@ export function BookingDesk({
                                       key={i}
                                       className="rounded bg-danger-soft px-1.5 py-0.5 font-semibold text-danger"
                                     >
-                                      {t(`issue.${i}`, { n: q.minStay })}
+                                      {t(`issue.${i}`, {
+                                        n: i === "max_stay" ? (q.maxStay ?? 0) : q.minStay,
+                                      })}
                                     </span>
                                   ))}
                                 </span>
@@ -754,6 +768,21 @@ export function BookingDesk({
             <label>
               <Label>{t("channelRef")}</Label>
               <input name="channelRef" className={inputCls} maxLength={64} dir="ltr" />
+            </label>
+            <label>
+              <Label>{t("promoCode")}</Label>
+              <input
+                value={promo}
+                onChange={(e) => setPromo(e.target.value)}
+                className={cn(inputCls, promoState && !promoState.valid && "border-danger")}
+                maxLength={32}
+                dir="ltr"
+              />
+              {promoState ? (
+                <span className={cn("mt-1 block text-xs", promoState.valid ? "text-success" : "text-danger")}>
+                  {promoState.valid ? t("promoApplied") : t("promoInvalid")}
+                </span>
+              ) : null}
             </label>
             <label>
               <Label>{t("eta")}</Label>

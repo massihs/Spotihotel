@@ -142,6 +142,12 @@ export const rateDays = pgTable(
     /** Stop sell: no new arrival can stay that night. */
     closed: boolean().notNull().default(false),
     minStay: integer(),
+    /** No arrival on this day (a stay already running through it is fine). */
+    closedToArrival: boolean().notNull().default(false),
+    /** No departure on this day. */
+    closedToDeparture: boolean().notNull().default(false),
+    /** Longest stay for an arrival on this day. */
+    maxStay: integer(),
     ...timestamps,
   },
   (t) => [
@@ -254,6 +260,9 @@ export const stays = pgTable(
     guarantee: varchar({ length: 8 }).notNull().default("none"),
     /** Sum of the nights' rates when booked (snapshot, shown on the confirmation). */
     totalCents: money().notNull().default(0),
+    /** Promotion code used at booking, and what it took off the stay's price. */
+    promoCode: varchar({ length: 32 }),
+    discountCents: money().notNull().default(0),
     notes: text(),
     checkedInAt: tstz(),
     checkedOutAt: tstz(),
