@@ -579,7 +579,8 @@
     "outlets": "Restaurants & cafés",
     "searchPlaceholderHotel": "Guest, booking or room number, page…",
     "searchingStays": "Searching bookings…",
-    "housekeeping": "Housekeeping & maintenance"
+    "housekeeping": "Housekeeping & maintenance",
+    "hotelReports": "Hotel reports"
   },
   "dashboard": {
     "welcome": "Hello {name}",
@@ -5493,5 +5494,62 @@
     "outUntil": "Back on",
     "optional": "optional",
     "send": "Save"
+  },
+  "hotelReports": {
+    "title": "Hotel reports",
+    "subtitle": "Manager's report, occupancy history and revenue by segment, to print or export.",
+    "tabs": {
+      "manager": "Manager's report",
+      "occupancy": "Occupancy history",
+      "segments": "By segment"
+    },
+    "csv": "Export (CSV)",
+    "print": "Print",
+    "day": "Day",
+    "from": "From",
+    "to": "To",
+    "show": "Show",
+    "today": "Day",
+    "mtd": "Month to date",
+    "ytd": "Year to date",
+    "managerOf": "Day of {day}",
+    "notClosed": "day not closed yet",
+    "rows": {
+      "roomsAvailable": "Rooms available",
+      "roomsSold": "Rooms sold",
+      "occupancy": "Occupancy",
+      "adr": "ADR",
+      "revpar": "RevPAR",
+      "roomRevenue": "Room revenue",
+      "totalRevenue": "Total revenue"
+    },
+    "revenueByDept": "Revenue by department",
+    "paymentsByMethod": "Payments by method",
+    "movements": "Movements",
+    "mv": {
+      "arrivals": "Arrivals",
+      "departures": "Departures",
+      "noShows": "No-shows",
+      "cancellations": "Cancellations",
+      "booked": "Bookings taken",
+      "guests": "Guests in house"
+    },
+    "none": "Nothing for the period",
+    "cols": {
+      "day": "Day",
+      "roomsSold": "Sold / available",
+      "occupancy": "Occupancy",
+      "adr": "ADR",
+      "revpar": "RevPAR",
+      "roomRevenue": "Room revenue",
+      "totalRevenue": "Total revenue",
+      "nights": "Room nights"
+    },
+    "noDays": "No closed day in the period.",
+    "total": "Total",
+    "segmentsTotal": "{nights} room nights · {revenue} · ADR {adr}",
+    "byChannel": "By channel",
+    "byPlan": "By rate plan",
+    "byType": "By room type"
   }
 }

@@ -579,7 +579,8 @@
     "outlets": "رستوران‌ها و کافه‌ها",
     "searchPlaceholderHotel": "مهمان، شماره رزرو یا اتاق، بخش‌ها…",
     "searchingStays": "جستجو در رزروها…",
-    "housekeeping": "خانه‌داری و تعمیرات"
+    "housekeeping": "خانه‌داری و تعمیرات",
+    "hotelReports": "گزارش‌های هتل"
   },
   "dashboard": {
     "welcome": "سلام {name}",
@@ -5493,5 +5494,62 @@
     "outUntil": "بازگشت به سرویس در",
     "optional": "اختیاری",
     "send": "ثبت"
+  },
+  "hotelReports": {
+    "title": "گزارش‌های هتل",
+    "subtitle": "گزارش مدیریت، سابقه اشغال و درآمد به تفکیک بخش؛ قابل چاپ و خروجی.",
+    "tabs": {
+      "manager": "گزارش مدیریت",
+      "occupancy": "سابقه اشغال",
+      "segments": "به تفکیک بخش"
+    },
+    "csv": "خروجی CSV",
+    "print": "چاپ",
+    "day": "روز",
+    "from": "از",
+    "to": "تا",
+    "show": "نمایش",
+    "today": "روز",
+    "mtd": "از ابتدای ماه",
+    "ytd": "از ابتدای سال",
+    "managerOf": "روز {day}",
+    "notClosed": "روز هنوز بسته نشده",
+    "rows": {
+      "roomsAvailable": "اتاق قابل فروش",
+      "roomsSold": "اتاق فروخته‌شده",
+      "occupancy": "ضریب اشغال",
+      "adr": "میانگین نرخ (ADR)",
+      "revpar": "RevPAR",
+      "roomRevenue": "درآمد اقامت",
+      "totalRevenue": "درآمد کل"
+    },
+    "revenueByDept": "درآمد به تفکیک بخش",
+    "paymentsByMethod": "دریافتی به تفکیک روش",
+    "movements": "جابه‌جایی‌ها",
+    "mv": {
+      "arrivals": "ورود",
+      "departures": "خروج",
+      "noShows": "عدم حضور",
+      "cancellations": "لغو",
+      "booked": "رزروهای ثبت‌شده",
+      "guests": "مهمانان مقیم"
+    },
+    "none": "موردی نیست",
+    "cols": {
+      "day": "روز",
+      "roomsSold": "فروخته / قابل فروش",
+      "occupancy": "اشغال",
+      "adr": "ADR",
+      "revpar": "RevPAR",
+      "roomRevenue": "درآمد اقامت",
+      "totalRevenue": "درآمد کل",
+      "nights": "شب‌اقامت"
+    },
+    "noDays": "در این بازه روز بسته‌شده‌ای نیست.",
+    "total": "جمع",
+    "segmentsTotal": "{nights} شب‌اقامت · {revenue} · ADR {adr}",
+    "byChannel": "به تفکیک کانال",
+    "byPlan": "به تفکیک طرح نرخ",
+    "byType": "به تفکیک نوع اتاق"
   }
 }

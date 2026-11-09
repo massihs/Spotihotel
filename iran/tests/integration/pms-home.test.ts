@@ -15,6 +15,7 @@ import { postCharge, postPayment } from "@/server/modules/pms/folios";
 import { runNightAudit } from "@/server/modules/pms/night-audit";
 import { hotelHome } from "@/server/modules/pms/home";
 import { addDays } from "@/server/modules/pms/calc";
+import { managerReport, occupancyHistory, revenueBySegment } from "@/server/modules/pms/reports";
 import { createOwnerWithRestaurant } from "../helpers/factories";
 
 describe("hotel home dashboard", () => {
@@ -109,5 +110,18 @@ describe("hotel home dashboard", () => {
     expect(next.arrivals).toEqual([]);
     expect(next.departures).toEqual([]);
     expect(next.inHouse).toBe(1);
+
+    // Reports of the closed day: one room sold of four, the minibar, the cash taken.
+    const report = await managerReport(db, h, today, today);
+    expect(report.today).toMatchObject({ rooms: 4, sold: 1, occupancyPct: 25, days: 1 });
+    expect(report.revenue.map((r) => r.department)).toContain("minibar");
+    expect(report.payments).toEqual([{ method: "cash", cents: 200 }]);
+    expect(report.movements).toMatchObject({ arrivals: 1, noShows: 1 });
+    const history = await occupancyHistory(db, h, today, today);
+    expect(history.days).toHaveLength(1);
+    expect(history.totals.occupancyPct).toBe(25);
+    const segments = await revenueBySegment(db, h, today, addDays(today, 1));
+    expect(segments.totals.nights).toBe(2);
+    expect(segments.bySource[0]).toMatchObject({ key: "direct", nights: 2, sharePct: 100 });
   });
 });

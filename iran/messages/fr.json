@@ -579,7 +579,8 @@
     "outlets": "Restaurants et cafés",
     "searchPlaceholderHotel": "Client, n° de réservation ou de chambre, page…",
     "searchingStays": "Recherche dans les réservations…",
-    "housekeeping": "Ménage et maintenance"
+    "housekeeping": "Ménage et maintenance",
+    "hotelReports": "Rapports de l'hôtel"
   },
   "dashboard": {
     "welcome": "Bonjour {name}",
@@ -5501,5 +5502,62 @@
     "outUntil": "Retour prévu le",
     "optional": "facultatif",
     "send": "Enregistrer"
+  },
+  "hotelReports": {
+    "title": "Rapports de l'hôtel",
+    "subtitle": "Rapport du directeur, historique d'occupation et chiffre d'affaires par segment, à imprimer ou exporter.",
+    "tabs": {
+      "manager": "Rapport du directeur",
+      "occupancy": "Historique d'occupation",
+      "segments": "Par segment"
+    },
+    "csv": "Exporter (CSV)",
+    "print": "Imprimer",
+    "day": "Jour",
+    "from": "Du",
+    "to": "Au",
+    "show": "Afficher",
+    "today": "Le jour",
+    "mtd": "Mois à date",
+    "ytd": "Année à date",
+    "managerOf": "Journée du {day}",
+    "notClosed": "journée pas encore clôturée",
+    "rows": {
+      "roomsAvailable": "Chambres à vendre",
+      "roomsSold": "Chambres vendues",
+      "occupancy": "Occupation",
+      "adr": "Prix moyen (ADR)",
+      "revpar": "RevPAR",
+      "roomRevenue": "CA hébergement",
+      "totalRevenue": "CA total"
+    },
+    "revenueByDept": "Chiffre d'affaires par service",
+    "paymentsByMethod": "Encaissements par moyen",
+    "movements": "Mouvements",
+    "mv": {
+      "arrivals": "Arrivées",
+      "departures": "Départs",
+      "noShows": "Non présentés",
+      "cancellations": "Annulations",
+      "booked": "Réservations prises",
+      "guests": "Clients présents"
+    },
+    "none": "Rien sur la période",
+    "cols": {
+      "day": "Jour",
+      "roomsSold": "Vendues / à vendre",
+      "occupancy": "Occupation",
+      "adr": "ADR",
+      "revpar": "RevPAR",
+      "roomRevenue": "CA hébergement",
+      "totalRevenue": "CA total",
+      "nights": "Nuitées"
+    },
+    "noDays": "Aucune journée clôturée sur la période.",
+    "total": "Total",
+    "segmentsTotal": "{nights} nuitées · {revenue} · ADR {adr}",
+    "byChannel": "Par canal",
+    "byPlan": "Par plan tarifaire",
+    "byType": "Par type de chambre"
   }
 }

@@ -579,7 +579,8 @@
     "outlets": "المطاعم والمقاهي",
     "searchPlaceholderHotel": "النزيل، رقم الحجز أو الغرفة، الصفحات…",
     "searchingStays": "جارٍ البحث في الحجوزات…",
-    "housekeeping": "التدبير والصيانة"
+    "housekeeping": "التدبير والصيانة",
+    "hotelReports": "تقارير الفندق"
   },
   "dashboard": {
     "welcome": "مرحبًا {name}",
@@ -5493,5 +5494,62 @@
     "outUntil": "العودة في",
     "optional": "اختياري",
     "send": "حفظ"
+  },
+  "hotelReports": {
+    "title": "تقارير الفندق",
+    "subtitle": "تقرير المدير وسجل الإشغال والإيرادات حسب الشريحة، للطباعة أو التصدير.",
+    "tabs": {
+      "manager": "تقرير المدير",
+      "occupancy": "سجل الإشغال",
+      "segments": "حسب الشريحة"
+    },
+    "csv": "تصدير CSV",
+    "print": "طباعة",
+    "day": "اليوم",
+    "from": "من",
+    "to": "إلى",
+    "show": "عرض",
+    "today": "اليوم",
+    "mtd": "منذ بداية الشهر",
+    "ytd": "منذ بداية السنة",
+    "managerOf": "يوم {day}",
+    "notClosed": "اليوم لم يُغلق بعد",
+    "rows": {
+      "roomsAvailable": "الغرف المتاحة",
+      "roomsSold": "الغرف المباعة",
+      "occupancy": "الإشغال",
+      "adr": "متوسط السعر",
+      "revpar": "RevPAR",
+      "roomRevenue": "إيراد الغرف",
+      "totalRevenue": "إجمالي الإيراد"
+    },
+    "revenueByDept": "الإيراد حسب القسم",
+    "paymentsByMethod": "المدفوعات حسب الطريقة",
+    "movements": "الحركة",
+    "mv": {
+      "arrivals": "الوصول",
+      "departures": "المغادرة",
+      "noShows": "عدم الحضور",
+      "cancellations": "الإلغاءات",
+      "booked": "الحجوزات المسجلة",
+      "guests": "النزلاء"
+    },
+    "none": "لا شيء",
+    "cols": {
+      "day": "اليوم",
+      "roomsSold": "المباعة / المتاحة",
+      "occupancy": "الإشغال",
+      "adr": "ADR",
+      "revpar": "RevPAR",
+      "roomRevenue": "إيراد الغرف",
+      "totalRevenue": "الإجمالي",
+      "nights": "الليالي"
+    },
+    "noDays": "لا أيام مغلقة في الفترة.",
+    "total": "المجموع",
+    "segmentsTotal": "{nights} ليلة · {revenue} · ADR {adr}",
+    "byChannel": "حسب القناة",
+    "byPlan": "حسب خطة السعر",
+    "byType": "حسب نوع الغرفة"
   }
 }

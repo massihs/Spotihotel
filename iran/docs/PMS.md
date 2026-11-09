@@ -115,6 +115,27 @@ Points de vente (`src/server/modules/outlets`) : chaque restaurant, café ou bar
 - Partie double alimentée automatiquement (`src/server/modules/ledger`) : journal, grand livre, balance, états financiers, TVA, chèques, clients et fournisseurs, trésorerie, clôture.
 - Console de groupe (`chain.ts`) : réservations centrales et chiffres consolidés de plusieurs hôtels.
 
+### 2.11 Facture officielle du séjour
+
+Depuis la note d'un séjour soldée : **Émettre la facture officielle** (`src/server/modules/pms/invoicing.ts`). Même numérotation annuelle sans trou que les autres ventes, vendeur et acheteur identifiés (code national, identifiant national, code économique), une ligne par charge, TVA par taux, règlements, séjour (n°, chambre, dates). Acheteur par défaut : la société de la note, sinon le client ; « au nom d'une société… » change l'acheteur sans changer le numéro. La facture s'imprime sur sa page publique (`/invoice/<jeton>`, PDF compris). La liste des factures exporte une période en CSV pour le **سامانه مودیان** (type 1 ou 2, identifiants de l'acheteur, hors taxe, TVA, total en rials, date jalali).
+
+### 2.12 Ménage et maintenance (`/housekeeping`)
+
+`src/server/modules/hotel/housekeeping.ts`, écran `src/components/hotel/housekeeping-ui.tsx`.
+
+- **Plan du jour** : état et occupation de chaque chambre (arrivée, départ, recouche, libre), arrivées pas prêtes en priorité ; la gouvernante choisit qui travaille et répartit les chambres à faire étage par étage, ou les confie à la main.
+- **Mes chambres** : la liste de la femme de chambre sur téléphone (Commencer, Terminé, Signaler un problème).
+- **Contrôle** réservé à la gouvernante (droit « gérer les chambres »).
+- **Maintenance** : tickets (chambre ou lieu, priorité, technicien) ; mise hors service d'une date à une autre, refusée si une réservation occupe la chambre ; réparée, la chambre revient au ménage.
+
+### 2.13 Restrictions et codes promo
+
+Dans le calendrier des prix : arrêt des ventes, séjour minimum et maximum, **fermé à l'arrivée**, **fermé au départ**. Les **codes promo** de « Clients » (pourcentage ou montant, date de fin, nombre d'utilisations) s'appliquent au comptoir et sur la page en ligne ; la remise est répartie sur les nuits et enregistrée sur le séjour.
+
+### 2.14 Rapports de l'hôtel (`/hotel-reports`)
+
+`src/server/modules/pms/reports.ts` : **rapport du directeur** d'une journée clôturée (chambres, occupation, ADR, RevPAR, chiffre d'affaires, avec mois et année à date — l'année commence le 1er Farvardin), chiffre d'affaires par service, encaissements par moyen, mouvements ; **historique d'occupation** d'une période ; **chiffre d'affaires par canal, plan tarifaire et type de chambre**. Impression et export CSV.
+
 ---
 
 ## 3. Où est le code
@@ -200,11 +221,12 @@ Tests du PMS : `tests/integration/pms.test.ts`, `pms-home.test.ts`, `pms-chain.t
 
 ## 7. Ce qui reste à faire
 
-| Sujet                          | État                                                                                   |
-| ------------------------------ | -------------------------------------------------------------------------------------- |
-| Channel manager bidirectionnel | à venir ; aujourd'hui la plateforme et sa référence sont saisies, commissions comptées |
-| Acompte payé en ligne          | à venir sur la page de réservation (Zarinpal déjà utilisé côté restaurant)             |
-| Envoi au سامانه مودیان         | à venir ; les données nécessaires sont enregistrées                                    |
-| Transmission directe Amaken    | pas d'API publique ; liste des voyageurs exportable                                    |
-| Serrures et standard           | selon le matériel de l'hôtel                                                           |
-| SMS réels                      | prêt : renseigner la clé Kavenegar                                                     |
+| Sujet                          | État                                                                                        |
+| ------------------------------ | ------------------------------------------------------------------------------------------- |
+| Channel manager bidirectionnel | à venir ; dépend des API des plateformes ; la plateforme et sa référence sont saisies       |
+| Confirmations SMS au comptoir  | à venir (seules les réservations en ligne reçoivent un SMS)                                 |
+| Acompte payé en ligne          | à venir sur la page de réservation (Zarinpal déjà utilisé côté restaurant)                  |
+| Envoi automatique au مودیان    | l'export CSV est prêt ; l'envoi direct par l'API du système fiscal reste à brancher         |
+| Transmission directe Amaken    | pas d'API publique ; liste des voyageurs exportable                                         |
+| Serrures et standard           | selon le matériel de l'hôtel                                                                |
+| Confort                        | objets trouvés, fusion de fiches, fidélité, ventes additionnelles, devises, liste d'attente |
