@@ -82,6 +82,8 @@ import {
   type pricingRuleSchema,
 } from "@/server/modules/pms/revenue";
 import { sendPrecheckinLink } from "@/server/modules/pms/precheckin";
+import { issueStayInvoice } from "@/server/modules/pms/invoicing";
+import type { BuyerInput } from "@/server/modules/invoices/service";
 import {
   autoAssignRooms,
   availableRooms,
@@ -159,6 +161,16 @@ export const amendStayAction = async (rid: string, id: string, input: In<typeof 
   runAction(async () =>
     done((await amendStay(db, await actionContext(rid, "frontdesk.manage"), id, input)).id),
   );
+export const issueStayInvoiceAction = async (rid: string, folioId: string, buyer?: BuyerInput | null) =>
+  runAction(async () => {
+    const inv = await issueStayInvoice(
+      db,
+      await actionContext(rid, "frontdesk.manage"),
+      folioId,
+      buyer ?? null,
+    );
+    return done({ number: inv.number, publicToken: inv.publicToken });
+  });
 export const searchStaysAction = async (rid: string, q: string) =>
   runAction(async () => searchStays(db, await actionContext(rid, "frontdesk.view"), q));
 export const autoAssignRoomsAction = async (rid: string, from: string, to: string) =>

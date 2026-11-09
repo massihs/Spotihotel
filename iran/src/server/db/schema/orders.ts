@@ -16,6 +16,7 @@ import {
 import { pk, timestamps, tstz, money } from "./_helpers";
 import { orderChannel, orderPaymentStatus, orderStatus, paymentStatus, refundStatus } from "./enums";
 import { products } from "./menu";
+import { folios } from "./pms";
 import { users } from "./platform";
 import { restaurants } from "./restaurant";
 import { diningTables, sessionParticipants, tableSessions } from "./tables";
@@ -339,6 +340,8 @@ export type InvoiceSnapshot = {
   currency: string;
   payments: { provider: string; amountCents: number; at: string; reference: string | null }[];
   notes: string | null;
+  /** A hotel stay's invoice: the booking, the room and the nights it covers. */
+  stay?: { number: number; room: string | null; arrival: string; departure: string; guest: string } | null;
 };
 
 /** Immutable once issued. Numbered gap-free per restaurant. */
@@ -354,6 +357,8 @@ export const invoices = pgTable(
     participantId: uuid().references(() => sessionParticipants.id, { onDelete: "set null" }),
     tableSessionId: uuid().references(() => tableSessions.id, { onDelete: "set null" }),
     paymentId: uuid().references(() => payments.id, { onDelete: "set null" }),
+    /** A hotel stay's invoice: issued from its folio (one invoice per folio). */
+    folioId: uuid().references(() => folios.id, { onDelete: "set null" }),
     currency: varchar({ length: 3 }).notNull(),
     totalCents: money().notNull(),
     taxCents: money().notNull(),
@@ -373,6 +378,9 @@ export const invoices = pgTable(
     uniqueIndex("invoices_payment_uq")
       .on(t.paymentId)
       .where(sql`${t.paymentId} IS NOT NULL`),
+    uniqueIndex("invoices_folio_uq")
+      .on(t.folioId)
+      .where(sql`${t.folioId} IS NOT NULL`),
     index("invoices_restaurant_issued_idx").on(t.restaurantId, t.issuedAt),
   ],
 );

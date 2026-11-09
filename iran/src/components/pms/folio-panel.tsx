@@ -1,6 +1,6 @@
 "use client";
 
-import { Ban, Percent, Printer, Shuffle } from "lucide-react";
+import { Ban, FileCheck2, Percent, Printer, Shuffle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
@@ -13,6 +13,7 @@ import { cn } from "@/lib/cn";
 import { parseMoneyInput } from "@/lib/money";
 import {
   discountLineAction,
+  issueStayInvoiceAction,
   moveLineAction,
   newFolioAction,
   postChargeAction,
@@ -89,11 +90,14 @@ export function FolioPanel({
   defaultAccountId,
   canPost,
   canAdjust,
+  invoices = [],
 }: {
   restaurantId: string;
   stayId: string;
   currency: string;
   folios: Folio[];
+  /** Official invoices already issued, per folio. */
+  invoices?: { folioId: string | null; number: string; publicToken: string }[];
   accounts: { id: string; name: string }[];
   defaultAccountId: string | null;
   canPost: boolean;
@@ -211,6 +215,14 @@ export function FolioPanel({
                 folioId={f.id}
                 accounts={accounts}
                 defaultAccountId={defaultAccountId}
+              />
+            ) : null}
+            {canPost ? (
+              <InvoiceButton
+                restaurantId={restaurantId}
+                folioId={f.id}
+                issued={invoices.find((i) => i.folioId === f.id) ?? null}
+                settled={f.balanceCents <= 0 && f.chargesCents > 0}
               />
             ) : null}
             <Link
@@ -597,5 +609,106 @@ function SheetInline({
         {children}
       </div>
     </div>
+  );
+}
+
+/**
+ * The folio's official invoice: issued once it is settled (to the guest, or the company it is
+ * billed to), or in another buyer's name; then its number links to the printable invoice.
+ */
+function InvoiceButton({
+  restaurantId,
+  folioId,
+  issued,
+  settled,
+}: {
+  restaurantId: string;
+  folioId: string;
+  issued: { number: string; publicToken: string } | null;
+  settled: boolean;
+}) {
+  const t = useTranslations("pms.folio");
+  const r = useRun();
+  if (!issued && !settled) return null;
+  return (
+    <span className="inline-flex flex-wrap items-center gap-2">
+      {issued ? (
+        <a
+          href={`/invoice/${issued.publicToken}`}
+          target="_blank"
+          rel="noopener"
+          className="inline-flex h-8 items-center gap-1.5 rounded-full bg-success-soft px-3 text-sm font-semibold text-success"
+        >
+          <FileCheck2 className="size-4" aria-hidden="true" />
+          {t("invoiceIssued", { number: issued.number })}
+        </a>
+      ) : (
+        <Button
+          size="sm"
+          variant="outline"
+          disabled={r.pending}
+          onClick={() => r.run(() => issueStayInvoiceAction(restaurantId, folioId))}
+        >
+          <FileCheck2 className="size-4" aria-hidden="true" />
+          {t("issueInvoice")}
+        </Button>
+      )}
+      <SheetButton label={t("invoiceToCompany")} title={t("invoiceToCompany")} variant="ghost">
+        {(close) => <BuyerForm restaurantId={restaurantId} folioId={folioId} done={close} />}
+      </SheetButton>
+      <FormError error={r.error} />
+    </span>
+  );
+}
+
+function BuyerForm({
+  restaurantId,
+  folioId,
+  done,
+}: {
+  restaurantId: string;
+  folioId: string;
+  done: () => void;
+}) {
+  const t = useTranslations("pms.folio");
+  const r = useRun();
+  const field = (name: string, label: string, opts: { required?: boolean; ltr?: boolean } = {}) => (
+    <label className="block">
+      <Label>{label}</Label>
+      <input name={name} required={opts.required} dir={opts.ltr ? "ltr" : undefined} className={inputCls} />
+    </label>
+  );
+  return (
+    <form
+      className="space-y-3"
+      action={(fd) =>
+        r.run(
+          () =>
+            issueStayInvoiceAction(restaurantId, folioId, {
+              name: String(fd.get("name") ?? ""),
+              nationalId: String(fd.get("nationalId") ?? ""),
+              economicCode: String(fd.get("economicCode") ?? ""),
+              phone: String(fd.get("phone") ?? ""),
+              address: String(fd.get("address") ?? ""),
+              postalCode: String(fd.get("postalCode") ?? ""),
+            }),
+          done,
+        )
+      }
+    >
+      <p className="text-sm text-fg-muted">{t("buyerHint")}</p>
+      {field("name", t("buyerName"), { required: true })}
+      <div className="grid gap-3 sm:grid-cols-2">
+        {field("nationalId", t("buyerNationalId"), { ltr: true })}
+        {field("economicCode", t("buyerEconomicCode"), { ltr: true })}
+        {field("phone", t("buyerPhone"), { ltr: true })}
+        {field("postalCode", t("buyerPostalCode"), { ltr: true })}
+      </div>
+      {field("address", t("buyerAddress"))}
+      <FormError error={r.error} />
+      <Button type="submit" className="w-full" disabled={r.pending}>
+        {t("issueInvoice")}
+      </Button>
+    </form>
   );
 }

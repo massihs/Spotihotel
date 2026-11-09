@@ -21,6 +21,7 @@ import { nightsBetween } from "@/server/modules/pms/calc";
 import { StatusText } from "@/components/pms/status-text";
 import { calendarLocale } from "@/lib/jalali-calendar";
 import { EDITION } from "@/config/edition";
+import { stayInvoices } from "@/server/modules/pms/invoicing";
 
 type Props = PageProps<"/[locale]/dashboard/[restaurantId]/stays/[stayId]">;
 
@@ -195,6 +196,11 @@ async function Stay({ params, searchParams }: Pick<Props, "params" | "searchPara
         </aside>
         <FolioPanel
           restaurantId={rid}
+          invoices={await stayInvoices(
+            db,
+            rid,
+            card.folios.map((f) => f.id),
+          )}
           stayId={s.id}
           currency={ctx.restaurant.currency}
           folios={card.folios.map((f) => ({

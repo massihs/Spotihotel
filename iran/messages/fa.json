@@ -1070,7 +1070,8 @@
     "invalid_sayad": "شناسه صیادی باید ۱۶ رقم باشد.",
     "sayad_taken": "این چک قبلاً ثبت شده است.",
     "supplier_not_found": "تأمین‌کننده یافت نشد.",
-    "document_required": "مدرک شناسایی را وارد کنید."
+    "document_required": "مدرک شناسایی را وارد کنید.",
+    "folio_empty": "این صورتحساب هیچ هزینه‌ای ندارد."
   },
   "tables": {
     "title": "میزها و کدهای QR",
@@ -2327,7 +2328,12 @@
       "stripe": "Stripe",
       "pay_later": "پرداخت سر میز"
     },
-    "discount": "تخفیف"
+    "discount": "تخفیف",
+    "stay": "اقامت",
+    "stayLine": "رزرو {number}، اتاق {room}، {guest}، از {arrival} تا {departure}",
+    "from": "از",
+    "to": "تا",
+    "moadianExport": "خروجی سامانه مودیان"
   },
   "kinds": {
     "label": "نوع کسب‌وکار",
@@ -4559,7 +4565,17 @@
       "chequeNumber": "شماره چک",
       "bank": "بانک",
       "drawer": "صادرکننده",
-      "dueDate": "تاریخ سررسید"
+      "dueDate": "تاریخ سررسید",
+      "issueInvoice": "صدور فاکتور رسمی",
+      "invoiceIssued": "فاکتور {number}",
+      "invoiceToCompany": "به نام شرکت…",
+      "buyerHint": "فاکتور پس از تسویه صورتحساب به نامی که اینجا وارد می‌کنید صادر می‌شود (اگر قبلاً صادر شده باشد، شماره آن تغییر نمی‌کند).",
+      "buyerName": "نام شخص یا شرکت",
+      "buyerNationalId": "کد ملی / شناسه ملی",
+      "buyerEconomicCode": "کد اقتصادی",
+      "buyerPhone": "تلفن",
+      "buyerPostalCode": "کد پستی",
+      "buyerAddress": "نشانی"
     },
     "invoice": {
       "print": "چاپ",

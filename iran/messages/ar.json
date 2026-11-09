@@ -1070,7 +1070,8 @@
     "invalid_sayad": "رقم صياد 16 رقمًا.",
     "sayad_taken": "هذا الشيك مسجل.",
     "supplier_not_found": "المورد غير موجود.",
-    "document_required": "أدخل وثيقة الهوية."
+    "document_required": "أدخل وثيقة الهوية.",
+    "folio_empty": "لا يحتوي هذا الحساب على أي رسوم."
   },
   "tables": {
     "title": "الطاولات ورموز QR",
@@ -2327,7 +2328,12 @@
       "stripe": "Stripe",
       "pay_later": "الدفع على الطاولة"
     },
-    "discount": "خصم"
+    "discount": "خصم",
+    "stay": "الإقامة",
+    "stayLine": "رقم {number}، الغرفة {room}، {guest}، من {arrival} إلى {departure}",
+    "from": "من",
+    "to": "إلى",
+    "moadianExport": "تصدير لنظام الضرائب"
   },
   "kinds": {
     "label": "نوع النشاط",
@@ -4559,7 +4565,17 @@
       "chequeNumber": "رقم الشيك",
       "bank": "البنك",
       "drawer": "الساحب",
-      "dueDate": "تاريخ الاستحقاق"
+      "dueDate": "تاريخ الاستحقاق",
+      "issueInvoice": "إصدار الفاتورة الرسمية",
+      "invoiceIssued": "الفاتورة {number}",
+      "invoiceToCompany": "باسم شركة…",
+      "buyerHint": "تُصدر الفاتورة بعد تسوية الحساب بالاسم المدخل هنا (يبقى رقمها كما هو إن كانت صادرة).",
+      "buyerName": "الاسم أو الشركة",
+      "buyerNationalId": "الرقم الوطني / المعرّف الوطني",
+      "buyerEconomicCode": "الرمز الاقتصادي",
+      "buyerPhone": "الهاتف",
+      "buyerPostalCode": "الرمز البريدي",
+      "buyerAddress": "العنوان"
     },
     "invoice": {
       "print": "طباعة",

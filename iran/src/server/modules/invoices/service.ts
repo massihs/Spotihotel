@@ -159,7 +159,7 @@ async function issueInTx(
   }
 }
 
-async function nextInvoiceSeq(tx: DbOrTx, restaurantId: string, year: number) {
+export async function nextInvoiceSeq(tx: DbOrTx, restaurantId: string, year: number) {
   const result = await tx.execute<{ value: string }>(sql`
     INSERT INTO counters (restaurant_id, name, value) VALUES (${restaurantId}, ${`invoice:${year}`}, 1)
     ON CONFLICT (restaurant_id, name) DO UPDATE SET value = counters.value + 1

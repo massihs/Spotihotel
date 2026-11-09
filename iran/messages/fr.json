@@ -1070,7 +1070,8 @@
     "invalid_sayad": "Le n° Sayad comporte 16 chiffres.",
     "sayad_taken": "Ce chèque est déjà enregistré.",
     "supplier_not_found": "Fournisseur introuvable.",
-    "document_required": "Indiquez votre pièce d'identité."
+    "document_required": "Indiquez votre pièce d'identité.",
+    "folio_empty": "Cette note ne contient aucune charge."
   },
   "tables": {
     "title": "Tables & QR codes",
@@ -2327,7 +2328,12 @@
       "stripe": "Stripe",
       "pay_later": "Payer à table"
     },
-    "discount": "Remise"
+    "discount": "Remise",
+    "stay": "Séjour",
+    "stayLine": "n° {number}, chambre {room}, {guest}, du {arrival} au {departure}",
+    "from": "Du",
+    "to": "Au",
+    "moadianExport": "Export سامانه مودیان"
   },
   "kinds": {
     "label": "Type d'établissement",
@@ -4567,7 +4573,17 @@
       "chequeNumber": "N° du chèque",
       "bank": "Banque",
       "drawer": "Tireur",
-      "dueDate": "Échéance"
+      "dueDate": "Échéance",
+      "issueInvoice": "Émettre la facture officielle",
+      "invoiceIssued": "Facture {number}",
+      "invoiceToCompany": "Au nom d'une société…",
+      "buyerHint": "La facture est émise une fois la note soldée, au nom indiqué ici (le numéro reste le même si elle existe déjà).",
+      "buyerName": "Nom ou raison sociale",
+      "buyerNationalId": "Code national / identifiant national",
+      "buyerEconomicCode": "Code économique",
+      "buyerPhone": "Téléphone",
+      "buyerPostalCode": "Code postal",
+      "buyerAddress": "Adresse"
     },
     "invoice": {
       "print": "Imprimer",

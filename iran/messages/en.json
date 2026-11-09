@@ -1070,7 +1070,8 @@
     "invalid_sayad": "The Sayad id has 16 digits.",
     "sayad_taken": "This cheque is already recorded.",
     "supplier_not_found": "Supplier not found.",
-    "document_required": "Enter your ID document."
+    "document_required": "Enter your ID document.",
+    "folio_empty": "This folio has no charges."
   },
   "tables": {
     "title": "Tables & QR codes",
@@ -2327,7 +2328,12 @@
       "stripe": "Stripe",
       "pay_later": "Pay at the table"
     },
-    "discount": "Discount"
+    "discount": "Discount",
+    "stay": "Stay",
+    "stayLine": "#{number}, room {room}, {guest}, {arrival} to {departure}",
+    "from": "From",
+    "to": "To",
+    "moadianExport": "Tax system export"
   },
   "kinds": {
     "label": "Type of venue",
@@ -4559,7 +4565,17 @@
       "chequeNumber": "Cheque number",
       "bank": "Bank",
       "drawer": "Drawer",
-      "dueDate": "Due date"
+      "dueDate": "Due date",
+      "issueInvoice": "Issue the official invoice",
+      "invoiceIssued": "Invoice {number}",
+      "invoiceToCompany": "In a company's name…",
+      "buyerHint": "The invoice is issued once the folio is settled, in the name given here (an existing invoice keeps its number).",
+      "buyerName": "Name or company",
+      "buyerNationalId": "National code / national id",
+      "buyerEconomicCode": "Economic code",
+      "buyerPhone": "Phone",
+      "buyerPostalCode": "Postal code",
+      "buyerAddress": "Address"
     },
     "invoice": {
       "print": "Print",

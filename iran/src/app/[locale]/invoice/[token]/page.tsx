@@ -31,6 +31,13 @@ async function Invoice({ params }: PageProps<"/[locale]/invoice/[token]">) {
   const nf = new Intl.NumberFormat(locale, { maximumFractionDigits: 0 });
   const rial = (c: number) => `${nf.format(Math.round(c / 100))} ${t("rial")}`;
   const money = (c: number) => (s.currency === "IRR" ? rial(c) : formatMoney(c, s.currency, locale));
+  const jalaliDay = (d: string) =>
+    new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      timeZone: "UTC",
+    }).format(new Date(`${d}T12:00:00Z`));
   const pct = (bps: number) => `${nf.format(bps / 100)}٪`;
   const party = (p: NonNullable<typeof s.buyer>) =>
     [
@@ -75,6 +82,20 @@ async function Invoice({ params }: PageProps<"/[locale]/invoice/[token]">) {
             <div>
               <dt className="inline text-fg-muted">{t("table")}: </dt>
               <dd className="inline">{s.tableLabel}</dd>
+            </div>
+          ) : null}
+          {s.stay ? (
+            <div className="sm:col-span-2">
+              <dt className="inline text-fg-muted">{t("stay")}: </dt>
+              <dd className="inline">
+                {t("stayLine", {
+                  number: s.stay.number,
+                  room: s.stay.room ?? "—",
+                  guest: s.stay.guest,
+                  arrival: jalaliDay(s.stay.arrival),
+                  departure: jalaliDay(s.stay.departure),
+                })}
+              </dd>
             </div>
           ) : null}
           {s.orders.length ? (
