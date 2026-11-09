@@ -578,7 +578,8 @@
     "restaurantReports": "گزارش فروش رستوران",
     "outlets": "رستوران‌ها و کافه‌ها",
     "searchPlaceholderHotel": "مهمان، شماره رزرو یا اتاق، بخش‌ها…",
-    "searchingStays": "جستجو در رزروها…"
+    "searchingStays": "جستجو در رزروها…",
+    "housekeeping": "خانه‌داری و تعمیرات"
   },
   "dashboard": {
     "welcome": "سلام {name}",
@@ -1071,7 +1072,11 @@
     "sayad_taken": "این چک قبلاً ثبت شده است.",
     "supplier_not_found": "تأمین‌کننده یافت نشد.",
     "document_required": "مدرک شناسایی را وارد کنید.",
-    "folio_empty": "این صورتحساب هیچ هزینه‌ای ندارد."
+    "folio_empty": "این صورتحساب هیچ هزینه‌ای ندارد.",
+    "room_booked_in_period": "در این بازه رزروی در این اتاق است؛ ابتدا آن را جابه‌جا کنید.",
+    "no_housekeeper": "دست‌کم یک نفر را انتخاب کنید.",
+    "member_not_found": "این شخص عضو تیم نیست.",
+    "room_required": "اتاقی را که خارج از سرویس می‌شود انتخاب کنید."
   },
   "tables": {
     "title": "میزها و کدهای QR",
@@ -5392,5 +5397,85 @@
     "password": "رمز",
     "copy": "کپی",
     "copied": "کپی شد"
+  },
+  "housekeeping": {
+    "title": "خانه‌داری و تعمیرات",
+    "subtitle": "برنامه امروز، فهرست هر مستخدم، بازبینی اتاق‌ها و تعمیرات.",
+    "tabs": {
+      "plan": "برنامه امروز",
+      "mine": "اتاق‌های من",
+      "maintenance": "تعمیرات"
+    },
+    "counts": {
+      "dirty": "کثیف",
+      "cleaning": "در حال نظافت",
+      "clean": "آماده بازبینی",
+      "inspected": "بازبینی‌شده",
+      "outOfOrder": "خارج از سرویس",
+      "unassigned": "بدون مستخدم"
+    },
+    "distributeTitle": "امروز چه کسانی کار می‌کنند؟",
+    "distribute": "تقسیم اتاق‌های باقی‌مانده ({n})",
+    "filter": {
+      "todo": "انجام‌نشده",
+      "unassigned": "بدون مستخدم",
+      "all": "همه",
+      "inspect": "آماده بازبینی"
+    },
+    "selected": "{n} اتاق انتخاب شد",
+    "assignTo": "سپردن به…",
+    "unassign": "هیچ‌کس",
+    "assign": "سپردن",
+    "floor": "طبقه {floor}",
+    "otherRooms": "سایر اتاق‌ها",
+    "priority": "ورود امشب: در اولویت",
+    "occupancy": {
+      "arrival": "ورودی",
+      "departure": "خروجی",
+      "stayover": "ماندگار",
+      "vacant": "خالی"
+    },
+    "nobody": "بدون مستخدم",
+    "inspect": "تأیید بازبینی",
+    "nothing": "اتاقی در این فهرست نیست.",
+    "mineEmpty": "امروز اتاقی به شما سپرده نشده است.",
+    "mineLeft": "{n} اتاق از {total} باقی مانده",
+    "start": "شروع",
+    "done": "تمام شد",
+    "report": "گزارش خرابی",
+    "reportRoom": "خرابی در اتاق {room}",
+    "newTicket": "ثبت درخواست تعمیر",
+    "roomN": "اتاق {room}",
+    "status": {
+      "open": "باز",
+      "in_progress": "در حال انجام",
+      "done": "تعمیر شد",
+      "cancelled": "لغو شد"
+    },
+    "prio": {
+      "low": "کم",
+      "normal": "عادی",
+      "urgent": "فوری"
+    },
+    "outPeriod": "خارج از سرویس از {from} تا {until}",
+    "untilFixed": "پایان تعمیر",
+    "startRepair": "شروع تعمیر",
+    "repaired": "تعمیر شد",
+    "cancelTicket": "لغو",
+    "noTickets": "تعمیری در جریان نیست.",
+    "room": "اتاق",
+    "noRoom": "اتاق نیست",
+    "place": "محل",
+    "placeHint": "لابی، استخر…",
+    "ticketTitle": "مشکل",
+    "ticketTitleHint": "خرابی کولر، نشتی آب…",
+    "description": "توضیحات",
+    "priorityLabel": "اولویت",
+    "assignee": "تعمیرکار",
+    "outOfOrder": "اتاق خارج از سرویس شود (قابل فروش نیست)",
+    "outFrom": "خارج از سرویس از",
+    "outUntil": "بازگشت به سرویس در",
+    "optional": "اختیاری",
+    "send": "ثبت"
   }
 }

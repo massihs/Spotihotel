@@ -578,7 +578,8 @@
     "restaurantReports": "تقارير المطعم",
     "outlets": "المطاعم والمقاهي",
     "searchPlaceholderHotel": "النزيل، رقم الحجز أو الغرفة، الصفحات…",
-    "searchingStays": "جارٍ البحث في الحجوزات…"
+    "searchingStays": "جارٍ البحث في الحجوزات…",
+    "housekeeping": "التدبير والصيانة"
   },
   "dashboard": {
     "welcome": "مرحبًا {name}",
@@ -1071,7 +1072,11 @@
     "sayad_taken": "هذا الشيك مسجل.",
     "supplier_not_found": "المورد غير موجود.",
     "document_required": "أدخل وثيقة الهوية.",
-    "folio_empty": "لا يحتوي هذا الحساب على أي رسوم."
+    "folio_empty": "لا يحتوي هذا الحساب على أي رسوم.",
+    "room_booked_in_period": "هناك حجز في هذه الغرفة خلال الفترة: انقله أولًا.",
+    "no_housekeeper": "اختر شخصًا واحدًا على الأقل.",
+    "member_not_found": "هذا الشخص ليس من الفريق.",
+    "room_required": "اختر الغرفة المراد إيقافها."
   },
   "tables": {
     "title": "الطاولات ورموز QR",
@@ -5392,5 +5397,85 @@
     "password": "كلمة المرور",
     "copy": "نسخ",
     "copied": "تم النسخ"
+  },
+  "housekeeping": {
+    "title": "التدبير الفندقي والصيانة",
+    "subtitle": "خطة اليوم، قائمة كل عامل، فحص الغرف والإصلاحات.",
+    "tabs": {
+      "plan": "خطة اليوم",
+      "mine": "غرفي",
+      "maintenance": "الصيانة"
+    },
+    "counts": {
+      "dirty": "متسخة",
+      "cleaning": "قيد التنظيف",
+      "clean": "للفحص",
+      "inspected": "مفحوصة",
+      "outOfOrder": "خارج الخدمة",
+      "unassigned": "غير موزعة"
+    },
+    "distributeTitle": "من يعمل اليوم؟",
+    "distribute": "توزيع الغرف المتبقية ({n})",
+    "filter": {
+      "todo": "للإنجاز",
+      "unassigned": "غير موزعة",
+      "all": "الكل",
+      "inspect": "للفحص"
+    },
+    "selected": "{n} محددة",
+    "assignTo": "إسناد إلى…",
+    "unassign": "لا أحد",
+    "assign": "إسناد",
+    "floor": "الطابق {floor}",
+    "otherRooms": "غرف أخرى",
+    "priority": "وصول الليلة: أولًا",
+    "occupancy": {
+      "arrival": "وصول",
+      "departure": "مغادرة",
+      "stayover": "إقامة مستمرة",
+      "vacant": "شاغرة"
+    },
+    "nobody": "لا أحد",
+    "inspect": "تم الفحص",
+    "nothing": "لا توجد غرف هنا.",
+    "mineEmpty": "لا توجد غرف مسندة إليك اليوم.",
+    "mineLeft": "متبقٍ {n} من {total}",
+    "start": "ابدأ",
+    "done": "تم",
+    "report": "الإبلاغ عن مشكلة",
+    "reportRoom": "مشكلة في الغرفة {room}",
+    "newTicket": "الإبلاغ عن إصلاح",
+    "roomN": "الغرفة {room}",
+    "status": {
+      "open": "مفتوح",
+      "in_progress": "قيد التنفيذ",
+      "done": "تم الإصلاح",
+      "cancelled": "ملغى"
+    },
+    "prio": {
+      "low": "منخفضة",
+      "normal": "عادية",
+      "urgent": "عاجلة"
+    },
+    "outPeriod": "خارج الخدمة من {from} إلى {until}",
+    "untilFixed": "الإصلاح",
+    "startRepair": "بدء الإصلاح",
+    "repaired": "تم الإصلاح",
+    "cancelTicket": "إلغاء",
+    "noTickets": "لا توجد إصلاحات جارية.",
+    "room": "الغرفة",
+    "noRoom": "ليست غرفة",
+    "place": "المكان",
+    "placeHint": "الردهة، المسبح…",
+    "ticketTitle": "المشكلة",
+    "ticketTitleHint": "عطل التكييف، تسرب…",
+    "description": "التفاصيل",
+    "priorityLabel": "الأولوية",
+    "assignee": "الفني",
+    "outOfOrder": "إيقاف الغرفة (لا يمكن بيعها)",
+    "outFrom": "خارج الخدمة من",
+    "outUntil": "العودة في",
+    "optional": "اختياري",
+    "send": "حفظ"
   }
 }

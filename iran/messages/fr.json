@@ -578,7 +578,8 @@
     "restaurantReports": "Rapports du restaurant",
     "outlets": "Restaurants et cafés",
     "searchPlaceholderHotel": "Client, n° de réservation ou de chambre, page…",
-    "searchingStays": "Recherche dans les réservations…"
+    "searchingStays": "Recherche dans les réservations…",
+    "housekeeping": "Ménage et maintenance"
   },
   "dashboard": {
     "welcome": "Bonjour {name}",
@@ -1071,7 +1072,11 @@
     "sayad_taken": "Ce chèque est déjà enregistré.",
     "supplier_not_found": "Fournisseur introuvable.",
     "document_required": "Indiquez votre pièce d'identité.",
-    "folio_empty": "Cette note ne contient aucune charge."
+    "folio_empty": "Cette note ne contient aucune charge.",
+    "room_booked_in_period": "Une réservation occupe cette chambre sur la période : déplacez-la d'abord.",
+    "no_housekeeper": "Choisissez au moins une personne.",
+    "member_not_found": "Cette personne ne fait pas partie de l'équipe.",
+    "room_required": "Choisissez la chambre à mettre hors service."
   },
   "tables": {
     "title": "Tables & QR codes",
@@ -5400,5 +5405,85 @@
     "password": "Mot de passe",
     "copy": "Copier",
     "copied": "Copié"
+  },
+  "housekeeping": {
+    "title": "Ménage et maintenance",
+    "subtitle": "Le plan du jour, la liste de chaque femme de chambre, le contrôle et les réparations.",
+    "tabs": {
+      "plan": "Plan du jour",
+      "mine": "Mes chambres",
+      "maintenance": "Maintenance"
+    },
+    "counts": {
+      "dirty": "Sales",
+      "cleaning": "En ménage",
+      "clean": "À contrôler",
+      "inspected": "Contrôlées",
+      "outOfOrder": "Hors service",
+      "unassigned": "Sans personne"
+    },
+    "distributeTitle": "Qui travaille aujourd'hui ?",
+    "distribute": "Répartir les chambres à faire ({n})",
+    "filter": {
+      "todo": "À faire",
+      "unassigned": "Sans personne",
+      "all": "Toutes",
+      "inspect": "À contrôler"
+    },
+    "selected": "{n} sélectionnée(s)",
+    "assignTo": "Confier à…",
+    "unassign": "Personne",
+    "assign": "Confier",
+    "floor": "Étage {floor}",
+    "otherRooms": "Autres chambres",
+    "priority": "Arrivée ce soir : en premier",
+    "occupancy": {
+      "arrival": "Arrivée",
+      "departure": "Départ",
+      "stayover": "Recouche",
+      "vacant": "Libre"
+    },
+    "nobody": "Personne",
+    "inspect": "Contrôlée",
+    "nothing": "Aucune chambre ici.",
+    "mineEmpty": "Aucune chambre ne vous est confiée aujourd'hui.",
+    "mineLeft": "{n} chambre(s) à faire sur {total}",
+    "start": "Commencer",
+    "done": "Terminé",
+    "report": "Signaler un problème",
+    "reportRoom": "Problème dans la chambre {room}",
+    "newTicket": "Signaler une réparation",
+    "roomN": "Chambre {room}",
+    "status": {
+      "open": "À faire",
+      "in_progress": "En cours",
+      "done": "Réparé",
+      "cancelled": "Annulé"
+    },
+    "prio": {
+      "low": "Faible",
+      "normal": "Normale",
+      "urgent": "Urgente"
+    },
+    "outPeriod": "Hors service du {from} au {until}",
+    "untilFixed": "la réparation",
+    "startRepair": "Prendre en charge",
+    "repaired": "Réparé",
+    "cancelTicket": "Annuler",
+    "noTickets": "Aucune réparation en cours.",
+    "room": "Chambre",
+    "noRoom": "Pas une chambre",
+    "place": "Lieu",
+    "placeHint": "Hall, piscine…",
+    "ticketTitle": "Problème",
+    "ticketTitleHint": "Climatisation en panne, fuite…",
+    "description": "Détails",
+    "priorityLabel": "Priorité",
+    "assignee": "Technicien",
+    "outOfOrder": "Mettre la chambre hors service (elle ne peut plus être vendue)",
+    "outFrom": "Hors service à partir du",
+    "outUntil": "Retour prévu le",
+    "optional": "facultatif",
+    "send": "Enregistrer"
   }
 }

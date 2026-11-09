@@ -578,7 +578,8 @@
     "restaurantReports": "Restaurant reports",
     "outlets": "Restaurants & cafés",
     "searchPlaceholderHotel": "Guest, booking or room number, page…",
-    "searchingStays": "Searching bookings…"
+    "searchingStays": "Searching bookings…",
+    "housekeeping": "Housekeeping & maintenance"
   },
   "dashboard": {
     "welcome": "Hello {name}",
@@ -1071,7 +1072,11 @@
     "sayad_taken": "This cheque is already recorded.",
     "supplier_not_found": "Supplier not found.",
     "document_required": "Enter your ID document.",
-    "folio_empty": "This folio has no charges."
+    "folio_empty": "This folio has no charges.",
+    "room_booked_in_period": "A booking has this room over the period: move it first.",
+    "no_housekeeper": "Pick at least one person.",
+    "member_not_found": "This person is not on the team.",
+    "room_required": "Pick the room to take out of order."
   },
   "tables": {
     "title": "Tables & QR codes",
@@ -5392,5 +5397,85 @@
     "password": "Password",
     "copy": "Copy",
     "copied": "Copied"
+  },
+  "housekeeping": {
+    "title": "Housekeeping & maintenance",
+    "subtitle": "Today's plan, each housekeeper's list, inspection and repairs.",
+    "tabs": {
+      "plan": "Today's plan",
+      "mine": "My rooms",
+      "maintenance": "Maintenance"
+    },
+    "counts": {
+      "dirty": "Dirty",
+      "cleaning": "Being cleaned",
+      "clean": "To inspect",
+      "inspected": "Inspected",
+      "outOfOrder": "Out of order",
+      "unassigned": "Unassigned"
+    },
+    "distributeTitle": "Who is working today?",
+    "distribute": "Share out the rooms to do ({n})",
+    "filter": {
+      "todo": "To do",
+      "unassigned": "Unassigned",
+      "all": "All",
+      "inspect": "To inspect"
+    },
+    "selected": "{n} selected",
+    "assignTo": "Give to…",
+    "unassign": "Nobody",
+    "assign": "Assign",
+    "floor": "Floor {floor}",
+    "otherRooms": "Other rooms",
+    "priority": "Arrival tonight: first",
+    "occupancy": {
+      "arrival": "Arrival",
+      "departure": "Departure",
+      "stayover": "Stay-over",
+      "vacant": "Vacant"
+    },
+    "nobody": "Nobody",
+    "inspect": "Inspected",
+    "nothing": "No room here.",
+    "mineEmpty": "No room is assigned to you today.",
+    "mineLeft": "{n} of {total} rooms left",
+    "start": "Start",
+    "done": "Done",
+    "report": "Report a problem",
+    "reportRoom": "Problem in room {room}",
+    "newTicket": "Report a repair",
+    "roomN": "Room {room}",
+    "status": {
+      "open": "Open",
+      "in_progress": "In progress",
+      "done": "Fixed",
+      "cancelled": "Cancelled"
+    },
+    "prio": {
+      "low": "Low",
+      "normal": "Normal",
+      "urgent": "Urgent"
+    },
+    "outPeriod": "Out of order {from} to {until}",
+    "untilFixed": "fixed",
+    "startRepair": "Start",
+    "repaired": "Fixed",
+    "cancelTicket": "Cancel",
+    "noTickets": "No repair in progress.",
+    "room": "Room",
+    "noRoom": "Not a room",
+    "place": "Place",
+    "placeHint": "Lobby, pool…",
+    "ticketTitle": "Problem",
+    "ticketTitleHint": "Air conditioning broken, leak…",
+    "description": "Details",
+    "priorityLabel": "Priority",
+    "assignee": "Technician",
+    "outOfOrder": "Take the room out of order (it can no longer be sold)",
+    "outFrom": "Out of order from",
+    "outUntil": "Back on",
+    "optional": "optional",
+    "send": "Save"
   }
 }

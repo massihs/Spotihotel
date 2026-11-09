@@ -113,7 +113,7 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
     { href: `${base}/planning`, label: t("quick.planning"), Icon: CalendarRange, tone: "sky", show: true },
     { href: `${base}/guests`, label: t("quick.guests"), Icon: Contact, tone: "violet", show: true },
     {
-      href: `${base}/rooms`,
+      href: `${base}/housekeeping`,
       label: t("quick.rooms"),
       Icon: BedDouble,
       tone: "teal",

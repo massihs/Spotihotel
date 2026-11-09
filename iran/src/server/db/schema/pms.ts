@@ -659,3 +659,40 @@ export const supplierPayments = pgTable(
     check("supplier_payments_amount_chk", sql`${t.amountCents} > 0`),
   ],
 );
+
+/**
+ * A repair to do (a leaking tap, the air conditioning…), on a room or elsewhere in the hotel.
+ * A room can be taken out of order for it, from one day until the day it should be back.
+ */
+export const maintenanceTickets = pgTable(
+  "maintenance_tickets",
+  {
+    id: pk(),
+    restaurantId: uuid()
+      .notNull()
+      .references(() => restaurants.id, { onDelete: "cascade" }),
+    roomId: uuid().references(() => diningTables.id, { onDelete: "set null" }),
+    /** Where, when it is not a room: "Lobby", "Pool"… */
+    place: varchar({ length: 80 }),
+    title: varchar({ length: 160 }).notNull(),
+    description: varchar({ length: 2000 }),
+    /** low | normal | urgent */
+    priority: varchar({ length: 8 }).notNull().default("normal"),
+    /** open | in_progress | done | cancelled */
+    status: varchar({ length: 12 }).notNull().default("open"),
+    /** The room cannot be sold from `outFrom` until `outUntil` (excluded). */
+    outOfOrder: boolean().notNull().default(false),
+    outFrom: date({ mode: "string" }),
+    outUntil: date({ mode: "string" }),
+    assignedToUserId: uuid().references(() => users.id, { onDelete: "set null" }),
+    createdByUserId: uuid().references(() => users.id, { onDelete: "set null" }),
+    resolvedAt: tstz(),
+    resolvedByUserId: uuid().references(() => users.id, { onDelete: "set null" }),
+    resolution: varchar({ length: 500 }),
+    ...timestamps,
+  },
+  (t) => [
+    index("maintenance_restaurant_status_idx").on(t.restaurantId, t.status),
+    index("maintenance_room_idx").on(t.roomId),
+  ],
+);

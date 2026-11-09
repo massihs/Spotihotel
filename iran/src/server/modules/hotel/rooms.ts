@@ -167,6 +167,8 @@ export async function setHousekeeping(
 ) {
   assertCan(ctx, "orders.update_status");
   const status = housekeepingSchema.parse(raw);
+  // Checking a cleaned room is the supervisor's call.
+  if (status === "inspected") assertCan(ctx, "tables.manage");
   if (!isUuid(tableId)) throw notFound();
   await db.transaction(async (tx) => {
     const [room] = await tx
