@@ -53,6 +53,10 @@ export const pmsSettings = pgTable("pms_settings", {
   channelCommissions: jsonb().$type<Record<string, number>>().notNull().default({}),
   /** Charge the first night to guaranteed bookings that never arrive (night audit). */
   chargeNoShows: boolean().notNull().default(true),
+  /** Foreign currencies the front desk takes, with their rate in the hotel's minor units per unit. */
+  currencies: jsonb().$type<{ code: string; rateCents: number }[]>().notNull().default([]),
+  /** Cash a receptionist starts a shift with, by default. */
+  deskFloatCents: money().notNull().default(0),
   nextBlockNumber: integer().notNull().default(1),
   nextStayNumber: integer().notNull().default(1001),
   nextFolioNumber: integer().notNull().default(1),
@@ -363,6 +367,9 @@ export const folioLines = pgTable(
     /** Payments: cash | card | transfer | online | city_ledger | deposit */
     method: varchar({ length: 16 }),
     reference: varchar({ length: 64 }),
+    /** Payments taken in a foreign currency (cash dollars, euros…): its code and amount (×100). */
+    currency: varchar({ length: 3 }),
+    foreignCents: money(),
     /** Where it came from: order | night_audit | service_booking | minibar | transfer | manual */
     sourceType: varchar({ length: 16 }).notNull().default("manual"),
     sourceId: uuid(),
@@ -703,5 +710,39 @@ export const maintenanceTickets = pgTable(
   (t) => [
     index("maintenance_restaurant_status_idx").on(t.restaurantId, t.status),
     index("maintenance_room_idx").on(t.roomId),
+  ],
+);
+
+/**
+ * A receptionist's cash shift (تحویل صندوق): opened with a float, closed by counting the cash
+ * (and each foreign currency) and handing it over. What was expected is snapshotted at closing.
+ */
+export const deskShifts = pgTable(
+  "desk_shifts",
+  {
+    id: pk(),
+    restaurantId: uuid()
+      .notNull()
+      .references(() => restaurants.id, { onDelete: "cascade" }),
+    userId: uuid().references(() => users.id, { onDelete: "set null" }),
+    openedAt: tstz().notNull().defaultNow(),
+    openingFloatCents: money().notNull().default(0),
+    closedAt: tstz(),
+    /** Takings of the shift by method (snapshot at closing), and the foreign cash by currency. */
+    expected: jsonb().$type<Record<string, number>>(),
+    expectedForeign: jsonb().$type<Record<string, number>>(),
+    countedCashCents: money(),
+    countedForeign: jsonb().$type<Record<string, number>>(),
+    /** Who received the drawer (the next receptionist or the chief cashier). */
+    handedToUserId: uuid().references(() => users.id, { onDelete: "set null" }),
+    note: text(),
+    ...timestamps,
+  },
+  (t) => [
+    index("desk_shifts_restaurant_idx").on(t.restaurantId, t.openedAt),
+    // One open shift per receptionist.
+    uniqueIndex("desk_shifts_one_open_uq")
+      .on(t.restaurantId, t.userId)
+      .where(sql`${t.closedAt} IS NULL`),
   ],
 );

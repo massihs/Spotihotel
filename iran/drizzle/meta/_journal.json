@@ -379,6 +379,13 @@
       "when": 1794212185971,
       "tag": "0053_restrictions_promo",
       "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "7",
+      "when": 1794335164065,
+      "tag": "0054_cashier_currencies",
+      "breakpoints": true
     }
   ]
 }

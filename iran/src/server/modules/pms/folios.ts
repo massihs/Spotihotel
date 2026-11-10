@@ -147,6 +147,9 @@ export type PostLine = {
   userId?: string | null;
   /** Defaults to the hotel's current business day. */
   businessDate?: string;
+  /** A payment in a foreign currency: its code and amount (×100). */
+  currency?: string | null;
+  foreignCents?: number | null;
 };
 
 /** Inserts one posting on an open folio (inside the caller's transaction). */
@@ -176,6 +179,8 @@ export async function postLine(tx: DbOrTx, restaurantId: string, timezone: strin
       sourceType: line.sourceType ?? "manual",
       sourceId: line.sourceId ?? null,
       postedByUserId: line.userId ?? null,
+      currency: line.currency ?? null,
+      foreignCents: line.foreignCents ?? null,
     })
     .returning();
   return row!;
@@ -247,8 +252,24 @@ export const paymentSchema = z
       .optional(),
     /** Paid by cheque (چک): the cheque enters the register with its Sayad id and due date. */
     cheque: chequeDetailsSchema.optional(),
+    /**
+     * Paid in a foreign currency the hotel takes (dollars, euros…): its code and the amount in it
+     * (×100). The hotel's amount then comes from the rate set in the cashier's settings.
+     */
+    currency: z
+      .string()
+      .trim()
+      .toUpperCase()
+      .regex(/^[A-Z]{3}$/)
+      .nullable()
+      .optional(),
+    foreignCents: z.coerce.number().int().min(1).max(MAX_CENTS).nullable().optional(),
   })
-  .refine((v) => v.method !== "cheque" || !!v.cheque, { message: "cheque_required", path: ["cheque"] });
+  .refine((v) => v.method !== "cheque" || !!v.cheque, { message: "cheque_required", path: ["cheque"] })
+  .refine((v) => !v.currency || !!v.foreignCents, {
+    message: "foreign_amount_required",
+    path: ["foreignCents"],
+  });
 
 /** Money received on a folio (deposit before arrival, settlement at check-out, company payment). */
 export async function postPayment(
@@ -261,22 +282,33 @@ export async function postPayment(
   const input = paymentSchema.parse(raw);
   const rid = ctx.restaurant.id;
   return db.transaction(async (tx) => {
+    let amountCents = input.amountCents;
+    if (input.currency) {
+      const { currencies } = await getPmsSettings(tx, rid, ctx.restaurant.timezone);
+      const rate = currencies.find((c) => c.code === input.currency)?.rateCents;
+      if (!rate) throw validation("currency_not_accepted", { field: "currency" });
+      amountCents = Math.round((input.foreignCents! / 100) * rate);
+      if (amountCents < 1 || amountCents > MAX_CENTS)
+        throw validation("invalid_amount", { field: "foreignCents" });
+    }
     const line = await postLine(tx, rid, ctx.restaurant.timezone, {
       folioId,
       kind: "payment",
       department: "payment",
       description: `payment:${input.method}`,
-      unitCents: -input.amountCents,
-      amountCents: -input.amountCents,
+      unitCents: -amountCents,
+      amountCents: -amountCents,
       method: input.method,
       reference: input.reference ?? input.cheque?.sayadId ?? null,
       userId: ctx.user.id,
+      currency: input.currency ?? null,
+      foreignCents: input.currency ? input.foreignCents! : null,
     });
     if (input.method === "cheque" && input.cheque)
       await insertCheque(tx, rid, {
         ...input.cheque,
         direction: "received",
-        amountCents: input.amountCents,
+        amountCents,
         folioLineId: line.id,
         userId: ctx.user.id,
         today: line.businessDate,
@@ -287,7 +319,7 @@ export async function postPayment(
       restaurantId: rid,
       entityType: "folio",
       entityId: folioId,
-      metadata: { method: input.method, amountCents: input.amountCents },
+      metadata: { method: input.method, amountCents, currency: input.currency ?? null },
     });
     return line;
   });
