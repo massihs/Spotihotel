@@ -2,8 +2,9 @@
 
 import { ChevronDown, ChevronLeft, LayoutGrid, LoaderCircle, X } from "lucide-react";
 import { useLinkStatus } from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Fragment, useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
+import { Fragment, Suspense, useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 
@@ -20,6 +21,8 @@ export type NavItem = {
   group?: string;
   /** Stable id of the section (collapse state is remembered per device). */
   groupKey?: string;
+  /** Sub-pages (the tabs of the page, `?tab=`), unfolded under the item. */
+  children?: { href: string; label: string }[];
 };
 
 type Section = { key: string; label?: string; items: NavItem[] };
@@ -149,6 +152,8 @@ function useActive() {
 /** Desktop sidebar navigation (dark sidebar): colored icon tiles, collapsible sections. */
 export function SidebarNav({ items, label }: { items: NavItem[]; label: string }) {
   const isActive = useActive();
+  // Items whose sub-pages are unfolded by hand (the active one always is).
+  const [unfolded, setUnfolded] = useState<Set<string>>(new Set());
   const collapsed = new Set(
     useSyncExternalStore(subscribeCollapsed, readCollapsed, () => "")
       .split(",")
@@ -186,7 +191,7 @@ export function SidebarNav({ items, label }: { items: NavItem[]; label: string }
             <div id={id} hidden={!open} className="space-y-0.5">
               {section.items.map((item) => {
                 const active = isActive(item);
-                return (
+                const link = (
                   <Link
                     key={item.href}
                     href={item.href}
@@ -217,7 +222,36 @@ export function SidebarNav({ items, label }: { items: NavItem[]; label: string }
                     <span className="min-w-0 flex-1 truncate">{item.label}</span>
                     <Pending className="text-sidebar-fg" />
                     <Badge n={item.badge} className="animate-pop-in" />
+                    {item.children?.length ? (
+                      <ChevronDown
+                        className={cn(
+                          "size-3.5 shrink-0 opacity-60 transition-transform",
+                          !(active || unfolded.has(item.href)) && "-rotate-90 rtl:rotate-90",
+                        )}
+                        aria-hidden="true"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setUnfolded((u) => {
+                            const n = new Set(u);
+                            if (n.has(item.href)) n.delete(item.href);
+                            else n.add(item.href);
+                            return n;
+                          });
+                        }}
+                      />
+                    ) : null}
                   </Link>
+                );
+                return item.children?.length && (active || unfolded.has(item.href)) ? (
+                  <Fragment key={item.href}>
+                    {link}
+                    <Suspense fallback={null}>
+                      <SubNav item={item} />
+                    </Suspense>
+                  </Fragment>
+                ) : (
+                  link
                 );
               })}
             </div>
@@ -225,6 +259,39 @@ export function SidebarNav({ items, label }: { items: NavItem[]; label: string }
         );
       })}
     </nav>
+  );
+}
+
+/** The sub-pages of an item, the current tab marked. */
+function SubNav({ item }: { item: NavItem }) {
+  const pathname = usePathname();
+  const sp = useSearchParams();
+  const first = item.children?.[0]?.href;
+  return (
+    <div className="relative ms-[1.35rem] space-y-px border-s border-sidebar-border ps-2 pb-1">
+      {item.children!.map((c) => {
+        const [path, query] = c.href.split("?");
+        const tab = new URLSearchParams(query ?? "").get("tab");
+        const current = sp.get("tab");
+        const active = pathname === path && (current ? current === tab : c.href === first);
+        return (
+          <Link
+            key={c.href}
+            href={c.href}
+            aria-current={active ? "page" : undefined}
+            className={cn(
+              "flex h-8 items-center gap-2 rounded-md px-2.5 text-[12.5px] transition-colors",
+              active
+                ? "bg-sidebar-2 font-semibold text-sidebar-fg"
+                : "text-sidebar-muted hover:bg-sidebar-2/55 hover:text-sidebar-fg",
+            )}
+          >
+            <span className="min-w-0 flex-1 truncate">{c.label}</span>
+            <Pending className="size-3.5 text-sidebar-fg" />
+          </Link>
+        );
+      })}
+    </div>
   );
 }
 

@@ -91,11 +91,14 @@ export function FolioPanel({
   canPost,
   canAdjust,
   invoices = [],
+  currencies = [],
 }: {
   restaurantId: string;
   stayId: string;
   currency: string;
   folios: Folio[];
+  /** Foreign currencies the front desk takes, with their rate (cashier settings). */
+  currencies?: { code: string; rateCents: number }[];
   /** Official invoices already issued, per folio. */
   invoices?: { folioId: string | null; number: string; publicToken: string }[];
   accounts: { id: string; name: string }[];
@@ -206,6 +209,7 @@ export function FolioPanel({
                   folioId={f.id}
                   currency={currency}
                   balance={f.balanceCents}
+                  currencies={currencies}
                 />
               </>
             ) : null}
@@ -332,16 +336,25 @@ function PaymentButton({
   folioId,
   currency,
   balance,
+  currencies,
 }: {
   restaurantId: string;
   folioId: string;
   currency: string;
   balance: number;
+  currencies: { code: string; rateCents: number }[];
 }) {
   const t = useTranslations("pms.folio");
   const tPay = useTranslations("pms.method");
+  const money = useMoney(currency);
   const r = useRun();
   const [method, setMethod] = useState("card");
+  // A foreign currency (cash dollars…): the guest's amount in it, converted at the cashier's rate.
+  const [fx, setFx] = useState("");
+  const [foreign, setForeign] = useState("");
+  const rate = currencies.find((c) => c.code === fx)?.rateCents ?? 0;
+  const foreignCents = Math.round(Number(foreign.replace(/[^\d.]/g, "")) * 100) || 0;
+  const converted = Math.round((foreignCents / 100) * rate);
   const factor = currency === "IRR" ? 1000 : 100;
   return (
     <SheetButton label={t("takePayment")} title={t("takePayment")} variant="primary">
@@ -349,11 +362,15 @@ function PaymentButton({
         <form
           className="space-y-4"
           action={(fd) => {
-            const amountCents = parseMoneyInput(String(fd.get("amount") ?? ""), currency) ?? 0;
+            const amountCents = fx
+              ? converted
+              : (parseMoneyInput(String(fd.get("amount") ?? ""), currency) ?? 0);
             r.run(
               () =>
                 postPaymentAction(restaurantId, folioId, {
                   amountCents,
+                  currency: fx || null,
+                  foreignCents: fx ? foreignCents : null,
                   method: method as "cash",
                   reference: String(fd.get("reference") ?? ""),
                   cheque:
@@ -371,17 +388,47 @@ function PaymentButton({
             );
           }}
         >
-          <MoneyField
-            name="amount"
-            currency={currency}
-            label={t("amount")}
-            required
-            defaultValue={
-              balance > 0
-                ? String(currency === "IRR" ? Math.round(balance / factor) : (balance / factor).toFixed(2))
-                : ""
-            }
-          />
+          {currencies.length ? (
+            <label className="block">
+              <Label>{t("currency")}</Label>
+              <select className={inputCls} value={fx} onChange={(e) => setFx(e.target.value)}>
+                <option value="">{t("localCurrency")}</option>
+                {currencies.map((c) => (
+                  <option key={c.code} value={c.code}>
+                    {c.code} — {t("rateOf", { rate: money(c.rateCents) })}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
+          {fx ? (
+            <label className="block">
+              <Label>{t("foreignAmount", { code: fx })}</Label>
+              <input
+                className={inputCls}
+                value={foreign}
+                onChange={(e) => setForeign(e.target.value)}
+                inputMode="decimal"
+                dir="ltr"
+                required
+              />
+              <span className="mt-1 block text-sm text-fg-muted">
+                {t("converted", { amount: money(converted) })}
+              </span>
+            </label>
+          ) : (
+            <MoneyField
+              name="amount"
+              currency={currency}
+              label={t("amount")}
+              required
+              defaultValue={
+                balance > 0
+                  ? String(currency === "IRR" ? Math.round(balance / factor) : (balance / factor).toFixed(2))
+                  : ""
+              }
+            />
+          )}
           <label className="block">
             <Label>{t("method")}</Label>
             <select

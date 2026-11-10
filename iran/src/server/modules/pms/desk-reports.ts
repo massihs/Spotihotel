@@ -42,14 +42,22 @@ import { getPmsSettings } from "./setup";
  */
 
 export type Cell = string | number | null;
-/** text | money (minor units) | int | pct | day (YYYY-MM-DD) | code (translated with `ns`). */
-export type Col = { key: string; type: "text" | "money" | "int" | "pct" | "day" | "code"; ns?: string };
+/**
+ * text | money (minor units) | int | ref (a booking or folio number: no thousands separator) |
+ * pct | day (YYYY-MM-DD) | datetime (ISO, shown in the hotel's time zone) | code (translated with `ns`).
+ */
+export type Col = {
+  key: string;
+  type: "text" | "money" | "int" | "ref" | "pct" | "day" | "datetime" | "code";
+  ns?: string;
+};
 export type Table = { cols: Col[]; rows: Record<string, Cell>[]; totals?: Record<string, Cell> };
 export type Period = { from: string; to: string; q?: string; method?: string; status?: string };
 
 const txt = (key: string): Col => ({ key, type: "text" });
 const money = (key: string): Col => ({ key, type: "money" });
 const int = (key: string): Col => ({ key, type: "int" });
+const ref = (key: string): Col => ({ key, type: "ref" });
 const day = (key: string): Col => ({ key, type: "day" });
 const code = (key: string, ns: string): Col => ({ key, type: "code", ns });
 
@@ -64,10 +72,6 @@ const totalsOf = (rows: Record<string, Cell>[], keys: string[], first: string, l
 const stayBalance = sql<number>`(select coalesce(sum(fl.amount_cents), 0) from folio_lines fl
   join folios f on f.id = fl.folio_id
   where f.stay_id = "stays"."id" and f.account_id is null and fl.voided_at is null)::bigint`;
-/** Fees posted for a stay from a source (no_show, cancellation). */
-const feeOf = (source: string) => sql<number>`(select coalesce(sum(fl.amount_cents), 0) from folio_lines fl
-  join folios f on f.id = fl.folio_id
-  where f.stay_id = "stays"."id" and fl.source_type = ${source} and fl.voided_at is null)::bigint`;
 /** Paid ahead on the guest's folios (deposits, prepayments). */
 const paidOf = sql<number>`(select coalesce(-sum(fl.amount_cents), 0) from folio_lines fl
   join folios f on f.id = fl.folio_id
@@ -76,6 +80,7 @@ const paidOf = sql<number>`(select coalesce(-sum(fl.amount_cents), 0) from folio
 function stayQuery(db: DbOrTx) {
   return db
     .select({
+      id: stays.id,
       number: stays.number,
       guest: guestName,
       phone: hotelGuests.phone,
@@ -136,6 +141,7 @@ export async function reservationList(db: DbOrTx, ctx: RestaurantContext, p: Per
     .orderBy(asc(stays.arrival), asc(stays.number))
     .limit(2000);
   const out = rows.map((r) => ({
+    id: r.id,
     number: r.number,
     guest: r.guest,
     arrival: r.arrival,
@@ -152,7 +158,7 @@ export async function reservationList(db: DbOrTx, ctx: RestaurantContext, p: Per
   }));
   return {
     cols: [
-      int("number"),
+      ref("number"),
       txt("guest"),
       day("arrival"),
       day("departure"),
@@ -188,6 +194,7 @@ export async function cancellations(db: DbOrTx, ctx: RestaurantContext, p: Perio
     .limit(2000);
   const fees = await feesByStay(db, ctx.restaurant.id, "cancellation", rows);
   const out = rows.map((r) => ({
+    id: r.id,
     number: r.number,
     guest: r.guest,
     cancelledOn: r.cancelledAt ? localDate(r.cancelledAt, tz) : null,
@@ -202,7 +209,7 @@ export async function cancellations(db: DbOrTx, ctx: RestaurantContext, p: Perio
   }));
   return {
     cols: [
-      int("number"),
+      ref("number"),
       txt("guest"),
       day("cancelledOn"),
       day("arrival"),
@@ -242,6 +249,7 @@ export async function noShows(
     .limit(2000);
   const fees = await feesByStay(db, ctx.restaurant.id, "no_show", rows);
   const out = rows.map((r) => ({
+    id: r.id,
     number: r.number,
     guest: r.guest,
     phone: r.phone ?? "",
@@ -256,7 +264,7 @@ export async function noShows(
   }));
   return {
     cols: [
-      int("number"),
+      ref("number"),
       txt("guest"),
       txt("phone"),
       day("arrival"),
@@ -489,8 +497,8 @@ export async function transactions(db: DbOrTx, ctx: RestaurantContext, p: Period
     cols: [
       day("day"),
       txt("time"),
-      int("folio"),
-      int("stay"),
+      ref("folio"),
+      ref("stay"),
       txt("room"),
       txt("holder"),
       code("method", "pms.method"),
@@ -657,6 +665,7 @@ export async function pendingSettlement(db: DbOrTx, ctx: RestaurantContext, p: P
     );
   const owed = new Map(balances.map((b) => [b.number, Number(b.balance)]));
   const out = rows.map((r) => ({
+    id: r.id,
     number: r.number,
     guest: r.guest,
     phone: r.phone ?? "",
@@ -668,7 +677,7 @@ export async function pendingSettlement(db: DbOrTx, ctx: RestaurantContext, p: P
   }));
   return {
     cols: [
-      int("number"),
+      ref("number"),
       txt("guest"),
       txt("phone"),
       txt("room"),
@@ -968,7 +977,7 @@ export async function stayInvoiceList(db: DbOrTx, ctx: RestaurantContext, p: Per
       txt("number"),
       day("issued"),
       txt("buyer"),
-      int("stay"),
+      ref("stay"),
       txt("room"),
       money("net"),
       money("tax"),
@@ -1019,6 +1028,7 @@ export async function expectedGuests(db: DbOrTx, ctx: RestaurantContext, p: Peri
   assertCan(ctx, "frontdesk.view");
   const rows = await db
     .select({
+      id: stays.id,
       arrival: stays.arrival,
       number: stays.number,
       guest: guestName,
@@ -1053,6 +1063,7 @@ export async function expectedGuests(db: DbOrTx, ctx: RestaurantContext, p: Peri
     .orderBy(asc(stays.arrival), asc(stays.eta), asc(stays.number))
     .limit(3000);
   const out = rows.map((r) => ({
+    id: r.id,
     arrival: r.arrival,
     number: r.number,
     guest: r.guest,
@@ -1072,7 +1083,7 @@ export async function expectedGuests(db: DbOrTx, ctx: RestaurantContext, p: Peri
   return {
     cols: [
       day("arrival"),
-      int("number"),
+      ref("number"),
       txt("guest"),
       txt("phone"),
       int("nights"),
@@ -1161,7 +1172,7 @@ export async function individualGuests(db: DbOrTx, ctx: RestaurantContext, p: Pe
   }));
   return {
     cols: [
-      int("number"),
+      ref("number"),
       txt("guest"),
       txt("nationality"),
       txt("room"),
@@ -1285,10 +1296,10 @@ export async function openFolios(db: DbOrTx, ctx: RestaurantContext, p: Period):
   }));
   return {
     cols: [
-      int("folio"),
+      ref("folio"),
       code("kind", "deskReports.folioKind"),
       txt("holder"),
-      int("stay"),
+      ref("stay"),
       txt("room"),
       code("status", "pms.status"),
       day("last"),
@@ -1304,6 +1315,7 @@ export async function inHouseDebtors(db: DbOrTx, ctx: RestaurantContext, p: Peri
   assertCan(ctx, "frontdesk.view");
   const rows = await db
     .select({
+      id: stays.id,
       room: diningTables.label,
       number: stays.number,
       guest: guestName,
@@ -1329,6 +1341,7 @@ export async function inHouseDebtors(db: DbOrTx, ctx: RestaurantContext, p: Peri
     .orderBy(desc(stayBalance))
     .limit(3000);
   const out = rows.map((r) => ({
+    id: r.id,
     room: r.room ?? "",
     number: r.number,
     guest: r.guest,
@@ -1342,7 +1355,7 @@ export async function inHouseDebtors(db: DbOrTx, ctx: RestaurantContext, p: Peri
   return {
     cols: [
       txt("room"),
-      int("number"),
+      ref("number"),
       txt("guest"),
       txt("phone"),
       day("arrival"),
@@ -1405,7 +1418,7 @@ export async function roomCharges(db: DbOrTx, ctx: RestaurantContext, p: Period)
     cols: [
       day("day"),
       txt("room"),
-      int("stay"),
+      ref("stay"),
       txt("guest"),
       code("department", "pms.dept"),
       txt("description"),
@@ -1556,5 +1569,9 @@ export type DeskTableKey = keyof typeof DESK_TABLES;
 /** The default period of a list: from `back` days ago to `ahead` days after the business day. */
 export async function deskPeriod(db: DbOrTx, ctx: RestaurantContext, back: number, ahead: number) {
   const { businessDate } = await getPmsSettings(db, ctx.restaurant.id, ctx.restaurant.timezone);
-  return { today: businessDate, from: addDays(businessDate, -back), to: addDays(businessDate, ahead) };
+  // Before the night audit the business day is still yesterday: the calendar day is covered too.
+  const now = localDate(new Date(), ctx.restaurant.timezone);
+  const first = businessDate < now ? businessDate : now;
+  const last = businessDate > now ? businessDate : now;
+  return { today: businessDate, from: addDays(first, -back), to: addDays(last, ahead) };
 }

@@ -62,7 +62,8 @@ export function nameMatches(typed: string, guest: { firstName: string | null; la
   const first = guest.firstName ?? "";
   return (
     sameName(typed, guest.lastName) ||
-    (!!first && (sameName(typed, `${first}${guest.lastName}`) || sameName(typed, `${guest.lastName}${first}`)))
+    (!!first &&
+      (sameName(typed, `${first}${guest.lastName}`) || sameName(typed, `${guest.lastName}${first}`)))
   );
 }
 

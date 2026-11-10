@@ -2,12 +2,24 @@ import "server-only";
 import { and, desc, eq, gte, isNotNull, isNull, lte, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { Database, DbOrTx } from "@/server/db/client";
-import { deskShifts, folioLines, pmsSettings, restaurantMembers, users } from "@/server/db/schema";
+import {
+  deskShifts,
+  diningTables,
+  folioLines,
+  folios,
+  hotelAccounts,
+  hotelGuests,
+  pmsSettings,
+  restaurantMembers,
+  stays,
+  users,
+} from "@/server/db/schema";
 import { recordAudit } from "@/server/audit";
 import { conflict, notFound, validation } from "@/server/errors";
 import { assertCan, type RestaurantContext } from "@/server/tenancy";
 import { isUuid } from "@/lib/ids";
 import { getPmsSettings } from "./setup";
+import { folioView } from "./folios";
 import type { Table } from "./desk-reports";
 
 /**
@@ -269,18 +281,6 @@ export async function shiftReport(
     )
     .orderBy(desc(deskShifts.closedAt))
     .limit(1000);
-  const time = (d: Date) =>
-    new Intl.DateTimeFormat("en-CA", {
-      timeZone: tz,
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    })
-      .format(d)
-      .replace(",", "");
   const out = rows.map(({ s, user, handedTo: to }) => {
     const e = s.expected ?? {};
     const expectedCash = s.openingFloatCents + (e.cash ?? 0);
@@ -288,12 +288,13 @@ export async function shiftReport(
       .filter(([k]) => k !== "cash")
       .reduce((n, [, v]) => n + v, 0);
     const foreign = Object.entries(s.countedForeign ?? {})
+      .filter(([, v]) => v > 0)
       .map(([c, v]) => `${(v / 100).toLocaleString("en")} ${c}`)
       .join(" · ");
     return {
       user: user ?? "—",
-      opened: time(s.openedAt),
-      closed: s.closedAt ? time(s.closedAt) : "",
+      opened: s.openedAt.toISOString(),
+      closed: s.closedAt ? s.closedAt.toISOString() : "",
       float: s.openingFloatCents,
       cash: e.cash ?? 0,
       expected: expectedCash,
@@ -309,8 +310,8 @@ export async function shiftReport(
   return {
     cols: [
       { key: "user", type: "text" },
-      { key: "opened", type: "text" },
-      { key: "closed", type: "text" },
+      { key: "opened", type: "datetime" },
+      { key: "closed", type: "datetime" },
       { key: "float", type: "money" },
       { key: "cash", type: "money" },
       { key: "expected", type: "money" },
@@ -342,4 +343,62 @@ export async function deskColleagues(db: DbOrTx, ctx: RestaurantContext) {
     .innerJoin(users, eq(users.id, restaurantMembers.userId))
     .where(eq(restaurantMembers.restaurantId, ctx.restaurant.id))
     .orderBy(users.fullName);
+}
+
+/**
+ * Open folios matching a search (booking or folio number, room, guest or company name), with their
+ * lines: where the cashier moves postings from (جابجایی حساب) or transfers a balance (انتقال حساب).
+ */
+export async function searchFolios(db: DbOrTx, ctx: RestaurantContext, raw: string) {
+  assertCan(ctx, "folio.post");
+  const q = raw.trim().replace(/[%_]/g, "").slice(0, 60);
+  if (q.length < 1) return [];
+  const digits = q.replace(/[^\d]/g, "");
+  const like = `%${q}%`;
+  const name = sql<string>`trim(concat_ws(' ', ${hotelGuests.firstName}, ${hotelGuests.lastName}))`;
+  const found = await db
+    .select({ id: folios.id, room: diningTables.label, stay: stays.number, stayStatus: stays.status })
+    .from(folios)
+    .leftJoin(stays, eq(stays.id, folios.stayId))
+    .leftJoin(hotelGuests, eq(hotelGuests.id, sql`coalesce(${folios.guestId}, ${stays.guestId})`))
+    .leftJoin(hotelAccounts, eq(hotelAccounts.id, folios.accountId))
+    .leftJoin(diningTables, eq(diningTables.id, stays.roomId))
+    .where(
+      and(
+        eq(folios.restaurantId, ctx.restaurant.id),
+        eq(folios.status, "open"),
+        sql`(${name} ilike ${like} or ${hotelAccounts.name} ilike ${like} or ${diningTables.label} = ${q}
+          or ${folios.label} ilike ${like}
+          ${digits ? sql`or ${stays.number}::text = ${digits} or ${folios.number}::text = ${digits}` : sql``})`,
+      ),
+    )
+    .orderBy(desc(folios.createdAt))
+    .limit(8);
+  return Promise.all(
+    found.map(async (f) => {
+      const v = await folioView(db, ctx.restaurant.id, f.id);
+      return {
+        id: v.id,
+        number: v.number,
+        holder: v.accountName ?? (`${v.guestFirst ?? ""} ${v.guestLast ?? ""}`.trim() || v.label || ""),
+        room: f.room,
+        stay: f.stay,
+        stayStatus: f.stayStatus,
+        account: !!v.accountId,
+        balanceCents: v.balanceCents,
+        lines: v.lines
+          .filter((l) => !l.voidedAt)
+          .map((l) => ({
+            id: l.id,
+            businessDate: l.businessDate,
+            kind: l.kind,
+            department: l.department,
+            description: l.description,
+            method: l.method,
+            amountCents: l.amountCents,
+            quantity: l.quantity,
+          })),
+      };
+    }),
+  );
 }

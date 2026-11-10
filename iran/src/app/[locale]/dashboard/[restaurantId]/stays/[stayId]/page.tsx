@@ -203,6 +203,7 @@ async function Stay({ params, searchParams }: Pick<Props, "params" | "searchPara
           )}
           stayId={s.id}
           currency={ctx.restaurant.currency}
+          currencies={settings.currencies}
           folios={card.folios.map((f) => ({
             id: f.id,
             number: f.number,

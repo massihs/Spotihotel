@@ -16,6 +16,7 @@ import {
   Hotel,
   KeyRound,
   NotebookTabs,
+  Landmark,
   Boxes,
   HeartHandshake,
   ChartColumn,
@@ -72,6 +73,7 @@ import { countOpenRequests } from "@/server/modules/hotel/requests";
 const HOTEL_LAYOUT: [page: string, group: HotelGroup][] = [
   ["frontdesk", "reception"],
   ["planning", "reception"],
+  ["reservation", "reception"],
   ["stays", "reception"],
   ["blocks", "reception"],
   ["guests", "reception"],
@@ -220,6 +222,19 @@ async function RestaurantShell({
         groupKey: "reception",
         group: "",
       },
+      // رزرواسیون: the bookings desk and its lists.
+      {
+        show: hotel && can(ctx, "frontdesk.view"),
+        href: `${base}/reservation`,
+        label: t("nav.reservation"),
+        icon: <BedDouble />,
+        groupKey: "reception",
+        group: "",
+        children: (["list", "rack", "cancelled", "noshow", "guaranteed", "settings"] as const).map((k) => ({
+          href: `${base}/reservation?tab=${k}`,
+          label: t(`deskReports.reservation.tabs.${k}`),
+        })),
+      },
       {
         show: hotel && can(ctx, "frontdesk.view"),
         href: `${base}/stays`,
@@ -251,6 +266,27 @@ async function RestaurantShell({
         icon: <FileBarChart />,
         groupKey: "reception",
         group: "",
+        children: (
+          [
+            "manager",
+            "comprehensive",
+            "occupancy",
+            "dailySales",
+            "charts",
+            "accounts",
+            "accountPerformance",
+            "plans",
+            "segments",
+            "bank",
+            "invoices",
+            "expected",
+            "individual",
+            "pax",
+            "openFolios",
+            "debtors",
+            "roomCharge",
+          ] as const
+        ).map((k) => ({ href: `${base}/hotel-reports?tab=${k}`, label: t(`hotelReports.tabs.${k}`) })),
       },
       {
         show: hotel && can(ctx, "frontdesk.view"),
@@ -427,7 +463,30 @@ async function RestaurantShell({
         groupKey: "guests",
         group: g.guests,
       },
-      // Finance.
+      // Finance. صندوق: the front desk cashier comes first for a hotel.
+      {
+        show: hotel && can(ctx, "folio.post"),
+        href: `${base}/cashier`,
+        label: t("nav.cashier"),
+        icon: <Landmark />,
+        groupKey: "finance",
+        group: g.finance,
+        children: (
+          [
+            "handover",
+            "currency",
+            "daily",
+            "transactions",
+            "move",
+            "transfer",
+            "pending",
+            "search",
+            "summary",
+            "handoverReport",
+            "settings",
+          ] as const
+        ).map((k) => ({ href: `${base}/cashier?tab=${k}`, label: t(`deskReports.cashier.tabs.${k}`) })),
+      },
       {
         show: can(ctx, "accounting.manage"),
         href: `${base}/ledger`,
@@ -538,6 +597,11 @@ async function RestaurantShell({
     ...sub("customers", "customers", ["coupons", "campaigns", "loyalty"]),
     ...sub("delivery", "delivery", ["settlement", "settings"]),
     ...sub("reservations", "reservations", ["queue", "settings"]),
+    ...(hotel
+      ? nav
+          .filter((n) => n.children?.length)
+          .flatMap((n) => n.children!.map((c) => ({ href: c.href, label: c.label, hint: n.label })))
+      : []),
     ...(visible.has(`${base}/settings`)
       ? (["profile", "service", "payments", "taxes", "legal", "modules", "printers", "listing"] as const).map(
           (k) => ({

@@ -136,7 +136,19 @@ Dans le calendrier des prix : arrêt des ventes, séjour minimum et maximum, **f
 
 `src/server/modules/pms/reports.ts` : **rapport du directeur** d'une journée clôturée (chambres, occupation, ADR, RevPAR, chiffre d'affaires, avec mois et année à date — l'année commence le 1er Farvardin), chiffre d'affaires par service, encaissements par moyen, mouvements ; **historique d'occupation** d'une période ; **chiffre d'affaires par canal, plan tarifaire et type de chambre**. Impression et export CSV.
 
-### 2.15 Logiciel PC Windows et macOS (`desktop/`)
+### 2.15 Réservation (`/reservation`)
+
+Menu « رزرواسیون » avec sous-menus : **liste des réservations** (période, statut, recherche), **rack des chambres** (chaque chambre du jour par étage : occupée, départ du jour, arrivée du jour, libre et prête, à nettoyer, hors service ; un clic ouvre le séjour), **annulations** (date, motif, pénalité), **no-show** et **no-show garantis** (garantie, frais facturés), **réglages** (liens vers les réglages de la réception, les plans et les contrats). Chaque liste s'imprime et s'exporte en CSV.
+
+### 2.16 Caisse (`/cashier`)
+
+Menu « صندوق » : **remise de caisse** par réceptionniste (fonds de caisse, encaissements par moyen et par devise, comptage des espèces et des devises, écart, remis à qui), **rapport devises** (montant en devise et contre-valeur), **espèces par jour** (encaissé, remboursé, net par réceptionniste), **transactions** et **recherche de transaction** (nom, n° de réservation ou de note, référence, montant), **déplacer des écritures** d'une note à une autre, **transférer un solde** vers un compte société, **clients à solder** (partis ou annulés avec un solde), **rapport global de caisse** (par réceptionniste et moyen), **rapport des remises**, **réglages** (fonds par défaut, devises acceptées et taux). Un paiement peut être pris en devise sur la note : il est converti au taux de la caisse et garde son montant d'origine. Services : `src/server/modules/pms/cashier.ts`, `desk-reports.ts` ; table `desk_shifts` (migration 0054).
+
+### 2.17 Rapports supplémentaires
+
+La page des rapports réunit maintenant : rapport du directeur, **rapport global** de la période, occupation, **ventes journalières** par service, **graphiques** (occupation, chiffre d'affaires, prix moyen), **comptes crédit** (solde, plafond, disponible, dernier paiement), **performance des comptes**, **plans tarifaires**, segments, **banque** (carte, virement, en ligne, chèque par jour), **factures de vente**, **arrivées à venir** (avec acompte payé), **clients individuels**, **ventes par personne**, **notes avec solde**, **débiteurs présents** et **room charges**. Écran limité à 400 lignes (« tout afficher » au besoin) ; totaux et CSV sur toutes les lignes.
+
+### 2.18 Logiciel PC Windows et macOS (`desktop/`)
 
 Le logiciel de la réception (Electron) : avec internet, c'est le site Spotihotel dans sa fenêtre (impression des cartes d'enregistrement, factures et tickets) ; si internet ou le site coupe, il bascule seul sur la **réception de secours** : clients présents (chambre, identité, nationalité, plan, téléphone, solde), arrivées des trois prochains jours, départs du jour, tableau des chambres par étage (occupée, propre, à nettoyer, hors service) et **registre de police**, avec recherche et impression A4. La copie vient de `GET /api/v1/offline/frontdesk` (jeton du PC, `src/server/modules/offline/frontdesk.ts`), rafraîchie toutes les deux minutes, chiffrée sur le disque par le trousseau du système (DPAPI, Keychain) et effacée quand le PC est délié ; elle n'est jamais servie aux téléphones du réseau local. La caisse hors ligne des restaurants et cafés reste disponible. Détails : [`desktop/README.md`](../../desktop/README.md).
 
