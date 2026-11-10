@@ -9,11 +9,22 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
+      - name: DNS and certificates
+        run: |
+          for name in spotihotel.ir www.spotihotel.ir spotihotel.liara.run; do
+            echo "=== $name"
+            echo "A:     $(dig +short A $name | tr '\n' ' ')"
+            echo "CNAME: $(dig +short CNAME $name | tr '\n' ' ')"
+            echo | timeout 15 openssl s_client -connect "$name:443" -servername "$name" 2>&1 \
+              | grep -E "subject=|issuer=|verify return code|alert|errno|Cipher is" | head -6 || true
+          done
+          echo "=== NS spotihotel.ir: $(dig +short NS spotihotel.ir | tr '\n' ' ')"
       - name: Inspect the live site
         run: |
-          for host in https://spotihotel.ir https://spotihotel.liara.run; do
+          for host in https://spotihotel.ir https://www.spotihotel.ir http://spotihotel.ir https://spotihotel.liara.run; do
             echo "=== $host${{ inputs.path }}"
             curl -sS -m 30 -o page.html -D headers.txt -L "$host${{ inputs.path }}" -H "Accept-Language: fr-FR,fr;q=0.9,en;q=0.8" || true
             grep -iE "^(HTTP|location|content-language|set-cookie: NEXT_LOCALE)" headers.txt || true
             grep -o '<html[^>]*>' page.html | head -1 || true
+            rm -f page.html headers.txt
           done
