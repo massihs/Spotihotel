@@ -17,6 +17,7 @@ import { enterTableByQr } from "@/server/modules/guest/sessions";
 import { getPathname } from "@/i18n/navigation";
 import { DEFAULT_LOCALE, isLocale, type AppLocale } from "@/i18n/config";
 import { env } from "@/server/env";
+import { scannedSite } from "@/server/modules/guest/site";
 
 /**
  * Entry point of every printed QR code: GET /t/{qrToken}
@@ -28,9 +29,10 @@ import { env } from "@/server/env";
 export async function GET(req: NextRequest, { params }: RouteContext<"/[locale]/t/[token]">) {
   const { locale, token } = await params;
   const requested: AppLocale = isLocale(locale) ? locale : DEFAULT_LOCALE;
-  // Absolute URL from APP_URL, never from req.url: behind a proxy or with `-H 0.0.0.0`, the
-  // request URL carries the internal host and the browser would lose its cookies.
-  const to = (path: string, l: AppLocale) => new URL(getPathname({ href: path, locale: l }), env().APP_URL);
+  // Absolute URL on the site the guest scanned, never from req.url: behind a proxy or with
+  // `-H 0.0.0.0`, the request URL carries the internal host and the browser would lose its cookies.
+  const site = scannedSite(req, env().APP_URL);
+  const to = (path: string, l: AppLocale) => new URL(getPathname({ href: path, locale: l }), site.origin);
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   try {
@@ -60,8 +62,10 @@ export async function GET(req: NextRequest, { params }: RouteContext<"/[locale]/
   const dest = to("/table", target);
   dest.searchParams.set("welcome", "1");
   const res = NextResponse.redirect(dest, 303);
-  res.cookies.set(GUEST_COOKIE, signValue(guestId), guestCookieOptions);
-  res.cookies.set(SEAT_COOKIE, signValue(entry.participant.id), seatCookieOptions);
+  // Over plain http (a domain still waiting for its certificate) a Secure cookie would be dropped.
+  const secure = site.https && guestCookieOptions.secure;
+  res.cookies.set(GUEST_COOKIE, signValue(guestId), { ...guestCookieOptions, secure });
+  res.cookies.set(SEAT_COOKIE, signValue(entry.participant.id), { ...seatCookieOptions, secure });
   res.headers.set("Referrer-Policy", "no-referrer");
   res.headers.set("Cache-Control", "no-store");
   return res;
