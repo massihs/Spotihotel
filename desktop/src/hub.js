@@ -47,6 +47,12 @@ export function createHub({
   log = () => {},
 }) {
   let snapshot = store.read("snapshot", null);
+  /** Hotels: the front desk copy (guests' personal data), read from its sealed file on first use. */
+  let frontdesk;
+  const getFrontdesk = () => {
+    if (frontdesk === undefined) frontdesk = store.readSealed?.("frontdesk", null) ?? null;
+    return frontdesk;
+  };
   let orders = store.read("orders", []);
   const local = store.read("hub", {});
   local.pairCode ??= String(randomInt(100000, 1000000));
@@ -260,10 +266,13 @@ export function createHub({
     }
   }
 
-  function state() {
+  function state(req) {
     const today = now().getTime() - 24 * 3600_000;
     return {
       snapshot,
+      /** This PC's own window (the front desk copy is shown only there). */
+      own: !!req && cookieKey(req) === ownKey,
+      hotel: snapshot?.restaurant.kind === "hotel",
       status: { ...status, pending: pending().length },
       orders: orders.filter((o) => !o.syncedAt || Date.parse(o.placedAt) > today),
       addresses: lanAddresses().map((a) => `http://${a}:${HUB_PORT}`),
@@ -318,7 +327,12 @@ export function createHub({
     }
     if (!authorized(req)) throw httpError(401, "pair_required");
 
-    if (p === "/api/state" && req.method === "GET") return send(res, 200, state());
+    if (p === "/api/state" && req.method === "GET") return send(res, 200, state(req));
+    // Guests' identities and balances: this PC only, never a waiter's phone.
+    if (p === "/api/frontdesk" && req.method === "GET") {
+      if (cookieKey(req) !== ownKey) throw httpError(403, "this_pc_only");
+      return send(res, 200, { frontdesk: getFrontdesk(), status });
+    }
     if (p === "/api/events" && req.method === "GET") {
       res.writeHead(200, { "content-type": "text/event-stream", "cache-control": "no-store", connection: "keep-alive" });
       res.write("retry: 2000\n\n");
@@ -388,6 +402,16 @@ export function createHub({
     },
     get snapshot() {
       return snapshot;
+    },
+    /** Hotels: the latest front desk copy (null forgets it, e.g. when the PC is unlinked). */
+    setFrontdesk(f) {
+      frontdesk = f;
+      if (f) store.writeSealed?.("frontdesk", f);
+      else store.remove?.("frontdesk");
+      broadcast("frontdesk");
+    },
+    get frontdesk() {
+      return getFrontdesk();
     },
     setStatus(patch) {
       status = { ...status, ...patch };

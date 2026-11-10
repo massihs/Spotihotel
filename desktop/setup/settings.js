@@ -41,6 +41,7 @@ function renderState() {
   $("syncInfo").textContent = [
     s.status.lastSyncAt ? t("lastSync", { when: new Date(s.status.lastSyncAt).toLocaleString() }) : t("never"),
     s.status.pending ? t("pending", { n: s.status.pending }) : "",
+    s.hotel ? (s.frontdeskAt ? t("deskCopyAt", { when: new Date(s.frontdeskAt).toLocaleString() }) : t("fdNone")) : "",
   ]
     .filter(Boolean)
     .join(" · ");

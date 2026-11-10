@@ -2,6 +2,7 @@ import net from "node:net";
 
 const HEALTH_EVERY = 8_000;
 const SNAPSHOT_EVERY = 5 * 60_000;
+const FRONTDESK_EVERY = 2 * 60_000;
 /** Two failed checks in a row before calling it an outage: one lost packet is not a cut. */
 const FAILS_FOR_OFFLINE = 2;
 
@@ -16,12 +17,13 @@ export function sendToPrinter(host, port, data, timeout = 8000) {
 
 /**
  * Keeps the desktop app in step with the website: watches the connection, refreshes the menu
- * copy, sends the orders taken offline as soon as the internet is back, and prints the website's
- * kitchen tickets (it replaces the separate print agent).
+ * copy and (hotels) the front desk copy, sends the orders taken offline as soon as the internet
+ * is back, and prints the website's kitchen tickets (it replaces the separate print agent).
  */
 export function createSync({ hub, getConfig, version, onChange = () => {}, log = () => {}, fetchImpl = fetch }) {
   let fails = 0;
   let lastSnapshot = 0;
+  let lastFrontdesk = 0;
   let lastHealth = 0;
   let timer = null;
   let printing = false;
@@ -64,7 +66,18 @@ export function createSync({ hub, getConfig, version, onChange = () => {}, log =
     if (snap.version > 1) throw new Error("app_too_old");
     hub.setSnapshot(snap);
     lastSnapshot = Date.now();
+    if (snap.restaurant?.kind === "hotel") await refreshFrontdesk().catch((e) => log(`frontdesk: ${e.message}`));
     return true;
+  }
+
+  /** Hotels: the front desk copy (rooms, guests in house, arrivals, departures, balances). */
+  async function refreshFrontdesk() {
+    const res = await call("/api/v1/offline/frontdesk", {}, 30_000);
+    if (!res.ok) throw new Error(`frontdesk ${res.status}`);
+    const copy = await res.json();
+    if (copy.version > 1) throw new Error("app_too_old");
+    hub.setFrontdesk(copy);
+    lastFrontdesk = Date.now();
   }
 
   /** Sends what was taken offline, in batches; each order is idempotent on the website. */
@@ -165,6 +178,9 @@ export function createSync({ hub, getConfig, version, onChange = () => {}, log =
           if (n) onChange({ synced: n });
         }
         if (Date.now() - lastSnapshot > SNAPSHOT_EVERY) await refreshSnapshot();
+        // Guests come and go all day: the front desk copy is kept fresher than the menu.
+        else if (hub.snapshot?.restaurant?.kind === "hotel" && Date.now() - lastFrontdesk > FRONTDESK_EVERY)
+          await refreshFrontdesk();
       } catch (e) {
         log(`sync: ${e.message}`);
       }
@@ -185,10 +201,12 @@ export function createSync({ hub, getConfig, version, onChange = () => {}, log =
       clearTimeout(timer);
     },
     refreshSnapshot,
+    refreshFrontdesk,
     pushOrders,
     /** "Sync now" button. */
     async now() {
       lastSnapshot = 0;
+      lastFrontdesk = 0;
       clearTimeout(timer);
       await tick();
     },

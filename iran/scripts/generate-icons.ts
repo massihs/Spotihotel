@@ -23,7 +23,23 @@ const out = [
   { file: "public/icons/apple-touch-icon.png", size: 180, padding: 2, radius: 0 },
 ];
 
+/**
+ * Desktop app (Windows and macOS): the tile inside a transparent margin, as macOS draws its app
+ * icons (824 px tile on a 1024 px canvas); electron-builder makes the .ico and .icns from it.
+ */
+const desktop = (size: number) => {
+  const tile = Math.round(size * 0.805);
+  const at = (size - tile) / 2;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+  ${mark(tile, 0, 7).replace("<svg ", `<svg x="${at}" y="${at}" `)}
+</svg>`;
+};
+
 async function main() {
+  await sharp(Buffer.from(desktop(1024)))
+    .png({ compressionLevel: 9 })
+    .toFile("../desktop/build/icon.png");
+  console.log("✓ ../desktop/build/icon.png");
   for (const o of out) {
     await sharp(Buffer.from(mark(o.size, o.padding, o.radius)))
       .png({ compressionLevel: 9 })

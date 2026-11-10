@@ -1507,15 +1507,15 @@
     "desktopHint": "Spotihotel for Windows and macOS: the whole site, plus order taking and printing even without internet.",
     "desktop": {
       "onlineTitle": "Like the site",
-      "onlineBody": "Online, the app shows Spotihotel like the browser and prints kitchen and bar tickets.",
-      "offlineTitle": "Without internet",
-      "offlineBody": "The till PC takes over: orders at the till and on the waiters' phones (same Wi-Fi), tickets printed locally.",
+      "onlineBody": "Online, the app is Spotihotel: front desk, room planning, accounts, reports; it also prints kitchen and bar tickets.",
+      "offlineTitle": "Front desk without internet",
+      "offlineBody": "If the internet drops, guests in house, arrivals, departures, room status, balances and the police register stay on this PC and can be printed; the restaurant till keeps taking orders.",
       "syncTitle": "Everything comes back",
-      "syncBody": "When the internet returns, orders and payments are sent up automatically, never twice.",
+      "syncBody": "The front desk copy is refreshed every two minutes and kept encrypted on the PC; the restaurant's offline orders are sent up, never twice, when the internet returns.",
       "windows": "Download for Windows",
       "mac": "Download for macOS",
       "soon": "Installers coming soon.",
-      "step1": "Install the app on the till PC (always on, on the hotel's Wi-Fi).",
+      "step1": "Install the app on the front desk PC (and, if needed, the restaurant till PC).",
       "step2": "Open it, sign in with a manager account, then \"Activate this PC\".",
       "step3": "Network printers are picked up automatically; the print agent is no longer needed.",
       "linked": "Linked PCs",
@@ -2419,12 +2419,20 @@
       "weekly": {
         "name": "Weekly playlist",
         "body": "A fresh playlist every Saturday.",
-        "features": ["30 new tracks every week", "No tiring repeats", "Plays on any device"]
+        "features": [
+          "30 new tracks every week",
+          "No tiring repeats",
+          "Plays on any device"
+        ]
       },
       "monthly": {
         "name": "Monthly playlist",
         "body": "A fresh playlist every month.",
-        "features": ["30 new tracks every month", "Ideal for calm venues", "Plays on any device"]
+        "features": [
+          "30 new tracks every month",
+          "Ideal for calm venues",
+          "Plays on any device"
+        ]
       }
     },
     "status": {

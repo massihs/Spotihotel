@@ -6,9 +6,10 @@
 <title>Spotihotel</title>
 <link rel="stylesheet" href="/app.css" />
 <style>
-  body { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: radial-gradient(circle at 20% 0%, #fde9e1, var(--bg) 55%); }
+  body { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: radial-gradient(circle at 20% 0%, #e6eaf3, var(--bg) 55%); }
   .box { width: min(520px, 100%); padding: 32px; }
-  .logo { width: 56px; height: 56px; border-radius: 18px; background: var(--accent); box-shadow: 0 10px 30px rgb(230 90 43 / 0.35); }
+  .logo { width: 56px; height: 56px; border-radius: 18px; background: var(--accent); box-shadow: 0 10px 30px rgb(29 47 87 / 0.35); display: grid; place-items: center; }
+  .logo svg { width: 34px; height: 34px; }
   h1 { font-size: 26px; margin: 18px 0 8px; }
   p { line-height: 1.7; }
   label { display: block; font-weight: 700; font-size: 14px; margin: 22px 0 6px; }
@@ -20,10 +21,10 @@
 </head>
 <body>
 <main class="card box">
-  <div class="logo"></div>
+  <div class="logo"><svg viewBox="0 0 32 32" fill="none" stroke="#c9a96a" stroke-linecap="round" aria-hidden="true"><path d="M10 25.5V14.5a6 6 0 0 1 12 0v11" stroke-width="2.2"/><path d="M8 25.5h16" stroke-width="2.2"/><circle cx="16" cy="17.2" r="1.7" fill="#c9a96a" stroke="none"/><path d="M16 18.5v3" stroke-width="1.4"/></svg></div>
   <h1 id="title"></h1>
   <p class="muted" id="body"></p>
-  <div class="feat"><div>🧾 POS</div><div>👨‍🍳 KDS</div><div>🖨️ ESC/POS</div></div>
+  <div class="feat"><div id="feat1"></div><div id="feat2"></div><div id="feat3"></div></div>
   <label for="server" id="serverLabel"></label>
   <div class="row">
     <input id="server" class="field" dir="ltr" spellcheck="false" />

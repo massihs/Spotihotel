@@ -7,6 +7,7 @@ import {
   Menu,
   net as enet,
   powerSaveBlocker,
+  safeStorage,
   session,
   shell,
 } from "electron";
@@ -29,7 +30,11 @@ const UUID = /\/dashboard\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9
 if (process.env.SPOTIHOTEL_DATA) app.setPath("userData", process.env.SPOTIHOTEL_DATA);
 if (!app.requestSingleInstanceLock()) app.quit();
 
-const store = createStore(path.join(app.getPath("userData"), "data"));
+// Guests' data (front desk copy) is sealed with the system's key store: DPAPI, macOS Keychain.
+const store = createStore(path.join(app.getPath("userData"), "data"), {
+  seal: (text) => (app.isReady() && safeStorage.isEncryptionAvailable() ? safeStorage.encryptString(text) : null),
+  unseal: (data) => safeStorage.decryptString(data),
+});
 let config = { serverUrl: DEFAULT_SERVER, localPrinters: [], ...store.read("config", {}) };
 // Older versions could pick OneNote / "Print to PDF" as the ticket printer: drop them.
 config.localPrinters = (config.localPrinters ?? []).filter((p) => !isVirtualPrinter(p.system));
@@ -66,10 +71,12 @@ const sync = createSync({
   log,
   fetchImpl: (url, init) => enet.fetch(url, init),
   onChange(e) {
-    if (e.online === false && mode === "site") showLocal();
+    // Hotels fall back to the front desk copy; a restaurant to its till.
+    if (e.online === false && mode === "site") showLocal(isHotel() ? "#/frontdesk" : "");
     if (e.synced) flash("synced", { n: e.synced });
     if (e.online === true) flash("online");
     if (e.revoked) {
+      hub.setFrontdesk(null);
       saveConfig({ deviceToken: null, deviceId: null });
       flash("revoked");
     }
@@ -78,6 +85,8 @@ const sync = createSync({
 });
 
 // ─── Views ───────────────────────────────────────────────────────────────────
+
+const isHotel = () => hub.snapshot?.restaurant.kind === "hotel";
 
 /** `screen` is a hash route ("#/kitchen"); the key logs this PC in once (cookie). */
 const localUrl = (screen = "") => `http://127.0.0.1:${hubPort}/?k=${hub.ownKey}${screen}`;
@@ -136,6 +145,8 @@ function state() {
     localPrinters: config.localPrinters ?? [],
     stations: hub.snapshot?.stations ?? [],
     locale: hub.snapshot?.restaurant.defaultLocale ?? config.locale ?? "fa",
+    hotel: isHotel(),
+    frontdeskAt: hub.frontdesk?.generatedAt ?? null,
     version: app.getVersion(),
     toast,
   };
@@ -162,7 +173,7 @@ async function link(restaurantId) {
     restaurantId: restaurant.id,
     restaurantName: restaurant.name,
   });
-  // A till PC: back on its own after a restart or a power cut.
+  // A reception or till PC: back on its own after a restart or a power cut.
   app.setLoginItemSettings({ openAtLogin: true });
   await sync.refreshSnapshot().catch((e) => log(`snapshot: ${e.message}`));
   sync.start();
@@ -209,7 +220,7 @@ function createWindow() {
     if (isMain && mode === "setup" && code !== -3 && url.startsWith(config.serverUrl)) return showServerSetup();
     if (isMain && mode === "site" && code !== -3 && url.startsWith(config.serverUrl)) {
       hub.setStatus({ online: false });
-      showLocal();
+      showLocal(isHotel() ? "#/frontdesk" : "");
     }
   });
 
@@ -229,7 +240,8 @@ function onNavigate(url) {
         buttons: ["OK", "×"],
         defaultId: 0,
         message: "Spotihotel",
-        detail: "Activer ce PC pour ce restaurant ? (mode hors ligne, impression locale)\nاین کامپیوتر برای این رستوران فعال شود؟",
+        detail:
+          "Activer ce PC pour cet établissement ? (copie de secours de la réception, caisse hors ligne, impression locale)\nاین کامپیوتر برای این هتل فعال شود؟ (نسخهٔ پشتیبان پذیرش، صندوق آفلاین، چاپ محلی)",
       })
       .then(async ({ response }) => {
         if (response !== 0) return;
@@ -260,7 +272,7 @@ ipcMain.handle("action", async (e, name, arg) => {
     case "site":
       return config.deviceToken ? showSite() : showSetup();
     case "local":
-      return showLocal(typeof arg === "string" ? arg : "");
+      return showLocal(typeof arg === "string" ? arg : isHotel() ? "#/frontdesk" : "");
     case "settings":
       return showSettings();
     case "sync":
@@ -324,11 +336,12 @@ ipcMain.handle("action", async (e, name, arg) => {
         defaultId: 1,
         message: "Spotihotel",
         detail: hub.pending().length
-          ? "Des commandes hors ligne ne sont pas encore envoyées. Délier quand même ?"
-          : "Délier ce PC du restaurant ?",
+          ? "Des commandes hors ligne ne sont pas encore envoyées. Délier quand même ?\nسفارش‌های آفلاین هنوز ارسال نشده‌اند. با این حال جدا شود؟"
+          : "Délier ce PC de l'établissement ? La copie de la réception sera effacée.\nاین کامپیوتر از هتل جدا شود؟ نسخهٔ پشتیبان پذیرش پاک می‌شود.",
       });
       if (response !== 0) return state();
       sync.stop();
+      hub.setFrontdesk(null);
       saveConfig({ deviceToken: null, deviceId: null, restaurantId: null, restaurantName: null, lastUrl: null });
       showSetup();
       return state();
@@ -397,7 +410,13 @@ async function smoke(dir) {
   }
   for (const screen of (process.env.SPOTIHOTEL_SMOKE_SCREENS ?? "").split(",").filter(Boolean)) {
     if (screen === "settings") showSettings();
-    else showLocal(`#/${screen}`);
+    else if (screen === "outage") {
+      // The website stops answering while the reception works on it.
+      showSite();
+      await wait(3000);
+      saveConfig({ serverUrl: "http://127.0.0.1:9" });
+      await wait(20_000);
+    } else showLocal(`#/${screen}`);
     await shot(screen);
   }
   app.quit();

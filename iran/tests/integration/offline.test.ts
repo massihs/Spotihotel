@@ -8,11 +8,11 @@ import {
   payments,
   printJobs,
   restaurantSettings,
+  restaurants,
   tableSessions,
 } from "@/server/db/schema";
 import { createCategory } from "@/server/modules/menu/categories";
 import { createProduct } from "@/server/modules/menu/products";
-import { createTable } from "@/server/modules/tables/service";
 import { savePrinter, authenticateAgent } from "@/server/modules/printing/service";
 import {
   authenticateDevice,
@@ -22,6 +22,12 @@ import {
   revokeDevice,
   type OfflineOrderInput,
 } from "@/server/modules/offline/service";
+import { frontdeskSnapshot } from "@/server/modules/offline/frontdesk";
+import { bulkCreateTables, createTable, listTables } from "@/server/modules/tables/service";
+import { assignRoomType, createRatePlan, createRoomType, getPmsSettings } from "@/server/modules/pms/setup";
+import { checkIn, createStay, getStay } from "@/server/modules/pms/stays";
+import { postCharge } from "@/server/modules/pms/folios";
+import { addDays } from "@/server/modules/pms/calc";
 import { createOwnerWithRestaurant } from "../helpers/factories";
 
 async function setup(name = "Offline") {
@@ -161,5 +167,86 @@ describe("desktop app offline mode", () => {
 
     await revokeDevice(db, ctx, device.id);
     expect(await authenticateDevice(db, device.token)).toBeNull();
+  });
+});
+
+describe("hotel desktop app: front desk copy", () => {
+  it("gives a linked PC the rooms, guests in house, arrivals and departures with their balance", async () => {
+    const restaurantOwner = await createOwnerWithRestaurant("Not a hotel", { plan: "enterprise" });
+    const other = await createDevice(db, restaurantOwner.ctx, "PC");
+    await expect(frontdeskSnapshot(db, (await authenticateDevice(db, other.token))!)).rejects.toMatchObject({
+      message: "not_hotel",
+    });
+
+    const { ctx } = await createOwnerWithRestaurant("Desk Hotel", { plan: "enterprise" });
+    await db.update(restaurants).set({ kind: "hotel" }).where(eq(restaurants.id, ctx.restaurant.id));
+    const h = { ...ctx, restaurant: { ...ctx.restaurant, kind: "hotel" as const } };
+    await bulkCreateTables(db, h, { from: 101, to: 103, kind: "room" });
+    const dbl = await createRoomType(db, h, {
+      code: "DBL",
+      name: "Double",
+      baseOccupancy: 2,
+      maxOccupancy: 2,
+      baseRateCents: 100_000,
+    });
+    const rooms = (await listTables(db, h)).filter((r) => r.kind === "room");
+    await assignRoomType(
+      db,
+      h,
+      rooms.map((r) => r.id),
+      dbl.id,
+    );
+    await createRatePlan(db, h, { code: "BB", name: "Breakfast", mealPlan: "BB", isDefault: true });
+    const { businessDate: today } = await getPmsSettings(db, h.restaurant.id, h.restaurant.timezone);
+    const guest = (lastName: string) => ({
+      firstName: "Sara",
+      lastName,
+      nationality: "IR",
+      documentType: "id_card" as const,
+      documentNumber: "0012345679",
+      fatherName: "Ali",
+    });
+    const inHouse = await createStay(db, h, {
+      guest: guest("Ahmadi"),
+      roomTypeId: dbl.id,
+      arrival: today,
+      departure: addDays(today, 2),
+    });
+    await checkIn(db, h, inHouse.id);
+    const folio = (await getStay(db, h, inHouse.id)).folios[0]!;
+    await postCharge(db, h, folio.id, { department: "minibar", description: "Water", unitCents: 30_000 });
+    await createStay(db, h, {
+      guest: guest("Tomorrow"),
+      roomTypeId: dbl.id,
+      arrival: addDays(today, 1),
+      departure: addDays(today, 3),
+    });
+    // Too far ahead for the copy.
+    await createStay(db, h, {
+      guest: guest("Later"),
+      roomTypeId: dbl.id,
+      arrival: addDays(today, 10),
+      departure: addDays(today, 11),
+    });
+
+    const device = await createDevice(db, h, "PC réception");
+    const snap = await frontdeskSnapshot(db, (await authenticateDevice(db, device.token))!);
+    expect(snap.businessDate).toBe(today);
+    expect(snap.rooms).toHaveLength(3);
+    expect(snap.inHouse).toHaveLength(1);
+    expect(snap.inHouse[0]).toMatchObject({
+      lastName: "Ahmadi",
+      documentNumber: "0012345679",
+      fatherName: "Ali",
+      plan: "BB",
+      typeCode: "DBL",
+    });
+    expect(snap.inHouse[0]!.balanceCents).toBeGreaterThanOrEqual(30_000);
+    expect(snap.arrivals.map((s) => s.lastName)).toEqual(["Tomorrow"]);
+    const occupied = snap.rooms.filter((r) => r.occupiedBy);
+    expect(occupied).toEqual([
+      expect.objectContaining({ occupiedBy: "Sara Ahmadi", stayNumber: inHouse.number, typeCode: "DBL" }),
+    ]);
+    expect(snap.departures).toEqual([]);
   });
 });

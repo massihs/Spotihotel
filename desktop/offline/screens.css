@@ -99,3 +99,66 @@ h2.sec { font-size: 15px; margin: 4px 0 0; color: var(--muted); }
   header.top { padding: 8px 12px; }
 }
 .kds .btn:not(.primary) { background: #2a313c; color: #fff; }
+
+/* ─── Hotels: front desk copy ─────────────────────────────────────────────── */
+.desk { padding: 16px; display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); }
+.desk > * { min-width: 0; }
+@media (max-width: 640px) { .desk { padding: 12px; } .fd-controls .field { width: 100%; } .kpis div { min-width: 0; flex: 1 1 30%; } }
+.fd-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.fd-head h2 { margin: 0 0 4px; font-size: 20px; }
+.stale { color: var(--danger); font-weight: 700; }
+.kpis { display: flex; flex-wrap: wrap; gap: 8px; }
+.kpis div { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 8px 14px; min-width: 92px; display: grid; }
+.kpis b { font-size: 22px; line-height: 1.2; }
+.kpis span { font-size: 12px; color: var(--muted); font-weight: 600; }
+.fd-alert { background: var(--warning-soft); color: #7a4a00; border-radius: 14px; padding: 10px 14px; font-weight: 600; font-size: 14px; }
+.fd-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.fd-controls .scroll { flex: 1 1 auto; min-width: 0; }
+.fd-controls .field { width: 280px; max-width: 100%; height: 40px; }
+.chip .count { font-size: 12px; opacity: 0.75; }
+.fd-day { margin: 10px 0 6px; font-size: 15px; }
+.fd-table { overflow-x: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; }
+.fd-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.fd-table th { text-align: start; font-size: 12px; color: var(--muted); font-weight: 700; background: var(--surface-2); padding: 8px 10px; white-space: nowrap; }
+.fd-table td { padding: 8px 10px; border-top: 1px solid var(--border); vertical-align: top; }
+.fd-table tr:hover td { background: #fafbfc; }
+.fd-table .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.fd-table .note { color: var(--warning); }
+.room { font-size: 16px; }
+.owe { color: var(--danger); white-space: nowrap; }
+.credit { color: var(--success); font-size: 13px; white-space: nowrap; }
+.tag { display: inline-block; border-radius: 999px; padding: 1px 8px; font-size: 11px; font-weight: 800; background: var(--surface-2); color: var(--muted); white-space: nowrap; }
+.tag.vip { background: #f6edd9; color: #8a6a24; }
+.tag.ok { background: var(--success-soft); color: var(--success); }
+.tag.warn { background: var(--warning-soft); color: var(--warning); }
+.legends { display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px; color: var(--muted); }
+.legend { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 12px; height: 12px; border-radius: 4px; display: inline-block; }
+.board { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+.rtile { border-radius: 12px; padding: 8px 10px; min-height: 74px; display: flex; flex-direction: column; gap: 2px; border: 1px solid var(--border); background: var(--surface); }
+.rt-top { display: flex; justify-content: space-between; align-items: baseline; gap: 4px; }
+.rt-top b { font-size: 17px; }
+.rtile small { font-size: 11.5px; color: var(--muted); }
+.rt-guest { font-size: 12.5px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rtile.occupied, .legend.occupied i { background: var(--accent); color: #fff; border-color: var(--accent); }
+.rtile.occupied small { color: #c8d0e0; }
+.rtile.clean, .legend.clean i { background: var(--success-soft); border-color: #b9e6c8; }
+.rtile.dirty, .legend.dirty i { background: var(--warning-soft); border-color: #f1d9a4; }
+.rtile.out_of_order, .legend.out_of_order i { background: #eceef1; border-style: dashed; color: var(--subtle); }
+.fd-privacy { font-size: 12px; margin: 0; }
+.print-only { display: none; }
+
+@media print {
+  @page { size: A4 landscape; margin: 10mm; }
+  body { background: #fff; font-size: 11px; }
+  header.top, .fd-controls, .fd-alert, .kpis, .fd-head, .fd-privacy, #toast, #modal { display: none !important; }
+  .desk { padding: 0; gap: 6px; }
+  .print-only { display: block; font-size: 13px; margin-bottom: 6px; }
+  .fd-table { border: 0; border-radius: 0; overflow: visible; }
+  .fd-table table { font-size: 10.5px; }
+  .fd-table th { background: #eee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .fd-table td, .fd-table th { padding: 4px 6px; border: 1px solid #bbb; }
+  .rtile { break-inside: avoid; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  tr { break-inside: avoid; }
+}
+.fd-table td.num { white-space: nowrap; }

@@ -35,7 +35,7 @@ function render(s) {
       : "";
   $("site").textContent = t("site");
   $("site").setAttribute("aria-pressed", String(s.mode === "site" || s.mode === "setup"));
-  $("local").textContent = t("local");
+  $("local").textContent = s.hotel ? t("localHotel") : t("local");
   $("local").setAttribute("aria-pressed", String(s.mode === "local"));
   $("local").classList.toggle("hidden", !s.linked);
   $("sync").textContent = t("syncNow");

@@ -17,9 +17,11 @@
   --fg: #14171c;
   --muted: #646b76;
   --subtle: #9aa1ab;
-  --accent: #e65a2b;
-  --accent-soft: #fde9e1;
-  --accent-text: #b8401a;
+  /* Spotihotel: navy and brass. */
+  --accent: #1d2f57;
+  --accent-soft: #e6eaf3;
+  --accent-text: #1d2f57;
+  --brass: #c9a96a;
   --success: #16a34a;
   --success-soft: #dcf5e4;
   --warning: #c27803;
@@ -57,7 +59,7 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   height: 44px; width: 100%; border-radius: 12px; border: 1px solid #cfd4db; background: var(--surface);
   padding: 0 12px; font-size: 15px; outline: none;
 }
-.field:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgb(230 90 43 / 0.15); }
+.field:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgb(29 47 87 / 0.15); }
 .chip {
   display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 999px;
   background: var(--surface); border: 1px solid var(--border); font-weight: 600; font-size: 14px; white-space: nowrap;

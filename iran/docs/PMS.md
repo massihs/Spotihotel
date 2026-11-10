@@ -136,6 +136,10 @@ Dans le calendrier des prix : arrêt des ventes, séjour minimum et maximum, **f
 
 `src/server/modules/pms/reports.ts` : **rapport du directeur** d'une journée clôturée (chambres, occupation, ADR, RevPAR, chiffre d'affaires, avec mois et année à date — l'année commence le 1er Farvardin), chiffre d'affaires par service, encaissements par moyen, mouvements ; **historique d'occupation** d'une période ; **chiffre d'affaires par canal, plan tarifaire et type de chambre**. Impression et export CSV.
 
+### 2.15 Logiciel PC Windows et macOS (`desktop/`)
+
+Le logiciel de la réception (Electron) : avec internet, c'est le site Spotihotel dans sa fenêtre (impression des cartes d'enregistrement, factures et tickets) ; si internet ou le site coupe, il bascule seul sur la **réception de secours** : clients présents (chambre, identité, nationalité, plan, téléphone, solde), arrivées des trois prochains jours, départs du jour, tableau des chambres par étage (occupée, propre, à nettoyer, hors service) et **registre de police**, avec recherche et impression A4. La copie vient de `GET /api/v1/offline/frontdesk` (jeton du PC, `src/server/modules/offline/frontdesk.ts`), rafraîchie toutes les deux minutes, chiffrée sur le disque par le trousseau du système (DPAPI, Keychain) et effacée quand le PC est délié ; elle n'est jamais servie aux téléphones du réseau local. La caisse hors ligne des restaurants et cafés reste disponible. Détails : [`desktop/README.md`](../../desktop/README.md).
+
 ---
 
 ## 3. Où est le code

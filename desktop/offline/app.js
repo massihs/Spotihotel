@@ -1,9 +1,11 @@
 import { buildLine, formatMoney, parseMoney, priceFor, totalsOf } from "/model.js";
 import { isRtl, translator } from "/i18n.js";
+import { DESK_TABS, deskList, deskScreen, deskUi } from "/frontdesk.js";
 
 /**
- * The screens of the local hub: order taking (till and waiters' phones), the orders list and the
- * kitchen display. Everything goes through the PC's local server, so it works without internet.
+ * The screens of the local hub: (hotels, on this PC only) the front desk copy, order taking for
+ * the restaurant and café (till and waiters' phones), the orders list and the kitchen display.
+ * Everything goes through the PC's local server, so it works without internet.
  */
 
 const app = document.getElementById("app");
@@ -30,6 +32,10 @@ let category = pref("category") ?? "all";
 let station = pref("station") ?? "all";
 let ticketOpen = false;
 let busy = false;
+// Hotels: the front desk copy (this PC only), its list and search.
+let desk = null;
+let deskTab = DESK_TABS.includes(pref("deskTab")) ? pref("deskTab") : "inHouse";
+let deskQuery = "";
 
 async function api(path, body) {
   const res = await fetch(path, {
@@ -53,7 +59,11 @@ function toast(text, error = false) {
 const money = (c) => formatMoney(c, data.snapshot.restaurant.currency, locale);
 /** Counts in the restaurant's digits (Persian digits for fa). */
 const num = (n) => new Intl.NumberFormat(locale).format(n);
-const route = () => (location.hash.replace(/^#\/?/, "") || pref("screen") || "order").split("?")[0];
+const deskOn = () => !!(data?.hotel && data?.own);
+function route() {
+  const r = (location.hash.replace(/^#\/?/, "") || pref("screen") || (deskOn() ? "frontdesk" : "order")).split("?")[0];
+  return r === "frontdesk" && !deskOn() ? "order" : r;
+}
 
 // ─── Loading ─────────────────────────────────────────────────────────────────
 
@@ -65,6 +75,7 @@ async function load() {
     app.innerHTML = `<div class="empty">${esc(e.message)}</div>`;
     return;
   }
+  if (deskOn()) desk = (await api("/api/frontdesk").catch(() => ({ frontdesk: desk }))).frontdesk;
   locale = data.snapshot?.restaurant.defaultLocale ?? navigator.language?.slice(0, 2) ?? "fa";
   t = translator(locale);
   document.documentElement.dir = isRtl(locale) ? "rtl" : "ltr";
@@ -85,6 +96,7 @@ function listen() {
   });
   events.addEventListener("status", () => void load());
   events.addEventListener("snapshot", () => void load());
+  events.addEventListener("frontdesk", () => void load());
   // A phone that slept: catch up.
   document.addEventListener("visibilitychange", () => {
     if (!document.hidden && Date.now() - last > 5000) void load();
@@ -142,12 +154,12 @@ function header() {
     <span class="badge ${st.online ? "on" : "off"}">${st.online ? t("online") : t("offline")}</span>
     ${st.pending ? `<span class="badge warn">${t("pending", { n: st.pending })}</span>` : ""}
     <nav class="tabs">
-      ${["order", "orders", "kitchen"]
+      ${[...(deskOn() ? ["frontdesk"] : []), "order", "orders", "kitchen"]
         .map((k) => `<a href="#/${k}" ${screen === k ? 'aria-current="page"' : ""}>${t(`tab${k[0].toUpperCase()}${k.slice(1)}`)}</a>`)
         .join("")}
     </nav>
     ${
-      staff.length && screen !== "kitchen"
+      staff.length && screen !== "kitchen" && screen !== "frontdesk"
         ? `<label class="staff"><select id="staff" aria-label="${t("whoAmI")}"><option value="">${t("whoAmI")}</option>${staff
             .map((m) => `<option value="${esc(m.userId)}" ${m.userId === me ? "selected" : ""}>${esc(m.name)}</option>`)
             .join("")}</select></label>`
@@ -163,7 +175,17 @@ function render() {
   }
   const screen = route();
   pref("screen", screen);
-  const body = screen === "orders" ? ordersScreen() : screen === "kitchen" ? kitchenScreen() : orderScreen();
+  // "#/frontdesk?tab=rooms" opens a given list.
+  const askedTab = new URLSearchParams(location.hash.split("?")[1] ?? "").get("tab");
+  if (askedTab && DESK_TABS.includes(askedTab)) deskTab = askedTab;
+  const body =
+    screen === "frontdesk"
+      ? deskScreen(desk, desk ? deskUi({ t, esc, locale, desk }) : { t }, { tab: deskTab, q: deskQuery, online: data.status.online })
+      : screen === "orders"
+        ? ordersScreen()
+        : screen === "kitchen"
+          ? kitchenScreen()
+          : orderScreen();
   app.innerHTML = header() + body;
   document.getElementById("staff")?.addEventListener("change", (e) => pref("staff", e.target.value));
 }
@@ -526,6 +548,12 @@ app.addEventListener("click", async (e) => {
     pref("category", category);
     return render();
   }
+  if (d.fdtab) {
+    deskTab = d.fdtab;
+    pref("deskTab", deskTab);
+    return render();
+  }
+  if (d.act === "fdprint") return window.print();
   if (d.station) {
     station = d.station;
     pref("station", station);
@@ -566,6 +594,13 @@ app.addEventListener("click", async (e) => {
   await load();
 });
 app.addEventListener("input", (e) => {
+  if (e.target.id === "fdq") {
+    // Only the list: the search box keeps its focus and caret.
+    deskQuery = e.target.value;
+    const list = document.getElementById("fdList");
+    if (list && desk) list.innerHTML = deskList(desk, deskUi({ t, esc, locale, desk }), { tab: deskTab, q: deskQuery });
+    return;
+  }
   if (e.target.id === "note") {
     cart.note = e.target.value;
     saveCart();
@@ -574,6 +609,8 @@ app.addEventListener("input", (e) => {
 window.addEventListener("hashchange", render);
 // The kitchen timers move on their own.
 setInterval(() => route() === "kitchen" && data?.snapshot && render(), 30_000);
+// The age of the front desk copy moves on too (it is flagged once it gets old).
+setInterval(() => route() === "frontdesk" && data?.snapshot && document.activeElement?.id !== "fdq" && render(), 60_000);
 
 await load();
 if (data) listen();

@@ -234,3 +234,59 @@ test("a dish sent elsewhere than its category prints at its own station", () => 
   const { line } = buildLine(kebab, "dine_in", ["v-lavash"], 1, "", snapshot.categories[0]);
   assert.equal(line.stationId, "s-bar");
 });
+
+test("hotels: the front desk copy is sealed on disk and served to this PC only", async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sfdesk-"));
+  // A reversible stand-in for the system key store.
+  const seal = (s) => Buffer.from(s, "utf8").map((b) => b ^ 0x5a);
+  const unseal = (b) => Buffer.from(b).map((x) => x ^ 0x5a).toString("utf8");
+  const store = createStore(dir, { seal, unseal });
+  const hub = createHub({ store, staticDir: path.join(root, "offline"), deliver: async () => {} });
+  hub.setSnapshot({ ...snapshot, restaurant: { ...snapshot.restaurant, kind: "hotel" } });
+  const copy = {
+    version: 1,
+    generatedAt: new Date().toISOString(),
+    hotel: { name: "Parsian", currency: "IRR", timezone: "Asia/Tehran", defaultLocale: "fa" },
+    businessDate: "2026-11-09",
+    rooms: [],
+    inHouse: [{ number: 12, firstName: "Sara", lastName: "Ahmadi", documentNumber: "0012345679" }],
+    arrivals: [],
+    departures: [],
+  };
+  hub.setFrontdesk(copy);
+  // Encrypted at rest: the guest's ID never appears in clear.
+  const raw = fs.readFileSync(path.join(dir, "frontdesk.sealed"));
+  assert.ok(!raw.toString("utf8").includes("0012345679"));
+  assert.ok(!fs.existsSync(path.join(dir, "frontdesk.json")));
+  // A new start reads it back.
+  const again = createHub({ store, staticDir: path.join(root, "offline"), deliver: async () => {} });
+  assert.equal(again.frontdesk.inHouse[0].lastName, "Ahmadi");
+
+  const port = await hub.listen(0, "127.0.0.1");
+  const base = `http://127.0.0.1:${port}`;
+  const own = `sfhub=${hub.ownKey}`;
+  const mine = await (await fetch(`${base}/api/state`, { headers: { cookie: own } })).json();
+  assert.equal(mine.own, true);
+  assert.equal(mine.hotel, true);
+  assert.equal((await (await fetch(`${base}/api/frontdesk`, { headers: { cookie: own } })).json()).frontdesk.inHouse.length, 1);
+  // A waiter's phone, paired with the code, sees the till but never the guests.
+  const ok = await fetch(`${base}/api/pair`, { method: "POST", body: JSON.stringify({ code: hub.pairCode }) });
+  const phone = ok.headers.get("set-cookie").split(";")[0];
+  assert.equal((await (await fetch(`${base}/api/state`, { headers: { cookie: phone } })).json()).own, false);
+  assert.equal((await fetch(`${base}/api/frontdesk`, { headers: { cookie: phone } })).status, 403);
+  assert.equal((await fetch(`${base}/api/frontdesk`)).status, 401);
+  await hub.close();
+
+  // Unlinking the PC erases it.
+  hub.setFrontdesk(null);
+  assert.ok(!fs.existsSync(path.join(dir, "frontdesk.sealed")));
+});
+
+test("without encryption the front desk copy is kept in memory only", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sfdesk-"));
+  const store = createStore(dir, { seal: () => null, unseal: () => "" });
+  const hub = createHub({ store, staticDir: path.join(root, "offline"), deliver: async () => {} });
+  hub.setFrontdesk({ version: 1, inHouse: [{ documentNumber: "0012345679" }] });
+  assert.equal(hub.frontdesk.inHouse.length, 1);
+  assert.deepEqual(fs.readdirSync(dir).filter((f) => f.startsWith("frontdesk")), []);
+});

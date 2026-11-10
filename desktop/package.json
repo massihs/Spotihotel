@@ -1,8 +1,8 @@
 {
   "name": "spotihotel-desktop",
   "productName": "Spotihotel",
-  "version": "1.0.4",
-  "description": "Spotihotel for Windows and macOS: the restaurant's till, with offline ordering and local printing.",
+  "version": "1.1.0",
+  "description": "Spotihotel for Windows and macOS: the hotel's front desk, with an offline backup of the reception and the restaurant till.",
   "author": "Spotihotel",
   "license": "UNLICENSED",
   "private": true,
