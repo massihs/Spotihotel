@@ -1,10 +1,16 @@
 "use client";
 
 import {
+  ArrowRight,
   BellRing,
   CalendarCheck,
+  Check,
   Flower2,
+  Info,
   KeyRound,
+  Lock,
+  Minus,
+  Plus,
   Receipt,
   UtensilsCrossed,
   Wifi,
@@ -29,6 +35,8 @@ import { FormError, inputCls, useDay } from "@/components/pms/kit";
 import { DateInput } from "@/components/ui/date-input";
 import { calendarLocale } from "@/lib/jalali-calendar";
 import { EDITION } from "@/config/edition";
+import { CopyRow } from "./room-concierge";
+import { WaiterCall, type CallOption } from "./waiter-call";
 
 type Service = {
   id: string;
@@ -57,6 +65,7 @@ export function StayPortal({
   today,
   stay,
   verified,
+  calls,
   settings,
   services,
   minibar,
@@ -71,6 +80,7 @@ export function StayPortal({
   today: string;
   stay: { firstName: string; departure: string } | null;
   verified: boolean;
+  calls: CallOption[];
   settings: {
     wifiName: string | null;
     wifiPassword: string | null;
@@ -83,144 +93,182 @@ export function StayPortal({
   bookings: { id: string; service: string; startsAt: string; people: number; status: string }[];
 }) {
   const t = useTranslations("portal");
+  const tc = useTranslations("concierge");
   const day = useDay();
+  // Charging the room (spa, minibar) and the bill: the guest's name first, asked where it is needed.
+  const access: Access = !stay ? "none" : verified ? "open" : "locked";
   return (
-    <div className="mx-auto max-w-xl space-y-4 px-4 pt-4 pb-24">
-      <header className="overflow-hidden rounded-3xl bg-[var(--sidebar)] p-6 text-[var(--sidebar-fg)]">
-        <p className="text-xs tracking-[0.2em] text-[var(--brass)] uppercase">{hotelName}</p>
-        <h1 className="mt-1 text-2xl font-bold">
-          {stay && verified ? t("hello", { name: stay.firstName || "" }) : t("welcome")}
+    <div className="mx-auto max-w-xl px-4 pt-4 pb-28">
+      <Link
+        href="/table"
+        className="mb-3 inline-flex h-9 items-center gap-1.5 rounded-full bg-surface px-3.5 text-sm font-semibold shadow-[var(--shadow-soft)] ring-1 ring-border"
+      >
+        <ArrowRight className="size-4 ltr:rotate-180" aria-hidden="true" />
+        {t("backToMenu")}
+      </Link>
+
+      <header className="relative overflow-hidden rounded-[28px] bg-[var(--sidebar)] px-6 pt-6 pb-5 text-[var(--sidebar-fg)] shadow-[var(--shadow-soft)]">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -end-16 -top-20 size-56 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--brass)_45%,transparent),transparent_70%)]"
+        />
+        <p className="relative text-xs font-semibold tracking-[0.18em] text-[var(--brass)]">{hotelName}</p>
+        <h1 className="relative mt-2 text-[26px] leading-tight font-bold">
+          {stay && verified && stay.firstName ? t("hello", { name: stay.firstName }) : t("welcome")}
         </h1>
-        <p className="mt-1 flex items-center gap-2 text-sm opacity-80">
-          <KeyRound className="size-4" aria-hidden="true" />
-          {t("room", { room })}
-          {stay
-            ? ` | ${t("departure", { day: day(stay.departure, { weekday: "long", day: "numeric", month: "long" }), time: settings.checkOutTime })}`
-            : ""}
-        </p>
+        <div className="relative mt-4 flex flex-wrap gap-2 text-sm">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 font-semibold ring-1 ring-white/15">
+            <KeyRound className="size-4 text-[var(--brass)]" aria-hidden="true" />
+            {t("room", { room })}
+          </span>
+          {stay ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/15">
+              <CalendarCheck className="size-4 text-[var(--brass)]" aria-hidden="true" />
+              {t("departure", {
+                day: day(stay.departure, { weekday: "long", day: "numeric", month: "long" }),
+                time: settings.checkOutTime,
+              })}
+            </span>
+          ) : null}
+        </div>
       </header>
 
-      {stay && !verified ? <Verify /> : null}
-
-      {settings.wifiName ? (
-        <Card icon={<Wifi />} title={t("wifi")}>
-          <p className="text-sm" dir="ltr">
-            <span className="text-fg-muted">SSID</span> <b>{settings.wifiName}</b>
-            {settings.wifiPassword ? (
-              <>
-                {" | "}
-                <span className="text-fg-muted">{t("password")}</span>{" "}
-                <b className="select-all">{settings.wifiPassword}</b>
-              </>
-            ) : null}
-          </p>
-        </Card>
-      ) : null}
-
-      <div className="grid grid-cols-2 gap-3">
-        <Link
-          href="/table"
-          className="flex flex-col gap-2 rounded-2xl border border-border bg-surface p-4 font-semibold"
-        >
-          <UtensilsCrossed className="size-5 text-accent-text" aria-hidden="true" />
-          {t("roomService")}
-          <span className="text-xs font-normal text-fg-muted">{t("roomServiceHint")}</span>
-        </Link>
-        <Link
-          href={`/r/${slug}/book`}
-          className="flex flex-col gap-2 rounded-2xl border border-border bg-surface p-4 font-semibold"
-        >
-          <CalendarCheck className="size-5 text-accent-text" aria-hidden="true" />
-          {t("restaurant")}
-          <span className="text-xs font-normal text-fg-muted">{t("restaurantHint")}</span>
-        </Link>
-        <Link
-          href="/table"
-          className="col-span-2 flex items-center gap-3 rounded-2xl border border-border bg-surface p-4 font-semibold"
-        >
-          <BellRing className="size-5 text-accent-text" aria-hidden="true" />
-          <span className="flex-1">
-            {t("requests")}
-            <span className="block text-xs font-normal text-fg-muted">{t("requestsHint")}</span>
+      <nav className="mt-4 grid grid-cols-3 gap-2.5" aria-label={t("quick")}>
+        <Link href="/table#room-service" className={QUICK}>
+          <span className={QUICK_ICON}>
+            <UtensilsCrossed />
           </span>
+          {t("roomService")}
         </Link>
-      </div>
+        {calls.length ? (
+          <WaiterCall options={calls} room className={cn(QUICK, "w-full")}>
+            <span className={QUICK_ICON}>
+              <BellRing />
+            </span>
+            {t("reception")}
+          </WaiterCall>
+        ) : null}
+        <Link href={`/r/${slug}/book`} className={QUICK}>
+          <span className={QUICK_ICON}>
+            <CalendarCheck />
+          </span>
+          {t("restaurant")}
+        </Link>
+      </nav>
 
-      {settings.guestInfo ? (
-        <Card icon={<KeyRound />} title={t("info")}>
-          <p className="text-sm whitespace-pre-line">{settings.guestInfo}</p>
-        </Card>
-      ) : null}
-
-      {!stay ? (
-        <p className="rounded-2xl bg-surface-2 p-4 text-sm text-fg-muted">{t("noStay")}</p>
-      ) : !verified ? null : (
-        <>
-          {services.length ? (
-            <Spa
-              services={services}
-              currency={currency}
-              today={today}
-              timeZone={timeZone}
-              bookings={bookings}
+      <div className="mt-4 space-y-4">
+        {settings.wifiName ? (
+          <Section id="wifi" icon={<Wifi />} title={t("wifi")}>
+            <CopyRow
+              label={tc("network")}
+              value={settings.wifiName}
+              copyLabel={tc("copy")}
+              copiedLabel={tc("copied")}
             />
-          ) : null}
-          {minibar.length ? <Minibar items={minibar} currency={currency} /> : null}
-          <Bill folios={folios} currency={currency} />
-        </>
-      )}
+            {settings.wifiPassword ? (
+              <CopyRow
+                label={tc("password")}
+                value={settings.wifiPassword}
+                copyLabel={tc("copy")}
+                copiedLabel={tc("copied")}
+              />
+            ) : null}
+          </Section>
+        ) : null}
+
+        {!stay ? (
+          <p className="rounded-2xl bg-surface-2 p-4 text-sm leading-6 text-fg-muted">{t("noStay")}</p>
+        ) : null}
+
+        {services.length ? (
+          <Spa
+            services={services}
+            currency={currency}
+            today={today}
+            timeZone={timeZone}
+            bookings={bookings}
+            access={access}
+          />
+        ) : null}
+        {minibar.length ? <Minibar items={minibar} currency={currency} access={access} /> : null}
+        {stay ? <Bill folios={folios} currency={currency} access={access} /> : null}
+
+        {settings.guestInfo ? (
+          <Section icon={<Info />} title={t("info")}>
+            <p className="text-sm leading-7 whitespace-pre-line text-fg-muted">{settings.guestInfo}</p>
+          </Section>
+        ) : null}
+      </div>
     </div>
   );
 }
 
-function Card({
+/** "open": verified; "locked": the guest's name is asked where needed; "none": no stay in the room. */
+type Access = "open" | "locked" | "none";
+
+const QUICK =
+  "flex min-h-[92px] flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-3 text-center text-sm font-semibold shadow-[var(--shadow-soft)] transition active:scale-[0.98]";
+const QUICK_ICON =
+  "grid size-10 place-items-center rounded-full bg-[var(--sidebar)] text-[var(--brass)] [&_svg]:size-[18px]";
+
+function Section({
   icon,
   title,
+  aside,
   children,
   id,
 }: {
   icon: React.ReactNode;
   title: string;
+  aside?: React.ReactNode;
   children: React.ReactNode;
   id?: string;
 }) {
   return (
-    <section id={id} className="scroll-mt-4 rounded-2xl border border-border bg-surface p-4">
-      <h2 className="mb-2 flex items-center gap-2 font-semibold">
-        <span className="grid size-8 place-items-center rounded-lg bg-accent-soft text-accent-text [&_svg]:size-4">
+    <section
+      id={id}
+      className="scroll-mt-4 rounded-3xl border border-border bg-surface p-4 shadow-[var(--shadow-soft)] sm:p-5"
+    >
+      <h2 className="mb-3 flex items-center gap-2.5 text-[17px] font-bold">
+        <span className="grid size-9 place-items-center rounded-full bg-[var(--sidebar)] text-[var(--brass)] [&_svg]:size-[17px]">
           {icon}
         </span>
-        {title}
+        <span className="flex-1">{title}</span>
+        {aside}
       </h2>
       {children}
     </section>
   );
 }
 
-function Verify() {
+/** Asked only when the guest charges the room or opens the bill; remembered for the stay. */
+function Unlock({ reason }: { reason: string }) {
   const t = useTranslations("portal");
   const [name, setName] = useState("");
   const r = useRun();
   return (
-    <Card id="verify" icon={<KeyRound />} title={t("verifyTitle")}>
-      <p className="mb-3 text-sm text-fg-muted">{t("verifyHint")}</p>
+    <div className="rounded-2xl bg-[color-mix(in_oklch,var(--brass)_12%,var(--surface))] p-3.5 ring-1 ring-[color-mix(in_oklch,var(--brass)_35%,transparent)]">
+      <p className="mb-2.5 flex items-start gap-2 text-sm leading-6">
+        <Lock className="mt-0.5 size-4 shrink-0 text-[var(--brass)]" aria-hidden="true" />
+        {reason}
+      </p>
       <form className="flex gap-2" action={() => r.run(() => verifyStayAction(name))}>
         <input
-          className={inputCls}
+          className={cn(inputCls, "bg-surface")}
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder={t("lastName")}
           autoComplete="family-name"
           required
         />
-        <Button type="submit" disabled={r.pending}>
+        <Button type="submit" disabled={r.pending || name.trim().length < 2}>
           {t("verify")}
         </Button>
       </form>
       <div className="mt-2">
         <FormError error={r.error} />
       </div>
-    </Card>
+    </div>
   );
 }
 
@@ -230,12 +278,14 @@ function Spa({
   today,
   timeZone,
   bookings,
+  access,
 }: {
   services: Service[];
   currency: string;
   today: string;
   timeZone: string;
   bookings: { id: string; service: string; startsAt: string; people: number; status: string }[];
+  access: Access;
 }) {
   const t = useTranslations("portal");
   const tKind = useTranslations("pms.serviceKind");
@@ -266,8 +316,8 @@ function Spa({
   const svc = services.find((s) => s.id === serviceId)!;
   const upcoming = bookings.filter((b) => b.status === "booked");
   return (
-    <Card id="spa" icon={<Flower2 />} title={t("spa")}>
-      <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
+    <Section id="spa" icon={<Flower2 />} title={t("spa")}>
+      <div className="-mx-1 mb-3 flex snap-x gap-2.5 overflow-x-auto px-1 pb-1">
         {services.map((s) => (
           <button
             key={s.id}
@@ -276,18 +326,24 @@ function Spa({
               setServiceId(s.id);
               setPicked(null);
             }}
+            aria-pressed={s.id === serviceId}
             className={cn(
-              "shrink-0 rounded-full px-3 py-1.5 text-sm font-semibold ring-1",
-              s.id === serviceId ? "bg-accent text-accent-fg ring-accent" : "ring-border",
+              "flex w-40 shrink-0 snap-start flex-col items-start gap-1 rounded-2xl p-3 text-start ring-1 transition",
+              s.id === serviceId
+                ? "bg-[var(--sidebar)] text-[var(--sidebar-fg)] ring-[var(--sidebar)]"
+                : "bg-surface-2 ring-border",
             )}
           >
-            {s.name}
+            <span className="line-clamp-2 text-sm leading-snug font-bold">{s.name}</span>
+            <span className={cn("text-xs", s.id === serviceId ? "text-[var(--brass)]" : "text-fg-muted")}>
+              {t("minutes", { n: s.durationMin })} | {s.priceCents ? money(s.priceCents) : t("included")}
+            </span>
           </button>
         ))}
       </div>
-      <p className="mb-3 text-sm text-fg-muted">
-        {tKind(svc.kind)} | {t("minutes", { n: svc.durationMin })} ·{" "}
-        {svc.priceCents ? t("perPerson", { price: money(svc.priceCents) }) : t("included")}
+      <p className="mb-3 text-sm leading-6 text-fg-muted">
+        {tKind(svc.kind)}
+        {svc.priceCents ? ` | ${t("perPerson", { price: money(svc.priceCents) })}` : ""}
         {svc.description ? <span className="mt-1 block">{svc.description}</span> : null}
       </p>
       <div className="mb-3 grid grid-cols-2 gap-2">
@@ -314,7 +370,7 @@ function Spa({
           ))}
         </select>
       </div>
-      <div className="mb-3 flex flex-wrap gap-2">
+      <div className="mb-3 grid grid-cols-4 gap-2">
         {slots.map((s) => {
           const off = s.past || s.left < people;
           return (
@@ -324,8 +380,8 @@ function Spa({
               disabled={off}
               onClick={() => setPicked(s.time)}
               className={cn(
-                "rounded-xl px-3 py-2 text-sm font-semibold tabular-nums ring-1",
-                picked === s.time ? "bg-accent text-accent-fg ring-accent" : "ring-border",
+                "h-10 rounded-xl text-sm font-semibold tabular-nums ring-1 transition",
+                picked === s.time ? "bg-accent text-accent-fg ring-accent" : "bg-surface ring-border",
                 off && "opacity-30",
               )}
               dir="ltr"
@@ -334,26 +390,36 @@ function Spa({
             </button>
           );
         })}
-        {!slots.length ? <p className="text-sm text-fg-muted">{t("noSlots")}</p> : null}
       </div>
-      <FormError error={r.error} />
-      <Button
-        className="w-full"
-        disabled={!picked || r.pending}
-        onClick={() =>
-          picked &&
-          r.run(
-            () => bookSpaAction(serviceId, day, picked, people),
-            () => setDone(!done),
-          )
-        }
-      >
-        {picked ? t("bookAt", { time: picked, price: money(svc.priceCents * people) }) : t("pickSlot")}
-      </Button>
+      {!slots.length ? <p className="mb-3 text-sm text-fg-muted">{t("noSlots")}</p> : null}
+      {access === "locked" && picked ? (
+        <Unlock reason={t("unlockSpa")} />
+      ) : access === "none" ? null : (
+        <>
+          <FormError error={r.error} />
+          <Button
+            className="h-12 w-full rounded-2xl text-[15px]"
+            disabled={!picked || r.pending}
+            onClick={() =>
+              picked &&
+              r.run(
+                () => bookSpaAction(serviceId, day, picked, people),
+                () => {
+                  setPicked(null);
+                  setDone(!done);
+                },
+              )
+            }
+          >
+            {picked ? t("bookAt", { time: picked, price: money(svc.priceCents * people) }) : t("pickSlot")}
+          </Button>
+        </>
+      )}
       {upcoming.length ? (
         <ul className="mt-4 space-y-2 border-t border-border pt-3 text-sm">
           {upcoming.map((b) => (
-            <li key={b.id} className="flex items-center gap-2">
+            <li key={b.id} className="flex items-center gap-2 rounded-xl bg-success-soft px-3 py-2">
+              <Check className="size-4 shrink-0 text-success" aria-hidden="true" />
               <span className="flex-1">
                 <b>{b.service}</b> | {when(b.startsAt)} | {t("peopleN", { n: b.people })}
               </span>
@@ -362,7 +428,7 @@ function Spa({
           ))}
         </ul>
       ) : null}
-    </Card>
+    </Section>
   );
 }
 
@@ -384,9 +450,11 @@ function CancelSpa({ id }: { id: string }) {
 function Minibar({
   items,
   currency,
+  access,
 }: {
   items: { id: string; name: string; priceCents: number }[];
   currency: string;
+  access: Access;
 }) {
   const t = useTranslations("portal");
   const money = useMoney(currency);
@@ -400,98 +468,141 @@ function Minibar({
     (s, l) => s + l.quantity * (items.find((i) => i.id === l.itemId)?.priceCents ?? 0),
     0,
   );
+  const step = (id: string, d: number) => {
+    setSent(false);
+    setQty({ ...qty, [id]: Math.min(50, Math.max(0, (qty[id] ?? 0) + d)) });
+  };
   return (
-    <Card id="minibar" icon={<Wine />} title={t("minibar")}>
-      <p className="mb-2 text-sm text-fg-muted">{t("minibarHint")}</p>
-      <ul className="divide-y divide-border">
-        {items.map((i) => (
-          <li key={i.id} className="flex items-center gap-3 py-2 text-sm">
-            <span className="flex-1">{i.name}</span>
-            <span className="text-fg-muted tabular-nums">{money(i.priceCents)}</span>
-            <span className="flex items-center gap-1">
-              <button
-                type="button"
-                className="grid size-8 place-items-center rounded-full ring-1 ring-border"
-                onClick={() => setQty({ ...qty, [i.id]: Math.max(0, (qty[i.id] ?? 0) - 1) })}
-                aria-label="−"
-              >
-                −
-              </button>
-              <span className="w-6 text-center tabular-nums">{qty[i.id] ?? 0}</span>
-              <button
-                type="button"
-                className="grid size-8 place-items-center rounded-full ring-1 ring-border"
-                onClick={() => setQty({ ...qty, [i.id]: Math.min(50, (qty[i.id] ?? 0) + 1) })}
-                aria-label="+"
-              >
-                +
-              </button>
-            </span>
-          </li>
-        ))}
+    <Section id="minibar" icon={<Wine />} title={t("minibar")}>
+      <p className="mb-3 text-sm leading-6 text-fg-muted">{t("minibarHint")}</p>
+      <ul className="grid grid-cols-2 gap-2">
+        {items.map((i) => {
+          const n = qty[i.id] ?? 0;
+          return (
+            <li
+              key={i.id}
+              className={cn(
+                "flex flex-col justify-between gap-2 rounded-2xl p-3 ring-1 transition",
+                n ? "bg-accent-soft ring-accent/40" : "bg-surface-2 ring-border",
+              )}
+            >
+              <span className="line-clamp-2 text-sm leading-snug font-semibold">{i.name}</span>
+              <span className="flex items-center justify-between gap-1">
+                <span className="text-xs text-fg-muted tabular-nums">{money(i.priceCents)}</span>
+                {access === "none" ? null : (
+                  <span className="flex items-center gap-1">
+                    {n ? (
+                      <>
+                        <button
+                          type="button"
+                          className="grid size-8 place-items-center rounded-full bg-surface ring-1 ring-border"
+                          onClick={() => step(i.id, -1)}
+                          aria-label={t("less", { name: i.name })}
+                        >
+                          <Minus className="size-3.5" aria-hidden="true" />
+                        </button>
+                        <span className="w-5 text-center text-sm font-bold tabular-nums">{n}</span>
+                      </>
+                    ) : null}
+                    <button
+                      type="button"
+                      className="grid size-8 place-items-center rounded-full bg-accent text-accent-fg"
+                      onClick={() => step(i.id, 1)}
+                      aria-label={t("more", { name: i.name })}
+                    >
+                      <Plus className="size-3.5" aria-hidden="true" />
+                    </button>
+                  </span>
+                )}
+              </span>
+            </li>
+          );
+        })}
       </ul>
-      <FormError error={r.error} />
       {sent ? (
-        <p className="mt-2 rounded-xl bg-success-soft px-3 py-2 text-sm text-success">{t("minibarThanks")}</p>
+        <p className="mt-3 flex items-center gap-2 rounded-xl bg-success-soft px-3 py-2 text-sm text-success">
+          <Check className="size-4" aria-hidden="true" />
+          {t("minibarThanks")}
+        </p>
       ) : null}
-      <Button
-        className="mt-3 w-full"
-        disabled={!lines.length || r.pending}
-        onClick={() =>
-          r.run(
-            () => declareMinibarAction(lines),
-            () => {
-              setQty({});
-              setSent(true);
-            },
-          )
-        }
-      >
-        {t("minibarSend", { total: money(total) })}
-      </Button>
-    </Card>
+      {lines.length ? (
+        access === "locked" ? (
+          <div className="mt-3">
+            <Unlock reason={t("unlockMinibar")} />
+          </div>
+        ) : (
+          <>
+            <FormError error={r.error} />
+            <Button
+              className="mt-3 h-12 w-full rounded-2xl text-[15px]"
+              disabled={r.pending}
+              onClick={() =>
+                r.run(
+                  () => declareMinibarAction(lines),
+                  () => {
+                    setQty({});
+                    setSent(true);
+                  },
+                )
+              }
+            >
+              {t("minibarSend", { total: money(total) })}
+            </Button>
+          </>
+        )
+      ) : null}
+    </Section>
   );
 }
 
 function Bill({
   folios,
   currency,
+  access,
 }: {
   folios: { id: string; number: number; balanceCents: number; lines: Line[] }[];
   currency: string;
+  access: Access;
 }) {
   const t = useTranslations("portal");
   const money = useMoney(currency);
   const day = useDay();
   const label = useLineLabel();
   const balance = folios.reduce((s, f) => s + f.balanceCents, 0);
+  const lines = folios.flatMap((f) => f.lines);
+  if (access !== "open")
+    return (
+      <Section id="bill" icon={<Receipt />} title={t("bill")}>
+        <Unlock reason={t("unlockBill")} />
+      </Section>
+    );
   return (
-    <Card id="bill" icon={<Receipt />} title={t("bill")}>
-      {folios.flatMap((f) => f.lines).length ? (
-        <ul className="space-y-1.5 text-sm">
-          {folios.flatMap((f) =>
-            f.lines.map((l) => (
-              <li key={l.id} className="flex gap-2">
-                <span className="w-14 shrink-0 text-fg-muted">{day(l.businessDate)}</span>
-                <span className="flex-1">
-                  {label(l)}
-                  {l.quantity > 1 ? ` × ${l.quantity}` : ""}
-                </span>
-                <span className={cn("tabular-nums", l.amountCents < 0 && "text-success")}>
-                  {money(l.amountCents)}
-                </span>
-              </li>
-            )),
-          )}
+    <Section id="bill" icon={<Receipt />} title={t("bill")}>
+      <div className="mb-3 flex items-end justify-between rounded-2xl bg-[var(--sidebar)] px-4 py-3.5 text-[var(--sidebar-fg)]">
+        <span className="text-sm opacity-80">{balance < 0 ? t("credit") : t("balance")}</span>
+        <span className={cn("text-xl font-bold tabular-nums", balance < 0 && "text-[var(--brass)]")}>
+          {money(Math.abs(balance))}
+        </span>
+      </div>
+      {lines.length ? (
+        <ul className="divide-y divide-border text-sm">
+          {lines.map((l) => (
+            <li key={l.id} className="flex items-center gap-3 py-2.5">
+              <span className="w-14 shrink-0 text-xs text-fg-muted">{day(l.businessDate)}</span>
+              <span className="flex-1">
+                {label(l)}
+                {l.quantity > 1 ? ` × ${l.quantity}` : ""}
+              </span>
+              <span className={cn("font-semibold tabular-nums", l.amountCents < 0 && "text-success")}>
+                {money(l.amountCents)}
+              </span>
+            </li>
+          ))}
         </ul>
       ) : (
         <p className="text-sm text-fg-muted">{t("billEmpty")}</p>
       )}
-      <p className="mt-3 flex justify-between border-t border-border pt-3 font-bold">
-        <span>{t("balance")}</span>
-        <span className="tabular-nums">{money(balance)}</span>
-      </p>
-      <p className="mt-2 text-xs text-fg-muted">{t("billHint")}</p>
-    </Card>
+      <p className="mt-3 text-xs leading-5 text-fg-muted">{t("billHint")}</p>
+    </Section>
   );
 }

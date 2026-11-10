@@ -1,6 +1,16 @@
 "use client";
 
-import { Check, Copy, Flower2, Receipt, Sparkles, UtensilsCrossed, Wifi, Wine } from "lucide-react";
+import {
+  Check,
+  ConciergeBell,
+  Copy,
+  Flower2,
+  Receipt,
+  Sparkles,
+  UtensilsCrossed,
+  Wifi,
+  Wine,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
@@ -9,13 +19,14 @@ import { useDay } from "@/components/pms/kit";
 import { WaiterCall, type CallOption } from "./waiter-call";
 
 const TILE =
-  "flex min-h-24 flex-col items-start justify-between gap-2 rounded-2xl border border-border bg-surface p-3.5 text-start font-semibold shadow-[var(--shadow-soft)] transition active:scale-[0.98] hover:border-border-strong";
-const ICON = "grid size-9 place-items-center rounded-xl bg-accent-soft text-accent-text [&_svg]:size-[18px]";
+  "flex min-h-[96px] flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-3 text-center text-[13.5px] leading-tight font-semibold shadow-[var(--shadow-soft)] transition active:scale-[0.97] hover:border-border-strong";
+const ICON =
+  "grid size-10 place-items-center rounded-full bg-[var(--sidebar)] text-[var(--brass)] [&_svg]:size-[18px]";
 
 /**
- * What a guest scanning the QR in their room needs first: the room and the day they leave, then
- * one tap to room service, the minibar, the spa, housekeeping and reception, the bill and the
- * Wi-Fi. The room service menu follows below.
+ * What a guest scanning the QR in their room needs first: the room and the day they leave, the
+ * Wi-Fi in one tap, then room service, the minibar, the spa, housekeeping and reception, and the
+ * bill. The room service menu follows below.
  */
 export function RoomConcierge({
   room,
@@ -35,15 +46,56 @@ export function RoomConcierge({
   const [showWifi, setShowWifi] = useState(false);
   return (
     <section aria-label={t("title")} className="mx-4 mt-3 space-y-3">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        <h2 className="text-lg font-bold">{t("title")}</h2>
-        {departure ? (
-          <p className="text-sm text-fg-muted">
-            {t("leaving", {
-              day: day(departure, { weekday: "long", day: "numeric", month: "long" }),
-              time: checkOutTime,
-            })}
-          </p>
+      <div className="relative overflow-hidden rounded-[26px] bg-[var(--sidebar)] p-5 text-[var(--sidebar-fg)] shadow-[var(--shadow-soft)]">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -end-14 -top-16 size-48 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--brass)_40%,transparent),transparent_70%)]"
+        />
+        <div className="relative flex items-end justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-xs font-semibold tracking-[0.18em] text-[var(--brass)]">{t("title")}</p>
+            <p className="mt-1 text-[34px] leading-none font-bold tabular-nums">{room}</p>
+          </div>
+          {departure ? (
+            <p className="text-end text-sm leading-5 opacity-85">
+              {t("leaving", {
+                day: day(departure, { weekday: "long", day: "numeric", month: "long" }),
+                time: checkOutTime,
+              })}
+            </p>
+          ) : null}
+        </div>
+        {wifi ? (
+          <button
+            type="button"
+            onClick={() => setShowWifi((v) => !v)}
+            aria-expanded={showWifi}
+            className="relative mt-4 flex w-full items-center gap-2.5 rounded-2xl bg-white/10 px-3.5 py-2.5 text-start text-sm ring-1 ring-white/15 transition hover:bg-white/15"
+          >
+            <Wifi className="size-[18px] shrink-0 text-[var(--brass)]" aria-hidden="true" />
+            <span className="min-w-0 flex-1">
+              <span className="block text-xs opacity-70">{t("wifi")}</span>
+              <span className="block truncate font-semibold" dir="ltr">
+                {wifi.name}
+              </span>
+            </span>
+            <span className="rounded-full bg-[var(--brass)] px-3 py-1 text-xs font-bold text-[var(--sidebar)]">
+              {showWifi ? t("hide") : t("password")}
+            </span>
+          </button>
+        ) : null}
+        {wifi && showWifi ? (
+          <div className="animate-pop-in relative mt-2 rounded-2xl bg-surface p-3 text-fg">
+            <CopyRow label={t("network")} value={wifi.name} copyLabel={t("copy")} copiedLabel={t("copied")} />
+            {wifi.password ? (
+              <CopyRow
+                label={t("password")}
+                value={wifi.password}
+                copyLabel={t("copy")}
+                copiedLabel={t("copied")}
+              />
+            ) : null}
+          </div>
         ) : null}
       </div>
       <div className="grid grid-cols-3 gap-2.5">
@@ -79,39 +131,19 @@ export function RoomConcierge({
           </span>
           {t("bill")}
         </Link>
-        {wifi ? (
-          <button
-            type="button"
-            onClick={() => setShowWifi((v) => !v)}
-            aria-expanded={showWifi}
-            className={cn(TILE, showWifi && "border-accent ring-2 ring-accent/30")}
-          >
-            <span className={ICON}>
-              <Wifi />
-            </span>
-            {t("wifi")}
-          </button>
-        ) : null}
+        <Link href="/table/stay" className={TILE}>
+          <span className={ICON}>
+            <ConciergeBell />
+          </span>
+          {t("myStay")}
+        </Link>
       </div>
-      {wifi && showWifi ? (
-        <div className="animate-pop-in rounded-2xl border border-border bg-surface p-4 shadow-[var(--shadow-soft)]">
-          <CopyRow label={t("network")} value={wifi.name} copyLabel={t("copy")} copiedLabel={t("copied")} />
-          {wifi.password ? (
-            <CopyRow
-              label={t("password")}
-              value={wifi.password}
-              copyLabel={t("copy")}
-              copiedLabel={t("copied")}
-            />
-          ) : null}
-        </div>
-      ) : null}
       <div id="room-service" className="scroll-mt-4" />
     </section>
   );
 }
 
-function CopyRow({
+export function CopyRow({
   label,
   value,
   copyLabel,

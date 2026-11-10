@@ -9,7 +9,7 @@ import { enforceRateLimit } from "@/server/infra/rate-limit";
 import { requireGuest } from "@/server/modules/guest/current";
 import { signValue } from "@/server/modules/guest/cookies";
 import { STAY_COOKIE, verifiedStay } from "@/server/modules/pms/portal-session";
-import { sameName, stayOfGuest } from "@/server/modules/pms/portal";
+import { nameMatches, stayOfGuest } from "@/server/modules/pms/portal";
 import { bookServiceAsGuest, cancelServiceBooking, serviceDay } from "@/server/modules/pms/wellness";
 import { declareMinibar } from "@/server/modules/pms/minibar";
 
@@ -20,13 +20,13 @@ async function requireStay() {
   return { guest: v.guest, stay: v.stay };
 }
 
-/** The guest types their last name once; the phone then sees the bill and can charge the room. */
+/** The guest types their name once; the phone then sees the bill and can charge the room. */
 export async function verifyStayAction(lastName: string) {
   return runAction(async () => {
     const guest = await requireGuest();
     await enforceRateLimit("dinerVerify", guest.guestId);
     const row = await stayOfGuest(db, guest);
-    if (!row || !sameName(lastName, row.guest.lastName)) throw new AppError("VALIDATION", "name_mismatch");
+    if (!row || !nameMatches(lastName, row.guest)) throw new AppError("VALIDATION", "name_mismatch");
     const store = await cookies();
     store.set(STAY_COOKIE, signValue(`${guest.participant.id}.${row.stay.id}`), {
       httpOnly: true,

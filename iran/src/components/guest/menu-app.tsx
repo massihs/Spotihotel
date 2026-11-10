@@ -640,24 +640,64 @@ type CardProps = {
 
 /**
  * Row card: the text on the reading side (name, Latin name, description, then price and "+" in
- * the thumb's reach), the photo on the other. Atelier shows no tile for dishes without a photo.
+ * the thumb's reach), the photo on the other. A dish without a photo gets no empty tile: its text
+ * takes the whole card.
  */
-function ListCard({
-  p,
-  eager,
-  money,
-  popular,
-  cart,
-  adding,
-  quickAdd,
-  open,
-  categoryIcon,
-  t,
-  theme,
-}: CardProps) {
+function ListCard({ p, eager, money, popular, cart, adding, quickAdd, open, t }: CardProps) {
   const tags = p.tags.filter((x) => TAG_META[x]).slice(0, 3);
   const { latin, text } = splitDescription(p.description, p.name);
-  const photo = p.images[0] || theme !== "atelier";
+  const photo = !!p.images[0];
+  if (!photo)
+    return (
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => open(p.id)}
+        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && open(p.id)}
+        className={cn(
+          "flex h-full w-full cursor-pointer items-center gap-3 rounded-2xl border border-border bg-surface px-4 py-3.5 text-start shadow-[var(--shadow-soft)] transition-[transform,border-color] hover:border-border-strong active:scale-[0.99]",
+          "atelier:rounded-none atelier:border-0 atelier:border-b atelier:bg-transparent atelier:px-0 atelier:py-5 atelier:hover:border-border",
+          "nuit:border-0 nuit:bg-transparent nuit:px-0 nuit:py-3",
+          !p.isAvailable && "opacity-60",
+        )}
+      >
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <p className="line-clamp-2 font-menu-display text-[16.5px] leading-snug font-bold atelier:text-[22px] atelier:leading-tight atelier:font-medium nuit:[font-family:var(--app-font)] nuit:font-semibold">
+              {p.name}
+            </p>
+            {popular.has(p.id) ? <PopularBadge className="shrink-0" /> : null}
+          </div>
+          {latin ? (
+            <p
+              className="mt-0.5 truncate text-xs tracking-wide text-fg-subtle"
+              dir="ltr"
+              style={{ textAlign: "end" }}
+            >
+              {latin}
+            </p>
+          ) : null}
+          {text ? <p className="mt-1 line-clamp-2 text-sm leading-6 text-fg-muted">{text}</p> : null}
+          {tags.length ? (
+            <div className="mt-1.5 flex flex-wrap items-center gap-1">
+              {tags.map((tag) => (
+                <TagChip key={tag} tag={tag} compact />
+              ))}
+            </div>
+          ) : null}
+          <Price product={p} money={money} className="mt-1.5" />
+        </div>
+        <InCartBadge n={cart.byProduct[p.id] ?? 0} />
+        {p.isAvailable ? (
+          <AddButton
+            label={t("guest.quickAdd", { name: p.name })}
+            busy={adding === p.id}
+            onClick={() => quickAdd(p)}
+            className="size-10"
+          />
+        ) : null}
+      </div>
+    );
   return (
     <div
       role="button"
@@ -706,16 +746,12 @@ function ListCard({
       </div>
       {photo ? (
         <div className="relative shrink-0 self-start">
-          {p.images[0] ? (
-            <ProductImage
-              product={p}
-              size="sm"
-              className={cn("size-24 rounded-2xl atelier:rounded-xl", !p.isAvailable && "grayscale")}
-              eager={eager}
-            />
-          ) : (
-            <DishPlaceholder icon={categoryIcon.get(p.id) ?? ""} className="size-24 rounded-2xl" />
-          )}
+          <ProductImage
+            product={p}
+            size="sm"
+            className={cn("size-24 rounded-2xl atelier:rounded-xl", !p.isAvailable && "grayscale")}
+            eager={eager}
+          />
           <InCartBadge n={cart.byProduct[p.id] ?? 0} className="absolute -end-1.5 -top-1.5" />
         </div>
       ) : (

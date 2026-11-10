@@ -8,9 +8,10 @@ import { getPmsSettings } from "./setup";
 import { bookingsOfStay } from "./wellness";
 
 /**
- * The guest portal behind a room's QR code. The stay is the one checked in to that room; it is
- * only shown to a phone that proved it belongs to the guest (their last name, remembered in a
- * signed cookie) so that someone scanning the code cannot read the bill or charge the room.
+ * The guest portal behind a room's QR code. Services, spa times, the minibar and the Wi-Fi are
+ * open to anyone in the room; the bill and charging the room (spa booking, minibar) need a phone
+ * that proved it belongs to the guest (their name, asked once and remembered in a signed cookie),
+ * so that someone else scanning the code cannot read the bill or charge the room.
  */
 export async function stayOfGuest(db: DbOrTx, guest: GuestContext) {
   if (guest.table.kind !== "room") return null;
@@ -33,15 +34,36 @@ export async function stayOfGuest(db: DbOrTx, guest: GuestContext) {
   return row;
 }
 
+/**
+ * The name a guest types to unlock their bill, compared loosely: accents, case, spaces, hyphens,
+ * the half-space (ZWNJ) and the Arabic forms of Persian letters (ي/ی, ك/ک, ة/ه…) do not matter.
+ */
+function normName(s: string) {
+  return s
+    .normalize("NFKD")
+    .replace(/\p{M}/gu, "")
+    .replace(/[يى]/g, "ی")
+    .replace(/ك/g, "ک")
+    .replace(/ة/g, "ه")
+    .replace(/[أإآ]/g, "ا")
+    .replace(/ؤ/g, "و")
+    .replace(/[\s'’\u200c\u200d_.-]/g, "")
+    .toLowerCase();
+}
+
 /** Accent- and case-insensitive comparison of a typed last name. */
 export function sameName(typed: string, real: string) {
-  const norm = (s: string) =>
-    s
-      .normalize("NFKD")
-      .replace(/\p{M}/gu, "")
-      .replace(/[\s'’-]/g, "")
-      .toLowerCase();
-  return norm(typed).length >= 2 && norm(typed) === norm(real);
+  const t = normName(typed);
+  return t.length >= 2 && t === normName(real);
+}
+
+/** The last name, or the full name in either order. */
+export function nameMatches(typed: string, guest: { firstName: string | null; lastName: string }) {
+  const first = guest.firstName ?? "";
+  return (
+    sameName(typed, guest.lastName) ||
+    (!!first && (sameName(typed, `${first}${guest.lastName}`) || sameName(typed, `${guest.lastName}${first}`)))
+  );
 }
 
 export async function portalData(db: Database, guest: GuestContext, stayId: string | null) {
@@ -59,9 +81,10 @@ export async function portalData(db: Database, guest: GuestContext, stayId: stri
       ),
     )
     .orderBy(asc(hotelServices.sortOrder), asc(hotelServices.name));
-  if (!stayId) return { settings, services, minibar: [], folios: [], bookings: [] };
-  const [minibar, folioIds, bookings] = await Promise.all([
-    settings.minibarSelfService ? listMinibar(db, rid, true) : Promise.resolve([]),
+  // The minibar's list and prices are no secret: shown before the guest unlocks their bill.
+  const minibar = settings.minibarSelfService ? await listMinibar(db, rid, true) : [];
+  if (!stayId) return { settings, services, minibar, folios: [], bookings: [] };
+  const [folioIds, bookings] = await Promise.all([
     db
       .select({ id: folios.id })
       .from(folios)

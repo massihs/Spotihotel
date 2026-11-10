@@ -301,6 +301,33 @@ const MENU: [category: string, items: [name: string, toman: number][]][] = [
   ],
 ];
 
+/** What the guest reads under each dish. */
+const DISH_INFO: Record<string, string> = {
+  "سوپ جو": "سوپ جو پرک با قارچ، هویج و خامه؛ با لیمو تازه سرو می‌شود.",
+  "کشک بادمجان": "بادمجان کبابی، کشک محلی، نعناع داغ و پیاز سرخ‌شده، با نان سنگک.",
+  "میرزا قاسمی": "بادمجان دودی گیلانی با سیر، گوجه و تخم‌مرغ محلی.",
+  "سالاد سزار": "کاهو رسمی، مرغ گریل، نان سیر برشته، پنیر پارمزان و سس سزار.",
+  "ماست و موسیر": "ماست چکیده با موسیر کوهی؛ همراه همیشگی کباب.",
+  "چلوکباب سلطانی": "یک سیخ برگ و یک سیخ کوبیده با برنج ایرانی زعفرانی، گوجه کبابی و کره.",
+  "چلو جوجه کباب": "سینه مرغ مزه‌دارشده با زعفران و لیمو، برنج ایرانی و گوجه کبابی.",
+  "کباب کوبیده": "دو سیخ کوبیده گوشت گوسفندی با برنج زعفرانی یا نان تازه.",
+  "زرشک‌پلو با مرغ": "ران مرغ آرام‌پز در سس زعفرانی با زرشک، خلال پسته و بادام.",
+  قورمه‌سبزی: "خورش سبزی معطر با گوشت گوسفندی، لوبیا قرمز و لیمو عمانی.",
+  فسنجان: "خورش گردو و رب انار با مرغ؛ ملس، به سبک شمال.",
+  "باقالی‌پلو با ماهیچه": "ماهیچه گوسفندی هشت ساعت پخت، باقالی‌پلو با شوید تازه.",
+  "ماهی قزل‌آلا": "قزل‌آلای کبابی با سبزی معطر، لیمو و پلو سبزی.",
+  "استیک فیله": "فیله گوساله گریل، سس قارچ، سیب‌زمینی تنوری و سبزیجات بخارپز.",
+  "بستنی سنتی": "بستنی زعفرانی با پسته و تکه‌های خامه.",
+  "فالوده شیرازی": "رشته‌های خنک فالوده با گلاب، آب لیمو و آلبالو.",
+  "کیک شکلاتی": "کیک شکلات تلخ گرم با مغز روان، کنار یک اسکوپ بستنی وانیل.",
+  "چای و نبات": "چای ایرانی دم‌کرده با نبات زعفرانی.",
+  "قهوه اسپرسو": "اسپرسوی دوبل از دانه‌های تازه برشته‌شده.",
+  کاپوچینو: "اسپرسو، شیر بخارداده و فوم نرم.",
+  "دوغ محلی": "دوغ گازدار محلی با پونه کوهی.",
+  "آبمیوه طبیعی": "پرتقال یا انار تازه‌گرفته، بسته به فصل.",
+  "آب معدنی": "بطری ۵۰۰ میلی‌لیتری.",
+};
+
 /** The menu's sections, each with its icon (the guest menu shows it on dishes without a photo). */
 const MENU_ICONS: Record<string, string> = {
   پیش‌غذا: "salad",
@@ -1317,6 +1344,17 @@ export async function seedParsian(ownerEmail: string, days = 30, opts: { build?:
           .where(
             and(eq(categories.restaurantId, existing.id), eq(categories.name, name), isNull(categories.icon)),
           );
+      for (const [name, description] of Object.entries(DISH_INFO))
+        await db
+          .update(products)
+          .set({ description })
+          .where(
+            and(
+              eq(products.restaurantId, existing.id),
+              eq(products.name, name),
+              isNull(products.description),
+            ),
+          );
       // The corporate rate is negotiated: never on the hotel's public booking page.
       await db
         .update(ratePlans)
@@ -1641,6 +1679,7 @@ export async function seedParsian(ownerEmail: string, days = 30, opts: { build?:
           restaurantId: rid,
           categoryId: c!.id,
           name,
+          description: DISH_INFO[name] ?? null,
           priceCents: T(toman),
           taxRateId: vat?.id,
           sortOrder: pi,

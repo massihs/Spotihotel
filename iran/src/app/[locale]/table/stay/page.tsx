@@ -6,6 +6,7 @@ import { portalData } from "@/server/modules/pms/portal";
 import { StayPortal } from "@/components/guest/stay-portal";
 import { SessionExpired, GuestSkeleton } from "@/components/guest/states";
 import { localDay } from "@/lib/period";
+import { guestCallsOf } from "@/server/modules/team/sections";
 
 /** "My stay": the hotel portal behind a room's QR (Wi-Fi, spa, minibar, the bill…). */
 export default function StayPortalPage() {
@@ -20,7 +21,10 @@ async function Portal() {
   const guest = await getGuest();
   if (!guest || guest.table.kind !== "room") return <SessionExpired />;
   const v = await verifiedStay();
-  const data = await portalData(db, guest, v.stay?.id ?? null);
+  const [data, calls] = await Promise.all([
+    portalData(db, guest, v.stay?.id ?? null),
+    guestCallsOf(db, guest.restaurant.id, { room: true }),
+  ]);
   return (
     <div data-brand={guest.restaurant.brandColor} className="min-h-dvh bg-bg">
       <StayPortal
@@ -34,6 +38,7 @@ async function Portal() {
           v.row ? { firstName: v.stay ? v.row.guest.firstName : "", departure: v.row.stay.departure } : null
         }
         verified={!!v.stay}
+        calls={calls.map(({ key, label, icon }) => ({ key, label, icon }))}
         settings={{
           wifiName: data.settings.wifiName,
           wifiPassword: data.settings.wifiPassword,
