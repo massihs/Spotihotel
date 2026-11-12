@@ -57,6 +57,8 @@ export const pmsSettings = pgTable("pms_settings", {
   currencies: jsonb().$type<{ code: string; rateCents: number }[]>().notNull().default([]),
   /** Cash a receptionist starts a shift with, by default. */
   deskFloatCents: money().notNull().default(0),
+  /** Settings of the service departments (laundry, damages, internet, TV, housekeeping, engineering). */
+  services: jsonb().$type<Record<string, unknown>>().notNull().default({}),
   nextBlockNumber: integer().notNull().default(1),
   nextStayNumber: integer().notNull().default(1001),
   nextFolioNumber: integer().notNull().default(1),

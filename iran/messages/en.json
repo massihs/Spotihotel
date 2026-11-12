@@ -582,7 +582,13 @@
     "housekeeping": "Housekeeping & maintenance",
     "hotelReports": "Hotel reports",
     "reservation": "Reservations",
-    "cashier": "Cashier"
+    "cashier": "Cashier",
+    "laundry": "Laundry",
+    "damages": "Damages",
+    "minibar": "Minibar",
+    "internet": "Internet",
+    "tv": "In-room TV",
+    "engineering": "Engineering"
   },
   "dashboard": {
     "welcome": "Hello {name}",
@@ -1088,7 +1094,17 @@
     "foreign_amount_required": "Enter the foreign amount.",
     "duplicate_currency": "Each currency only once.",
     "cart_other_outlet": "Your cart is from another restaurant.",
-    "product_other_outlet": "This dish is not on this restaurant's menu."
+    "product_other_outlet": "This dish is not on this restaurant's menu.",
+    "no_stay_in_room": "Nobody is staying in this room.",
+    "ticket_settled": "This ticket is already settled.",
+    "ticket_cancelled": "This ticket is cancelled.",
+    "ticket_on_bill": "Already on the bill: void it from the bill.",
+    "not_waivable": "Only a damage can be waived.",
+    "username_taken": "This username is taken.",
+    "profile_not_found": "Profile not found.",
+    "unknown_package": "Unknown package.",
+    "room_not_inspected": "The room is not inspected yet.",
+    "unknown_kind": "Unknown department."
   },
   "tables": {
     "title": "Tables & QR codes",
@@ -4324,7 +4340,10 @@
       "city_tax": "City tax",
       "misc": "Miscellaneous",
       "payment": "Payment",
-      "transfer": "Transfer"
+      "transfer": "Transfer",
+      "damage": "Damages",
+      "internet": "Internet",
+      "tv": "TV"
     },
     "method": {
       "cash": "Cash",
@@ -5467,9 +5486,15 @@
     "title": "Housekeeping & maintenance",
     "subtitle": "Today's plan, each housekeeper's list, inspection and repairs.",
     "tabs": {
-      "plan": "Today's plan",
+      "plan": "Cleaning rack",
       "mine": "My rooms",
-      "maintenance": "Maintenance"
+      "maintenance": "Maintenance",
+      "base": "Base data",
+      "log": "Logbook",
+      "operations": "Operations",
+      "rack": "Housekeeping rack",
+      "reports": "Reports",
+      "settings": "Settings"
     },
     "counts": {
       "dirty": "Dirty",
@@ -5729,7 +5754,24 @@
       "counted": "Counted",
       "difference": "Difference",
       "handedTo": "Handed to",
-      "note": "Note"
+      "note": "Note",
+      "date": "Date",
+      "items": "Items",
+      "settlement": "Settlement",
+      "item": "Item",
+      "qty": "Qty",
+      "tickets": "Tickets",
+      "pending": "Unpaid",
+      "at": "Time",
+      "event": "Event",
+      "detail": "Detail",
+      "title": "Title",
+      "priority": "Priority",
+      "assigned": "Assigned to",
+      "equipment": "Equipment",
+      "cleaned": "Cleaned",
+      "inspected": "Inspected",
+      "credits": "Minutes"
     },
     "folioKind": {
       "guest": "Guest",
@@ -5856,5 +5898,353 @@
     "transferred": "Transferred.",
     "transferAmount": "Transfer {amount}",
     "transfer": "Transfer"
+  },
+  "laundry": {
+    "title": "Laundry",
+    "subtitle": "Guests' laundry: register bags, track them to delivery, settle on the bill or at the desk, reports.",
+    "today": "Today's tickets",
+    "tabs": {
+      "register": "Register",
+      "tickets": "Tickets",
+      "base": "Base data",
+      "cashbox": "Cash desk",
+      "reports": "Reports",
+      "settings": "Settings"
+    }
+  },
+  "damages": {
+    "title": "Damages",
+    "subtitle": "Damages found in rooms: record them, settle on the bill or at the desk, or waive them.",
+    "today": "Today's damages",
+    "tabs": {
+      "register": "Register",
+      "tickets": "Tickets",
+      "base": "Base data",
+      "cashbox": "Cash desk",
+      "reports": "Reports",
+      "settings": "Settings"
+    }
+  },
+  "services": {
+    "items": {
+      "hint": {
+        "laundry": "Laundry price list: each item with its price (wash, iron, dry clean).",
+        "damage": "List of damages and what each one costs."
+      },
+      "add": "Add an item",
+      "empty": "No items yet.",
+      "emptyForForm": "First add items and prices under “Base data”.",
+      "noCategory": "No category",
+      "name": "Name",
+      "category": "Category",
+      "price": "Price",
+      "active": "Active"
+    },
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "Delete?",
+    "save": "Save",
+    "saved": "Saved",
+    "count": "{n} ticket(s)",
+    "allStatuses": "All statuses",
+    "express": "Express",
+    "form": {
+      "room": "Room",
+      "walkIn": "Walk-in",
+      "guestName": "Guest name",
+      "pickRoom": "Occupied room",
+      "noRooms": "No occupied room.",
+      "items": "Items",
+      "express": "Express (+{pct}%)",
+      "note": "Note",
+      "settle": "Settlement",
+      "total": "Total",
+      "submit": "Register",
+      "done": "Ticket #{n} registered"
+    },
+    "settle": {
+      "room": "On the bill",
+      "cash": "Cash",
+      "card": "Card",
+      "pos": "Card transfer",
+      "pending": "Unpaid",
+      "waived": "Waived"
+    },
+    "status": {
+      "received": "Received",
+      "in_progress": "In progress",
+      "ready": "Ready",
+      "delivered": "Delivered",
+      "open": "Recorded",
+      "cancelled": "Cancelled"
+    },
+    "next": {
+      "in_progress": "Start",
+      "ready": "Ready",
+      "delivered": "Deliver"
+    },
+    "list": {
+      "empty": "Nothing here.",
+      "room": "Room {room}",
+      "due": "Ready by {at}",
+      "cancel": "Cancel",
+      "confirmCancel": "Cancel this ticket?",
+      "confirmWaive": "Waive this damage?"
+    },
+    "report": {
+      "byItem": "By item",
+      "byDay": "By day"
+    },
+    "settings": {
+      "expressPct": "Express surcharge (%)",
+      "readyHours": "Turnaround (hours)",
+      "readyHoursHint": "express takes half",
+      "settleToRoom": "On the bill by default",
+      "settleToRoomHint": "When registering, “On the bill” is preselected."
+    }
+  },
+  "minibarx": {
+    "title": "Minibar",
+    "subtitle": "Minibar consumption charged to bills, the product list and reports.",
+    "tabs": {
+      "register": "Register",
+      "base": "Base data",
+      "reports": "Reports",
+      "settings": "Settings"
+    },
+    "noItems": "First add products under “Base data”.",
+    "room": "Occupied room",
+    "total": "Total",
+    "charge": "Charge to the bill",
+    "charged": "Charged to the bill.",
+    "byItem": "By product",
+    "byRoom": "By room",
+    "selfService": "Guests declare it",
+    "selfServiceHint": "Guests declare what they took from the room's QR page.",
+    "save": "Save",
+    "saved": "Saved"
+  },
+  "internet": {
+    "title": "Internet",
+    "subtitle": "Guests' internet logins, profiles (speed, data, length) and automatic creation at check-in.",
+    "tabs": {
+      "users": "Users",
+      "profiles": "Profiles",
+      "settings": "Settings"
+    },
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "Delete?",
+    "save": "Save",
+    "copy": "Copy",
+    "profiles": {
+      "add": "New profile",
+      "empty": "No profile yet.",
+      "free": "Free",
+      "down": "Download",
+      "up": "Upload",
+      "quota": "Data",
+      "days": "Length",
+      "daysN": "{n} days",
+      "devices": "Devices",
+      "unlimited": "Unlimited",
+      "untilCheckout": "Until check-out",
+      "name": "Name",
+      "price": "Price",
+      "active": "Active"
+    },
+    "accounts": {
+      "add": "New login",
+      "needProfile": "Create a profile first.",
+      "created": "Login created:",
+      "empty": "No login yet.",
+      "username": "Username",
+      "password": "Password",
+      "room": "Room",
+      "guest": "Guest",
+      "profile": "Profile",
+      "validUntil": "Valid until",
+      "status": "Status",
+      "disable": "Disable",
+      "enable": "Enable",
+      "extend": "+1 day",
+      "reset": "New password",
+      "auto": "empty = automatic",
+      "charge": "Charge the profile to the bill"
+    },
+    "status": {
+      "active": "Active",
+      "disabled": "Disabled",
+      "expired": "Expired",
+      "all": "All"
+    },
+    "settings": {
+      "autoCreate": "Create a login at check-in",
+      "autoCreateHint": "with the default profile below.",
+      "profileId": "Default profile",
+      "usernameMode": "Username",
+      "mode": {
+        "room": "Room number (r1204)",
+        "random": "Random"
+      },
+      "passwordLength": "Password length (digits)",
+      "disableOnCheckout": "Disable at check-out"
+    }
+  },
+  "tv": {
+    "title": "In-room TV (IPTV)",
+    "subtitle": "Each room's TV, channel packages, on-screen messages and the activity report.",
+    "tabs": {
+      "rooms": "Rooms",
+      "activity": "Activity report",
+      "settings": "Settings"
+    },
+    "delete": "Delete",
+    "board": {
+      "count": "{on} of {total} on",
+      "sendAll": "Message to all rooms",
+      "on": "Turn on",
+      "off": "Turn off",
+      "vacant": "Vacant",
+      "package": "Package",
+      "noPackage": "Basic",
+      "message": "On-screen message",
+      "messageFor": "Message for room {room}",
+      "send": "Send"
+    },
+    "events": {
+      "activated": "Turned on",
+      "deactivated": "Turned off",
+      "package": "Package changed",
+      "message": "Message"
+    },
+    "settings": {
+      "autoActivate": "Turn on at check-in",
+      "deactivateOnCheckout": "Turn off at check-out",
+      "welcome": "Welcome message",
+      "welcomeHint": "'{name}' = guest's name",
+      "server": "IPTV server address",
+      "packages": "Channel packages",
+      "packageName": "Package name",
+      "price": "Price",
+      "addPackage": "Add"
+    }
+  },
+  "engineering": {
+    "title": "Engineering",
+    "subtitle": "Work orders, the equipment register, preventive maintenance and reports.",
+    "tabs": {
+      "orders": "Work orders",
+      "equipment": "Equipment",
+      "preventive": "Preventive",
+      "reports": "Reports",
+      "settings": "Settings"
+    },
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "Delete?",
+    "save": "Save",
+    "saved": "Saved",
+    "equipment": {
+      "add": "New equipment",
+      "empty": "No equipment yet.",
+      "name": "Name",
+      "category": "Category",
+      "location": "Location",
+      "serial": "Serial",
+      "interval": "Service every",
+      "daysUnit": "days",
+      "last": "Last service",
+      "next": "Next service",
+      "room": "Room",
+      "roomN": "Room {room}",
+      "days": "every {n} days",
+      "note": "Note",
+      "active": "Active"
+    },
+    "preventive": {
+      "none": "No service scheduled.",
+      "overdue": "Overdue",
+      "today": "Today",
+      "last": "Last: {day}",
+      "never": "Never serviced",
+      "serviced": "Mark serviced"
+    },
+    "report": {
+      "total": "Orders",
+      "open": "Open",
+      "done": "Done",
+      "urgent": "Urgent",
+      "avgHours": "Avg. time to fix (h)",
+      "services": "Preventive services",
+      "tickets": "Orders in the period",
+      "serviceLog": "Services done"
+    },
+    "priority": {
+      "low": "Low",
+      "normal": "Normal",
+      "urgent": "Urgent"
+    },
+    "status": {
+      "open": "Open",
+      "in_progress": "In progress",
+      "done": "Done",
+      "cancelled": "Cancelled"
+    },
+    "settings": {
+      "categories": "Equipment categories",
+      "categoriesHint": "one per line"
+    }
+  },
+  "hkx": {
+    "save": "Save",
+    "saved": "Saved",
+    "log": {
+      "add": "New entry",
+      "category": "Type",
+      "room": "Room",
+      "text": "Text",
+      "save": "Save",
+      "empty": "Nothing logged in this period.",
+      "close": "Close",
+      "reopen": "Reopen",
+      "roomN": "Room {room}"
+    },
+    "cat": {
+      "note": "Note",
+      "lost_found": "Lost & found",
+      "incident": "Incident",
+      "request": "Request"
+    },
+    "ops": {
+      "occupiedDirty": "Occupied rooms → dirty",
+      "occupiedDirtyHint": "For the daily cleaning of stayovers.",
+      "cleanInspected": "Clean rooms → inspected",
+      "cleanInspectedHint": "After the supervisor's round.",
+      "vacantDirtyClean": "Vacant dirty rooms → clean",
+      "vacantDirtyCleanHint": "When every vacant room has been done.",
+      "clearAssignments": "Clear assignments",
+      "clearAssignmentsHint": "No room given to anyone.",
+      "confirm": "Apply to every room concerned?",
+      "run": "Run",
+      "done": "{n} room(s) changed."
+    },
+    "rack": {
+      "mismatch": "Mismatch with front desk"
+    },
+    "base": {
+      "credits": "Cleaning time per room type",
+      "creditsHint": "Used to measure each housekeeper's work in the reports.",
+      "minutes": "min",
+      "staff": "Staff",
+      "staffHint": "Active team members and today's rooms.",
+      "roomsToday": "rooms today"
+    },
+    "settings": {
+      "dirtyStayoversDaily": "Stayovers dirty at the night audit",
+      "dirtyStayoversDailyHint": "After the night audit, occupied rooms go dirty for the daily cleaning.",
+      "inspectionRequired": "Check-in only into inspected rooms",
+      "inspectionRequiredHint": "A clean room must be inspected before check-in."
+    }
   }
 }

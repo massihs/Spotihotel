@@ -582,7 +582,13 @@
     "housekeeping": "خانه‌داری و تعمیرات",
     "hotelReports": "گزارش‌های هتل",
     "reservation": "رزرواسیون",
-    "cashier": "صندوق"
+    "cashier": "صندوق",
+    "laundry": "لاندری",
+    "damages": "خسارت",
+    "minibar": "مینی بار",
+    "internet": "اینترنت",
+    "tv": "تلویزیون تحت شبکه",
+    "engineering": "فنی و مهندسی"
   },
   "dashboard": {
     "welcome": "سلام {name}",
@@ -1088,7 +1094,17 @@
     "foreign_amount_required": "مبلغ ارزی را وارد کنید.",
     "duplicate_currency": "هر ارز فقط یک بار.",
     "cart_other_outlet": "سبد شما از رستوران دیگری است.",
-    "product_other_outlet": "این غذا در منوی این رستوران نیست."
+    "product_other_outlet": "این غذا در منوی این رستوران نیست.",
+    "no_stay_in_room": "این اتاق مهمان مقیم ندارد.",
+    "ticket_settled": "این مورد قبلاً تسویه شده است.",
+    "ticket_cancelled": "این مورد لغو شده است.",
+    "ticket_on_bill": "روی حساب مهمان ثبت شده؛ از صورتحساب برگشت بزنید.",
+    "not_waivable": "فقط خسارت قابل بخشش است.",
+    "username_taken": "این نام کاربری قبلاً استفاده شده است.",
+    "profile_not_found": "پروفایل پیدا نشد.",
+    "unknown_package": "این بسته تعریف نشده است.",
+    "room_not_inspected": "اتاق هنوز بازبینی نشده است.",
+    "unknown_kind": "بخش نامعتبر."
   },
   "tables": {
     "title": "میزها و کدهای QR",
@@ -4324,7 +4340,10 @@
       "city_tax": "عوارض اقامت",
       "misc": "متفرقه",
       "payment": "پرداخت",
-      "transfer": "انتقال"
+      "transfer": "انتقال",
+      "damage": "خسارت",
+      "internet": "اینترنت",
+      "tv": "تلویزیون"
     },
     "method": {
       "cash": "نقدی",
@@ -5467,9 +5486,15 @@
     "title": "خانه‌داری و تعمیرات",
     "subtitle": "برنامه امروز، فهرست هر مستخدم، بازبینی اتاق‌ها و تعمیرات.",
     "tabs": {
-      "plan": "برنامه امروز",
+      "plan": "رک نظافت",
       "mine": "اتاق‌های من",
-      "maintenance": "تعمیرات"
+      "maintenance": "تعمیرات",
+      "base": "اطلاعات پایه",
+      "log": "دفتر گزارش",
+      "operations": "عملیات",
+      "rack": "رک خانه داری",
+      "reports": "گزارشات",
+      "settings": "تنظیمات"
     },
     "counts": {
       "dirty": "کثیف",
@@ -5729,7 +5754,24 @@
       "counted": "شمارش شده",
       "difference": "اختلاف",
       "handedTo": "تحویل به",
-      "note": "توضیح"
+      "note": "توضیح",
+      "date": "تاریخ",
+      "items": "اقلام",
+      "settlement": "تسویه",
+      "item": "قلم",
+      "qty": "تعداد",
+      "tickets": "تعداد",
+      "pending": "تسویه نشده",
+      "at": "زمان",
+      "event": "رویداد",
+      "detail": "شرح",
+      "title": "عنوان",
+      "priority": "اولویت",
+      "assigned": "مسئول",
+      "equipment": "تجهیز",
+      "cleaned": "نظافت‌شده",
+      "inspected": "بازبینی‌شده",
+      "credits": "دقیقه کار"
     },
     "folioKind": {
       "guest": "مهمان",
@@ -5856,5 +5898,353 @@
     "transferred": "انتقال انجام شد.",
     "transferAmount": "انتقال {amount}",
     "transfer": "انتقال"
+  },
+  "laundry": {
+    "title": "لاندری",
+    "subtitle": "ثبت لباس‌های مهمان، پیگیری آماده‌سازی، تسویه روی حساب اتاق یا صندوق، و گزارش‌ها.",
+    "today": "سفارش‌های امروز",
+    "tabs": {
+      "register": "ثبت خدمات",
+      "tickets": "پیگیری",
+      "base": "اطلاعات پایه",
+      "cashbox": "صندوق",
+      "reports": "گزارشات",
+      "settings": "تنظیمات"
+    }
+  },
+  "damages": {
+    "title": "خسارت",
+    "subtitle": "ثبت خسارت‌های اتاق، تسویه روی حساب مهمان یا صندوق، یا بخشش.",
+    "today": "خسارت‌های امروز",
+    "tabs": {
+      "register": "ثبت خدمات",
+      "tickets": "پیگیری",
+      "base": "اطلاعات پایه",
+      "cashbox": "صندوق",
+      "reports": "گزارشات",
+      "settings": "تنظیمات"
+    }
+  },
+  "services": {
+    "items": {
+      "hint": {
+        "laundry": "نرخ‌نامه لاندری: هر قلم با قیمت شستشو، اتو یا خشکشویی.",
+        "damage": "فهرست خسارت‌ها با مبلغ جریمه هر مورد."
+      },
+      "add": "افزودن قلم",
+      "empty": "هنوز قلمی تعریف نشده است.",
+      "emptyForForm": "ابتدا در «اطلاعات پایه» اقلام و قیمت‌ها را تعریف کنید.",
+      "noCategory": "بدون دسته",
+      "name": "نام",
+      "category": "دسته",
+      "price": "قیمت",
+      "active": "فعال"
+    },
+    "edit": "ویرایش",
+    "delete": "حذف",
+    "confirmDelete": "حذف شود؟",
+    "save": "ذخیره",
+    "saved": "ذخیره شد",
+    "count": "{n} مورد",
+    "allStatuses": "همه وضعیت‌ها",
+    "express": "فوری",
+    "form": {
+      "room": "اتاق",
+      "walkIn": "مهمان بدون اتاق",
+      "guestName": "نام مهمان",
+      "pickRoom": "اتاق مقیم",
+      "noRooms": "هیچ اتاقی مقیم ندارد.",
+      "items": "اقلام",
+      "express": "فوری (+{pct}٪)",
+      "note": "توضیحات",
+      "settle": "تسویه",
+      "total": "جمع",
+      "submit": "ثبت",
+      "done": "شماره {n} ثبت شد"
+    },
+    "settle": {
+      "room": "به حساب اتاق",
+      "cash": "نقدی",
+      "card": "کارتخوان",
+      "pos": "کارت به کارت",
+      "pending": "تسویه نشده",
+      "waived": "بخشیده شد"
+    },
+    "status": {
+      "received": "دریافت شد",
+      "in_progress": "در حال انجام",
+      "ready": "آماده",
+      "delivered": "تحویل شد",
+      "open": "ثبت شده",
+      "cancelled": "لغو شد"
+    },
+    "next": {
+      "in_progress": "شروع",
+      "ready": "آماده شد",
+      "delivered": "تحویل به مهمان"
+    },
+    "list": {
+      "empty": "موردی نیست.",
+      "room": "اتاق {room}",
+      "due": "تحویل {at}",
+      "cancel": "لغو",
+      "confirmCancel": "این مورد لغو شود؟",
+      "confirmWaive": "این خسارت بخشیده شود؟"
+    },
+    "report": {
+      "byItem": "به تفکیک قلم",
+      "byDay": "به تفکیک روز"
+    },
+    "settings": {
+      "expressPct": "افزایش قیمت سرویس فوری (٪)",
+      "readyHours": "زمان آماده‌سازی (ساعت)",
+      "readyHoursHint": "سرویس فوری نصف این زمان",
+      "settleToRoom": "به‌طور پیش‌فرض به حساب اتاق",
+      "settleToRoomHint": "هنگام ثبت، تسویه «به حساب اتاق» انتخاب شده باشد."
+    }
+  },
+  "minibarx": {
+    "title": "مینی بار",
+    "subtitle": "ثبت مصرف مینی‌بار اتاق‌ها روی حساب، فهرست اقلام و گزارش مصرف.",
+    "tabs": {
+      "register": "ثبت مصرف",
+      "base": "اطلاعات پایه",
+      "reports": "گزارشات",
+      "settings": "تنظیمات"
+    },
+    "noItems": "ابتدا اقلام مینی‌بار را در «اطلاعات پایه» تعریف کنید.",
+    "room": "اتاق مقیم",
+    "total": "جمع",
+    "charge": "ثبت روی حساب اتاق",
+    "charged": "روی حساب اتاق ثبت شد.",
+    "byItem": "به تفکیک قلم",
+    "byRoom": "به تفکیک اتاق",
+    "selfService": "اعلام مصرف توسط مهمان",
+    "selfServiceHint": "مهمان از صفحه QR اتاق، مصرف مینی‌بار را خودش ثبت کند.",
+    "save": "ذخیره",
+    "saved": "ذخیره شد"
+  },
+  "internet": {
+    "title": "اینترنت",
+    "subtitle": "کاربران اینترنت مهمانان، پروفایل‌ها (سرعت، حجم، مدت) و ساخت خودکار هنگام پذیرش.",
+    "tabs": {
+      "users": "کاربران اینترنت",
+      "profiles": "پروفایل",
+      "settings": "تنظیمات"
+    },
+    "edit": "ویرایش",
+    "delete": "حذف",
+    "confirmDelete": "حذف شود؟",
+    "save": "ذخیره",
+    "copy": "کپی",
+    "profiles": {
+      "add": "پروفایل جدید",
+      "empty": "هنوز پروفایلی نیست.",
+      "free": "رایگان",
+      "down": "سرعت دانلود",
+      "up": "سرعت آپلود",
+      "quota": "حجم",
+      "days": "مدت",
+      "daysN": "{n} روز",
+      "devices": "تعداد دستگاه",
+      "unlimited": "نامحدود",
+      "untilCheckout": "تا خروج",
+      "name": "نام",
+      "price": "قیمت",
+      "active": "فعال"
+    },
+    "accounts": {
+      "add": "کاربر جدید",
+      "needProfile": "ابتدا یک پروفایل بسازید.",
+      "created": "کاربر ساخته شد:",
+      "empty": "هنوز کاربری نیست.",
+      "username": "نام کاربری",
+      "password": "رمز",
+      "room": "اتاق",
+      "guest": "مهمان",
+      "profile": "پروفایل",
+      "validUntil": "اعتبار تا",
+      "status": "وضعیت",
+      "disable": "غیرفعال",
+      "enable": "فعال",
+      "extend": "+۱ روز",
+      "reset": "رمز جدید",
+      "auto": "خالی = خودکار",
+      "charge": "ثبت هزینه پروفایل روی حساب اتاق"
+    },
+    "status": {
+      "active": "فعال",
+      "disabled": "غیرفعال",
+      "expired": "منقضی",
+      "all": "همه"
+    },
+    "settings": {
+      "autoCreate": "ساخت خودکار کاربر هنگام پذیرش",
+      "autoCreateHint": "با پروفایل پیش‌فرض زیر.",
+      "profileId": "پروفایل پیش‌فرض",
+      "usernameMode": "نام کاربری",
+      "mode": {
+        "room": "شماره اتاق (r1204)",
+        "random": "تصادفی"
+      },
+      "passwordLength": "طول رمز (رقم)",
+      "disableOnCheckout": "غیرفعال‌سازی هنگام خروج"
+    }
+  },
+  "tv": {
+    "title": "تلویزیون تحت شبکه",
+    "subtitle": "وضعیت تلویزیون هر اتاق، بسته کانال‌ها، پیام روی صفحه و گزارش فعالیت.",
+    "tabs": {
+      "rooms": "اتاق‌ها",
+      "activity": "گزارش فعالیت",
+      "settings": "تنظیمات"
+    },
+    "delete": "حذف",
+    "board": {
+      "count": "{on} از {total} روشن",
+      "sendAll": "پیام به همه اتاق‌ها",
+      "on": "روشن",
+      "off": "خاموش",
+      "vacant": "خالی",
+      "package": "بسته",
+      "noPackage": "بسته پایه",
+      "message": "پیام روی صفحه",
+      "messageFor": "پیام برای اتاق {room}",
+      "send": "ارسال"
+    },
+    "events": {
+      "activated": "روشن شد",
+      "deactivated": "خاموش شد",
+      "package": "تغییر بسته",
+      "message": "پیام"
+    },
+    "settings": {
+      "autoActivate": "روشن‌شدن هنگام پذیرش",
+      "deactivateOnCheckout": "خاموش‌شدن هنگام خروج",
+      "welcome": "پیام خوشامد",
+      "welcomeHint": "'{name}' = نام مهمان",
+      "server": "نشانی سرور IPTV",
+      "packages": "بسته‌های کانال",
+      "packageName": "نام بسته",
+      "price": "قیمت",
+      "addPackage": "افزودن"
+    }
+  },
+  "engineering": {
+    "title": "فنی و مهندسی",
+    "subtitle": "دستورکارهای تعمیر، شناسنامه تجهیزات، نگهداری پیشگیرانه و گزارش‌ها.",
+    "tabs": {
+      "orders": "دستورکارها",
+      "equipment": "تجهیزات",
+      "preventive": "نگهداری پیشگیرانه",
+      "reports": "گزارشات",
+      "settings": "تنظیمات"
+    },
+    "edit": "ویرایش",
+    "delete": "حذف",
+    "confirmDelete": "حذف شود؟",
+    "save": "ذخیره",
+    "saved": "ذخیره شد",
+    "equipment": {
+      "add": "تجهیز جدید",
+      "empty": "هنوز تجهیزی ثبت نشده است.",
+      "name": "نام",
+      "category": "دسته",
+      "location": "محل",
+      "serial": "شماره سریال",
+      "interval": "دوره سرویس",
+      "daysUnit": "روز",
+      "last": "آخرین سرویس",
+      "next": "سرویس بعدی",
+      "room": "اتاق",
+      "roomN": "اتاق {room}",
+      "days": "هر {n} روز",
+      "note": "توضیحات",
+      "active": "فعال"
+    },
+    "preventive": {
+      "none": "هیچ سرویسی برنامه‌ریزی نشده است.",
+      "overdue": "عقب افتاده",
+      "today": "امروز",
+      "last": "آخرین: {day}",
+      "never": "هنوز سرویس نشده",
+      "serviced": "سرویس انجام شد"
+    },
+    "report": {
+      "total": "دستورکارها",
+      "open": "باز",
+      "done": "انجام‌شده",
+      "urgent": "فوری",
+      "avgHours": "میانگین زمان رفع (ساعت)",
+      "services": "سرویس‌های پیشگیرانه",
+      "tickets": "دستورکارهای دوره",
+      "serviceLog": "سرویس‌های انجام‌شده"
+    },
+    "priority": {
+      "low": "کم",
+      "normal": "عادی",
+      "urgent": "فوری"
+    },
+    "status": {
+      "open": "باز",
+      "in_progress": "در حال انجام",
+      "done": "انجام شد",
+      "cancelled": "لغو"
+    },
+    "settings": {
+      "categories": "دسته‌های تجهیزات",
+      "categoriesHint": "هر خط یک دسته"
+    }
+  },
+  "hkx": {
+    "save": "ذخیره",
+    "saved": "ذخیره شد",
+    "log": {
+      "add": "ثبت در دفتر",
+      "category": "نوع",
+      "room": "اتاق",
+      "text": "شرح",
+      "save": "ثبت",
+      "empty": "دفتر این دوره خالی است.",
+      "close": "بستن",
+      "reopen": "باز کردن",
+      "roomN": "اتاق {room}"
+    },
+    "cat": {
+      "note": "یادداشت",
+      "lost_found": "اشیای پیداشده",
+      "incident": "حادثه",
+      "request": "درخواست"
+    },
+    "ops": {
+      "occupiedDirty": "اتاق‌های اشغال ← کثیف",
+      "occupiedDirtyHint": "برای نظافت روزانه اتاق‌های ماندگار.",
+      "cleanInspected": "اتاق‌های تمیز ← بازبینی‌شده",
+      "cleanInspectedHint": "پس از بازدید سرپرست خانه‌داری.",
+      "vacantDirtyClean": "اتاق‌های خالی کثیف ← تمیز",
+      "vacantDirtyCleanHint": "وقتی همه اتاق‌های خالی نظافت شده‌اند.",
+      "clearAssignments": "حذف تقسیم اتاق‌ها",
+      "clearAssignmentsHint": "هیچ اتاقی به مستخدمی سپرده نباشد.",
+      "confirm": "این عملیات روی همه اتاق‌های مربوط انجام شود؟",
+      "run": "اجرا",
+      "done": "{n} اتاق تغییر کرد."
+    },
+    "rack": {
+      "mismatch": "مغایرت با پذیرش"
+    },
+    "base": {
+      "credits": "زمان نظافت هر نوع اتاق",
+      "creditsHint": "برای سنجش کارکرد مستخدمان در گزارش‌ها.",
+      "minutes": "دقیقه",
+      "staff": "مستخدمان",
+      "staffHint": "اعضای فعال تیم هتل و اتاق‌های امروزشان.",
+      "roomsToday": "اتاق امروز"
+    },
+    "settings": {
+      "dirtyStayoversDaily": "کثیف‌شدن اتاق‌های اشغال در پایان روز",
+      "dirtyStayoversDailyHint": "پس از بستن روز، اتاق‌های اشغال برای نظافت روزانه کثیف می‌شوند.",
+      "inspectionRequired": "پذیرش فقط در اتاق بازبینی‌شده",
+      "inspectionRequiredHint": "اتاق «تمیز» تا بازبینی سرپرست قابل پذیرش نیست."
+    }
   }
 }

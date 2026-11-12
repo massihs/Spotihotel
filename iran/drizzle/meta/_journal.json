@@ -393,6 +393,13 @@
       "when": 1794468901709,
       "tag": "0055_room_service_outlets",
       "breakpoints": true
+    },
+    {
+      "idx": 56,
+      "version": "7",
+      "when": 1794514394184,
+      "tag": "0056_hotel_services",
+      "breakpoints": true
     }
   ]
 }

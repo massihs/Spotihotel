@@ -582,7 +582,13 @@
     "housekeeping": "التدبير والصيانة",
     "hotelReports": "تقارير الفندق",
     "reservation": "الحجوزات",
-    "cashier": "الصندوق"
+    "cashier": "الصندوق",
+    "laundry": "المغسلة",
+    "damages": "الأضرار",
+    "minibar": "الميني بار",
+    "internet": "الإنترنت",
+    "tv": "التلفزيون الشبكي",
+    "engineering": "الهندسة والصيانة"
   },
   "dashboard": {
     "welcome": "مرحبًا {name}",
@@ -1088,7 +1094,17 @@
     "foreign_amount_required": "أدخل المبلغ بالعملة.",
     "duplicate_currency": "كل عملة مرة واحدة.",
     "cart_other_outlet": "سلتك من مطعم آخر.",
-    "product_other_outlet": "هذا الطبق ليس في قائمة هذا المطعم."
+    "product_other_outlet": "هذا الطبق ليس في قائمة هذا المطعم.",
+    "no_stay_in_room": "لا يوجد نزيل في هذه الغرفة.",
+    "ticket_settled": "تمت تسوية هذا الطلب.",
+    "ticket_cancelled": "هذا الطلب ملغى.",
+    "ticket_on_bill": "مسجل على الفاتورة: ألغه من الفاتورة.",
+    "not_waivable": "يمكن الإعفاء من الأضرار فقط.",
+    "username_taken": "اسم المستخدم مستخدم.",
+    "profile_not_found": "الملف غير موجود.",
+    "unknown_package": "باقة غير معروفة.",
+    "room_not_inspected": "لم يتم فحص الغرفة بعد.",
+    "unknown_kind": "قسم غير معروف."
   },
   "tables": {
     "title": "الطاولات ورموز QR",
@@ -4324,7 +4340,10 @@
       "city_tax": "ضريبة الإقامة",
       "misc": "متفرقات",
       "payment": "دفعة",
-      "transfer": "تحويل"
+      "transfer": "تحويل",
+      "damage": "الأضرار",
+      "internet": "الإنترنت",
+      "tv": "التلفزيون"
     },
     "method": {
       "cash": "نقدًا",
@@ -5467,9 +5486,15 @@
     "title": "التدبير الفندقي والصيانة",
     "subtitle": "خطة اليوم، قائمة كل عامل، فحص الغرف والإصلاحات.",
     "tabs": {
-      "plan": "خطة اليوم",
+      "plan": "لوحة التنظيف",
       "mine": "غرفي",
-      "maintenance": "الصيانة"
+      "maintenance": "الصيانة",
+      "base": "البيانات الأساسية",
+      "log": "سجل الملاحظات",
+      "operations": "العمليات",
+      "rack": "لوحة الإشراف الداخلي",
+      "reports": "التقارير",
+      "settings": "الإعدادات"
     },
     "counts": {
       "dirty": "متسخة",
@@ -5729,7 +5754,24 @@
       "counted": "المعدود",
       "difference": "الفرق",
       "handedTo": "سُلّم إلى",
-      "note": "ملاحظة"
+      "note": "ملاحظة",
+      "date": "التاريخ",
+      "items": "البنود",
+      "settlement": "التسوية",
+      "item": "البند",
+      "qty": "الكمية",
+      "tickets": "الطلبات",
+      "pending": "غير مسدد",
+      "at": "الوقت",
+      "event": "الحدث",
+      "detail": "التفاصيل",
+      "title": "العنوان",
+      "priority": "الأولوية",
+      "assigned": "المكلّف",
+      "equipment": "المعدة",
+      "cleaned": "المنظفة",
+      "inspected": "المفحوصة",
+      "credits": "الدقائق"
     },
     "folioKind": {
       "guest": "نزيل",
@@ -5856,5 +5898,353 @@
     "transferred": "تم التحويل.",
     "transferAmount": "تحويل {amount}",
     "transfer": "تحويل"
+  },
+  "laundry": {
+    "title": "المغسلة",
+    "subtitle": "غسيل النزلاء: التسجيل والمتابعة حتى التسليم والتسوية على الفاتورة أو في الصندوق والتقارير.",
+    "today": "طلبات اليوم",
+    "tabs": {
+      "register": "تسجيل",
+      "tickets": "المتابعة",
+      "base": "البيانات الأساسية",
+      "cashbox": "الصندوق",
+      "reports": "التقارير",
+      "settings": "الإعدادات"
+    }
+  },
+  "damages": {
+    "title": "الأضرار",
+    "subtitle": "أضرار الغرف: التسجيل والتسوية على الفاتورة أو في الصندوق أو الإعفاء.",
+    "today": "أضرار اليوم",
+    "tabs": {
+      "register": "تسجيل",
+      "tickets": "المتابعة",
+      "base": "البيانات الأساسية",
+      "cashbox": "الصندوق",
+      "reports": "التقارير",
+      "settings": "الإعدادات"
+    }
+  },
+  "services": {
+    "items": {
+      "hint": {
+        "laundry": "قائمة أسعار المغسلة.",
+        "damage": "قائمة الأضرار وتكلفة كل منها."
+      },
+      "add": "إضافة بند",
+      "empty": "لا توجد بنود بعد.",
+      "emptyForForm": "أضف البنود والأسعار أولاً في البيانات الأساسية.",
+      "noCategory": "بدون فئة",
+      "name": "الاسم",
+      "category": "الفئة",
+      "price": "السعر",
+      "active": "مفعّل"
+    },
+    "edit": "تعديل",
+    "delete": "حذف",
+    "confirmDelete": "حذف؟",
+    "save": "حفظ",
+    "saved": "تم الحفظ",
+    "count": "{n} طلب",
+    "allStatuses": "كل الحالات",
+    "express": "مستعجل",
+    "form": {
+      "room": "غرفة",
+      "walkIn": "زبون عابر",
+      "guestName": "اسم النزيل",
+      "pickRoom": "غرفة مشغولة",
+      "noRooms": "لا توجد غرف مشغولة.",
+      "items": "البنود",
+      "express": "مستعجل (+{pct}٪)",
+      "note": "ملاحظة",
+      "settle": "التسوية",
+      "total": "المجموع",
+      "submit": "تسجيل",
+      "done": "تم تسجيل الطلب رقم {n}"
+    },
+    "settle": {
+      "room": "على الفاتورة",
+      "cash": "نقداً",
+      "card": "بطاقة",
+      "pos": "تحويل",
+      "pending": "غير مسدد",
+      "waived": "معفى"
+    },
+    "status": {
+      "received": "مستلم",
+      "in_progress": "قيد التنفيذ",
+      "ready": "جاهز",
+      "delivered": "مُسلّم",
+      "open": "مسجل",
+      "cancelled": "ملغى"
+    },
+    "next": {
+      "in_progress": "بدء",
+      "ready": "جاهز",
+      "delivered": "تسليم"
+    },
+    "list": {
+      "empty": "لا شيء.",
+      "room": "غرفة {room}",
+      "due": "التسليم {at}",
+      "cancel": "إلغاء",
+      "confirmCancel": "إلغاء هذا الطلب؟",
+      "confirmWaive": "الإعفاء من هذا الضرر؟"
+    },
+    "report": {
+      "byItem": "حسب البند",
+      "byDay": "حسب اليوم"
+    },
+    "settings": {
+      "expressPct": "زيادة الخدمة المستعجلة (٪)",
+      "readyHours": "مدة التجهيز (ساعات)",
+      "readyHoursHint": "المستعجل نصف المدة",
+      "settleToRoom": "على الفاتورة افتراضياً",
+      "settleToRoomHint": "يتم اختيار «على الفاتورة» مسبقاً."
+    }
+  },
+  "minibarx": {
+    "title": "الميني بار",
+    "subtitle": "استهلاك الميني بار على الفاتورة وقائمة المنتجات والتقارير.",
+    "tabs": {
+      "register": "تسجيل",
+      "base": "البيانات الأساسية",
+      "reports": "التقارير",
+      "settings": "الإعدادات"
+    },
+    "noItems": "أضف المنتجات أولاً.",
+    "room": "غرفة مشغولة",
+    "total": "المجموع",
+    "charge": "تسجيل على الفاتورة",
+    "charged": "تم التسجيل على الفاتورة.",
+    "byItem": "حسب المنتج",
+    "byRoom": "حسب الغرفة",
+    "selfService": "تصريح النزيل",
+    "selfServiceHint": "يصرّح النزيل من صفحة رمز الغرفة.",
+    "save": "حفظ",
+    "saved": "تم الحفظ"
+  },
+  "internet": {
+    "title": "الإنترنت",
+    "subtitle": "حسابات الإنترنت للنزلاء والملفات والإنشاء التلقائي.",
+    "tabs": {
+      "users": "المستخدمون",
+      "profiles": "الملفات",
+      "settings": "الإعدادات"
+    },
+    "edit": "تعديل",
+    "delete": "حذف",
+    "confirmDelete": "حذف؟",
+    "save": "حفظ",
+    "copy": "نسخ",
+    "profiles": {
+      "add": "ملف جديد",
+      "empty": "لا توجد ملفات.",
+      "free": "مجاني",
+      "down": "التنزيل",
+      "up": "الرفع",
+      "quota": "الحجم",
+      "days": "المدة",
+      "daysN": "{n} يوم",
+      "devices": "الأجهزة",
+      "unlimited": "غير محدود",
+      "untilCheckout": "حتى المغادرة",
+      "name": "الاسم",
+      "price": "السعر",
+      "active": "مفعّل"
+    },
+    "accounts": {
+      "add": "حساب جديد",
+      "needProfile": "أنشئ ملفاً أولاً.",
+      "created": "تم إنشاء الحساب:",
+      "empty": "لا توجد حسابات.",
+      "username": "اسم المستخدم",
+      "password": "كلمة المرور",
+      "room": "الغرفة",
+      "guest": "النزيل",
+      "profile": "الملف",
+      "validUntil": "صالح حتى",
+      "status": "الحالة",
+      "disable": "تعطيل",
+      "enable": "تفعيل",
+      "extend": "+يوم",
+      "reset": "كلمة مرور جديدة",
+      "auto": "فارغ = تلقائي",
+      "charge": "تسجيل التكلفة على الفاتورة"
+    },
+    "status": {
+      "active": "مفعّل",
+      "disabled": "معطّل",
+      "expired": "منتهي",
+      "all": "الكل"
+    },
+    "settings": {
+      "autoCreate": "إنشاء حساب عند الوصول",
+      "autoCreateHint": "بالملف الافتراضي.",
+      "profileId": "الملف الافتراضي",
+      "usernameMode": "اسم المستخدم",
+      "mode": {
+        "room": "رقم الغرفة",
+        "random": "عشوائي"
+      },
+      "passwordLength": "طول كلمة المرور",
+      "disableOnCheckout": "التعطيل عند المغادرة"
+    }
+  },
+  "tv": {
+    "title": "التلفزيون الشبكي",
+    "subtitle": "حالة تلفزيون كل غرفة والباقات والرسائل وتقرير النشاط.",
+    "tabs": {
+      "rooms": "الغرف",
+      "activity": "تقرير النشاط",
+      "settings": "الإعدادات"
+    },
+    "delete": "حذف",
+    "board": {
+      "count": "{on} من {total} قيد التشغيل",
+      "sendAll": "رسالة لكل الغرف",
+      "on": "تشغيل",
+      "off": "إيقاف",
+      "vacant": "شاغرة",
+      "package": "الباقة",
+      "noPackage": "أساسية",
+      "message": "رسالة على الشاشة",
+      "messageFor": "رسالة للغرفة {room}",
+      "send": "إرسال"
+    },
+    "events": {
+      "activated": "تشغيل",
+      "deactivated": "إيقاف",
+      "package": "تغيير الباقة",
+      "message": "رسالة"
+    },
+    "settings": {
+      "autoActivate": "التشغيل عند الوصول",
+      "deactivateOnCheckout": "الإيقاف عند المغادرة",
+      "welcome": "رسالة الترحيب",
+      "welcomeHint": "'{name}' = اسم النزيل",
+      "server": "عنوان خادم IPTV",
+      "packages": "باقات القنوات",
+      "packageName": "اسم الباقة",
+      "price": "السعر",
+      "addPackage": "إضافة"
+    }
+  },
+  "engineering": {
+    "title": "الهندسة والصيانة",
+    "subtitle": "أوامر العمل وسجل المعدات والصيانة الوقائية والتقارير.",
+    "tabs": {
+      "orders": "أوامر العمل",
+      "equipment": "المعدات",
+      "preventive": "الصيانة الوقائية",
+      "reports": "التقارير",
+      "settings": "الإعدادات"
+    },
+    "edit": "تعديل",
+    "delete": "حذف",
+    "confirmDelete": "حذف؟",
+    "save": "حفظ",
+    "saved": "تم الحفظ",
+    "equipment": {
+      "add": "معدة جديدة",
+      "empty": "لا توجد معدات.",
+      "name": "الاسم",
+      "category": "الفئة",
+      "location": "الموقع",
+      "serial": "الرقم التسلسلي",
+      "interval": "الدورية",
+      "daysUnit": "يوم",
+      "last": "آخر صيانة",
+      "next": "الصيانة التالية",
+      "room": "الغرفة",
+      "roomN": "غرفة {room}",
+      "days": "كل {n} يوم",
+      "note": "ملاحظة",
+      "active": "مفعّل"
+    },
+    "preventive": {
+      "none": "لا توجد صيانة مجدولة.",
+      "overdue": "متأخر",
+      "today": "اليوم",
+      "last": "الأخيرة: {day}",
+      "never": "لم تتم صيانته",
+      "serviced": "تمت الصيانة"
+    },
+    "report": {
+      "total": "الأوامر",
+      "open": "مفتوحة",
+      "done": "منجزة",
+      "urgent": "عاجلة",
+      "avgHours": "متوسط زمن الإصلاح",
+      "services": "الصيانات الوقائية",
+      "tickets": "أوامر الفترة",
+      "serviceLog": "الصيانات المنجزة"
+    },
+    "priority": {
+      "low": "منخفضة",
+      "normal": "عادية",
+      "urgent": "عاجلة"
+    },
+    "status": {
+      "open": "مفتوح",
+      "in_progress": "قيد التنفيذ",
+      "done": "منجز",
+      "cancelled": "ملغى"
+    },
+    "settings": {
+      "categories": "فئات المعدات",
+      "categoriesHint": "واحدة في كل سطر"
+    }
+  },
+  "hkx": {
+    "save": "حفظ",
+    "saved": "تم الحفظ",
+    "log": {
+      "add": "إدخال جديد",
+      "category": "النوع",
+      "room": "الغرفة",
+      "text": "النص",
+      "save": "حفظ",
+      "empty": "لا شيء في هذه الفترة.",
+      "close": "إغلاق",
+      "reopen": "إعادة فتح",
+      "roomN": "غرفة {room}"
+    },
+    "cat": {
+      "note": "ملاحظة",
+      "lost_found": "المفقودات",
+      "incident": "حادث",
+      "request": "طلب"
+    },
+    "ops": {
+      "occupiedDirty": "الغرف المشغولة ← متسخة",
+      "occupiedDirtyHint": "للتنظيف اليومي.",
+      "cleanInspected": "النظيفة ← مفحوصة",
+      "cleanInspectedHint": "بعد جولة المشرف.",
+      "vacantDirtyClean": "الشاغرة المتسخة ← نظيفة",
+      "vacantDirtyCleanHint": "عند تنظيف كل الغرف الشاغرة.",
+      "clearAssignments": "مسح التوزيع",
+      "clearAssignmentsHint": "لا غرفة مسندة.",
+      "confirm": "تطبيق على كل الغرف المعنية؟",
+      "run": "تنفيذ",
+      "done": "تم تغيير {n} غرفة."
+    },
+    "rack": {
+      "mismatch": "تعارض مع الاستقبال"
+    },
+    "base": {
+      "credits": "زمن التنظيف لكل نوع",
+      "creditsHint": "لقياس عمل كل موظف.",
+      "minutes": "دقيقة",
+      "staff": "الموظفون",
+      "staffHint": "الأعضاء النشطون وغرف اليوم.",
+      "roomsToday": "غرف اليوم"
+    },
+    "settings": {
+      "dirtyStayoversDaily": "الغرف المشغولة متسخة عند إغلاق اليوم",
+      "dirtyStayoversDailyHint": "بعد الإغلاق تصبح الغرف المشغولة متسخة.",
+      "inspectionRequired": "الوصول فقط لغرفة مفحوصة",
+      "inspectionRequiredHint": "يجب فحص الغرفة قبل الوصول."
+    }
   }
 }

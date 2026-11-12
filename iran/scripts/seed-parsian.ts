@@ -78,10 +78,13 @@ import { createExpense } from "@/server/modules/reports/service";
 import { createPurchase, createStockItem, createSupplier } from "@/server/modules/inventory/service";
 import { paySupplier, setChequeStatus } from "@/server/modules/ledger/finance";
 import { openRequest } from "@/server/modules/hotel/requests";
+import { saveServiceItem, saveServicesSettings } from "@/server/modules/hotel/services";
+import { saveInternetProfile } from "@/server/modules/hotel/internet";
+import { saveEquipment } from "@/server/modules/hotel/engineering";
 import { createOutlet, setOutletMenu } from "@/server/modules/outlets/service";
 import { syncLedger } from "@/server/modules/ledger/sync";
 import { localDay } from "@/lib/period";
-import { cheques } from "@/server/db/schema";
+import { cheques, serviceItems } from "@/server/db/schema";
 
 const SLUG = "parsian-test";
 const TZ = "Asia/Tehran";
@@ -384,6 +387,97 @@ type Planned = {
  * built before outlets existed: its tables are attached and its past orders follow them.
  * Returns how many outlets were added (0 when they already exist).
  */
+/** The service departments' starting data (laundry and damage prices, internet, TV, equipment). */
+async function ensureParsianServices(ctx: RestaurantContext) {
+  const rid = ctx.restaurant.id;
+  const [{ n } = { n: 0 }] = await db
+    .select({ n: count() })
+    .from(serviceItems)
+    .where(eq(serviceItems.restaurantId, rid));
+  if (n > 0) return;
+  const T = 1000; // tomans → minor units
+  const laundry: [string, string, number][] = [
+    ["پیراهن", "شستشو و اتو", 180_000],
+    ["شلوار", "شستشو و اتو", 200_000],
+    ["کت", "خشکشویی", 450_000],
+    ["کت و شلوار", "خشکشویی", 750_000],
+    ["مانتو", "خشکشویی", 400_000],
+    ["پیراهن زنانه", "شستشو و اتو", 220_000],
+    ["لباس زیر / جوراب", "شستشو", 60_000],
+    ["تی‌شرت", "شستشو", 120_000],
+    ["اتوی پیراهن", "فقط اتو", 90_000],
+    ["اتوی شلوار", "فقط اتو", 100_000],
+  ];
+  for (const [name, category, price] of laundry)
+    await saveServiceItem(db, ctx, "laundry", null, { name, category, priceCents: price * T });
+  const damages: [string, string, number][] = [
+    ["لکه روی ملحفه", "منسوجات", 1_200_000],
+    ["حوله آسیب‌دیده / مفقود", "منسوجات", 1_500_000],
+    ["لیوان یا فنجان شکسته", "ظروف", 400_000],
+    ["آینه یا شیشه شکسته", "اثاثیه", 6_000_000],
+    ["لکه روی موکت یا مبل", "اثاثیه", 3_500_000],
+    ["کنترل تلویزیون مفقود", "تجهیزات", 1_800_000],
+    ["کارت کلید مفقود", "تجهیزات", 500_000],
+    ["استعمال دخانیات در اتاق", "سایر", 5_000_000],
+  ];
+  for (const [name, category, price] of damages)
+    await saveServiceItem(db, ctx, "damage", null, { name, category, priceCents: price * T });
+  const free = await saveInternetProfile(db, ctx, null, {
+    name: "پایه (رایگان)",
+    downKbps: 10_240,
+    upKbps: 2_048,
+    quotaMb: 5_120,
+    devices: 2,
+    priceCents: 0,
+  });
+  await saveInternetProfile(db, ctx, null, {
+    name: "پرسرعت",
+    downKbps: 51_200,
+    upKbps: 10_240,
+    devices: 4,
+    priceCents: 350_000 * T,
+  });
+  await saveInternetProfile(db, ctx, null, {
+    name: "یک‌روزه",
+    downKbps: 20_480,
+    upKbps: 5_120,
+    quotaMb: 10_240,
+    days: 1,
+    devices: 2,
+    priceCents: 150_000 * T,
+  });
+  await saveServicesSettings(db, ctx, "internet", {
+    autoCreate: true,
+    profileId: free.id,
+    usernameMode: "room",
+    passwordLength: 6,
+    disableOnCheckout: true,
+  });
+  await saveServicesSettings(db, ctx, "tv", {
+    autoActivate: true,
+    deactivateOnCheckout: true,
+    welcome: "{name} عزیز، به هتل پارسیان خوش آمدید",
+    server: "",
+    packages: [
+      { name: "پایه", priceCents: 0 },
+      { name: "ورزشی", priceCents: 250_000 * T },
+      { name: "فیلم و سریال", priceCents: 300_000 * T },
+    ],
+  });
+  const equipmentList: [string, string, string, number][] = [
+    ["چیلر مرکزی", "سرمایش و گرمایش", "موتورخانه", 90],
+    ["دیگ بخار", "تأسیسات", "موتورخانه", 180],
+    ["آسانسور شماره ۱", "آسانسور", "لابی", 30],
+    ["آسانسور شماره ۲", "آسانسور", "لابی", 30],
+    ["ژنراتور اضطراری", "برق", "پارکینگ", 60],
+    ["پمپ استخر", "تأسیسات", "استخر", 45],
+    ["سیستم اعلام حریق", "برق", "کل ساختمان", 90],
+  ];
+  for (const [name, category, location, intervalDays] of equipmentList)
+    await saveEquipment(db, ctx, null, { name, category, location, intervalDays });
+  console.log("✓ Parsian test hotel: service departments set up");
+}
+
 async function ensureParsianOutlets(ctx: RestaurantContext) {
   const rid = ctx.restaurant.id;
   const [{ n } = { n: 0 }] = await db
@@ -1337,6 +1431,7 @@ export async function seedParsian(ownerEmail: string, days = 30, opts: { build?:
     if (complete || !build) {
       const ctx = await loadRestaurantContext(db, { ...ownerUser, locale: ownerUser.locale }, existing.id);
       const added = await ensureParsianOutlets(ctx);
+      await ensureParsianServices(ctx);
       for (const [name, icon] of Object.entries(MENU_ICONS))
         await db
           .update(categories)
@@ -1690,6 +1785,7 @@ export async function seedParsian(ownerEmail: string, days = 30, opts: { build?:
   }
   // The hotel's restaurants and cafés, with their tables and their part of the menu.
   await ensureParsianOutlets(ownerCtx);
+  await ensureParsianServices(ownerCtx);
   restaurantTables = (await listTables(db, ownerCtx)).filter((p) => p.kind !== "room");
   const suppliers = [];
   for (const [name, phone] of [

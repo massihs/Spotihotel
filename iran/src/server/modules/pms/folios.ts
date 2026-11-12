@@ -25,6 +25,9 @@ export const CHARGE_DEPARTMENTS = [
   "parking",
   "transport",
   "city_tax",
+  "damage",
+  "internet",
+  "tv",
   "misc",
 ] as const;
 export type ChargeDepartment = (typeof CHARGE_DEPARTMENTS)[number];

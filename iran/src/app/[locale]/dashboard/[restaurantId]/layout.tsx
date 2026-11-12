@@ -45,6 +45,12 @@ import {
   UtensilsCrossed,
   Users,
   Wallet,
+  Shirt,
+  ShieldAlert,
+  Tv,
+  Wifi,
+  Wine,
+  Wrench,
 } from "lucide-react";
 import { getDisabledModules, logoUrl } from "@/server/modules/restaurants/settings";
 import type { ModuleKey } from "@/lib/modules";
@@ -79,6 +85,12 @@ const HOTEL_LAYOUT: [page: string, group: HotelGroup][] = [
   ["guests", "reception"],
   ["rooms", "rooms"],
   ["housekeeping", "rooms"],
+  ["laundry", "rooms"],
+  ["damages", "rooms"],
+  ["minibar", "rooms"],
+  ["internet", "rooms"],
+  ["tv", "rooms"],
+  ["engineering", "rooms"],
   ["requests", "rooms"],
   ["orders", "rooms"],
   ["wellness", "rooms"],
@@ -329,6 +341,95 @@ async function RestaurantShell({
         icon: <SprayCan />,
         groupKey: "reception",
         group: "",
+        children: (can(ctx, "tables.manage")
+          ? ([
+              "base",
+              "plan",
+              "log",
+              "operations",
+              "rack",
+              "reports",
+              "settings",
+              "mine",
+              "maintenance",
+            ] as const)
+          : (["plan", "log", "rack", "mine", "maintenance"] as const)
+        ).map((k) => ({
+          href: `${base}/housekeeping?tab=${k}`,
+          label: t(`housekeeping.tabs.${k}`),
+        })),
+      },
+      {
+        show: hotel && can(ctx, "frontdesk.view"),
+        href: `${base}/laundry`,
+        label: t("nav.laundry"),
+        icon: <Shirt />,
+        groupKey: "reception",
+        group: "",
+        children: (["register", "tickets", "base", "cashbox", "reports", "settings"] as const).map((k) => ({
+          href: `${base}/laundry?tab=${k}`,
+          label: t(`laundry.tabs.${k}`),
+        })),
+      },
+      {
+        show: hotel && can(ctx, "frontdesk.view"),
+        href: `${base}/damages`,
+        label: t("nav.damages"),
+        icon: <ShieldAlert />,
+        groupKey: "reception",
+        group: "",
+        children: (["register", "tickets", "base", "cashbox", "reports", "settings"] as const).map((k) => ({
+          href: `${base}/damages?tab=${k}`,
+          label: t(`damages.tabs.${k}`),
+        })),
+      },
+      {
+        show: hotel && can(ctx, "frontdesk.view"),
+        href: `${base}/minibar`,
+        label: t("nav.minibar"),
+        icon: <Wine />,
+        groupKey: "reception",
+        group: "",
+        children: (["register", "base", "reports", "settings"] as const).map((k) => ({
+          href: `${base}/minibar?tab=${k}`,
+          label: t(`minibarx.tabs.${k}`),
+        })),
+      },
+      {
+        show: hotel && can(ctx, "frontdesk.view"),
+        href: `${base}/internet`,
+        label: t("nav.internet"),
+        icon: <Wifi />,
+        groupKey: "reception",
+        group: "",
+        children: (["users", "profiles", "settings"] as const).map((k) => ({
+          href: `${base}/internet?tab=${k}`,
+          label: t(`internet.tabs.${k}`),
+        })),
+      },
+      {
+        show: hotel && can(ctx, "frontdesk.view"),
+        href: `${base}/tv`,
+        label: t("nav.tv"),
+        icon: <Tv />,
+        groupKey: "reception",
+        group: "",
+        children: (["rooms", "activity", "settings"] as const).map((k) => ({
+          href: `${base}/tv?tab=${k}`,
+          label: t(`tv.tabs.${k}`),
+        })),
+      },
+      {
+        show: hotel && can(ctx, "tables.view"),
+        href: `${base}/engineering`,
+        label: t("nav.engineering"),
+        icon: <Wrench />,
+        groupKey: "reception",
+        group: "",
+        children: (["orders", "equipment", "preventive", "reports", "settings"] as const).map((k) => ({
+          href: `${base}/engineering?tab=${k}`,
+          label: t(`engineering.tabs.${k}`),
+        })),
       },
       // Hotels: their restaurants, cafés and bars, each with its tables, menu and till.
       {

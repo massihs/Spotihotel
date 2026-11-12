@@ -1,3 +1,4 @@
+import { dirtyStayoversAfterAudit } from "@/server/modules/hotel/hk-extra";
 import { and, asc, desc, eq, inArray, isNull, lte, ne, sql } from "drizzle-orm";
 import type { Database, DbOrTx } from "@/server/db/client";
 import {
@@ -218,6 +219,8 @@ export async function runNightAudit(db: Database, ctx: RestaurantContext) {
   });
   // Journal the day in the general ledger (idempotent; also done before every finance report).
   await syncLedger(db, ctx.restaurant);
+  // Daily cleaning: the rooms slept in go back to dirty for the new day.
+  await dirtyStayoversAfterAudit(db, ctx).catch((e) => console.error("stayovers to dirty", e));
   return { ...result, ...keyFigures(result.roomsAvailable, result.roomsSold, result.roomRevenueCents) };
 }
 

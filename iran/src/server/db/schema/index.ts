@@ -22,4 +22,5 @@ export * from "./ops";
 export * from "./billing";
 export * from "./push";
 export * from "./pms";
+export * from "./hotel-services";
 export * from "./ledger";

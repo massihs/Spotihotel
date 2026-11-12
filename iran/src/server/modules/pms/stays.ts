@@ -29,6 +29,9 @@ import { findUsableCoupon } from "@/server/modules/customers/service";
 import { couponDiscount } from "@/lib/coupon";
 import { createGuest, guestFields, nationalCodeOk, nationalCodeRule } from "./guests";
 import { getPmsSettings } from "./setup";
+import { servicesSettings } from "@/server/modules/hotel/services";
+import { internetOnCheckIn, internetOnCheckOut } from "@/server/modules/hotel/internet";
+import { tvOnCheckIn, tvOnCheckOut } from "@/server/modules/hotel/tv";
 import {
   accountFolioOf,
   closeFolios,
@@ -865,6 +868,12 @@ export async function checkIn(
     if (room.housekeeping === "out_of_order") throw conflict("room_out_of_order");
     if (!input.allowDirty && !["clean", "inspected"].includes(room.housekeeping))
       throw conflict("room_not_clean");
+    if (
+      !input.allowDirty &&
+      room.housekeeping === "clean" &&
+      (await servicesSettings(tx, rid, ctx.restaurant.timezone)).housekeeping.inspectionRequired
+    )
+      throw conflict("room_not_inspected");
     await assertRoomFree(tx, rid, room.id, s.arrival, s.departure, s.id);
     const [inRoom] = await tx
       .select({ id: stays.id })
@@ -910,6 +919,14 @@ export async function checkIn(
     await emit(tx, { topic: topics.restaurant(rid), type: "notification.created" });
     return updated!;
   });
+  // The room's services follow the guest: an internet login, the TV switched on (best effort:
+  // the check-in itself is done).
+  if (result.roomId) {
+    await internetOnCheckIn(db, ctx, result.id, result.roomId).catch((e) =>
+      console.error("internet at check-in", e),
+    );
+    await tvOnCheckIn(db, ctx, result.id, result.roomId).catch((e) => console.error("tv at check-in", e));
+  }
   return result;
 }
 
@@ -933,7 +950,7 @@ export async function checkOut(
   const input = checkOutSchema.parse(raw);
   const rid = ctx.restaurant.id;
   await chargeRoomOrders(db, ctx, stayId);
-  return db.transaction(async (tx) => {
+  const out = await db.transaction(async (tx) => {
     const s = await lockStay(tx, rid, stayId);
     if (s.status !== "in_house") throw conflict("not_in_house");
     const settings = await getPmsSettings(tx, rid, ctx.restaurant.timezone);
@@ -994,6 +1011,9 @@ export async function checkOut(
     await emit(tx, { topic: topics.restaurant(rid), type: "session.closed" });
     return updated!;
   });
+  await internetOnCheckOut(db, ctx, out.id).catch((e) => console.error("internet at check-out", e));
+  await tvOnCheckOut(db, ctx, out.id, out.roomId).catch((e) => console.error("tv at check-out", e));
+  return out;
 }
 
 /** Charges every night before `until` not charged yet (room + city tax), dated on its own day. */

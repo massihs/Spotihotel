@@ -582,7 +582,13 @@
     "housekeeping": "Ménage et maintenance",
     "hotelReports": "Rapports de l'hôtel",
     "reservation": "Réservation",
-    "cashier": "Caisse"
+    "cashier": "Caisse",
+    "laundry": "Blanchisserie",
+    "damages": "Dommages",
+    "minibar": "Minibar",
+    "internet": "Internet",
+    "tv": "Télévision (IPTV)",
+    "engineering": "Technique"
   },
   "dashboard": {
     "welcome": "Bonjour {name}",
@@ -1088,7 +1094,17 @@
     "foreign_amount_required": "Saisissez le montant en devise.",
     "duplicate_currency": "Chaque devise une seule fois.",
     "cart_other_outlet": "Votre panier vient d'un autre restaurant.",
-    "product_other_outlet": "Ce plat n'est pas au menu de ce restaurant."
+    "product_other_outlet": "Ce plat n'est pas au menu de ce restaurant.",
+    "no_stay_in_room": "Aucun client dans cette chambre.",
+    "ticket_settled": "Ce bon est déjà réglé.",
+    "ticket_cancelled": "Ce bon est annulé.",
+    "ticket_on_bill": "Déjà sur la note : annulez la ligne depuis la note.",
+    "not_waivable": "Seul un dommage peut être offert.",
+    "username_taken": "Cet identifiant existe déjà.",
+    "profile_not_found": "Profil introuvable.",
+    "unknown_package": "Bouquet inconnu.",
+    "room_not_inspected": "La chambre n'est pas encore contrôlée.",
+    "unknown_kind": "Service inconnu."
   },
   "tables": {
     "title": "Tables & QR codes",
@@ -4324,7 +4340,10 @@
       "city_tax": "Taxe de séjour",
       "misc": "Divers",
       "payment": "Règlement",
-      "transfer": "Transfert"
+      "transfer": "Transfert",
+      "damage": "Dommages",
+      "internet": "Internet",
+      "tv": "Télévision"
     },
     "method": {
       "cash": "Espèces",
@@ -5467,9 +5486,15 @@
     "title": "Ménage et maintenance",
     "subtitle": "Le plan du jour, la liste de chaque femme de chambre, le contrôle et les réparations.",
     "tabs": {
-      "plan": "Plan du jour",
+      "plan": "Rack ménage",
       "mine": "Mes chambres",
-      "maintenance": "Maintenance"
+      "maintenance": "Maintenance",
+      "base": "Données de base",
+      "log": "Main courante",
+      "operations": "Opérations",
+      "rack": "Rack hébergement",
+      "reports": "Rapports",
+      "settings": "Réglages"
     },
     "counts": {
       "dirty": "Sales",
@@ -5729,7 +5754,24 @@
       "counted": "Compté",
       "difference": "Écart",
       "handedTo": "Remis à",
-      "note": "Note"
+      "note": "Note",
+      "date": "Date",
+      "items": "Articles",
+      "settlement": "Règlement",
+      "item": "Article",
+      "qty": "Qté",
+      "tickets": "Bons",
+      "pending": "À régler",
+      "at": "Heure",
+      "event": "Événement",
+      "detail": "Détail",
+      "title": "Intitulé",
+      "priority": "Priorité",
+      "assigned": "Assigné à",
+      "equipment": "Équipement",
+      "cleaned": "Faites",
+      "inspected": "Contrôlées",
+      "credits": "Minutes"
     },
     "folioKind": {
       "guest": "Client",
@@ -5856,5 +5898,353 @@
     "transferred": "Transfert effectué.",
     "transferAmount": "Transférer {amount}",
     "transfer": "Transférer"
+  },
+  "laundry": {
+    "title": "Blanchisserie",
+    "subtitle": "Linge des clients : saisie, suivi jusqu'à la livraison, règlement sur la note ou à la caisse, rapports.",
+    "today": "Bons du jour",
+    "tabs": {
+      "register": "Saisie",
+      "tickets": "Suivi",
+      "base": "Données de base",
+      "cashbox": "Caisse",
+      "reports": "Rapports",
+      "settings": "Réglages"
+    }
+  },
+  "damages": {
+    "title": "Dommages",
+    "subtitle": "Dommages constatés en chambre : saisie, règlement sur la note ou à la caisse, ou geste commercial.",
+    "today": "Dommages du jour",
+    "tabs": {
+      "register": "Saisie",
+      "tickets": "Suivi",
+      "base": "Données de base",
+      "cashbox": "Caisse",
+      "reports": "Rapports",
+      "settings": "Réglages"
+    }
+  },
+  "services": {
+    "items": {
+      "hint": {
+        "laundry": "Tarif de la blanchisserie : chaque article avec son prix (lavage, repassage, nettoyage à sec).",
+        "damage": "Liste des dommages et le montant facturé pour chacun."
+      },
+      "add": "Ajouter un article",
+      "empty": "Aucun article pour l'instant.",
+      "emptyForForm": "Créez d'abord les articles et leurs prix dans « Données de base ».",
+      "noCategory": "Sans catégorie",
+      "name": "Nom",
+      "category": "Catégorie",
+      "price": "Prix",
+      "active": "Actif"
+    },
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "confirmDelete": "Supprimer ?",
+    "save": "Enregistrer",
+    "saved": "Enregistré",
+    "count": "{n} bon(s)",
+    "allStatuses": "Tous les états",
+    "express": "Express",
+    "form": {
+      "room": "Chambre",
+      "walkIn": "Client de passage",
+      "guestName": "Nom du client",
+      "pickRoom": "Chambre occupée",
+      "noRooms": "Aucune chambre occupée.",
+      "items": "Articles",
+      "express": "Express (+{pct} %)",
+      "note": "Remarque",
+      "settle": "Règlement",
+      "total": "Total",
+      "submit": "Enregistrer",
+      "done": "Bon n° {n} enregistré"
+    },
+    "settle": {
+      "room": "Sur la note",
+      "cash": "Espèces",
+      "card": "Carte",
+      "pos": "Virement carte",
+      "pending": "À régler",
+      "waived": "Offert"
+    },
+    "status": {
+      "received": "Reçu",
+      "in_progress": "En cours",
+      "ready": "Prêt",
+      "delivered": "Livré",
+      "open": "Enregistré",
+      "cancelled": "Annulé"
+    },
+    "next": {
+      "in_progress": "Commencer",
+      "ready": "Prêt",
+      "delivered": "Livrer"
+    },
+    "list": {
+      "empty": "Aucun bon.",
+      "room": "Chambre {room}",
+      "due": "Prêt {at}",
+      "cancel": "Annuler",
+      "confirmCancel": "Annuler ce bon ?",
+      "confirmWaive": "Offrir ce dommage ?"
+    },
+    "report": {
+      "byItem": "Par article",
+      "byDay": "Par jour"
+    },
+    "settings": {
+      "expressPct": "Supplément express (%)",
+      "readyHours": "Délai de préparation (heures)",
+      "readyHoursHint": "l'express en moitié moins",
+      "settleToRoom": "Sur la note par défaut",
+      "settleToRoomHint": "À la saisie, « Sur la note » est déjà choisi."
+    }
+  },
+  "minibarx": {
+    "title": "Minibar",
+    "subtitle": "Consommations des minibars sur la note, liste des produits et rapports.",
+    "tabs": {
+      "register": "Saisie",
+      "base": "Données de base",
+      "reports": "Rapports",
+      "settings": "Réglages"
+    },
+    "noItems": "Ajoutez d'abord les produits dans « Données de base ».",
+    "room": "Chambre occupée",
+    "total": "Total",
+    "charge": "Porter sur la note",
+    "charged": "Porté sur la note.",
+    "byItem": "Par produit",
+    "byRoom": "Par chambre",
+    "selfService": "Déclaration par le client",
+    "selfServiceHint": "Le client déclare ce qu'il a pris depuis le QR de la chambre.",
+    "save": "Enregistrer",
+    "saved": "Enregistré"
+  },
+  "internet": {
+    "title": "Internet",
+    "subtitle": "Comptes internet des clients, profils (débit, volume, durée) et création automatique au check-in.",
+    "tabs": {
+      "users": "Utilisateurs",
+      "profiles": "Profils",
+      "settings": "Réglages"
+    },
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "confirmDelete": "Supprimer ?",
+    "save": "Enregistrer",
+    "copy": "Copier",
+    "profiles": {
+      "add": "Nouveau profil",
+      "empty": "Aucun profil.",
+      "free": "Gratuit",
+      "down": "Débit descendant",
+      "up": "Débit montant",
+      "quota": "Volume",
+      "days": "Durée",
+      "daysN": "{n} jours",
+      "devices": "Appareils",
+      "unlimited": "Illimité",
+      "untilCheckout": "Jusqu'au départ",
+      "name": "Nom",
+      "price": "Prix",
+      "active": "Actif"
+    },
+    "accounts": {
+      "add": "Nouveau compte",
+      "needProfile": "Créez d'abord un profil.",
+      "created": "Compte créé :",
+      "empty": "Aucun compte.",
+      "username": "Identifiant",
+      "password": "Mot de passe",
+      "room": "Chambre",
+      "guest": "Client",
+      "profile": "Profil",
+      "validUntil": "Valable jusqu'au",
+      "status": "État",
+      "disable": "Désactiver",
+      "enable": "Activer",
+      "extend": "+1 jour",
+      "reset": "Nouveau mot de passe",
+      "auto": "vide = automatique",
+      "charge": "Facturer le profil sur la note"
+    },
+    "status": {
+      "active": "Actif",
+      "disabled": "Désactivé",
+      "expired": "Expiré",
+      "all": "Tous"
+    },
+    "settings": {
+      "autoCreate": "Créer un compte au check-in",
+      "autoCreateHint": "avec le profil par défaut ci-dessous.",
+      "profileId": "Profil par défaut",
+      "usernameMode": "Identifiant",
+      "mode": {
+        "room": "Numéro de chambre (r1204)",
+        "random": "Aléatoire"
+      },
+      "passwordLength": "Longueur du mot de passe (chiffres)",
+      "disableOnCheckout": "Désactiver au check-out"
+    }
+  },
+  "tv": {
+    "title": "Télévision (IPTV)",
+    "subtitle": "État de la TV de chaque chambre, bouquets, message à l'écran et rapport d'activité.",
+    "tabs": {
+      "rooms": "Chambres",
+      "activity": "Rapport d'activité",
+      "settings": "Réglages"
+    },
+    "delete": "Supprimer",
+    "board": {
+      "count": "{on} sur {total} allumées",
+      "sendAll": "Message à toutes les chambres",
+      "on": "Allumer",
+      "off": "Éteindre",
+      "vacant": "Libre",
+      "package": "Bouquet",
+      "noPackage": "Bouquet de base",
+      "message": "Message à l'écran",
+      "messageFor": "Message pour la chambre {room}",
+      "send": "Envoyer"
+    },
+    "events": {
+      "activated": "Allumée",
+      "deactivated": "Éteinte",
+      "package": "Bouquet changé",
+      "message": "Message"
+    },
+    "settings": {
+      "autoActivate": "Allumer au check-in",
+      "deactivateOnCheckout": "Éteindre au check-out",
+      "welcome": "Message de bienvenue",
+      "welcomeHint": "'{name}' = nom du client",
+      "server": "Adresse du serveur IPTV",
+      "packages": "Bouquets de chaînes",
+      "packageName": "Nom du bouquet",
+      "price": "Prix",
+      "addPackage": "Ajouter"
+    }
+  },
+  "engineering": {
+    "title": "Technique",
+    "subtitle": "Bons de travaux, inventaire des équipements, maintenance préventive et rapports.",
+    "tabs": {
+      "orders": "Bons de travaux",
+      "equipment": "Équipements",
+      "preventive": "Maintenance préventive",
+      "reports": "Rapports",
+      "settings": "Réglages"
+    },
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "confirmDelete": "Supprimer ?",
+    "save": "Enregistrer",
+    "saved": "Enregistré",
+    "equipment": {
+      "add": "Nouvel équipement",
+      "empty": "Aucun équipement.",
+      "name": "Nom",
+      "category": "Catégorie",
+      "location": "Emplacement",
+      "serial": "N° de série",
+      "interval": "Périodicité",
+      "daysUnit": "jours",
+      "last": "Dernier entretien",
+      "next": "Prochain entretien",
+      "room": "Chambre",
+      "roomN": "Chambre {room}",
+      "days": "tous les {n} jours",
+      "note": "Remarque",
+      "active": "Actif"
+    },
+    "preventive": {
+      "none": "Aucun entretien planifié.",
+      "overdue": "En retard",
+      "today": "Aujourd'hui",
+      "last": "Dernier : {day}",
+      "never": "Jamais entretenu",
+      "serviced": "Entretien fait"
+    },
+    "report": {
+      "total": "Bons",
+      "open": "Ouverts",
+      "done": "Faits",
+      "urgent": "Urgents",
+      "avgHours": "Délai moyen (h)",
+      "services": "Entretiens préventifs",
+      "tickets": "Bons de la période",
+      "serviceLog": "Entretiens réalisés"
+    },
+    "priority": {
+      "low": "Basse",
+      "normal": "Normale",
+      "urgent": "Urgente"
+    },
+    "status": {
+      "open": "Ouvert",
+      "in_progress": "En cours",
+      "done": "Fait",
+      "cancelled": "Annulé"
+    },
+    "settings": {
+      "categories": "Catégories d'équipements",
+      "categoriesHint": "une par ligne"
+    }
+  },
+  "hkx": {
+    "save": "Enregistrer",
+    "saved": "Enregistré",
+    "log": {
+      "add": "Nouvelle entrée",
+      "category": "Type",
+      "room": "Chambre",
+      "text": "Texte",
+      "save": "Enregistrer",
+      "empty": "Rien dans la main courante pour cette période.",
+      "close": "Clore",
+      "reopen": "Rouvrir",
+      "roomN": "Chambre {room}"
+    },
+    "cat": {
+      "note": "Note",
+      "lost_found": "Objet trouvé",
+      "incident": "Incident",
+      "request": "Demande"
+    },
+    "ops": {
+      "occupiedDirty": "Chambres occupées → sales",
+      "occupiedDirtyHint": "Pour le ménage quotidien des recouches.",
+      "cleanInspected": "Chambres propres → contrôlées",
+      "cleanInspectedHint": "Après le tour de la gouvernante.",
+      "vacantDirtyClean": "Chambres libres sales → propres",
+      "vacantDirtyCleanHint": "Quand toutes les chambres libres ont été faites.",
+      "clearAssignments": "Effacer les attributions",
+      "clearAssignmentsHint": "Plus aucune chambre attribuée.",
+      "confirm": "Appliquer à toutes les chambres concernées ?",
+      "run": "Appliquer",
+      "done": "{n} chambre(s) modifiée(s)."
+    },
+    "rack": {
+      "mismatch": "Écart avec la réception"
+    },
+    "base": {
+      "credits": "Temps de ménage par type",
+      "creditsHint": "Sert à mesurer le travail de chacun dans les rapports.",
+      "minutes": "min",
+      "staff": "Personnel",
+      "staffHint": "Membres actifs et leurs chambres du jour.",
+      "roomsToday": "chambres aujourd'hui"
+    },
+    "settings": {
+      "dirtyStayoversDaily": "Recouches sales à la clôture de journée",
+      "dirtyStayoversDailyHint": "Après la clôture, les chambres occupées passent à « sale » pour le ménage du jour.",
+      "inspectionRequired": "Check-in seulement en chambre contrôlée",
+      "inspectionRequiredHint": "Une chambre « propre » doit être contrôlée avant le check-in."
+    }
   }
 }
