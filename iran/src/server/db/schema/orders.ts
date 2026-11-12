@@ -35,6 +35,8 @@ export const carts = pgTable(
     participantId: uuid()
       .notNull()
       .references(() => sessionParticipants.id, { onDelete: "cascade" }),
+    /** A room's cart is for one of the hotel's restaurants or cafés (its kitchen gets the order). */
+    outletId: uuid().references(() => outlets.id, { onDelete: "set null" }),
     note: text(),
     ...timestamps,
   },

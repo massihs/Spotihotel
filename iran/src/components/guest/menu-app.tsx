@@ -21,7 +21,9 @@ import {
   useTransition,
   type ReactNode,
 } from "react";
-import { addToCartAction } from "@/app/[locale]/table/actions";
+import { addToCartAction, switchOutletAction } from "@/app/[locale]/table/actions";
+import type { AddItemInput } from "@/server/modules/cart/service";
+import { OutletPicker, type RoomOutlet } from "./outlet-picker";
 import { Toast } from "@/components/ui/toast";
 import { useMoney } from "@/components/ui/use-money";
 import { Link } from "@/i18n/navigation";
@@ -96,6 +98,9 @@ export function MenuApp({
   room = false,
   theme,
   shortPrices,
+  outlets = [],
+  outletId = null,
+  cartOutlet = null,
 }: {
   menu: PublicMenu;
   currency: string;
@@ -109,6 +114,11 @@ export function MenuApp({
   theme: MenuTheme;
   /** Menu prices in thousand tomans (the unit is shown once per section). */
   shortPrices: boolean;
+  /** A hotel room: the restaurants and cafés it can order from, and the one shown. */
+  outlets?: RoomOutlet[];
+  outletId?: string | null;
+  /** The outlet whose dishes are already in the cart. */
+  cartOutlet?: { id: string; name: string } | null;
 }) {
   const t = useTranslations();
   const locale = useLocale();
@@ -207,14 +217,34 @@ export function MenuApp({
     tab?.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
   }, [active]);
 
+  const outlet = outlets.find((o) => o.id === outletId) ?? null;
+  /**
+   * Adds to the cart for the outlet shown. A cart already holding another outlet's dishes is
+   * emptied first, once the guest agrees (each order goes to a single kitchen).
+   */
+  const addRemote = async (input: Omit<AddItemInput, "outletId">) => {
+    let res = await addToCartAction({ ...input, outletId });
+    if (res && !res.ok && res.error === "cart_other_outlet" && outletId) {
+      const ok = window.confirm(
+        t("guest.outlets.switchConfirm", { from: cartOutlet?.name ?? "", to: outlet?.name ?? "" }),
+      );
+      if (!ok) return null;
+      const sw = await switchOutletAction(outletId);
+      if (sw?.ok && sw.data) setCart(sw.data);
+      res = await addToCartAction({ ...input, outletId });
+    }
+    return res;
+  };
+
   /** Tap on "+": products whose defaults are enough go straight to the cart, others open. */
   const quickAdd = (p: PublicProduct) => {
     if (!canQuickAdd(p)) return setOpenId(p.id);
     setAdding(p.id);
     startTransition(async () => {
       const optionValueIds = [...initialSelection(p.optionGroups).values()].flatMap((s) => [...s]);
-      const res = await addToCartAction({ productId: p.id, optionValueIds, quantity: 1, note: "" });
+      const res = await addRemote({ productId: p.id, optionValueIds, quantity: 1, note: "" });
       setAdding(null);
+      if (res === null) return;
       if (res?.ok && res.data) {
         setCart(res.data);
         navigator.vibrate?.(20);
@@ -251,6 +281,9 @@ export function MenuApp({
   return (
     <>
       {header}
+      {room ? (
+        <OutletPicker outlets={outlets} current={outletId} cartOutlet={cartOutlet?.id ?? null} />
+      ) : null}
       {/* Marks the end of the header: past it, the compact bar takes over. */}
       <div ref={sentinel} aria-hidden="true" />
       <div
@@ -262,7 +295,7 @@ export function MenuApp({
       >
         <div className="mx-auto flex h-12 max-w-3xl items-center gap-3 px-4 pt-[env(safe-area-inset-top)] lg:max-w-6xl">
           <p className="min-w-0 flex-1 truncate font-menu-display text-[17px] font-semibold">
-            {restaurantName}
+            {outlet?.name ?? restaurantName}
           </p>
           <span className="shrink-0 rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-semibold text-accent-text">
             {t(room ? "guest.tableBadgeRoom" : "guest.tableBadge", { table: tableLabel })}
@@ -605,6 +638,7 @@ export function MenuApp({
           inCart={cart.byProduct[open.id] ?? 0}
           suggestions={suggestionsFor(open)}
           onPick={setOpenId}
+          addRemote={addRemote}
           onClose={() => setOpenId(null)}
           onAdded={(summary) => {
             setCart(summary);

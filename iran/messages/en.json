@@ -1086,7 +1086,9 @@
     "invalid_recipient": "Invalid recipient.",
     "currency_not_accepted": "This currency is not set up in the cashier settings.",
     "foreign_amount_required": "Enter the foreign amount.",
-    "duplicate_currency": "Each currency only once."
+    "duplicate_currency": "Each currency only once.",
+    "cart_other_outlet": "Your cart is from another restaurant.",
+    "product_other_outlet": "This dish is not on this restaurant's menu."
   },
   "tables": {
     "title": "Tables & QR codes",
@@ -1747,7 +1749,21 @@
     "roomService": "Room service",
     "roomServiceHint": "Your order is delivered to your room.",
     "myStay": "My stay",
-    "myStayHint": "Spa, minibar, my bill, Wi-Fi and hotel info"
+    "myStayHint": "Spa, minibar, my bill, Wi-Fi and hotel info",
+    "outlets": {
+      "title": "Order from which restaurant?",
+      "count": "{n} restaurants and cafés",
+      "inCart": "In cart",
+      "switchConfirm": "Your cart is from “{from}”. Empty it to order from “{to}”?",
+      "kinds": {
+        "restaurant": "Restaurant",
+        "cafe": "Café",
+        "bar": "Bar",
+        "lounge": "Lounge",
+        "pool_bar": "Pool bar",
+        "pastry": "Pastry shop"
+      }
+    }
   },
   "categoryTemplates": {
     "starters": "Starters",
@@ -5369,7 +5385,9 @@
     "archiveConfirm": "Close “{name}”? Its tables and past sales are kept.",
     "emptyTitle": "No restaurant or café yet",
     "emptyBody": "Add them in one click above: each gets its tables, their QR codes and its till.",
-    "allOutlets": "Whole hotel"
+    "allOutlets": "Whole hotel",
+    "roomService": "Room service",
+    "roomServiceHint": "Room guests order from here by scanning their room's QR; orders reach this outlet's kitchen and till."
   },
   "onlineBooking": {
     "metaTitle": "Book a room",

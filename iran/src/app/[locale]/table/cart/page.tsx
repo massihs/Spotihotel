@@ -39,7 +39,9 @@ async function GuestCart() {
             seatLabel={t(guest.table.kind === "room" ? "tableBadgeRoom" : "tableBadge", {
               table: guest.table.label,
             })}
-            restaurantName={guest.restaurant.name}
+            restaurantName={
+              cart.outlet ? `${guest.restaurant.name} — ${cart.outlet.name}` : guest.restaurant.name
+            }
             displayName={guest.participant.displayName}
             hasIssues={cart.hasIssues}
             orderCount={orders.length}

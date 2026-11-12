@@ -4,6 +4,7 @@ import { Check, Flame, Plus, Scale, ShoppingBag, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { addToCartAction } from "@/app/[locale]/table/actions";
+import type { AddItemInput } from "@/server/modules/cart/service";
 import { useMoney } from "@/components/ui/use-money";
 import { cn } from "@/lib/cn";
 import type { PublicProduct } from "@/server/modules/menu/public";
@@ -32,10 +33,15 @@ export function ProductSheet({
   suggestions = [],
   onPick,
   addLocal,
+  addRemote,
 }: {
   product: PublicProduct;
   /** Online ordering: the cart lives in the browser, nothing is sent to the server here. */
   addLocal?: (line: { optionValueIds: string[]; quantity: number; note: string }) => CartSummary;
+  /** Adds through the menu (a room's outlet, switching cart if the guest agrees); null = declined. */
+  addRemote?: (
+    input: Omit<AddItemInput, "outletId">,
+  ) => Promise<Awaited<ReturnType<typeof addToCartAction>> | null>;
   currency: string;
   popular?: boolean;
   /** Units of this dish already in the cart. */
@@ -99,7 +105,9 @@ export function ProductSheet({
       return;
     }
     startTransition(async () => {
-      const res = await addToCartAction({ productId: p.id, optionValueIds: valueIds, quantity, note });
+      const input = { productId: p.id, optionValueIds: valueIds, quantity, note };
+      const res = addRemote ? await addRemote(input) : await addToCartAction(input);
+      if (res === null) return;
       if (res?.ok && res.data) onAdded(res.data);
       else if (res && !res.ok)
         setError(t.has(`errorCodes.${res.error}`) ? t(`errorCodes.${res.error}`) : t("errorCodes.internal"));

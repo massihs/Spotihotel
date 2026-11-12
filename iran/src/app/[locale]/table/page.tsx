@@ -20,6 +20,7 @@ import { RoomConcierge } from "@/components/guest/room-concierge";
 import { guestCallsOf } from "@/server/modules/team/sections";
 import { getPmsSettings } from "@/server/modules/pms/setup";
 import { inHouseStayOfRoom } from "@/server/modules/pms/stays";
+import { roomServiceOutlets } from "@/server/modules/outlets/service";
 
 /** The guest cookie is per request: the page streams behind its own boundary (instant navigations). */
 export default function GuestMenuPage({ searchParams }: PageProps<"/[locale]/table">) {
@@ -29,7 +30,7 @@ export default function GuestMenuPage({ searchParams }: PageProps<"/[locale]/tab
         <Welcome searchParams={searchParams} />
       </Suspense>
       <Suspense fallback={<GuestSkeleton />}>
-        <GuestMenu />
+        <GuestMenu searchParams={searchParams} />
       </Suspense>
     </>
   );
@@ -52,7 +53,8 @@ async function Welcome({ searchParams }: Pick<PageProps<"/[locale]/table">, "sea
   );
 }
 
-async function GuestMenu() {
+async function GuestMenu({ searchParams }: Pick<PageProps<"/[locale]/table">, "searchParams">) {
+  const asked = (await searchParams).outlet;
   const guest = await getGuest();
   if (!guest) return <SessionExpired />;
   // Menu comes from the tag-invalidated cache; the cart is always read live.
@@ -64,8 +66,13 @@ async function GuestMenu() {
     getPopularProductIds(guest.restaurant.id),
     getStorefront(db, guest.restaurant.id),
   ]);
-  // A table of the hotel's café shows the café's menu (and what all outlets share).
-  const menu = menuForOutlet(fullMenu, guest.table.outletId);
+  // A hotel room orders from any restaurant or café open to room service (the one picked, else
+  // the one its cart is from, else the first); a table of the hotel's café shows the café's menu.
+  const roomOutlets = guest.table.kind === "room" ? await roomServiceOutlets(db, guest.restaurant.id) : [];
+  const viewing = roomOutlets.length
+    ? (roomOutlets.find((o) => o.id === asked)?.id ?? cart.outlet?.id ?? roomOutlets[0]!.id)
+    : null;
+  const menu = menuForOutlet(fullMenu, viewing ?? guest.table.outletId);
   const t = await getTranslations("guest");
   const waitingText = guest.session.confirmed ? "" : t("waitingConfirm");
   const byProduct: Record<string, number> = {};
@@ -101,6 +108,9 @@ async function GuestMenu() {
             room={room}
             theme={menuThemeOf(guest.restaurant.menuTheme)}
             shortPrices={guest.restaurant.menuShortPrices}
+            outlets={roomOutlets}
+            outletId={viewing}
+            cartOutlet={cart.outlet}
             header={
               <>
                 <GuestHeader guest={guest} orderCount={orders.length} cover={cover} store={store} />

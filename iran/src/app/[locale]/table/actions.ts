@@ -29,6 +29,7 @@ import {
   setCartItemNote,
   setCartItemQuantity,
   type AddItemInput,
+  switchCartOutlet,
 } from "@/server/modules/cart/service";
 
 async function guest() {
@@ -49,6 +50,15 @@ export async function addToCartAction(input: AddItemInput) {
   return runAction(async () => {
     const g = await guest();
     await addToCart(db, g, input);
+    return cartSummary(await getCartView(db, g));
+  });
+}
+
+/** A room guest with a cart from another restaurant switches: the cart is emptied first. */
+export async function switchOutletAction(outletId: string) {
+  return runAction(async () => {
+    const g = await guest();
+    await switchCartOutlet(db, g, outletId);
     return cartSummary(await getCartView(db, g));
   });
 }

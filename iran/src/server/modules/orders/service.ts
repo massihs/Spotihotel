@@ -168,7 +168,8 @@ export async function placeOrder(
         seq,
         channel: "dine_in",
         tableId: guest.table.id,
-        outletId: guest.table.outletId,
+        // A room picks the restaurant or café it orders from; a table belongs to its outlet.
+        outletId: cart?.outletId ?? guest.table.outletId,
         tableSessionId: guest.session.id,
         participantId: guest.participant.id,
         tableLabel: guest.table.label,

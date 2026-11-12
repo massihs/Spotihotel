@@ -1086,7 +1086,9 @@
     "invalid_recipient": "Destinataire invalide.",
     "currency_not_accepted": "Cette devise n'est pas acceptée (réglages de caisse).",
     "foreign_amount_required": "Saisissez le montant en devise.",
-    "duplicate_currency": "Chaque devise une seule fois."
+    "duplicate_currency": "Chaque devise une seule fois.",
+    "cart_other_outlet": "Votre panier vient d'un autre restaurant.",
+    "product_other_outlet": "Ce plat n'est pas au menu de ce restaurant."
   },
   "tables": {
     "title": "Tables & QR codes",
@@ -1747,7 +1749,21 @@
     "roomService": "Room service",
     "roomServiceHint": "Votre commande est livrée dans votre chambre.",
     "myStay": "Mon séjour",
-    "myStayHint": "Spa, minibar, ma note, Wi-Fi et infos de l'hôtel"
+    "myStayHint": "Spa, minibar, ma note, Wi-Fi et infos de l'hôtel",
+    "outlets": {
+      "title": "Commander auprès de quel restaurant ?",
+      "count": "{n} restaurants et cafés",
+      "inCart": "Au panier",
+      "switchConfirm": "Votre panier vient de « {from} ». Le vider pour commander chez « {to} » ?",
+      "kinds": {
+        "restaurant": "Restaurant",
+        "cafe": "Café",
+        "bar": "Bar",
+        "lounge": "Lounge",
+        "pool_bar": "Bar de la piscine",
+        "pastry": "Pâtisserie"
+      }
+    }
   },
   "categoryTemplates": {
     "starters": "Entrées",
@@ -5369,7 +5385,9 @@
     "archiveConfirm": "Fermer « {name} » ? Ses tables et ses ventes passées sont conservées.",
     "emptyTitle": "Aucun restaurant ni café pour l'instant",
     "emptyBody": "Ajoutez-les en un clic ci-dessus : chacun reçoit ses tables, leurs QR codes et sa caisse.",
-    "allOutlets": "Tout l'hôtel"
+    "allOutlets": "Tout l'hôtel",
+    "roomService": "Room service",
+    "roomServiceHint": "Les clients des chambres commandent ici en scannant le QR de la chambre ; la commande arrive dans sa cuisine et sa caisse."
   },
   "onlineBooking": {
     "metaTitle": "Réserver une chambre",

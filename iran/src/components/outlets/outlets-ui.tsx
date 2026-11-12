@@ -58,6 +58,7 @@ export type OutletView = {
   kind: string;
   location: string | null;
   hours: string | null;
+  roomService: boolean;
   tables: number;
   openTables: number;
   categories: number;
@@ -167,6 +168,18 @@ function OutletFields({ values }: { values?: Partial<OutletView> }) {
           />
         </label>
       </div>
+      <label className="flex items-start gap-3 rounded-xl bg-brand-50 p-3 ring-1 ring-brand-100">
+        <input
+          type="checkbox"
+          name="roomService"
+          defaultChecked={values?.roomService ?? true}
+          className="mt-0.5 size-4 accent-[var(--accent)]"
+        />
+        <span className="text-sm">
+          <b className="block">{t("roomService")}</b>
+          <span className="text-fg-muted">{t("roomServiceHint")}</span>
+        </span>
+      </label>
     </>
   );
 }
@@ -198,6 +211,7 @@ export function NewOutletButton({ restaurantId }: { restaurantId: string }) {
                     kind: str(fd, "kind") as Kind,
                     location: str(fd, "location"),
                     hours: str(fd, "hours"),
+                    roomService: fd.get("roomService") === "on",
                     tables: Number(str(fd, "tables") || 0),
                     seats: Number(str(fd, "seats") || 4),
                     tablePrefix: str(fd, "tablePrefix"),
@@ -455,6 +469,7 @@ export function OutletCard({
                           kind: str(fd, "kind") as Kind,
                           location: str(fd, "location"),
                           hours: str(fd, "hours"),
+                          roomService: fd.get("roomService") === "on",
                         }),
                       close,
                     );

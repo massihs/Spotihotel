@@ -1086,7 +1086,9 @@
     "invalid_recipient": "المستلم غير صالح.",
     "currency_not_accepted": "هذه العملة غير معرّفة في إعدادات الصندوق.",
     "foreign_amount_required": "أدخل المبلغ بالعملة.",
-    "duplicate_currency": "كل عملة مرة واحدة."
+    "duplicate_currency": "كل عملة مرة واحدة.",
+    "cart_other_outlet": "سلتك من مطعم آخر.",
+    "product_other_outlet": "هذا الطبق ليس في قائمة هذا المطعم."
   },
   "tables": {
     "title": "الطاولات ورموز QR",
@@ -1747,7 +1749,21 @@
     "roomService": "خدمة الغرف",
     "roomServiceHint": "يُوصَل طلبك إلى غرفتك.",
     "myStay": "إقامتي",
-    "myStayHint": "السبا والميني بار وفاتورتي والواي فاي ومعلومات الفندق"
+    "myStayHint": "السبا والميني بار وفاتورتي والواي فاي ومعلومات الفندق",
+    "outlets": {
+      "title": "من أي مطعم تطلب؟",
+      "count": "{n} مطاعم ومقاهٍ",
+      "inCart": "في السلة",
+      "switchConfirm": "سلتك من «{from}». هل تفرغها للطلب من «{to}»؟",
+      "kinds": {
+        "restaurant": "مطعم",
+        "cafe": "مقهى",
+        "bar": "بار",
+        "lounge": "صالة",
+        "pool_bar": "مقهى المسبح",
+        "pastry": "حلويات"
+      }
+    }
   },
   "categoryTemplates": {
     "starters": "المقبلات",
@@ -5369,7 +5385,9 @@
     "archiveConfirm": "إغلاق «{name}»؟ تُحفظ طاولاته ومبيعاته السابقة.",
     "emptyTitle": "لا يوجد مطعم أو مقهى بعد",
     "emptyBody": "أضفها بنقرة من الأعلى: لكل منها طاولاتها ورموز QR وصندوقها.",
-    "allOutlets": "الفندق كله"
+    "allOutlets": "الفندق كله",
+    "roomService": "خدمة الغرف",
+    "roomServiceHint": "يطلب نزلاء الغرف من هنا بمسح رمز الغرفة؛ يصل الطلب إلى مطبخ وصندوق هذا المكان."
   },
   "onlineBooking": {
     "metaTitle": "احجز غرفة",

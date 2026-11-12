@@ -22,6 +22,8 @@ export const outlets = pgTable(
     hours: varchar({ length: 40 }),
     sortOrder: integer().notNull().default(0),
     isActive: boolean().notNull().default(true),
+    /** Hotel rooms may order from it (room service); on by default for every outlet. */
+    roomService: boolean().notNull().default(true),
     ...timestamps,
     ...softDelete,
   },

@@ -36,6 +36,8 @@ export const outletSchema = z.object({
   kind: z.enum(OUTLET_KINDS).default("restaurant"),
   location: optText(80),
   hours: optText(40),
+  /** Hotel rooms order from it (room service): on unless the manager turns it off. */
+  roomService: z.coerce.boolean().default(true),
 });
 
 /** Creation also lays out the outlet's tables, so it can take orders at once. */
@@ -121,6 +123,7 @@ export async function createOutlet(
       kind: input.kind,
       location: input.location ?? null,
       hours: input.hours ?? null,
+      roomService: input.roomService,
       sortOrder: n,
     })
     .returning();
@@ -157,7 +160,13 @@ export async function updateOutlet(
   if (!current) throw notFound();
   await db
     .update(outlets)
-    .set({ name: input.name, kind: input.kind, location: input.location ?? null, hours: input.hours ?? null })
+    .set({
+      name: input.name,
+      kind: input.kind,
+      location: input.location ?? null,
+      hours: input.hours ?? null,
+      roomService: input.roomService,
+    })
     .where(eq(outlets.id, current.id));
   // Its tables follow the new name on the floor plan.
   if (current.name !== input.name)
@@ -300,4 +309,26 @@ export async function outletSales(db: DbOrTx, ctx: RestaurantContext, from: stri
     totalCents,
     orders: lines.reduce((s, l) => s + l.orders, 0),
   };
+}
+
+/** The outlets a hotel room orders from (active, room service on), in the manager's order. */
+export async function roomServiceOutlets(db: DbOrTx, restaurantId: string) {
+  return db
+    .select({
+      id: outlets.id,
+      name: outlets.name,
+      kind: outlets.kind,
+      location: outlets.location,
+      hours: outlets.hours,
+    })
+    .from(outlets)
+    .where(
+      and(
+        eq(outlets.restaurantId, restaurantId),
+        isNull(outlets.deletedAt),
+        eq(outlets.isActive, true),
+        eq(outlets.roomService, true),
+      ),
+    )
+    .orderBy(asc(outlets.sortOrder), asc(outlets.createdAt));
 }

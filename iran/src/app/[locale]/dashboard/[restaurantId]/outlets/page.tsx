@@ -68,6 +68,7 @@ async function Outlets({ params }: Pick<Props, "params">) {
                 kind: o.kind,
                 location: o.location,
                 hours: o.hours,
+                roomService: o.roomService,
                 tables: o.tables,
                 openTables: o.openTables,
                 categories: o.categories,

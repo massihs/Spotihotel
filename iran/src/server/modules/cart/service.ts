@@ -1,8 +1,9 @@
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, eq, inArray, isNull } from "drizzle-orm";
 import { z } from "zod";
 import type { Database, DbOrTx } from "@/server/db/client";
-import { cartItems, carts } from "@/server/db/schema";
-import { AppError, notFound } from "@/server/errors";
+import { cartItems, carts, categories, outlets, products } from "@/server/db/schema";
+import { AppError, conflict, notFound } from "@/server/errors";
+import { roomServiceOutlets } from "@/server/modules/outlets/service";
 import { isUuid } from "@/lib/ids";
 import { touchSession, type GuestContext } from "@/server/modules/guest/sessions";
 import { loadPricedProducts, type PublicProduct } from "@/server/modules/menu/public";
@@ -26,6 +27,8 @@ export const addItemSchema = z.object({
     .transform((v) => (v === "" ? null : v))
     .nullable()
     .optional(),
+  /** A hotel room: the restaurant or café whose menu the guest is ordering from. */
+  outletId: z.uuid().nullable().optional(),
 });
 export type AddItemInput = z.input<typeof addItemSchema>;
 
@@ -61,6 +64,15 @@ export async function addToCart(db: Database, ctx: GuestContext, raw: AddItemInp
   return db.transaction(async (tx) => {
     const cart = await getOrCreateCart(tx, ctx);
     const items = await tx.select().from(cartItems).where(eq(cartItems.cartId, cart.id));
+    // A room orders from one of the hotel's outlets at a time: its kitchen gets the order.
+    if (ctx.table.kind === "room") {
+      const outletId = await roomOutletFor(tx, ctx, input.outletId ?? cart.outletId ?? null);
+      if (outletId) {
+        if (items.length && cart.outletId && cart.outletId !== outletId) throw conflict("cart_other_outlet");
+        await assertProductInOutlet(tx, ctx.restaurant.id, input.productId, outletId);
+        if (cart.outletId !== outletId) await tx.update(carts).set({ outletId }).where(eq(carts.id, cart.id));
+      }
+    }
     const key = lineKey(input.productId, input.optionValueIds, input.note);
     const same = items.find((i) => lineKey(i.productId, i.optionValueIds, i.note) === key);
     if (same) {
@@ -77,6 +89,50 @@ export async function addToCart(db: Database, ctx: GuestContext, raw: AddItemInp
       });
     }
     await touchSession(tx, ctx.session.id);
+  });
+}
+
+/** The room-service outlet asked for (or the first one), null when the hotel has none. */
+async function roomOutletFor(tx: DbOrTx, ctx: GuestContext, asked: string | null) {
+  const list = await roomServiceOutlets(tx, ctx.restaurant.id);
+  if (!list.length) return null;
+  return list.find((o) => o.id === asked)?.id ?? list[0]!.id;
+}
+
+/** A dish of another outlet's menu cannot go in this outlet's order (shared sections can). */
+async function assertProductInOutlet(tx: DbOrTx, restaurantId: string, productId: string, outletId: string) {
+  const [row] = await tx
+    .select({ outletIds: categories.outletIds })
+    .from(products)
+    .innerJoin(categories, eq(categories.id, products.categoryId))
+    .where(and(eq(products.id, productId), eq(products.restaurantId, restaurantId)));
+  if (row && row.outletIds.length && !row.outletIds.includes(outletId))
+    throw new AppError("VALIDATION", "product_other_outlet");
+}
+
+/**
+ * The room guest switches restaurant with a cart from another one: the cart is emptied (they
+ * confirmed) and now belongs to the outlet chosen.
+ */
+export async function switchCartOutlet(db: Database, ctx: GuestContext, outletId: string) {
+  if (ctx.table.kind !== "room" || !isUuid(outletId)) throw notFound();
+  await db.transaction(async (tx) => {
+    const [o] = await tx
+      .select({ id: outlets.id })
+      .from(outlets)
+      .where(
+        and(
+          eq(outlets.id, outletId),
+          eq(outlets.restaurantId, ctx.restaurant.id),
+          eq(outlets.roomService, true),
+          eq(outlets.isActive, true),
+          isNull(outlets.deletedAt),
+        ),
+      );
+    if (!o) throw notFound();
+    const cart = await getOrCreateCart(tx, ctx);
+    await tx.delete(cartItems).where(eq(cartItems.cartId, cart.id));
+    await tx.update(carts).set({ outletId }).where(eq(carts.id, cart.id));
   });
 }
 
@@ -168,7 +224,16 @@ export async function getCartView(db: Database, ctx: GuestContext) {
     };
   });
   const valid = lines.filter((l) => l.line).map((l) => l.line!);
+  const [outlet] =
+    cart?.outletId && items.length
+      ? await db
+          .select({ id: outlets.id, name: outlets.name })
+          .from(outlets)
+          .where(inArray(outlets.id, [cart.outletId]))
+      : [];
   return {
+    /** A room's cart: the restaurant or café it orders from. */
+    outlet: outlet ?? null,
     lines,
     itemCount: valid.reduce((n, l) => n + l.quantity, 0),
     totals: computeTotals(valid, ctx.restaurant.pricesIncludeTax),
