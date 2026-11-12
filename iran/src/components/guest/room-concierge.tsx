@@ -82,7 +82,7 @@ export function RoomConcierge({
             <Wifi className="size-[18px] shrink-0 text-[var(--brass)]" aria-hidden="true" />
             <span className="min-w-0 flex-1">
               <span className="block text-xs opacity-70">{t("wifi")}</span>
-              <span className="block truncate font-semibold" dir="ltr">
+              <span className="latin-digits block truncate font-semibold" dir="ltr">
                 {wifi.name}
               </span>
             </span>
@@ -166,7 +166,7 @@ export function CopyRow({
     <div className="flex items-center justify-between gap-3 py-1.5">
       <div className="min-w-0">
         <p className="text-xs text-fg-muted">{label}</p>
-        <p className="truncate font-semibold select-all" dir="ltr">
+        <p className="latin-digits truncate font-semibold select-all" dir="ltr">
           {value}
         </p>
       </div>

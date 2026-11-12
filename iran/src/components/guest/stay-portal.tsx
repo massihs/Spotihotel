@@ -107,13 +107,20 @@ export function StayPortal({
         {t("backToMenu")}
       </Link>
 
-      <header className="relative overflow-hidden rounded-[28px] bg-[var(--sidebar)] px-6 pt-6 pb-5 text-[var(--sidebar-fg)] shadow-[var(--shadow-soft)]">
+      <header className="sidebar-shade relative isolate overflow-hidden rounded-[28px] bg-[var(--sidebar)] px-6 pt-6 pb-5 text-[var(--sidebar-fg)] shadow-[var(--shadow-float)]">
+        <span
+          aria-hidden="true"
+          className="texture-khatam texture-fade-corner [--tex-color:var(--brass)] [--tex-opacity:0.16] [--tex-size:56px]"
+        />
+        <span aria-hidden="true" className="texture-grain [--grain-opacity:0.12]" />
         <span
           aria-hidden="true"
           className="pointer-events-none absolute -end-16 -top-20 size-56 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--brass)_45%,transparent),transparent_70%)]"
         />
-        <p className="relative text-xs font-semibold tracking-[0.18em] text-[var(--brass)]">{hotelName}</p>
-        <h1 className="relative mt-2 text-[26px] leading-tight font-bold">
+        <p className="relative text-xs font-semibold text-[var(--brass)] ltr:tracking-[0.18em]">
+          {hotelName}
+        </p>
+        <h1 className="font-display relative mt-2 text-[2.1rem] leading-tight">
           {stay && verified && stay.firstName ? t("hello", { name: stay.firstName }) : t("welcome")}
         </h1>
         <div className="relative mt-4 flex flex-wrap gap-2 text-sm">
