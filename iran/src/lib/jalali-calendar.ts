@@ -119,3 +119,16 @@ export function calendarLocale(locale: string, edition: string) {
   if (edition !== "iran") return locale;
   return `${locale === "fa" ? "fa-IR" : locale}-u-ca-persian`;
 }
+
+/**
+ * Formats a date, setting a Persian-calendar date that has both weekday and year the usual way:
+ * ICU writes it "۱۴۰۵ آبان ۱۵, جمعه" in Persian; this gives "جمعه ۱۵ آبان ۱۴۰۵".
+ */
+export function formatCalendarDate(fmt: Intl.DateTimeFormat, date: Date): string {
+  const o = fmt.resolvedOptions();
+  if (!(o.locale.startsWith("fa") && o.calendar === "persian" && o.weekday && o.year))
+    return fmt.format(date);
+  const parts = fmt.formatToParts(date);
+  const get = (type: Intl.DateTimeFormatPartTypes) => parts.find((p) => p.type === type)?.value ?? "";
+  return [get("weekday"), get("day"), get("month"), get("year")].filter(Boolean).join(" ");
+}

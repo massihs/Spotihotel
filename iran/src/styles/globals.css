@@ -48,8 +48,15 @@
   --info-soft: oklch(0.965 0.025 237);
 
   --brass: oklch(0.72 0.1 80);
+  /* Gold call-to-action on the night-blue panels (home page, sign-in, guest pages). */
+  --brass-gradient: linear-gradient(135deg, oklch(0.88 0.085 88), oklch(0.75 0.115 74));
+  --brass-ink: oklch(0.21 0.045 262);
+  --brass-glow: oklch(0.76 0.12 76 / 0.42);
 
   --shadow-color: 220 30% 18%;
+  --shadow-card:
+    inset 0 1px 0 rgb(255 255 255 / 0.7), 0 1px 2px hsl(220 30% 18% / 0.05),
+    0 2px 8px -4px hsl(220 30% 18% / 0.06);
 }
 
 :root,
@@ -114,6 +121,8 @@
     --danger-soft: oklch(0.3 0.08 25);
     --info-soft: oklch(0.3 0.06 237);
     --shadow-color: 0 0% 0%;
+    --shadow-card:
+      inset 0 1px 0 rgb(255 255 255 / 0.04), 0 1px 2px rgb(0 0 0 / 0.3), 0 6px 16px -8px rgb(0 0 0 / 0.5);
   }
   :root:not([data-theme="light"]),
   :root:not([data-theme="light"]) [data-brand] {
@@ -168,6 +177,8 @@
   --danger-soft: oklch(0.3 0.08 25);
   --info-soft: oklch(0.3 0.06 237);
   --shadow-color: 0 0% 0%;
+  --shadow-card:
+    inset 0 1px 0 rgb(255 255 255 / 0.04), 0 1px 2px rgb(0 0 0 / 0.3), 0 6px 16px -8px rgb(0 0 0 / 0.5);
 }
 :root[data-theme="dark"],
 :root[data-theme="dark"] [data-brand] {
@@ -245,6 +256,9 @@
     0 1px 2px oklch(0.3 var(--brand-c) var(--brand-h) / 0.06),
     0 6px 18px -10px oklch(0.3 var(--brand-c) var(--brand-h) / 0.16);
   --shadow-float: 0 24px 54px -16px oklch(0.25 var(--brand-c) var(--brand-h) / 0.32);
+  --shadow-card:
+    inset 0 1px 0 rgb(255 255 255 / 0.8), 0 1px 2px oklch(0.3 var(--brand-c) var(--brand-h) / 0.06),
+    0 10px 26px -14px oklch(0.3 var(--brand-c) var(--brand-h) / 0.2);
   /* The canvas: the hotel's colour glowing softly from the top corner. */
   --canvas:
     radial-gradient(
@@ -273,6 +287,14 @@
     oklch(0.17 calc(var(--brand-c) * 0.55) var(--brand-h)) 100%
   );
 }
+/* The band at the top of a hotel's guest pages: the hotel's colour, deep, in day and night mode. */
+[data-kind="hotel"] .guest-band {
+  background: linear-gradient(
+    160deg,
+    oklch(0.32 calc(var(--brand-c) * 0.85) var(--brand-h)),
+    var(--sidebar) 75%
+  );
+}
 [data-kind="hotel"] .brand-wash {
   opacity: 1;
   background: var(--canvas);
@@ -299,6 +321,8 @@
     --sidebar-border: oklch(0.25 calc(var(--brand-c) * 0.48) var(--brand-h));
     --shadow-color: 0 0% 0%;
     --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.3), 0 6px 18px -10px rgb(0 0 0 / 0.5);
+    --shadow-card:
+      inset 0 1px 0 rgb(255 255 255 / 0.04), 0 1px 2px rgb(0 0 0 / 0.3), 0 10px 26px -14px rgb(0 0 0 / 0.6);
     --canvas: radial-gradient(
       1100px 420px at 100% -8%,
       oklch(0.32 calc(var(--brand-c) * 0.8) var(--brand-h) / 0.45),
@@ -331,6 +355,8 @@
   --sidebar-border: oklch(0.25 calc(var(--brand-c) * 0.48) var(--brand-h));
   --shadow-color: 0 0% 0%;
   --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.3), 0 6px 18px -10px rgb(0 0 0 / 0.5);
+  --shadow-card:
+    inset 0 1px 0 rgb(255 255 255 / 0.04), 0 1px 2px rgb(0 0 0 / 0.3), 0 10px 26px -14px rgb(0 0 0 / 0.6);
   --canvas: radial-gradient(
     1100px 420px at 100% -8%,
     oklch(0.32 calc(var(--brand-c) * 0.8) var(--brand-h) / 0.45),
@@ -706,34 +732,51 @@ dialog[open]::backdrop {
   animation: dice-roll 0.45s cubic-bezier(0.3, 0.7, 0.4, 1) both;
 }
 
-/* Home page (app/[locale]/page.tsx). Colours go through custom properties: the CSS optimizer
-   drops colour functions with var() written straight into a property. */
+/* Home page (app/[locale]/page.tsx) and the sign-in panel: deep night blue with a brass Persian
+   lattice and gold headings. Colours go through custom properties: the CSS optimizer drops colour
+   functions with var() written straight into a property. */
 .landing-hero {
-  --landing-glow: color-mix(in oklab, var(--accent) 55%, transparent);
-  --landing-glow-2: color-mix(in oklab, var(--accent) 25%, #facc15 20%);
-  --landing-glow-text: color-mix(in oklab, var(--accent) 45%, white);
-  background-color: #140b05;
+  --landing-glow: oklch(0.52 0.13 258 / 0.42);
+  --landing-glow-2: oklch(0.78 0.11 80 / 0.14);
+  --landing-glow-text: oklch(0.86 0.085 84);
+  --landing-top: oklch(0.225 0.052 262);
+  --landing-bottom: oklch(0.145 0.034 264);
+  background-color: oklch(0.18 0.042 262);
   background-image:
     radial-gradient(60% 55% at 85% 0%, var(--landing-glow), transparent 70%),
-    radial-gradient(45% 50% at 0% 100%, var(--landing-glow-2), transparent 70%);
+    radial-gradient(45% 50% at 0% 100%, var(--landing-glow-2), transparent 70%),
+    linear-gradient(180deg, var(--landing-top), var(--landing-bottom));
 }
+/* The brass lattice over the night blue, fading out from the centre. */
 .landing-grid {
-  background-image:
-    linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black, transparent);
+  --landing-lattice: oklch(0.82 0.1 82);
+  background-color: var(--landing-lattice);
+  opacity: 0.11;
+  -webkit-mask-image:
+    url("/patterns/khatam.svg"), radial-gradient(ellipse 75% 70% at 50% 25%, #000 20%, transparent 75%);
+  mask-image:
+    url("/patterns/khatam.svg"), radial-gradient(ellipse 75% 70% at 50% 25%, #000 20%, transparent 75%);
+  -webkit-mask-size:
+    72px,
+    100% 100%;
+  mask-size:
+    72px,
+    100% 100%;
+  -webkit-mask-repeat: repeat, no-repeat;
+  mask-repeat: repeat, no-repeat;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
 }
 .landing-highlight {
-  --landing-hl-a: color-mix(in oklab, var(--accent) 60%, white);
-  --landing-hl-b: color-mix(in oklab, var(--accent) 70%, #facc15);
+  --landing-hl-a: oklch(0.92 0.07 90);
+  --landing-hl-b: oklch(0.77 0.12 76);
   background-image: linear-gradient(90deg, var(--landing-hl-a), var(--landing-hl-b));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 .landing-orb {
-  --landing-orb: color-mix(in oklab, var(--accent) 45%, transparent);
+  --landing-orb: oklch(0.55 0.13 258 / 0.5);
   background: radial-gradient(closest-side, var(--landing-orb), transparent);
   filter: blur(20px);
 }
@@ -776,5 +819,177 @@ dialog[open]::backdrop {
   .landing-float,
   .landing-float-slow {
     animation: none;
+  }
+}
+
+@layer components {
+  /* ─── Textures & ornaments ───────────────────────────────────────────────────
+   * The Persian eight-point star lattice (khatam) and a fine grain, laid as
+   * absolutely positioned layers (`<span aria-hidden className="texture-khatam" />`
+   * inside a `relative overflow-hidden` box). The lattice is a mask, so it takes
+   * any colour: `[--tex-color:var(--brass)] [--tex-opacity:0.1] [--tex-size:72px]`.
+   */
+  .texture-khatam {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    background-color: var(--tex-color, currentColor);
+    opacity: var(--tex-opacity, 0.08);
+    -webkit-mask-image: url("/patterns/khatam.svg");
+    mask-image: url("/patterns/khatam.svg");
+    -webkit-mask-size: var(--tex-size, 80px);
+    mask-size: var(--tex-size, 80px);
+    -webkit-mask-repeat: repeat;
+    mask-repeat: repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+  }
+  /* The lattice fading away: downwards, towards the start side, or from a corner. */
+  .texture-fade-b {
+    -webkit-mask-image: url("/patterns/khatam.svg"), linear-gradient(to bottom, #000, transparent 85%);
+    mask-image: url("/patterns/khatam.svg"), linear-gradient(to bottom, #000, transparent 85%);
+    -webkit-mask-size:
+      var(--tex-size, 80px),
+      100% 100%;
+    mask-size:
+      var(--tex-size, 80px),
+      100% 100%;
+    -webkit-mask-repeat: repeat, no-repeat;
+    mask-repeat: repeat, no-repeat;
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+  .texture-fade-corner {
+    -webkit-mask-image:
+      url("/patterns/khatam.svg"), radial-gradient(circle at 100% 0%, #000, transparent 70%);
+    mask-image: url("/patterns/khatam.svg"), radial-gradient(circle at 100% 0%, #000, transparent 70%);
+    -webkit-mask-size:
+      var(--tex-size, 80px),
+      100% 100%;
+    mask-size:
+      var(--tex-size, 80px),
+      100% 100%;
+    -webkit-mask-repeat: repeat, no-repeat;
+    mask-repeat: repeat, no-repeat;
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+  [dir="rtl"] .texture-fade-corner {
+    -webkit-mask-image: url("/patterns/khatam.svg"), radial-gradient(circle at 0% 0%, #000, transparent 70%);
+    mask-image: url("/patterns/khatam.svg"), radial-gradient(circle at 0% 0%, #000, transparent 70%);
+  }
+  .texture-grain {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    background-image: url("/patterns/grain.svg");
+    background-size: 180px;
+    opacity: var(--grain-opacity, 0.07);
+    mix-blend-mode: soft-light;
+  }
+
+  /* A brass ornament: a small diamond and a line fading away (headings, dividers). */
+  .ornament {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--brass);
+  }
+  .ornament::before {
+    content: "";
+    width: 0.45rem;
+    height: 0.45rem;
+    transform: rotate(45deg);
+    background: currentColor;
+    border-radius: 1px;
+    flex: none;
+  }
+  .ornament::after {
+    content: "";
+    height: 1px;
+    width: var(--ornament-width, 3rem);
+    background: linear-gradient(to left, transparent, currentColor);
+  }
+  [dir="rtl"] .ornament::after {
+    background: linear-gradient(to right, transparent, currentColor);
+  }
+
+  /* Segmented tabs: a tinted rail, the current tab raised in white with the brand's ink. */
+  .seg {
+    display: flex;
+    max-width: 100%;
+    width: fit-content;
+    gap: 0.25rem;
+    padding: 0.3rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-radius: 999px;
+    background: var(--surface-2);
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+  .seg-item {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 0.4rem;
+    height: 2.25rem;
+    padding: 0 1rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--fg-muted);
+    transition:
+      background-color 150ms,
+      color 150ms,
+      box-shadow 150ms;
+  }
+  .seg-item:hover {
+    --seg-hover: color-mix(in oklch, var(--surface) 55%, transparent);
+    color: var(--fg);
+    background: var(--seg-hover);
+  }
+  .seg-item[aria-current="page"],
+  .seg-item[aria-current="true"],
+  .seg-item[aria-selected="true"] {
+    --seg-raise-1: oklch(0.3 var(--brand-c) var(--brand-h) / 0.08);
+    --seg-raise-2: oklch(0.3 var(--brand-c) var(--brand-h) / 0.2);
+    color: var(--accent-text);
+    background: var(--surface);
+    box-shadow:
+      0 1px 2px var(--seg-raise-1),
+      0 4px 12px -6px var(--seg-raise-2),
+      inset 0 0 0 1px var(--border);
+  }
+
+  /* Display face (public and guest pages): Markazi Text, the Persian serif of the hotel's signs. */
+  /* Persian and Arabic pages: the Persian cut, then the UI font (its Persian digits draw any number);
+     French and English pages: the Latin cut first. */
+  .font-display {
+    font-family: var(--font-menu-serif), var(--app-font);
+    font-weight: 650;
+    line-height: 1.25;
+  }
+  :root[dir="ltr"] .font-display {
+    font-family: var(--font-display-latin), var(--font-menu-serif), var(--app-font);
+    letter-spacing: -0.012em;
+  }
+
+  /* A section's eyebrow between two short rules: ── Eyebrow ── (public pages). */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--eyebrow-color, var(--accent-text));
+  }
+  .eyebrow::before,
+  .eyebrow::after {
+    content: "";
+    width: 1.75rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.5;
   }
 }

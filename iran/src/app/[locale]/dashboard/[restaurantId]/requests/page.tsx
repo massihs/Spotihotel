@@ -5,7 +5,6 @@ import { LiveRefresh } from "@/components/realtime/live";
 import { RequestsBoard } from "@/components/hotel/requests-board";
 import { GuestCallsPanel } from "../team/guest-calls";
 import { Link } from "@/i18n/navigation";
-import { cn } from "@/lib/cn";
 import { requireRestaurant } from "@/server/auth/current";
 import { db } from "@/server/db/client";
 import { can } from "@/server/tenancy";
@@ -46,19 +45,13 @@ async function Requests({ params, searchParams }: Pick<Props, "params" | "search
   return (
     <>
       <PageHeader title={t("title")} description={t("subtitle")} />
-      <nav
-        className="-mx-4 mb-4 flex [scrollbar-width:none] gap-2 overflow-x-auto px-4"
-        aria-label={t("title")}
-      >
+      <nav className="seg mb-5 print:hidden" aria-label={t("title")}>
         {(["board", ...(manage ? ["services"] : [])] as const).map((k) => (
           <Link
             key={k}
             href={k === "board" ? base : `${base}?tab=${k}`}
             aria-current={tab === k ? "page" : undefined}
-            className={cn(
-              "shrink-0 rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap",
-              tab === k ? "bg-accent text-accent-fg" : "bg-surface text-fg-muted ring-1 ring-border",
-            )}
+            className="seg-item"
           >
             {t(`tabs.${k}`)}
           </Link>

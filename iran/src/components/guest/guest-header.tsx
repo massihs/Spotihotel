@@ -159,7 +159,16 @@ export async function GuestHeader({
 
   return (
     <header className="relative">
-      <div className="relative h-32 overflow-hidden bg-gradient-to-br from-accent to-accent-hover sm:h-44">
+      <div className="guest-band relative isolate h-32 overflow-hidden bg-gradient-to-br from-accent to-accent-hover sm:h-44">
+        {cover ? null : (
+          <>
+            <span
+              aria-hidden="true"
+              className="texture-khatam [--tex-color:var(--brass)] [--tex-opacity:0.18] [--tex-size:60px]"
+            />
+            <span aria-hidden="true" className="texture-grain [--grain-opacity:0.14]" />
+          </>
+        )}
         {cover ? (
           <img
             src={cover.lg}
@@ -182,7 +191,7 @@ export async function GuestHeader({
         <div className="flex items-center gap-3 rounded-3xl border border-border bg-surface p-3 shadow-[var(--shadow-float)]">
           {logoTile("size-14 rounded-2xl ring-1 ring-border")}
           <div className="min-w-0 flex-1">
-            <h1 className="truncate text-lg leading-tight font-bold tracking-tight">{name}</h1>
+            <h1 className="font-display line-clamp-2 text-[1.45rem] leading-[1.2]">{name}</h1>
             <p className="mt-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[13px]">{guestLine}</p>
           </div>
           <div className="flex shrink-0 items-center gap-2">

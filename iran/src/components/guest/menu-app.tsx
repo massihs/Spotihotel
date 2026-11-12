@@ -212,9 +212,16 @@ export function MenuApp({
     return () => observer.disconnect();
   }, [sections]);
 
+  // Keep the active chip centred in its bar. Only the bar scrolls (scrollIntoView would also
+  // scroll the page down to the bar when the menu opens, past the header).
   useEffect(() => {
-    const tab = tabsRef.current?.querySelector<HTMLElement>(`[data-chip="${active}"]`);
-    tab?.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
+    const bar = tabsRef.current;
+    const tab = bar?.querySelector<HTMLElement>(`[data-chip="${active}"]`);
+    if (!bar || !tab) return;
+    const b = bar.getBoundingClientRect();
+    const r = tab.getBoundingClientRect();
+    const delta = r.left + r.width / 2 - (b.left + b.width / 2);
+    if (Math.abs(delta) > 4) bar.scrollBy({ left: delta, behavior: "smooth" });
   }, [active]);
 
   const outlet = outlets.find((o) => o.id === outletId) ?? null;
@@ -365,21 +372,20 @@ export function MenuApp({
                     aria-current={active === c.id ? "true" : undefined}
                     onClick={() => setActive(c.id)}
                     className={cn(
-                      "flex h-10 shrink-0 items-center gap-2 rounded-full ps-1.5 pe-4 text-sm font-semibold whitespace-nowrap transition-colors nuit:px-4",
+                      "flex h-10 shrink-0 items-center gap-2 rounded-full px-4 text-sm font-semibold whitespace-nowrap transition-[background-color,color,box-shadow] duration-200",
                       "atelier:h-11 atelier:rounded-none atelier:border-b-2 atelier:px-0 atelier:text-[15px] atelier:font-medium atelier:shadow-none atelier:ring-0",
                       active === c.id
-                        ? "bg-accent bg-[image:var(--brand-gradient)] text-accent-fg shadow-[0_8px_18px_-10px_var(--accent)] atelier:border-fg atelier:bg-transparent atelier:bg-none atelier:text-fg nuit:bg-accent nuit:text-accent-fg"
-                        : "bg-surface text-fg-muted ring-1 ring-border hover:text-fg atelier:border-transparent atelier:bg-transparent",
+                        ? "bg-accent bg-[image:var(--brand-gradient)] text-accent-fg shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_8px_18px_-10px_var(--accent)] atelier:border-fg atelier:bg-transparent atelier:bg-none atelier:text-fg nuit:bg-accent nuit:text-accent-fg"
+                        : "bg-surface text-fg-muted shadow-[var(--shadow-soft)] ring-1 ring-border hover:text-fg atelier:border-transparent atelier:bg-transparent atelier:shadow-none",
                     )}
                   >
-                    <span
+                    <CategoryIcon
+                      icon={c.icon}
                       className={cn(
-                        "grid size-7 place-items-center rounded-full atelier:hidden nuit:hidden",
-                        active === c.id ? "bg-white/18 text-accent-fg" : "bg-brand-100 text-brand-700",
+                        "size-4 shrink-0 atelier:hidden nuit:hidden",
+                        active === c.id ? "text-[var(--brass)]" : "text-brand-500",
                       )}
-                    >
-                      <CategoryIcon icon={c.icon} className="size-4" />
-                    </span>
+                    />
                     {c.name}
                   </a>
                 ))}
@@ -409,13 +415,20 @@ export function MenuApp({
           {featured.length > 0 ? (
             <section className="pt-4" aria-labelledby="featured-title">
               <div className="flex items-center gap-2 px-4 atelier:px-5">
-                <Sparkles className="size-[18px] text-accent atelier:hidden" aria-hidden="true" />
+                <Sparkles className="size-[18px] text-[var(--brass)] atelier:hidden" aria-hidden="true" />
                 <h2
                   id="featured-title"
-                  className="font-menu-display text-base font-bold tracking-tight atelier:text-[22px] atelier:font-medium nuit:text-lg nuit:font-medium nuit:text-accent-text"
+                  className={cn(
+                    "font-menu-display text-base font-bold tracking-tight atelier:text-[22px] atelier:font-medium nuit:text-lg nuit:font-medium nuit:text-accent-text",
+                    theme === "doux" &&
+                      "font-display text-[1.45rem] leading-tight font-semibold tracking-normal",
+                  )}
                 >
                   {t("guest.featured")}
                 </h2>
+                {theme === "doux" ? (
+                  <span aria-hidden="true" className="ornament ms-1 [--ornament-width:2.5rem]" />
+                ) : null}
               </div>
               <ul className="no-scrollbar mt-2.5 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 atelier:px-5">
                 {featured.map((p) => (
@@ -480,50 +493,85 @@ export function MenuApp({
               </button>
             </div>
           ) : (
-            sections.map((c, ci) => (
-              <section
-                key={c.id}
-                id={`c-${c.id}`}
-                data-category={c.id}
-                className="scroll-mt-44 pt-6"
-                aria-labelledby={`h-${c.id}`}
-              >
-                <div className="flex items-end gap-3 px-4 atelier:px-5">
-                  <span className="grid size-9 shrink-0 place-items-center self-center rounded-xl bg-accent-soft text-accent-text atelier:hidden nuit:hidden">
-                    <CategoryIcon icon={c.icon} className="size-[18px]" />
-                  </span>
-                  <h2
-                    id={`h-${c.id}`}
-                    className="min-w-0 flex-1 font-menu-display text-lg leading-tight font-bold tracking-tight atelier:text-[28px] atelier:font-medium nuit:text-xl nuit:font-medium nuit:text-accent-text"
+            sections.map((c, ci) => {
+              // The default look in list view: on phones, a category is one card (its banner on
+              // top, then its dishes separated by hairlines, like a printed menu); from tablets up,
+              // the banner then a card per dish in columns.
+              const framed = theme === "doux" && view === "list";
+              const note = short ? t("guest.priceUnit") : t("guest.items", { count: c.items.length });
+              return (
+                <section
+                  key={c.id}
+                  id={`c-${c.id}`}
+                  data-category={c.id}
+                  className="scroll-mt-44 pt-7"
+                  aria-labelledby={`h-${c.id}`}
+                >
+                  <div
+                    className={cn(
+                      framed &&
+                        "mx-4 overflow-hidden rounded-[1.4rem] border border-border bg-surface shadow-[var(--shadow-card)] sm:mx-0 sm:overflow-visible sm:rounded-none sm:border-0 sm:bg-transparent sm:shadow-none",
+                    )}
                   >
-                    {c.name}
-                  </h2>
-                  <span className="shrink-0 pb-0.5 text-xs text-fg-subtle">
-                    {short ? t("guest.priceUnit") : t("guest.items", { count: c.items.length })}
-                  </span>
-                </div>
-                {c.description ? (
-                  <p className="mt-1.5 px-4 text-sm leading-6 text-fg-muted atelier:px-5">{c.description}</p>
-                ) : null}
-                {view === "grid" ? (
-                  <ul className="mt-3 grid grid-cols-2 gap-3 px-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 atelier:gap-x-4 atelier:gap-y-6 atelier:px-5">
-                    {c.items.map((p, pi) => (
-                      <li key={p.id}>
-                        <GridCard p={p} eager={ci === 0 && pi < 4} {...card} />
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <ul className="mt-3 grid gap-3 px-4 sm:grid-cols-2 lg:grid-cols-3 atelier:mt-1 atelier:gap-0 atelier:px-5 atelier:sm:gap-x-8 nuit:gap-1">
-                    {c.items.map((p, pi) => (
-                      <li key={p.id}>
-                        <ListCard p={p} eager={ci === 0 && pi < 4} {...card} />
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </section>
-            ))
+                    {theme === "doux" ? (
+                      <CategoryBanner
+                        id={`h-${c.id}`}
+                        name={c.name}
+                        icon={c.icon}
+                        description={c.description}
+                        note={note}
+                        framed={framed}
+                      />
+                    ) : (
+                      <>
+                        <div className="flex items-end gap-3 px-4 atelier:px-5">
+                          <span className="grid size-9 shrink-0 place-items-center self-center rounded-xl bg-accent-soft text-accent-text atelier:hidden nuit:hidden">
+                            <CategoryIcon icon={c.icon} className="size-[18px]" />
+                          </span>
+                          <h2
+                            id={`h-${c.id}`}
+                            className="min-w-0 flex-1 font-menu-display text-lg leading-tight font-bold tracking-tight atelier:text-[28px] atelier:font-medium nuit:text-xl nuit:font-medium nuit:text-accent-text"
+                          >
+                            {c.name}
+                          </h2>
+                          <span className="shrink-0 pb-0.5 text-xs text-fg-subtle">{note}</span>
+                        </div>
+                        {c.description ? (
+                          <p className="mt-1.5 px-4 text-sm leading-6 text-fg-muted atelier:px-5">
+                            {c.description}
+                          </p>
+                        ) : null}
+                      </>
+                    )}
+                    {view === "grid" ? (
+                      <ul className="mt-3 grid grid-cols-2 gap-3 px-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 atelier:gap-x-4 atelier:gap-y-6 atelier:px-5">
+                        {c.items.map((p, pi) => (
+                          <li key={p.id}>
+                            <GridCard p={p} eager={ci === 0 && pi < 4} {...card} />
+                          </li>
+                        ))}
+                      </ul>
+                    ) : framed ? (
+                      <ul className="divide-y divide-border border-t border-border sm:mt-3 sm:grid sm:grid-cols-2 sm:gap-3 sm:divide-y-0 sm:border-t-0 sm:px-4 lg:grid-cols-3">
+                        {c.items.map((p, pi) => (
+                          <li key={p.id}>
+                            <MenuRow p={p} eager={ci === 0 && pi < 4} {...card} />
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <ul className="mt-3 grid gap-3 px-4 sm:grid-cols-2 lg:grid-cols-3 atelier:mt-1 atelier:gap-0 atelier:px-5 atelier:sm:gap-x-8 nuit:gap-1">
+                        {c.items.map((p, pi) => (
+                          <li key={p.id}>
+                            <ListCard p={p} eager={ci === 0 && pi < 4} {...card} />
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </section>
+              );
+            })
           )}
         </main>
       </div>
@@ -791,6 +839,130 @@ function ListCard({ p, eager, money, popular, cart, adding, quickAdd, open, t }:
       ) : (
         <InCartBadge n={cart.byProduct[p.id] ?? 0} className="self-start" />
       )}
+    </div>
+  );
+}
+
+/**
+ * A category's heading in the default look: a band in the hotel's tint with the Persian lattice,
+ * the category's medallion, its name in the display serif and how many dishes it holds. Framed:
+ * the top of the category's card on phones (square, no ring), a band of its own from tablets up.
+ */
+function CategoryBanner({
+  id,
+  name,
+  icon,
+  description,
+  note,
+  framed,
+}: {
+  id: string;
+  name: string;
+  icon: string;
+  description: string | null;
+  note: string;
+  framed: boolean;
+}) {
+  return (
+    <div
+      className={cn(
+        "relative isolate overflow-hidden bg-[linear-gradient(120deg,var(--brand-100),var(--brand-50)_65%)] px-4 py-3.5",
+        framed
+          ? "sm:mx-4 sm:rounded-[1.4rem] sm:ring-1 sm:ring-brand-200/80 sm:ring-inset"
+          : "mx-4 rounded-[1.4rem] ring-1 ring-brand-200/80 ring-inset",
+      )}
+    >
+      <span
+        aria-hidden="true"
+        className="texture-khatam texture-fade-corner [--tex-color:var(--brand-600)] [--tex-opacity:0.15] [--tex-size:46px]"
+      />
+      <div className="relative flex items-center gap-3.5">
+        <span className="grid size-12 shrink-0 place-items-center rounded-full bg-surface text-brand-700 shadow-[var(--shadow-soft)] ring-1 ring-brand-200">
+          <CategoryIcon icon={icon} className="size-[1.3rem]" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <h2 id={id} className="font-display text-[1.65rem] leading-tight text-fg">
+            {name}
+          </h2>
+          <p className="mt-0.5 text-xs font-medium text-fg-muted">{note}</p>
+        </div>
+      </div>
+      {description ? <p className="relative mt-2.5 text-sm leading-6 text-fg-muted">{description}</p> : null}
+    </div>
+  );
+}
+
+/**
+ * A dish as a line of the menu card (default look, list view): name, Latin name, two lines of
+ * description, badges and price on the reading side; the photo, if there is one, on the other
+ * with "+" on its corner, else a soft "+" next to the price.
+ */
+function MenuRow({ p, eager, money, popular, cart, adding, quickAdd, open, t }: CardProps) {
+  const tags = p.tags.filter((x) => TAG_META[x]).slice(0, 3);
+  const { latin, text } = splitDescription(p.description, p.name);
+  const photo = !!p.images[0];
+  const add = (className?: string, tone?: "soft") =>
+    p.isAvailable ? (
+      <AddButton
+        label={t("guest.quickAdd", { name: p.name })}
+        busy={adding === p.id}
+        onClick={() => quickAdd(p)}
+        tone={tone}
+        className={className}
+      />
+    ) : null;
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={() => open(p.id)}
+      onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && open(p.id)}
+      className={cn(
+        "flex h-full w-full cursor-pointer gap-4 px-4 py-4 text-start transition-colors active:bg-surface-2",
+        "sm:rounded-2xl sm:border sm:border-border sm:bg-surface sm:shadow-[var(--shadow-soft)] sm:hover:border-border-strong",
+        !p.isAvailable && "opacity-60",
+      )}
+    >
+      <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex items-start gap-2">
+          <p className="line-clamp-2 min-w-0 flex-1 text-[16px] leading-snug font-bold">{p.name}</p>
+          {photo ? null : <InCartBadge n={cart.byProduct[p.id] ?? 0} className="shrink-0" />}
+        </div>
+        {latin ? (
+          <p
+            className="mt-0.5 truncate text-xs tracking-wide text-fg-subtle"
+            dir="ltr"
+            style={{ textAlign: "end" }}
+          >
+            {latin}
+          </p>
+        ) : null}
+        {text ? <p className="mt-1 line-clamp-2 text-[13.5px] leading-6 text-fg-muted">{text}</p> : null}
+        {popular.has(p.id) || tags.length ? (
+          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+            {popular.has(p.id) ? <PopularBadge /> : null}
+            {tags.map((tag) => (
+              <TagChip key={tag} tag={tag} compact />
+            ))}
+          </div>
+        ) : null}
+        <div className="mt-auto flex items-center justify-between gap-3 pt-2.5">
+          <Price product={p} money={money} split />
+          {photo ? null : add("size-9", "soft")}
+        </div>
+      </div>
+      {photo ? (
+        <div className="relative shrink-0 self-start">
+          <ProductImage
+            product={p}
+            size="sm"
+            className={cn("size-[5.75rem] rounded-2xl ring-1 ring-black/5", !p.isAvailable && "grayscale")}
+            eager={eager}
+          />
+          <InCartBadge n={cart.byProduct[p.id] ?? 0} className="absolute -end-1.5 -top-1.5" />
+          {add("absolute -bottom-2 -start-2 size-9 ring-4 ring-surface")}
+        </div>
+      ) : null}
     </div>
   );
 }

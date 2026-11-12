@@ -5,7 +5,7 @@ export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-        "relative rounded-xl border border-border bg-surface shadow-[var(--shadow-soft)]",
+        "relative rounded-2xl border border-border bg-surface shadow-[var(--shadow-card)]",
         className,
       )}
       {...props}
@@ -23,7 +23,7 @@ export function CardHeader({
   action?: ReactNode;
 }) {
   return (
-    <div className="flex flex-wrap items-start justify-between gap-4 rounded-t-[inherit] border-b border-border bg-brand-50/70 px-5 py-4">
+    <div className="flex flex-wrap items-start justify-between gap-4 rounded-t-[inherit] border-b border-border bg-[linear-gradient(to_bottom,var(--brand-50),color-mix(in_oklch,var(--brand-50)_35%,var(--surface)))] px-5 py-4">
       <div className="min-w-0">
         <h2 className="text-[15px] font-semibold text-fg">{title}</h2>
         {description ? <p className="mt-0.5 text-sm text-fg-muted">{description}</p> : null}
@@ -77,6 +77,16 @@ export function StatCard({
       )}
       style={tone === "gradient" ? { background: "var(--brand-gradient)" } : undefined}
     >
+      {/* The star lattice in the corner: white on the solid tiles, the brand's ink on the light ones. */}
+      <span
+        className={cn(
+          "texture-khatam texture-fade-corner [--tex-size:60px]",
+          solid
+            ? "[--tex-color:white] [--tex-opacity:0.12]"
+            : "[--tex-color:var(--brand-600)] [--tex-opacity:0.07]",
+        )}
+        aria-hidden="true"
+      />
       <div className="relative flex items-start justify-between gap-3">
         <p className={cn("text-sm font-medium", solid ? "opacity-80" : "text-fg-muted")}>{label}</p>
         {icon ? (

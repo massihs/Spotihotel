@@ -14,7 +14,6 @@ import {
   ServicesPanel,
 } from "@/components/pms/setup-panels";
 import { Link } from "@/i18n/navigation";
-import { cn } from "@/lib/cn";
 import { requireRestaurant } from "@/server/auth/current";
 import { db } from "@/server/db/client";
 import { diningTables } from "@/server/db/schema";
@@ -152,16 +151,13 @@ async function HotelSetup({ params, searchParams }: Props) {
   return (
     <>
       <PageHeader title={t("title")} description={t("subtitle")} />
-      <nav className="mb-5 flex gap-1 overflow-x-auto border-b border-border" aria-label={t("title")}>
+      <nav className="seg mb-5 print:hidden" aria-label={t("title")}>
         {TABS.map((k) => (
           <Link
             key={k}
             href={`/dashboard/${rid}/hotel?tab=${k}`}
             aria-current={k === tab ? "page" : undefined}
-            className={cn(
-              "-mb-px border-b-2 px-3 py-2 text-sm font-semibold whitespace-nowrap",
-              k === tab ? "border-accent text-fg" : "border-transparent text-fg-muted hover:text-fg",
-            )}
+            className="seg-item"
           >
             {t(`tabs.${k}`)}
           </Link>

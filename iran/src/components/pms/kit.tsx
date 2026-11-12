@@ -5,14 +5,15 @@ import { useState, type ReactNode } from "react";
 import { Button, type ButtonVariant, type ButtonSize } from "@/components/ui/button";
 import { Sheet, useRun } from "@/components/ui/sheet-kit";
 import { cn } from "@/lib/cn";
-import { calendarLocale } from "@/lib/jalali-calendar";
+import { calendarLocale, formatCalendarDate } from "@/lib/jalali-calendar";
 import { EDITION } from "@/config/edition";
 
 /** "2026-11-03" → "3 nov." / "۱۲ آبان" (the UI language picks the calendar). */
 export function useDay() {
   const locale = useLocale();
   return (day: string, opts: Intl.DateTimeFormatOptions = { day: "numeric", month: "short" }) =>
-    new Intl.DateTimeFormat(calendarLocale(locale, EDITION), { ...opts, timeZone: "UTC" }).format(
+    formatCalendarDate(
+      new Intl.DateTimeFormat(calendarLocale(locale, EDITION), { ...opts, timeZone: "UTC" }),
       new Date(`${day}T12:00:00Z`),
     );
 }
@@ -152,7 +153,7 @@ export function Label({ children, hint }: { children: ReactNode; hint?: ReactNod
 }
 
 export const inputCls =
-  "h-11 w-full rounded-xl border border-border-strong bg-surface px-3 text-[15px] focus-visible:border-accent focus-visible:ring-4 focus-visible:ring-[var(--ring)] focus-visible:outline-none";
+  "h-11 w-full rounded-xl border border-border-strong bg-surface px-3.5 text-[15px] shadow-[inset_0_1px_2px_oklch(0.3_var(--brand-c)_var(--brand-h)/0.05)] transition-[border-color,box-shadow] hover:border-brand-300 focus-visible:border-accent focus-visible:ring-4 focus-visible:ring-[var(--ring)] focus-visible:outline-none";
 
 /** Tabs as links (?tab=…), rendered by the server page. */
 export function TableShell({ children, className }: { children: ReactNode; className?: string }) {

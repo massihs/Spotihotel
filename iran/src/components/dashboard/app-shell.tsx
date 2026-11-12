@@ -147,6 +147,12 @@ export async function AppShell({
           style={{ background: "var(--brand-gradient)" }}
           aria-hidden="true"
         />
+        {/* The Persian star lattice in brass, fading down the sidebar, and a fine grain. */}
+        <span
+          className="texture-khatam texture-fade-b [--tex-color:var(--brass)] [--tex-opacity:0.1] [--tex-size:76px]"
+          aria-hidden="true"
+        />
+        <span className="texture-grain [--grain-opacity:0.1]" aria-hidden="true" />
         <aside className="relative flex flex-col lg:sticky lg:top-0 lg:h-dvh">
           <div className="px-5 pt-6 pb-5">
             <Link href="/dashboard" aria-label="Spotihotel" className="inline-flex">
@@ -235,10 +241,7 @@ export function PageHeader({
   return (
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3 sm:gap-4 lg:mb-8">
       <div className="min-w-0">
-        <span
-          className="mb-2.5 block h-1 w-10 rounded-full bg-accent bg-[image:var(--brand-gradient)] sm:mb-3"
-          aria-hidden="true"
-        />
+        <span className="ornament mb-2.5 [--ornament-width:3.5rem] sm:mb-3" aria-hidden="true" />
         <h1 className="text-[23px] leading-tight font-extrabold tracking-tight text-fg sm:text-[30px]">
           {title}
         </h1>

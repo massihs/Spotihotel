@@ -93,20 +93,9 @@ async function Reports({ params, searchParams }: Pick<Props, "params" | "searchP
           to={period.last}
         />
       </div>
-      <nav
-        className="-mx-4 mb-5 flex [scrollbar-width:none] gap-2 overflow-x-auto px-4"
-        aria-label={t("title")}
-      >
+      <nav className="seg mb-5 print:hidden" aria-label={t("title")}>
         {TABS.filter((k) => k !== "security" || can(ctx, "audit.view")).map((k) => (
-          <Link
-            key={k}
-            href={tabHref(k)}
-            aria-current={tab === k ? "page" : undefined}
-            className={cn(
-              "shrink-0 rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap",
-              tab === k ? "bg-accent text-accent-fg" : "bg-surface text-fg-muted ring-1 ring-border",
-            )}
-          >
+          <Link key={k} href={tabHref(k)} aria-current={tab === k ? "page" : undefined} className="seg-item">
             {t(`tabs.${k}`)}
           </Link>
         ))}

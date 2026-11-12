@@ -1,7 +1,7 @@
 import { cn } from "@/lib/cn";
 import type { ButtonHTMLAttributes } from "react";
 
-export type ButtonVariant = "primary" | "accent" | "secondary" | "outline" | "ghost" | "danger";
+export type ButtonVariant = "primary" | "accent" | "brass" | "secondary" | "outline" | "ghost" | "danger";
 export type ButtonSize = "sm" | "md" | "lg" | "xl";
 
 const variants: Record<ButtonVariant, string> = {
@@ -9,6 +9,9 @@ const variants: Record<ButtonVariant, string> = {
     "bg-accent bg-[image:var(--brand-gradient)] text-accent-fg hover:brightness-110 shadow-[inset_0_1px_0_rgb(255_255_255/0.22),var(--shadow-accent-sm)]",
   accent:
     "bg-accent bg-[image:var(--brand-gradient)] text-accent-fg hover:brightness-110 shadow-[inset_0_1px_0_rgb(255_255_255/0.22),var(--shadow-accent-sm)]",
+  /** Gold, for the call to action on the night-blue panels. */
+  brass:
+    "bg-[var(--brass)] bg-[image:var(--brass-gradient)] text-[color:var(--brass-ink)] hover:brightness-105 shadow-[inset_0_1px_0_rgb(255_255_255/0.45),0_12px_30px_-12px_var(--brass-glow)]",
   secondary: "bg-surface text-fg ring-1 ring-inset ring-border hover:bg-surface-2",
   outline: "bg-surface text-fg ring-1 ring-inset ring-border-strong hover:bg-surface-2",
   ghost: "text-fg-muted hover:text-fg hover:bg-surface-2",

@@ -55,12 +55,25 @@ const persianDigits = localFont({
 });
 
 // Display faces of the guest menu themes (Atelier: Persian serif, Nuit: modern Kufi).
+// No metric fallback: characters outside the Arabic cut (Latin letters, ASCII digits) go on to
+// the next font of the stack (Persian digits on Persian pages), not to a local Arial.
 const menuSerif = localFont({
   src: "../../../node_modules/@fontsource-variable/markazi-text/files/markazi-text-arabic-wght-normal.woff2",
   weight: "400 700",
   variable: "--font-menu-serif",
   display: "swap",
   preload: false,
+  adjustFontFallback: false,
+});
+// The same serif for Latin text (French and English titles): its own family, with no metric
+// fallback, so Persian letters fall through to the Persian cut above.
+const displayLatin = localFont({
+  src: "../../../node_modules/@fontsource-variable/markazi-text/files/markazi-text-latin-wght-normal.woff2",
+  weight: "400 700",
+  variable: "--font-display-latin",
+  display: "swap",
+  preload: false,
+  adjustFontFallback: false,
 });
 const menuKufi = localFont({
   src: "../../../node_modules/@fontsource-variable/reem-kufi/files/reem-kufi-arabic-wght-normal.woff2",
@@ -102,7 +115,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
     <html
       lang={locale}
       dir={localeDirection(locale)}
-      className={`${sans.variable} ${persian.variable} ${persianDigits.variable} ${menuSerif.variable} ${menuKufi.variable}`}
+      className={`${sans.variable} ${persian.variable} ${persianDigits.variable} ${menuSerif.variable} ${displayLatin.variable} ${menuKufi.variable}`}
       data-scroll-behavior="smooth"
       // Day mode by default; a saved night mode is applied before paint by THEME_SCRIPT.
       data-theme="light"

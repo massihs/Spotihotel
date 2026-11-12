@@ -5,7 +5,6 @@ import {
   Check,
   ChefHat,
   CreditCard,
-  ImageIcon,
   LayoutGrid,
   Rows3,
   Loader2,
@@ -28,6 +27,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { usePref, writePref } from "@/components/ui/use-pref";
 import { CategoryIcon } from "@/components/category-icon";
+import { DishTile } from "@/components/ui/dish-tile";
 import { useMoney } from "@/components/ui/use-money";
 import { cn } from "@/lib/cn";
 import { couponDiscount } from "@/lib/coupon";
@@ -131,6 +131,7 @@ export function PosTerminal({
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  const catIcon = useMemo(() => new Map(menu.categories.map((c) => [c.id, c.icon])), [menu]);
   const products = useMemo(() => {
     const q = query.trim().toLowerCase();
     const ids =
@@ -701,9 +702,7 @@ export function PosTerminal({
                   {p.images[0] ? (
                     <img src={p.images[0].sm} alt="" loading="lazy" className="size-full object-cover" />
                   ) : (
-                    <span className="grid size-full place-items-center text-fg-subtle">
-                      <ImageIcon className="size-6" />
-                    </span>
+                    <DishTile icon={catIcon.get(p.categoryId) ?? null} className="size-full" />
                   )}
                   {lines.some((l) => l.product.id === p.id) ? (
                     <span className="absolute end-2 top-2 grid h-6 min-w-6 place-items-center rounded-full bg-accent px-1.5 text-xs font-bold text-accent-fg tabular-nums">

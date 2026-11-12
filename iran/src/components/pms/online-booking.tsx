@@ -260,15 +260,21 @@ export function OnlineBooking({
             {results?.types.map((rt) => (
               <article
                 key={rt.id}
-                className="overflow-hidden rounded-3xl border border-border bg-surface shadow-[var(--shadow-soft)]"
+                className="overflow-hidden rounded-3xl border border-border bg-surface shadow-[var(--shadow-card)]"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3 p-4 sm:p-5">
-                  <div className="flex min-w-0 gap-3">
-                    <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-brand-50 text-brand-700">
-                      <BedDouble className="size-5" aria-hidden="true" />
+                  <div className="flex min-w-0 gap-3.5">
+                    <span className="relative isolate grid size-16 shrink-0 place-items-center overflow-hidden rounded-2xl bg-[linear-gradient(150deg,var(--brand-100),var(--brand-50)_55%,var(--brand-100))] ring-1 ring-brand-200 ring-inset">
+                      <span
+                        aria-hidden="true"
+                        className="texture-khatam [--tex-color:var(--brand-600)] [--tex-opacity:0.14] [--tex-size:34px]"
+                      />
+                      <span className="relative grid size-10 place-items-center rounded-full bg-surface text-brand-700 shadow-[var(--shadow-soft)] ring-1 ring-brand-200">
+                        <BedDouble className="size-5" aria-hidden="true" />
+                      </span>
                     </span>
                     <div className="min-w-0">
-                      <h3 className="font-bold">{rt.name}</h3>
+                      <h3 className="font-display text-[1.45rem] leading-tight">{rt.name}</h3>
                       <p className="text-sm text-fg-muted">{t("upTo", { n: rt.maxOccupancy })}</p>
                       {rt.description ? <p className="mt-1 text-sm text-fg-muted">{rt.description}</p> : null}
                       {rt.amenities.length ? (
@@ -365,14 +371,24 @@ function Shell({
 }) {
   return (
     <div className="min-h-dvh bg-bg">
-      <header className="bg-[var(--sidebar)] text-[var(--sidebar-fg)]">
-        <div className="mx-auto max-w-4xl px-4 pt-8 pb-14 sm:px-6">
+      <header className="sidebar-shade relative isolate overflow-hidden bg-[var(--sidebar)] text-[var(--sidebar-fg)]">
+        <span
+          aria-hidden="true"
+          className="texture-khatam texture-fade-b [--tex-color:var(--brass)] [--tex-opacity:0.14] [--tex-size:68px]"
+        />
+        <span aria-hidden="true" className="texture-grain [--grain-opacity:0.12]" />
+        <div className="relative mx-auto max-w-4xl px-4 pt-8 pb-16 sm:px-6">
           <div className="flex items-center justify-between gap-3">
-            <p className="text-xs tracking-[0.2em] text-[var(--brass)] uppercase">{t("eyebrow")}</p>
+            <p className="text-xs font-semibold text-[var(--brass)] ltr:tracking-[0.2em] ltr:uppercase">
+              {t("eyebrow")}
+            </p>
             {/* Foreign guests book too: Persian, English or Arabic. */}
             <LanguageSwitcher className="bg-white/10 text-[var(--sidebar-fg)] ring-1 ring-white/15 hover:bg-white/15" />
           </div>
-          <h1 className="mt-1 text-3xl font-bold">{hotel.name}</h1>
+          <h1 className="font-display mt-2 text-[2.4rem] leading-[1.15] text-balance sm:text-5xl">
+            {hotel.name}
+          </h1>
+          <span aria-hidden="true" className="ornament mt-4 [--ornament-width:4rem]" />
           <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm opacity-80">
             {hotel.address || hotel.city ? (
               <span className="inline-flex items-center gap-1.5">
@@ -391,13 +407,13 @@ function Shell({
               </a>
             ) : null}
           </p>
-          <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs">
-            <CalendarCheck className="size-3.5" aria-hidden="true" />
+          <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-white/[0.08] px-3 py-1 text-xs ring-1 ring-white/15 backdrop-blur">
+            <CalendarCheck className="size-3.5 text-[var(--brass)]" aria-hidden="true" />
             {t("promise")}
           </p>
         </div>
       </header>
-      <main className="mx-auto -mt-8 max-w-4xl space-y-5 px-4 pb-16 sm:px-6">{children}</main>
+      <main className="relative mx-auto -mt-8 max-w-4xl space-y-5 px-4 pb-16 sm:px-6">{children}</main>
     </div>
   );
 }

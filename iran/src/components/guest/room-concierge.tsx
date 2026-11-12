@@ -46,15 +46,22 @@ export function RoomConcierge({
   const [showWifi, setShowWifi] = useState(false);
   return (
     <section aria-label={t("title")} className="mx-4 mt-3 space-y-3">
-      <div className="relative overflow-hidden rounded-[26px] bg-[var(--sidebar)] p-5 text-[var(--sidebar-fg)] shadow-[var(--shadow-soft)]">
+      <div className="sidebar-shade relative isolate overflow-hidden rounded-[26px] bg-[var(--sidebar)] p-5 text-[var(--sidebar-fg)] shadow-[var(--shadow-float)]">
+        <span
+          aria-hidden="true"
+          className="texture-khatam texture-fade-corner [--tex-color:var(--brass)] [--tex-opacity:0.16] [--tex-size:56px]"
+        />
+        <span aria-hidden="true" className="texture-grain [--grain-opacity:0.12]" />
         <span
           aria-hidden="true"
           className="pointer-events-none absolute -end-14 -top-16 size-48 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--brass)_40%,transparent),transparent_70%)]"
         />
         <div className="relative flex items-end justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-xs font-semibold tracking-[0.18em] text-[var(--brass)]">{t("title")}</p>
-            <p className="mt-1 text-[34px] leading-none font-bold tabular-nums">{room}</p>
+            <p className="text-xs font-semibold text-[var(--brass)] ltr:tracking-[0.18em] ltr:uppercase">
+              {t("title")}
+            </p>
+            <p className="font-display mt-1.5 text-[2.6rem] leading-none tabular-nums">{room}</p>
           </div>
           {departure ? (
             <p className="text-end text-sm leading-5 opacity-85">

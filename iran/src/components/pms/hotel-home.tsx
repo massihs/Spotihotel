@@ -23,10 +23,10 @@ import type { ReactNode } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { buttonClasses } from "@/components/ui/button";
-import { Card, CardHeader, StatCard, TONE_TILE, type Tone } from "@/components/ui/card";
+import { Card, CardHeader, StatCard } from "@/components/ui/card";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
-import { calendarLocale } from "@/lib/jalali-calendar";
+import { calendarLocale, formatCalendarDate } from "@/lib/jalali-calendar";
 import { EDITION } from "@/config/edition";
 import { db } from "@/server/db/client";
 import { can, type RestaurantContext } from "@/server/tenancy";
@@ -52,7 +52,10 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
   const base = `/dashboard/${ctx.restaurant.id}`;
   const cal = calendarLocale(locale, EDITION);
   const fmtDay = (day: string, opts: Intl.DateTimeFormatOptions) =>
-    new Intl.DateTimeFormat(cal, { ...opts, timeZone: "UTC" }).format(new Date(`${day}T12:00:00Z`));
+    formatCalendarDate(
+      new Intl.DateTimeFormat(cal, { ...opts, timeZone: "UTC" }),
+      new Date(`${day}T12:00:00Z`),
+    );
   const f = home.figures;
   const name = (s: { firstName: string; lastName: string }) => `${s.firstName} ${s.lastName}`.trim();
   const pct = (n: number) => `${Math.round(n)}%`;
@@ -101,37 +104,33 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
       },
   ].filter((x) => !!x);
 
-  const quick: { href: string; label: string; Icon: typeof KeyRound; tone: Tone; show: boolean }[] = [
+  const quick: { href: string; label: string; Icon: typeof KeyRound; show: boolean }[] = [
     {
       href: `${base}/stays/new`,
       label: t("quick.newBooking"),
       Icon: CalendarPlus,
-      tone: "emerald",
       show: can(ctx, "frontdesk.manage"),
     },
-    { href: `${base}/frontdesk`, label: t("quick.frontdesk"), Icon: KeyRound, tone: "indigo", show: true },
-    { href: `${base}/planning`, label: t("quick.planning"), Icon: CalendarRange, tone: "sky", show: true },
-    { href: `${base}/guests`, label: t("quick.guests"), Icon: Contact, tone: "violet", show: true },
+    { href: `${base}/frontdesk`, label: t("quick.frontdesk"), Icon: KeyRound, show: true },
+    { href: `${base}/planning`, label: t("quick.planning"), Icon: CalendarRange, show: true },
+    { href: `${base}/guests`, label: t("quick.guests"), Icon: Contact, show: true },
     {
       href: `${base}/housekeeping`,
       label: t("quick.rooms"),
       Icon: BedDouble,
-      tone: "teal",
       show: can(ctx, "tables.view"),
     },
     {
       href: `${base}/requests`,
       label: t("quick.requests"),
       Icon: ConciergeBell,
-      tone: "orange",
       show: can(ctx, "orders.view"),
     },
-    { href: `${base}/wellness`, label: t("quick.wellness"), Icon: Flower2, tone: "fuchsia", show: true },
+    { href: `${base}/wellness`, label: t("quick.wellness"), Icon: Flower2, show: true },
     {
       href: `${base}/ledger`,
       label: t("quick.ledger"),
       Icon: BookOpenCheck,
-      tone: "amber",
       show: can(ctx, "accounting.manage"),
     },
   ];
@@ -209,7 +208,12 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
 
       {/* Tonight + the day's movements */}
       <section className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
-        <Card className="overflow-hidden border-transparent bg-ink p-6 text-ink-fg shadow-[var(--shadow-float)]">
+        <Card className="sidebar-shade relative isolate overflow-hidden border-transparent bg-[var(--sidebar)] p-6 text-[var(--sidebar-fg)] shadow-[var(--shadow-float)] ring-1 ring-white/5">
+          <span
+            aria-hidden="true"
+            className="texture-khatam texture-fade-corner [--tex-color:var(--brass)] [--tex-opacity:0.14] [--tex-size:64px]"
+          />
+          <span aria-hidden="true" className="texture-grain [--grain-opacity:0.1]" />
           <div className="relative flex items-start justify-between gap-3">
             <div>
               <p className="text-sm font-medium opacity-75">{t("tonight")}</p>
@@ -219,7 +223,7 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
               <p className="mt-1 text-sm opacity-80">{t("roomsSold", { sold: f.sold, rooms: f.rooms })}</p>
             </div>
             <span
-              className="grid size-11 shrink-0 place-items-center rounded-2xl bg-white/12"
+              className="grid size-11 shrink-0 place-items-center rounded-2xl bg-white/10 text-[var(--brass)] ring-1 ring-white/10"
               aria-hidden="true"
             >
               <BedDouble className="size-5" />
@@ -238,7 +242,10 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
               {home.ahead.map((d, i) => (
                 <div key={d.day} className="flex h-full flex-1 flex-col items-center justify-end gap-1.5">
                   <div
-                    className={cn("w-full rounded-md", i === 0 ? "bg-white" : "bg-white/30")}
+                    className={cn(
+                      "w-full rounded-md",
+                      i === 0 ? "bg-[var(--brass)] bg-[image:var(--brass-gradient)]" : "bg-white/25",
+                    )}
                     style={{ height: `${Math.max(6, (d.occupancyPct / maxAhead) * 80)}%` }}
                     title={`${fmtDay(d.day, { day: "numeric", month: "short" })} · ${pct(d.occupancyPct)} · ${d.sold}/${d.rooms}`}
                   />
@@ -297,16 +304,15 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
       <nav aria-label={t("quickTitle")} className="mt-4 grid grid-cols-4 gap-2 sm:gap-3 lg:grid-cols-8">
         {quick
           .filter((q) => q.show)
-          .map(({ href, label, Icon, tone }) => (
+          .map(({ href, label, Icon }) => (
             <Link
               key={href}
               href={href}
-              className="group flex flex-col items-center gap-2 rounded-2xl border border-border bg-surface px-1.5 py-3 text-center shadow-[var(--shadow-soft)] transition-colors hover:border-accent/40 hover:bg-accent-soft/40"
+              className="group flex flex-col items-center gap-2 rounded-2xl border border-border bg-surface px-1.5 py-3 text-center shadow-[var(--shadow-card)] transition-[border-color,transform] hover:-translate-y-0.5 hover:border-brand-300"
             >
               <span
                 className={cn(
-                  "grid size-11 place-items-center rounded-2xl transition-transform group-hover:scale-105",
-                  TONE_TILE[tone],
+                  "grid size-11 place-items-center rounded-full bg-brand-50 text-brand-700 ring-1 ring-brand-200 transition-colors ring-inset group-hover:bg-accent group-hover:bg-[image:var(--brand-gradient)] group-hover:text-accent-fg group-hover:ring-transparent",
                 )}
               >
                 <Icon className="size-5" aria-hidden="true" />

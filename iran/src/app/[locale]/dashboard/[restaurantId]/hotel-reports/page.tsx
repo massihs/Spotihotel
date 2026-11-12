@@ -4,12 +4,13 @@ import { FileDown } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { Card } from "@/components/ui/card";
 import { buttonClasses } from "@/components/ui/button";
+import { DateInput } from "@/components/ui/date-input";
 import { PrintButton } from "@/components/ui/print-button";
 import { Link } from "@/i18n/navigation";
 import { DEFAULT_LOCALE } from "@/i18n/config";
 import { cn } from "@/lib/cn";
 import { getMoney } from "@/lib/money-server";
-import { calendarLocale, jalaliYearStart } from "@/lib/jalali-calendar";
+import { calendarLocale, formatCalendarDate, jalaliYearStart } from "@/lib/jalali-calendar";
 import { localDay } from "@/lib/period";
 import { EDITION } from "@/config/edition";
 import { requireRestaurant } from "@/server/auth/current";
@@ -108,7 +109,8 @@ async function HotelReports({ params, searchParams }: Props) {
     d: string,
     opts: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" },
   ) =>
-    new Intl.DateTimeFormat(calendarLocale(locale, EDITION), { ...opts, timeZone: "UTC" }).format(
+    formatCalendarDate(
+      new Intl.DateTimeFormat(calendarLocale(locale, EDITION), { ...opts, timeZone: "UTC" }),
       new Date(`${d}T12:00:00Z`),
     );
   const label = (tr: typeof tDept, k: string | null) =>
@@ -144,15 +146,13 @@ async function HotelReports({ params, searchParams }: Props) {
           )
         }
       />
-      <nav className="mb-4 flex gap-1.5 overflow-x-auto pb-1 print:hidden" aria-label={t("title")}>
+      <nav className="seg mb-5 print:hidden" aria-label={t("title")}>
         {TABS.map((x) => (
           <Link
             key={x}
             href={`${base}?tab=${x}`}
-            className={cn(
-              "inline-flex h-9 shrink-0 items-center rounded-full px-4 text-sm font-semibold whitespace-nowrap ring-1",
-              x === tab ? "bg-brand-700 text-white ring-brand-700" : "bg-surface text-fg-muted ring-border",
-            )}
+            aria-current={x === tab ? "page" : undefined}
+            className="seg-item"
           >
             {t(`tabs.${x}`)}
           </Link>
@@ -174,32 +174,23 @@ async function HotelReports({ params, searchParams }: Props) {
           {tab === "manager" ? (
             <label className="text-sm">
               <span className="mb-1 block text-fg-muted">{t("day")}</span>
-              <input
-                type="date"
-                name="day"
-                defaultValue={day}
-                className="h-10 rounded-xl border border-border bg-surface px-3"
-              />
+              <span className="block w-60">
+                <DateInput name="day" defaultValue={day} required aria-label={t("day")} />
+              </span>
             </label>
           ) : (
             <>
               <label className="text-sm">
                 <span className="mb-1 block text-fg-muted">{t("from")}</span>
-                <input
-                  type="date"
-                  name="from"
-                  defaultValue={from}
-                  className="h-10 rounded-xl border border-border bg-surface px-3"
-                />
+                <span className="block w-60">
+                  <DateInput name="from" defaultValue={from} required aria-label={t("from")} />
+                </span>
               </label>
               <label className="text-sm">
                 <span className="mb-1 block text-fg-muted">{t("to")}</span>
-                <input
-                  type="date"
-                  name="to"
-                  defaultValue={to}
-                  className="h-10 rounded-xl border border-border bg-surface px-3"
-                />
+                <span className="block w-60">
+                  <DateInput name="to" defaultValue={to} required aria-label={t("to")} />
+                </span>
               </label>
             </>
           )}

@@ -85,19 +85,13 @@ async function Reservations({ params, searchParams }: Pick<Props, "params" | "se
           ) : null
         }
       />
-      <nav
-        className="-mx-4 mb-4 flex [scrollbar-width:none] gap-2 overflow-x-auto px-4"
-        aria-label={t("title")}
-      >
+      <nav className="seg mb-5 print:hidden" aria-label={t("title")}>
         {TABS.filter((k) => k !== "settings" || can(ctx, "restaurant.manage")).map((k) => (
           <Link
             key={k}
             href={k === "plan" ? base : `${base}?tab=${k}`}
             aria-current={tab === k ? "page" : undefined}
-            className={cn(
-              "shrink-0 rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap",
-              tab === k ? "bg-accent text-accent-fg" : "bg-surface text-fg-muted ring-1 ring-border",
-            )}
+            className="seg-item"
           >
             {t(`tabs.${k}`)}
             {k === "queue" && waiting ? (

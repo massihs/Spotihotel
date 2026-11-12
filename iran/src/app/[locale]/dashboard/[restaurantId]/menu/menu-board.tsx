@@ -9,7 +9,6 @@ import {
   CircleOff,
   Eye,
   EyeOff,
-  ImageIcon,
   ImageOff,
   LayoutGrid,
   List,
@@ -39,6 +38,7 @@ import {
 } from "@/components/ui/form";
 import { SortableList } from "@/components/ui/sortable-list";
 import { CategoryIcon } from "@/components/category-icon";
+import { DishTile } from "@/components/ui/dish-tile";
 import { IconPicker } from "@/components/dashboard/icon-picker";
 import { resolveCategoryIcon } from "@/lib/category-icons";
 import { Toast } from "@/components/ui/toast";
@@ -259,6 +259,7 @@ export function MenuBoard({
   const used = new Set(categories.map((c) => c.templateKey).filter((k): k is string => !!k));
   const base = `/dashboard/${restaurantId}/menu`;
   const catName = useMemo(() => new Map(categories.map((c) => [c.id, c.name])), [categories]);
+  const catIcon = useMemo(() => new Map(categories.map((c) => [c.id, c.icon])), [categories]);
 
   const q = query.trim().toLowerCase();
   // Searching or filtering looks across the whole menu; otherwise the selected category, sortable.
@@ -292,6 +293,7 @@ export function MenuBoard({
       canManage={canManage}
       canFlag={canFlag}
       category={wide ? catName.get(p.categoryId) : undefined}
+      icon={catIcon.get(p.categoryId) ?? null}
       onError={(c) => setToast(message(c))}
       onSaved={() => setToast(t("menu.priceSaved"))}
     />
@@ -617,6 +619,7 @@ export function MenuBoard({
                     canManage={canManage}
                     canFlag={canFlag}
                     category={wide ? catName.get(p.categoryId) : undefined}
+                    icon={catIcon.get(p.categoryId) ?? null}
                     onError={(c) => setToast(message(c))}
                     onSaved={() => setToast(t("menu.priceSaved"))}
                   />
@@ -656,25 +659,28 @@ type ItemProps = {
   canManage: boolean;
   canFlag: boolean;
   category?: string;
+  /** The dish's category icon, drawn when it has no photo. */
+  icon?: string | null;
   onError: (code: string) => void;
   onSaved: () => void;
 };
 
-function Thumb({ p, className }: { p: ProductRow; className?: string }) {
+function Thumb({
+  p,
+  icon,
+  className,
+  size = "sm",
+}: {
+  p: ProductRow;
+  icon?: string | null;
+  className?: string;
+  size?: "sm" | "md";
+}) {
+  const state = cn(!p.isAvailable && "grayscale", !p.isActive && "opacity-50");
+  if (!p.image) return <DishTile icon={icon} size={size} className={cn("shrink-0", state, className)} />;
   return (
-    <span
-      className={cn(
-        "grid shrink-0 place-items-center overflow-hidden bg-surface-2 text-fg-subtle",
-        !p.isAvailable && "grayscale",
-        !p.isActive && "opacity-50",
-        className,
-      )}
-    >
-      {p.image ? (
-        <img src={p.image.sm} alt="" loading="lazy" className="size-full object-cover" />
-      ) : (
-        <ImageIcon className="size-5" aria-hidden="true" />
-      )}
+    <span className={cn("grid shrink-0 place-items-center overflow-hidden bg-surface-2", state, className)}>
+      <img src={p.image.sm} alt="" loading="lazy" className="size-full object-cover" />
     </span>
   );
 }
@@ -692,7 +698,7 @@ function ProductItem({
     <div className="group flex flex-wrap items-center gap-x-3 gap-y-2 bg-surface px-1 py-2.5 sm:flex-nowrap">
       {handle ?? <span className="w-1" />}
       <Link href={href} className="shrink-0">
-        <Thumb p={p} className="size-14 rounded-xl" />
+        <Thumb p={p} icon={props.icon} className="size-14 rounded-xl" />
       </Link>
       <div className="min-w-0 flex-1">
         <Link
@@ -737,7 +743,7 @@ function ProductCard(props: ItemProps) {
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-surface ring-1 ring-border transition-shadow hover:shadow-[var(--shadow-float)]">
       <Link href={href} className="relative block">
-        <Thumb p={p} className="aspect-[4/3] w-full" />
+        <Thumb p={p} icon={props.icon} size="md" className="aspect-[4/3] w-full" />
         <span className="absolute start-2 top-2 flex flex-wrap gap-1">
           {!p.isAvailable ? <Badge tone="warning">{t("soldOut")}</Badge> : null}
           {!p.isActive ? <Badge>{t("hidden")}</Badge> : null}

@@ -120,26 +120,25 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
         {/* ── Hero ────────────────────────────────────────── */}
         <section className="landing-hero relative isolate overflow-hidden text-white">
           <div aria-hidden="true" className="landing-grid pointer-events-none absolute inset-0 -z-10" />
+          <span aria-hidden="true" className="texture-grain -z-10 [--grain-opacity:0.14]" />
           <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-4 pt-14 pb-20 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:pt-24 lg:pb-28">
             <div>
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-medium text-white/85 ring-1 ring-white/15 backdrop-blur">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.07] px-3.5 py-1.5 text-xs font-medium text-white/85 ring-1 ring-white/15 backdrop-blur">
                 <span className="relative flex size-2">
-                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-60" />
-                  <span className="relative inline-flex size-2 rounded-full bg-accent" />
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-[var(--brass)] opacity-60" />
+                  <span className="relative inline-flex size-2 rounded-full bg-[var(--brass)]" />
                 </span>
                 {t("badge")}
               </span>
-              <h1 className="mt-6 text-[2.5rem] leading-[1.15] font-black tracking-tight text-balance sm:text-6xl">
+              <h1 className="font-display mt-7 text-[2.9rem] leading-[1.2] text-balance sm:text-[4.25rem]">
                 {t.rich("titleRich", {
                   hl: (chunks: ReactNode) => <span className="landing-highlight">{chunks}</span>,
                 })}
               </h1>
-              <p className="mt-6 max-w-xl text-lg leading-8 text-pretty text-white/70">{t("subtitle")}</p>
+              <span aria-hidden="true" className="ornament mt-6 [--ornament-width:5rem]" />
+              <p className="mt-5 max-w-xl text-lg leading-8 text-pretty text-white/70">{t("subtitle")}</p>
               <div className="mt-9 flex flex-wrap items-center gap-3">
-                <Link
-                  href="/signup"
-                  className={buttonClasses("accent", "lg", "px-7 shadow-[0_10px_30px_-8px_var(--accent)]")}
-                >
+                <Link href="/signup" className={buttonClasses("brass", "lg", "rounded-full px-7")}>
                   {t("ctaPrimary")}
                   <ArrowLeft className="size-4 ltr:rotate-180" aria-hidden="true" />
                 </Link>
@@ -153,8 +152,8 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
               <ul className="mt-9 flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/65">
                 {(["noApp", "zarinpal", "invoice"] as const).map((k) => (
                   <li key={k} className="flex items-center gap-1.5">
-                    <span className="grid size-5 place-items-center rounded-full bg-accent/25">
-                      <Check className="size-3 text-white" strokeWidth={3} aria-hidden="true" />
+                    <span className="grid size-5 place-items-center rounded-full bg-[image:var(--brass-gradient)] text-[color:var(--brass-ink)]">
+                      <Check className="size-3" strokeWidth={3} aria-hidden="true" />
                     </span>
                     {t(`trust.${k}`)}
                   </li>
@@ -302,14 +301,15 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
         <section className="px-4 py-14 sm:px-6 sm:py-24">
           <div className="landing-hero relative isolate mx-auto max-w-6xl overflow-hidden rounded-[2rem] px-5 py-10 text-white sm:px-12 sm:py-14">
             <div aria-hidden="true" className="landing-grid pointer-events-none absolute inset-0 -z-10" />
+            <span aria-hidden="true" className="texture-grain -z-10 [--grain-opacity:0.14]" />
             <SectionTitle eyebrow={t("iran.eyebrow")} title={t("iran.title")} dark />
             <ul className="mt-8 grid gap-3 sm:mt-12 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
               {MADE_FOR_IRAN.map(({ key, Icon }) => (
                 <li
                   key={key}
-                  className="flex gap-4 rounded-2xl bg-white/[0.06] p-4 ring-1 ring-white/10 sm:p-5"
+                  className="flex gap-4 rounded-2xl bg-white/[0.05] p-4 ring-1 ring-white/10 backdrop-blur-sm transition hover:bg-white/[0.08] sm:p-5"
                 >
-                  <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-accent text-accent-fg">
+                  <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[image:var(--brass-gradient)] text-[color:var(--brass-ink)] shadow-[0_8px_20px_-10px_var(--brass-glow)]">
                     <Icon className="size-5" aria-hidden="true" />
                   </span>
                   <span>
@@ -455,12 +455,13 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
         <section className="px-4 pb-14 sm:px-6 sm:pb-24">
           <div className="landing-hero relative isolate mx-auto max-w-6xl overflow-hidden rounded-[2rem] px-6 py-12 text-center text-white sm:px-12 sm:py-16">
             <div aria-hidden="true" className="landing-grid pointer-events-none absolute inset-0 -z-10" />
-            <h2 className="mx-auto max-w-2xl text-3xl font-black tracking-tight text-balance sm:text-4xl">
+            <span aria-hidden="true" className="texture-grain -z-10 [--grain-opacity:0.14]" />
+            <h2 className="font-display mx-auto max-w-2xl text-4xl leading-[1.25] text-balance sm:text-5xl">
               {t("finalTitle")}
             </h2>
             <p className="mx-auto mt-4 max-w-xl leading-8 text-white/70">{t("finalBody")}</p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <Link href="/signup" className={buttonClasses("accent", "lg", "px-8")}>
+              <Link href="/signup" className={buttonClasses("brass", "lg", "rounded-full px-8")}>
                 {t("ctaPrimary")}
               </Link>
               <Link
@@ -497,16 +498,9 @@ function SectionTitle({
   return (
     <div className="mx-auto max-w-2xl text-center">
       {eyebrow ? (
-        <p
-          className={cn(
-            "text-sm font-bold tracking-wide",
-            dark ? "text-[color:var(--landing-glow-text)]" : "text-accent-text",
-          )}
-        >
-          {eyebrow}
-        </p>
+        <p className={cn("eyebrow", dark && "[--eyebrow-color:var(--landing-glow-text)]")}>{eyebrow}</p>
       ) : null}
-      <h2 className="mt-2 text-3xl font-black tracking-tight text-balance sm:text-4xl">{title}</h2>
+      <h2 className="font-display mt-3 text-[2.15rem] leading-[1.25] text-balance sm:text-5xl">{title}</h2>
       {subtitle ? (
         <p className={cn("mt-4 text-lg leading-8", dark ? "text-white/70" : "text-fg-muted")}>{subtitle}</p>
       ) : null}
@@ -580,7 +574,7 @@ function HeroVisual({ t }: { t: T }) {
         <TonightCard t={t} />
       </div>
       <div className="landing-float-slow absolute -end-1 top-24 flex items-center gap-2.5 rounded-2xl bg-white/95 px-3.5 py-2.5 text-[#141414] shadow-xl ring-1 ring-black/5 lg:-end-8">
-        <span className="grid size-8 place-items-center rounded-full bg-brand-600 text-white">
+        <span className="grid size-8 place-items-center rounded-full bg-[image:var(--brass-gradient)] text-[color:var(--brass-ink)]">
           <KeyRound className="size-4" />
         </span>
         <span className="text-sm leading-tight font-bold">
@@ -588,8 +582,8 @@ function HeroVisual({ t }: { t: T }) {
           <span className="block text-xs font-medium text-neutral-500">{t("float.checkinRoom")}</span>
         </span>
       </div>
-      <div className="landing-float absolute -end-2 bottom-24 flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-bold text-accent-fg shadow-xl lg:-end-10">
-        <MoonStar className="size-4" />
+      <div className="landing-float absolute -end-2 bottom-24 flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-white shadow-xl ring-1 ring-white/20 backdrop-blur-md lg:-end-10">
+        <MoonStar className="size-4 text-[var(--brass)]" />
         {t("float.audit")} ✓
       </div>
     </div>

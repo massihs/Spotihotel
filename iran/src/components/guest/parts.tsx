@@ -15,7 +15,7 @@ import {
   WheatOff,
   type LucideIcon,
 } from "lucide-react";
-import { CategoryIcon } from "@/components/category-icon";
+import { DishTile } from "@/components/ui/dish-tile";
 import { useTranslations } from "next-intl";
 import type { PricedOptionGroup } from "@/server/modules/pricing";
 import type { PublicProduct } from "@/server/modules/menu/public";
@@ -141,13 +141,9 @@ export function InCartBadge({ n, className }: { n: number; className?: string })
   );
 }
 
-/** Photo-less dishes get a soft tile with their category icon, so every card keeps its rhythm. */
+/** Photo-less dishes get the hotel's patterned tile with their category icon (grid view). */
 export function DishPlaceholder({ icon, className }: { icon: string; className?: string }) {
-  return (
-    <div className={cn("grid place-items-center bg-accent-soft text-accent-text/70", className)}>
-      <CategoryIcon icon={icon} className="size-1/3 min-h-6 min-w-6" />
-    </div>
-  );
+  return <DishTile icon={icon} className={className} />;
 }
 
 export function ProductImage({
@@ -177,21 +173,32 @@ export function ProductImage({
   );
 }
 
+/** "۴۲۰٬۰۰۰ تومان" → ["۴۲۰٬۰۰۰", "تومان"]: the figure, then the unit after it (if any). */
+function splitUnit(text: string): [string, string | null] {
+  const m = /^(.*\p{Nd})\s+([^\p{Nd}]+)$/u.exec(text);
+  return m ? [m[1]!, m[2]!] : [text, null];
+}
+
 export function Price({
   product: p,
   money,
+  split,
   className,
 }: {
   product: PublicProduct;
   money: (c: number) => string;
+  /** Set the currency smaller than the figure (lines of the menu). */
+  split?: boolean;
   className?: string;
 }) {
   const t = useTranslations("guest");
   const pct = discountPct(p);
+  const [figure, unit] = split ? splitUnit(money(p.priceCents)) : [money(p.priceCents), null];
   return (
     <span className={cn("flex flex-wrap items-center gap-x-2 gap-y-1 text-[15px]", className)}>
       <span className="font-bold text-fg tabular-nums atelier:font-medium nuit:text-accent-text">
-        {money(p.priceCents)}
+        {figure}
+        {unit ? <span className="ms-1 text-xs font-medium text-fg-muted">{unit}</span> : null}
       </span>
       {pct ? (
         <>
@@ -215,11 +222,14 @@ export function AddButton({
   label,
   onClick,
   busy,
+  tone,
   className,
 }: {
   label: string;
   onClick: () => void;
   busy?: boolean;
+  /** "soft": a tinted "+" for a line of the menu (the solid one sits on photos). */
+  tone?: "soft";
   className?: string;
 }) {
   return (
@@ -233,7 +243,10 @@ export function AddButton({
         onClick();
       }}
       className={cn(
-        "grid size-11 shrink-0 place-items-center rounded-full bg-accent bg-[image:var(--brand-gradient)] text-accent-fg shadow-[0_8px_18px_-10px_var(--accent)]",
+        "grid size-11 shrink-0 place-items-center rounded-full",
+        tone === "soft"
+          ? "bg-brand-50 text-brand-700 ring-1 ring-brand-200 ring-inset hover:bg-brand-100 [&_svg]:size-[1.15rem]"
+          : "bg-accent bg-[image:var(--brand-gradient)] text-accent-fg shadow-[0_8px_18px_-10px_var(--accent)]",
         "atelier:bg-transparent atelier:bg-none atelier:text-fg atelier:shadow-none atelier:ring-1 atelier:ring-fg nuit:shadow-none",
         "transition-transform active:scale-90 disabled:opacity-60",
         className,

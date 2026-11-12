@@ -176,7 +176,9 @@ export function SidebarNav({ items, label }: { items: NavItem[]; label: string }
                 aria-controls={id}
                 className="group/h flex w-full items-center gap-2 rounded-lg px-2.5 pt-5 pb-1.5 text-start text-[11px] font-semibold tracking-wider text-sidebar-muted/60 uppercase transition-colors hover:text-sidebar-fg"
               >
-                <span className="flex-1">{section.label}</span>
+                <span className="flex flex-1 items-center gap-2 before:size-1 before:rotate-45 before:rounded-[1px] before:bg-[var(--brass)] before:opacity-70">
+                  {section.label}
+                </span>
                 {!open && badge ? <Badge n={badge} /> : null}
                 <ChevronDown
                   className={cn(
@@ -199,13 +201,13 @@ export function SidebarNav({ items, label }: { items: NavItem[]; label: string }
                     className={cn(
                       "group relative flex h-9 items-center gap-3 rounded-lg px-2.5 text-[13.5px] font-medium transition-[background-color,color] duration-150",
                       active
-                        ? "bg-sidebar-2 text-sidebar-fg shadow-[inset_0_0_0_1px_var(--sidebar-border)]"
-                        : "text-sidebar-muted hover:bg-sidebar-2/55 hover:text-sidebar-fg",
+                        ? "bg-white/[0.08] text-sidebar-fg shadow-[inset_0_0_0_1px_rgb(255_255_255/0.07),0_6px_16px_-10px_rgb(0_0_0/0.5)]"
+                        : "text-sidebar-muted hover:bg-white/[0.05] hover:text-sidebar-fg",
                     )}
                   >
                     {active ? (
                       <span
-                        className="absolute inset-y-2 start-0 w-[3px] rounded-full bg-accent"
+                        className="absolute inset-y-2 start-0 w-[3px] rounded-full bg-[var(--brass)] shadow-[0_0_10px_var(--brass)]"
                         aria-hidden="true"
                       />
                     ) : null}
@@ -213,7 +215,7 @@ export function SidebarNav({ items, label }: { items: NavItem[]; label: string }
                     <span
                       className={cn(
                         "grid size-5 shrink-0 place-items-center transition-colors [&_svg]:size-[18px] [&_svg]:stroke-[1.75]",
-                        active ? "text-accent-soft-2" : "text-sidebar-muted group-hover:text-sidebar-fg",
+                        active ? "text-[var(--brass)]" : "text-sidebar-muted group-hover:text-sidebar-fg",
                       )}
                       aria-hidden="true"
                     >

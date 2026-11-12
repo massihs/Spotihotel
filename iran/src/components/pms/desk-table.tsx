@@ -31,18 +31,13 @@ export async function DeskTabs({
 }) {
   const t = await getTranslations(ns);
   return (
-    <nav className="mb-4 flex gap-1.5 overflow-x-auto pb-1 print:hidden" aria-label={t("title")}>
+    <nav className="seg mb-5 print:hidden" aria-label={t("title")}>
       {tabs.map((x) => (
         <Link
           key={x}
           href={`${base}?tab=${x}`}
           aria-current={x === current ? "page" : undefined}
-          className={cn(
-            "inline-flex h-9 shrink-0 items-center rounded-full px-4 text-sm font-semibold whitespace-nowrap ring-1 transition-colors",
-            x === current
-              ? "bg-brand-700 text-white ring-brand-700"
-              : "bg-surface text-fg-muted ring-border hover:text-fg",
-          )}
+          className="seg-item"
         >
           {t(`tabs.${x}`)}
         </Link>

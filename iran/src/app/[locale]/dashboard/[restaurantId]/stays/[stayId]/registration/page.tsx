@@ -7,7 +7,7 @@ import { restaurantSettings, restaurants } from "@/server/db/schema";
 import { getStay } from "@/server/modules/pms/stays";
 import { nightsBetween } from "@/server/modules/pms/calc";
 import { PrintButton } from "@/components/ui/print-button";
-import { calendarLocale } from "@/lib/jalali-calendar";
+import { calendarLocale, formatCalendarDate } from "@/lib/jalali-calendar";
 import { EDITION } from "@/config/edition";
 
 type Props = PageProps<"/[locale]/dashboard/[restaurantId]/stays/[stayId]/registration">;
@@ -43,13 +43,16 @@ async function RegistrationCard({ params }: Pick<Props, "params">) {
       .where(eq(restaurants.id, ctx.restaurant.id)),
   ]);
   const day = (d: string) =>
-    new Intl.DateTimeFormat(calendarLocale(locale, EDITION), {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-      timeZone: "UTC",
-    }).format(new Date(`${d}T12:00:00Z`));
+    formatCalendarDate(
+      new Intl.DateTimeFormat(calendarLocale(locale, EDITION), {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "UTC",
+      }),
+      new Date(`${d}T12:00:00Z`),
+    );
   const g = card.guest;
   const s = card.stay;
   const iranian = !g.nationality || g.nationality === "IR";

@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { Card } from "@/components/ui/card";
 import { buttonClasses } from "@/components/ui/button";
+import { DateInput } from "@/components/ui/date-input";
 import { DEFAULT_LOCALE } from "@/i18n/config";
 import { FileDown } from "lucide-react";
 import { requireRestaurant } from "@/server/auth/current";
@@ -35,21 +36,17 @@ async function Invoices({ params }: { params: Params }) {
             action={`${locale === DEFAULT_LOCALE ? "" : `/${locale}`}/dashboard/${ctx.restaurant.id}/invoices/moadian`}
             className="flex flex-wrap items-end gap-2"
           >
-            <label className="text-xs text-fg-muted">
+            <label className="block w-56 text-xs text-fg-muted">
               {t("invoice.from")}
-              <input
-                type="date"
-                name="from"
-                className="mt-1 block h-9 rounded-lg border border-border bg-surface px-2 text-sm"
-              />
+              <span className="mt-1 block">
+                <DateInput name="from" aria-label={t("invoice.from")} />
+              </span>
             </label>
-            <label className="text-xs text-fg-muted">
+            <label className="block w-56 text-xs text-fg-muted">
               {t("invoice.to")}
-              <input
-                type="date"
-                name="to"
-                className="mt-1 block h-9 rounded-lg border border-border bg-surface px-2 text-sm"
-              />
+              <span className="mt-1 block">
+                <DateInput name="to" aria-label={t("invoice.to")} />
+              </span>
             </label>
             <button type="submit" className={buttonClasses("secondary", "md")}>
               <FileDown className="size-4" aria-hidden="true" />

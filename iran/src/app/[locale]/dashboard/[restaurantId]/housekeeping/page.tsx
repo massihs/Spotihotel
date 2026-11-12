@@ -3,7 +3,6 @@ import { getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { LiveRefresh } from "@/components/realtime/live";
 import { Link } from "@/i18n/navigation";
-import { cn } from "@/lib/cn";
 import { HousekeepingPlan, MaintenanceBoard, MyRooms } from "@/components/hotel/housekeeping-ui";
 import { requireRestaurant } from "@/server/auth/current";
 import { db } from "@/server/db/client";
@@ -47,15 +46,13 @@ async function Housekeeping({ params, searchParams }: Props) {
     <>
       <PageHeader title={t("title")} description={t("subtitle")} />
       <LiveRefresh types={["notification.created", "session.closed"]} />
-      <nav className="mb-4 flex flex-wrap gap-1.5" aria-label={t("title")}>
+      <nav className="seg mb-5 print:hidden" aria-label={t("title")}>
         {TABS.map((x) => (
           <Link
             key={x}
             href={`${base}?tab=${x}`}
-            className={cn(
-              "inline-flex h-9 items-center rounded-full px-4 text-sm font-semibold ring-1",
-              x === tab ? "bg-brand-700 text-white ring-brand-700" : "bg-surface text-fg-muted ring-border",
-            )}
+            aria-current={x === tab ? "page" : undefined}
+            className="seg-item"
           >
             {t(`tabs.${x}`)}
           </Link>
