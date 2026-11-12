@@ -152,8 +152,16 @@ function useActive() {
 /** Desktop sidebar navigation (dark sidebar): colored icon tiles, collapsible sections. */
 export function SidebarNav({ items, label }: { items: NavItem[]; label: string }) {
   const isActive = useActive();
-  // Items whose sub-pages are unfolded by hand (the active one always is).
-  const [unfolded, setUnfolded] = useState<Set<string>>(new Set());
+  // Items whose sub-pages were folded or unfolded by hand: the active one is open by default,
+  // the others closed; a click on the chevron (or on the active item again) flips it.
+  const [flipped, setFlipped] = useState<Set<string>>(new Set());
+  const flip = (href: string) =>
+    setFlipped((f) => {
+      const n = new Set(f);
+      if (n.has(href)) n.delete(href);
+      else n.add(href);
+      return n;
+    });
   const collapsed = new Set(
     useSyncExternalStore(subscribeCollapsed, readCollapsed, () => "")
       .split(",")
@@ -193,11 +201,25 @@ export function SidebarNav({ items, label }: { items: NavItem[]; label: string }
             <div id={id} hidden={!open} className="space-y-0.5">
               {section.items.map((item) => {
                 const active = isActive(item);
+                const hasSub = !!item.children?.length;
+                const open = hasSub && active !== flipped.has(item.href);
                 const link = (
                   <Link
                     key={item.href}
                     href={item.href}
                     aria-current={active ? "page" : undefined}
+                    aria-expanded={hasSub ? open : undefined}
+                    onClick={(e) => {
+                      if (!hasSub) return;
+                      if (active) {
+                        // Already on this page: the click folds or unfolds its sub-menu.
+                        e.preventDefault();
+                        flip(item.href);
+                      } else if (flipped.has(item.href)) {
+                        // Opening another page: its sub-menu starts open.
+                        flip(item.href);
+                      }
+                    }}
                     className={cn(
                       "group relative flex h-9 items-center gap-3 rounded-lg px-2.5 text-[13.5px] font-medium transition-[background-color,color] duration-150",
                       active
@@ -228,24 +250,19 @@ export function SidebarNav({ items, label }: { items: NavItem[]; label: string }
                       <ChevronDown
                         className={cn(
                           "size-3.5 shrink-0 opacity-60 transition-transform",
-                          !(active || unfolded.has(item.href)) && "-rotate-90 rtl:rotate-90",
+                          !open && "-rotate-90 rtl:rotate-90",
                         )}
                         aria-hidden="true"
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          setUnfolded((u) => {
-                            const n = new Set(u);
-                            if (n.has(item.href)) n.delete(item.href);
-                            else n.add(item.href);
-                            return n;
-                          });
+                          flip(item.href);
                         }}
                       />
                     ) : null}
                   </Link>
                 );
-                return item.children?.length && (active || unfolded.has(item.href)) ? (
+                return open ? (
                   <Fragment key={item.href}>
                     {link}
                     <Suspense fallback={null}>
