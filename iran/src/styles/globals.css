@@ -218,75 +218,131 @@
  * reads like front-desk software rather than a café menu. The brand accent stays the hotel's.
  */
 [data-kind="hotel"] {
-  /* Canvas, panels and lines take a whisper of the hotel's colour rather than plain grey. */
-  --bg: oklch(0.97 calc(var(--brand-c) * 0.12) var(--brand-h));
-  --surface: oklch(1 0 0);
-  --surface-2: oklch(0.958 calc(var(--brand-c) * 0.17) var(--brand-h));
-  --surface-3: oklch(0.922 calc(var(--brand-c) * 0.24) var(--brand-h));
-  --border: oklch(0.91 calc(var(--brand-c) * 0.16) var(--brand-h));
-  --border-strong: oklch(0.85 calc(var(--brand-c) * 0.24) var(--brand-h));
-  --fg: oklch(0.22 0.03 262);
-  --fg-muted: oklch(0.5 0.023 258);
-  --fg-subtle: oklch(0.64 0.017 258);
-  --ink: oklch(0.25 0.05 264);
-  --ink-hover: oklch(0.33 0.055 264);
+  /*
+   * Everything takes a shade of the hotel's own colour: a tinted canvas, near-white panels with a
+   * breath of it, lines and secondary panels a step deeper, text inked with it, and a sidebar
+   * that is the colour itself, deep. Change the hotel's colour and the whole panel follows.
+   */
+  --bg: oklch(0.962 calc(var(--brand-c) * 0.3) var(--brand-h));
+  --surface: oklch(0.996 calc(var(--brand-c) * 0.05) var(--brand-h));
+  --surface-2: oklch(0.948 calc(var(--brand-c) * 0.36) var(--brand-h));
+  --surface-3: oklch(0.905 calc(var(--brand-c) * 0.48) var(--brand-h));
+  --border: oklch(0.9 calc(var(--brand-c) * 0.34) var(--brand-h));
+  --border-strong: oklch(0.82 calc(var(--brand-c) * 0.48) var(--brand-h));
+  --fg: oklch(0.23 calc(var(--brand-c) * 0.45) var(--brand-h));
+  --fg-muted: oklch(0.49 calc(var(--brand-c) * 0.34) var(--brand-h));
+  --fg-subtle: oklch(0.63 calc(var(--brand-c) * 0.26) var(--brand-h));
+  --ink: oklch(0.27 calc(var(--brand-c) * 0.8) var(--brand-h));
+  --ink-hover: oklch(0.34 calc(var(--brand-c) * 0.85) var(--brand-h));
   --ink-fg: oklch(1 0 0);
-  --sidebar: oklch(0.2 0.045 264);
-  --sidebar-2: oklch(0.255 0.05 264);
-  --sidebar-fg: oklch(0.965 0.008 255);
-  --sidebar-muted: oklch(0.74 0.03 258);
-  --sidebar-border: oklch(0.31 0.05 264);
+  --sidebar: oklch(0.205 calc(var(--brand-c) * 0.62) var(--brand-h));
+  --sidebar-2: oklch(0.265 calc(var(--brand-c) * 0.7) var(--brand-h));
+  --sidebar-fg: oklch(0.97 calc(var(--brand-c) * 0.08) var(--brand-h));
+  --sidebar-muted: oklch(0.76 calc(var(--brand-c) * 0.38) var(--brand-h));
+  --sidebar-border: oklch(0.32 calc(var(--brand-c) * 0.66) var(--brand-h));
   --shadow-color: 224 45% 14%;
+  --shadow-soft:
+    0 1px 2px oklch(0.3 var(--brand-c) var(--brand-h) / 0.06),
+    0 6px 18px -10px oklch(0.3 var(--brand-c) var(--brand-h) / 0.16);
+  --shadow-float: 0 24px 54px -16px oklch(0.25 var(--brand-c) var(--brand-h) / 0.32);
+  /* The canvas: the hotel's colour glowing softly from the top corner. */
+  --canvas:
+    radial-gradient(
+      1100px 420px at 100% -8%,
+      oklch(0.9 calc(var(--brand-c) * 0.7) var(--brand-h) / 0.55),
+      transparent 62%
+    ),
+    radial-gradient(
+      900px 360px at 0% -12%,
+      oklch(0.92 calc(var(--brand-c) * 0.55) calc(var(--brand-h) - 24) / 0.4),
+      transparent 60%
+    );
 }
 [data-kind="hotel"] .on-dark {
-  --surface-2: oklch(0.31 0.05 264);
-  --surface-3: oklch(0.36 0.055 264);
-  --fg-subtle: oklch(0.62 0.03 258);
-  --border-strong: oklch(0.4 0.055 264);
+  --surface-2: oklch(0.31 calc(var(--brand-c) * 0.72) var(--brand-h));
+  --surface-3: oklch(0.36 calc(var(--brand-c) * 0.75) var(--brand-h));
+  --fg-subtle: oklch(0.63 calc(var(--brand-c) * 0.4) var(--brand-h));
+  --border-strong: oklch(0.4 calc(var(--brand-c) * 0.75) var(--brand-h));
+}
+/* The sidebar: the hotel's colour, a little lighter at the top, deeper at the bottom. */
+[data-kind="hotel"] .sidebar-shade {
+  background: linear-gradient(
+    180deg,
+    oklch(0.27 calc(var(--brand-c) * 0.78) var(--brand-h)) 0%,
+    var(--sidebar) 38%,
+    oklch(0.17 calc(var(--brand-c) * 0.55) var(--brand-h)) 100%
+  );
 }
 [data-kind="hotel"] .brand-wash {
-  opacity: 0.35;
+  opacity: 1;
+  background: var(--canvas);
 }
 [data-kind="hotel"] .brand-glow {
-  opacity: 0.18;
+  opacity: 0.32;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) [data-kind="hotel"] {
-    --bg: oklch(0.155 0.018 262);
-    --surface: oklch(0.2 0.022 262);
-    --surface-2: oklch(0.24 0.025 262);
-    --surface-3: oklch(0.29 0.028 262);
-    --border: oklch(0.28 0.025 262);
-    --border-strong: oklch(0.36 0.03 262);
-    --fg: oklch(0.97 0.005 255);
-    --fg-muted: oklch(0.75 0.018 258);
-    --fg-subtle: oklch(0.6 0.018 258);
+    --bg: oklch(0.155 calc(var(--brand-c) * 0.3) var(--brand-h));
+    --surface: oklch(0.2 calc(var(--brand-c) * 0.34) var(--brand-h));
+    --surface-2: oklch(0.24 calc(var(--brand-c) * 0.38) var(--brand-h));
+    --surface-3: oklch(0.29 calc(var(--brand-c) * 0.42) var(--brand-h));
+    --border: oklch(0.28 calc(var(--brand-c) * 0.38) var(--brand-h));
+    --border-strong: oklch(0.36 calc(var(--brand-c) * 0.42) var(--brand-h));
+    --fg: oklch(0.97 calc(var(--brand-c) * 0.06) var(--brand-h));
+    --fg-muted: oklch(0.75 calc(var(--brand-c) * 0.22) var(--brand-h));
+    --fg-subtle: oklch(0.6 calc(var(--brand-c) * 0.22) var(--brand-h));
     --ink: oklch(0.97 0.005 255);
     --ink-hover: oklch(0.87 0.01 255);
     --ink-fg: oklch(0.155 0.018 262);
-    --sidebar: oklch(0.13 0.025 264);
-    --sidebar-2: oklch(0.2 0.032 264);
-    --sidebar-border: oklch(0.25 0.032 264);
+    --sidebar: oklch(0.13 calc(var(--brand-c) * 0.4) var(--brand-h));
+    --sidebar-2: oklch(0.2 calc(var(--brand-c) * 0.48) var(--brand-h));
+    --sidebar-border: oklch(0.25 calc(var(--brand-c) * 0.48) var(--brand-h));
     --shadow-color: 0 0% 0%;
+    --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.3), 0 6px 18px -10px rgb(0 0 0 / 0.5);
+    --canvas: radial-gradient(
+      1100px 420px at 100% -8%,
+      oklch(0.32 calc(var(--brand-c) * 0.8) var(--brand-h) / 0.45),
+      transparent 62%
+    );
+  }
+  :root:not([data-theme="light"]) [data-kind="hotel"] .sidebar-shade {
+    background: linear-gradient(
+      180deg,
+      oklch(0.18 calc(var(--brand-c) * 0.5) var(--brand-h)),
+      var(--sidebar) 40%
+    );
   }
 }
 :root[data-theme="dark"] [data-kind="hotel"] {
-  --bg: oklch(0.155 0.018 262);
-  --surface: oklch(0.2 0.022 262);
-  --surface-2: oklch(0.24 0.025 262);
-  --surface-3: oklch(0.29 0.028 262);
-  --border: oklch(0.28 0.025 262);
-  --border-strong: oklch(0.36 0.03 262);
-  --fg: oklch(0.97 0.005 255);
-  --fg-muted: oklch(0.75 0.018 258);
-  --fg-subtle: oklch(0.6 0.018 258);
+  --bg: oklch(0.155 calc(var(--brand-c) * 0.3) var(--brand-h));
+  --surface: oklch(0.2 calc(var(--brand-c) * 0.34) var(--brand-h));
+  --surface-2: oklch(0.24 calc(var(--brand-c) * 0.38) var(--brand-h));
+  --surface-3: oklch(0.29 calc(var(--brand-c) * 0.42) var(--brand-h));
+  --border: oklch(0.28 calc(var(--brand-c) * 0.38) var(--brand-h));
+  --border-strong: oklch(0.36 calc(var(--brand-c) * 0.42) var(--brand-h));
+  --fg: oklch(0.97 calc(var(--brand-c) * 0.06) var(--brand-h));
+  --fg-muted: oklch(0.75 calc(var(--brand-c) * 0.22) var(--brand-h));
+  --fg-subtle: oklch(0.6 calc(var(--brand-c) * 0.22) var(--brand-h));
   --ink: oklch(0.97 0.005 255);
   --ink-hover: oklch(0.87 0.01 255);
   --ink-fg: oklch(0.155 0.018 262);
-  --sidebar: oklch(0.13 0.025 264);
-  --sidebar-2: oklch(0.2 0.032 264);
-  --sidebar-border: oklch(0.25 0.032 264);
+  --sidebar: oklch(0.13 calc(var(--brand-c) * 0.4) var(--brand-h));
+  --sidebar-2: oklch(0.2 calc(var(--brand-c) * 0.48) var(--brand-h));
+  --sidebar-border: oklch(0.25 calc(var(--brand-c) * 0.48) var(--brand-h));
   --shadow-color: 0 0% 0%;
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.3), 0 6px 18px -10px rgb(0 0 0 / 0.5);
+  --canvas: radial-gradient(
+    1100px 420px at 100% -8%,
+    oklch(0.32 calc(var(--brand-c) * 0.8) var(--brand-h) / 0.45),
+    transparent 62%
+  );
+}
+:root[data-theme="dark"] [data-kind="hotel"] .sidebar-shade {
+  background: linear-gradient(
+    180deg,
+    oklch(0.18 calc(var(--brand-c) * 0.5) var(--brand-h)),
+    var(--sidebar) 40%
+  );
 }
 
 @theme inline {

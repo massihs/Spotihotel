@@ -58,7 +58,7 @@ export function OutletPicker({
               className={cn(
                 "relative flex w-[11.5rem] shrink-0 snap-start flex-col gap-2 rounded-2xl p-3.5 text-start ring-1 transition active:scale-[0.98]",
                 active
-                  ? "bg-[var(--brand-gradient)] text-accent-fg shadow-[0_10px_24px_-14px_var(--accent)] ring-transparent"
+                  ? "bg-accent bg-[image:var(--brand-gradient)] text-accent-fg shadow-[0_12px_26px_-14px_var(--accent)] ring-transparent"
                   : "bg-surface ring-border hover:ring-brand-300",
               )}
             >
@@ -66,7 +66,7 @@ export function OutletPicker({
                 <span
                   className={cn(
                     "grid size-10 place-items-center rounded-xl [&_svg]:size-5",
-                    active ? "bg-white/15 text-white" : "bg-brand-50 text-brand-700",
+                    active ? "bg-white/15 text-accent-fg" : "bg-brand-100 text-brand-700",
                   )}
                 >
                   <Icon aria-hidden="true" />
@@ -83,7 +83,7 @@ export function OutletPicker({
                 ) : null}
               </span>
               <span className="line-clamp-1 text-[15px] leading-snug font-bold">{o.name}</span>
-              <span className={cn("space-y-0.5 text-xs", active ? "text-white/80" : "text-fg-muted")}>
+              <span className={cn("space-y-0.5 text-xs", active ? "text-accent-fg/80" : "text-fg-muted")}>
                 <span className="block">{t(`kinds.${o.kind}` as "kinds.restaurant")}</span>
                 {o.hours ? (
                   <span className="flex items-center gap-1">

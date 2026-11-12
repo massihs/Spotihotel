@@ -6,9 +6,9 @@ export type ButtonSize = "sm" | "md" | "lg" | "xl";
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    "bg-accent text-accent-fg hover:bg-accent-hover shadow-[inset_0_1px_0_rgb(255_255_255/0.22),var(--shadow-accent-sm)]",
+    "bg-accent bg-[image:var(--brand-gradient)] text-accent-fg hover:brightness-110 shadow-[inset_0_1px_0_rgb(255_255_255/0.22),var(--shadow-accent-sm)]",
   accent:
-    "bg-accent text-accent-fg hover:bg-accent-hover shadow-[inset_0_1px_0_rgb(255_255_255/0.22),var(--shadow-accent-sm)]",
+    "bg-accent bg-[image:var(--brand-gradient)] text-accent-fg hover:brightness-110 shadow-[inset_0_1px_0_rgb(255_255_255/0.22),var(--shadow-accent-sm)]",
   secondary: "bg-surface text-fg ring-1 ring-inset ring-border hover:bg-surface-2",
   outline: "bg-surface text-fg ring-1 ring-inset ring-border-strong hover:bg-surface-2",
   ghost: "text-fg-muted hover:text-fg hover:bg-surface-2",

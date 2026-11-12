@@ -140,7 +140,7 @@ export async function AppShell({
       </a>
 
       {/* Desktop sidebar */}
-      <div className="on-dark relative hidden overflow-hidden bg-sidebar lg:block print:hidden">
+      <div className="on-dark sidebar-shade relative hidden overflow-hidden bg-sidebar lg:block print:hidden">
         {/* Brand glow behind the logo. */}
         <div
           className="brand-glow pointer-events-none absolute -start-20 -top-24 size-72 rounded-full opacity-35 blur-3xl"
@@ -174,7 +174,7 @@ export async function AppShell({
       <div className="relative min-w-0">
         {/* Soft brand wash at the top of every page. */}
         <div
-          className="brand-wash pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-accent-soft/80 to-transparent print:hidden"
+          className="brand-wash pointer-events-none absolute inset-x-0 top-0 h-[26rem] bg-gradient-to-b from-accent-soft/80 to-transparent print:hidden"
           aria-hidden="true"
         />
         {/* Top bar */}
@@ -235,7 +235,13 @@ export function PageHeader({
   return (
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3 sm:gap-4 lg:mb-8">
       <div className="min-w-0">
-        <h1 className="text-[23px] leading-tight font-extrabold tracking-tight sm:text-[30px]">{title}</h1>
+        <span
+          className="mb-2.5 block h-1 w-10 rounded-full bg-accent bg-[image:var(--brand-gradient)] sm:mb-3"
+          aria-hidden="true"
+        />
+        <h1 className="text-[23px] leading-tight font-extrabold tracking-tight text-fg sm:text-[30px]">
+          {title}
+        </h1>
         {description ? (
           <p className="mt-1 line-clamp-2 max-w-3xl text-[13px] leading-5 text-fg-muted sm:mt-1.5 sm:line-clamp-none sm:text-sm sm:leading-6">
             {description}

@@ -28,7 +28,11 @@ async function GuestCart() {
   ]);
   return (
     <LiveProvider url="/api/v1/realtime/guest">
-      <div data-brand={guest.restaurant.brandColor} className="contents">
+      <div
+        data-brand={guest.restaurant.brandColor}
+        data-kind={guest.restaurant.kind}
+        className="min-h-dvh bg-bg"
+      >
         <div data-menu-theme={menuThemeOf(guest.restaurant.menuTheme)}>
           <LiveRefresh types={["session.closed"]} />
           <CartView

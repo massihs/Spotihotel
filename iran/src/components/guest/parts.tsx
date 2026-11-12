@@ -130,7 +130,7 @@ export function InCartBadge({ n, className }: { n: number; className?: string })
   return (
     <span
       className={cn(
-        "animate-pop-in grid h-6 min-w-6 place-items-center rounded-full bg-fg px-1.5 text-xs font-bold text-bg tabular-nums shadow",
+        "animate-pop-in grid h-6 min-w-6 place-items-center rounded-full bg-brand-800 px-1.5 text-xs font-bold text-white tabular-nums shadow",
         className,
       )}
       aria-label={t("inCart", { n })}
@@ -233,8 +233,8 @@ export function AddButton({
         onClick();
       }}
       className={cn(
-        "grid size-11 shrink-0 place-items-center rounded-full bg-accent text-accent-fg shadow-accent",
-        "atelier:bg-transparent atelier:text-fg atelier:shadow-none atelier:ring-1 atelier:ring-fg nuit:shadow-none",
+        "grid size-11 shrink-0 place-items-center rounded-full bg-accent bg-[image:var(--brand-gradient)] text-accent-fg shadow-[0_8px_18px_-10px_var(--accent)]",
+        "atelier:bg-transparent atelier:bg-none atelier:text-fg atelier:shadow-none atelier:ring-1 atelier:ring-fg nuit:shadow-none",
         "transition-transform active:scale-90 disabled:opacity-60",
         className,
       )}

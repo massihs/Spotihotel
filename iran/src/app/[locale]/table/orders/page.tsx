@@ -64,7 +64,11 @@ async function GuestOrders({ searchParams }: Pick<PageProps<"/[locale]/table/ord
   const pushKey = vapidPublicKey();
   return (
     <LiveProvider url="/api/v1/realtime/guest">
-      <div data-brand={guest.restaurant.brandColor} className="contents">
+      <div
+        data-brand={guest.restaurant.brandColor}
+        data-kind={guest.restaurant.kind}
+        className="min-h-dvh bg-bg"
+      >
         <div data-menu-theme={menuThemeOf(guest.restaurant.menuTheme)}>
           <LiveRefresh types={["order.updated", "session.closed", "payment.updated"]} />
           <GuestTopBar

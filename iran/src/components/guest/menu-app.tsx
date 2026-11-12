@@ -368,14 +368,14 @@ export function MenuApp({
                       "flex h-10 shrink-0 items-center gap-2 rounded-full ps-1.5 pe-4 text-sm font-semibold whitespace-nowrap transition-colors nuit:px-4",
                       "atelier:h-11 atelier:rounded-none atelier:border-b-2 atelier:px-0 atelier:text-[15px] atelier:font-medium atelier:shadow-none atelier:ring-0",
                       active === c.id
-                        ? "bg-fg text-bg shadow-sm atelier:border-fg atelier:bg-transparent atelier:text-fg nuit:bg-accent nuit:text-accent-fg"
+                        ? "bg-accent bg-[image:var(--brand-gradient)] text-accent-fg shadow-[0_8px_18px_-10px_var(--accent)] atelier:border-fg atelier:bg-transparent atelier:bg-none atelier:text-fg nuit:bg-accent nuit:text-accent-fg"
                         : "bg-surface text-fg-muted ring-1 ring-border hover:text-fg atelier:border-transparent atelier:bg-transparent",
                     )}
                   >
                     <span
                       className={cn(
                         "grid size-7 place-items-center rounded-full atelier:hidden nuit:hidden",
-                        active === c.id ? "bg-accent text-accent-fg" : "bg-accent-soft text-accent-text",
+                        active === c.id ? "bg-white/18 text-accent-fg" : "bg-brand-100 text-brand-700",
                       )}
                     >
                       <CategoryIcon icon={c.icon} className="size-4" />
@@ -615,7 +615,7 @@ export function MenuApp({
           <Link
             key={cart.itemCount}
             href="/table/cart"
-            className="animate-pop-in flex h-14 items-center gap-3 rounded-full bg-accent ps-2 pe-5 font-semibold text-accent-fg shadow-[var(--shadow-float)] transition-transform active:scale-[0.98] atelier:rounded-2xl"
+            className="animate-pop-in flex h-14 items-center gap-3 rounded-full bg-accent bg-[image:var(--brand-gradient)] ps-2 pe-5 font-semibold text-accent-fg shadow-[0_18px_36px_-14px_var(--accent)] ring-1 ring-white/10 transition-transform active:scale-[0.98] atelier:rounded-2xl"
           >
             <span className="relative grid size-10 place-items-center rounded-full bg-black/10">
               <ShoppingBag className="size-5" aria-hidden="true" />

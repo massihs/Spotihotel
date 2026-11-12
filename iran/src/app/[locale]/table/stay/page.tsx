@@ -26,7 +26,11 @@ async function Portal() {
     guestCallsOf(db, guest.restaurant.id, { room: true }),
   ]);
   return (
-    <div data-brand={guest.restaurant.brandColor} className="min-h-dvh bg-bg">
+    <div
+      data-brand={guest.restaurant.brandColor}
+      data-kind={guest.restaurant.kind}
+      className="min-h-dvh bg-bg"
+    >
       <StayPortal
         hotelName={guest.restaurant.name}
         slug={guest.restaurant.slug}

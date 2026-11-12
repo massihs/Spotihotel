@@ -93,7 +93,11 @@ async function GuestMenu({ searchParams }: Pick<PageProps<"/[locale]/table">, "s
     (dishes.find((p) => p.isFeatured && p.images[0]) ?? dishes.find((p) => p.images[0]))?.images[0] ?? null;
   return (
     <LiveProvider url="/api/v1/realtime/guest">
-      <div data-brand={guest.restaurant.brandColor} className="contents">
+      <div
+        data-brand={guest.restaurant.brandColor}
+        data-kind={guest.restaurant.kind}
+        className="min-h-dvh bg-bg"
+      >
         <div data-menu-theme={menuThemeOf(guest.restaurant.menuTheme)}>
           <LiveRefresh
             types={guest.session.confirmed ? ["session.closed"] : ["session.closed", "session.opened"]}

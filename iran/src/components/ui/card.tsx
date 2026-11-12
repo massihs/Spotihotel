@@ -69,6 +69,8 @@ export function StatCard({
     <Card
       className={cn(
         "overflow-hidden p-5",
+        // Plain figures: a breath of the hotel's colour from the corner, not a flat white tile.
+        !solid && "bg-[linear-gradient(155deg,var(--brand-100),var(--surface)_58%)]",
         tone === "ink" && "border-transparent bg-ink text-ink-fg shadow-none",
         tone === "accent" && "border-transparent bg-accent text-accent-fg shadow-none",
         tone === "gradient" && "border-transparent text-white shadow-accent",
