@@ -239,7 +239,7 @@ export async function DeskTable({
       ) : null}
       <Card className="overflow-x-auto print:overflow-visible print:border-0 print:shadow-none">
         <table className="w-full text-sm">
-          <thead className="sticky top-0 border-b border-border bg-surface-2 text-xs text-fg-muted">
+          <thead className="shade-head sticky top-0 border-b border-border text-xs text-fg-muted">
             <tr>
               {table.cols.map((c) => (
                 <th

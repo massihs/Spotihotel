@@ -20,8 +20,7 @@ import { WaiterCall, type CallOption } from "./waiter-call";
 
 const TILE =
   "flex min-h-[96px] flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-3 text-center text-[13.5px] leading-tight font-semibold shadow-[var(--shadow-soft)] transition active:scale-[0.97] hover:border-border-strong";
-const ICON =
-  "grid size-10 place-items-center rounded-full bg-[var(--sidebar)] text-[var(--brass)] [&_svg]:size-[18px]";
+const ICON = "shade-fill grid size-10 place-items-center rounded-full [&_svg]:size-[18px]";
 
 /**
  * What a guest scanning the QR in their room needs first: the room and the day they leave, the
@@ -107,39 +106,39 @@ export function RoomConcierge({
       </div>
       <div className="grid grid-cols-3 gap-2.5">
         <a href="#room-service" className={TILE}>
-          <span className={ICON}>
+          <span className={cn(ICON, "shade-royal")}>
             <UtensilsCrossed />
           </span>
           {t("roomService")}
         </a>
         <Link href="/table/stay#minibar" className={TILE}>
-          <span className={ICON}>
+          <span className={cn(ICON, "shade-indigo")}>
             <Wine />
           </span>
           {t("minibar")}
         </Link>
         <Link href="/table/stay#spa" className={TILE}>
-          <span className={ICON}>
+          <span className={cn(ICON, "shade-cyan")}>
             <Flower2 />
           </span>
           {t("spa")}
         </Link>
         {calls.length ? (
           <WaiterCall options={calls} room className={cn(TILE, "w-full")}>
-            <span className={ICON}>
+            <span className={cn(ICON, "shade-periwinkle")}>
               <Sparkles />
             </span>
             {t("requests")}
           </WaiterCall>
         ) : null}
         <Link href="/table/stay#bill" className={TILE}>
-          <span className={ICON}>
+          <span className={cn(ICON, "shade-azure")}>
             <Receipt />
           </span>
           {t("bill")}
         </Link>
         <Link href="/table/stay" className={TILE}>
-          <span className={ICON}>
+          <span className={cn(ICON, "shade-navy")}>
             <ConciergeBell />
           </span>
           {t("myStay")}

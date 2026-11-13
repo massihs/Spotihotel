@@ -142,21 +142,21 @@ export function StayPortal({
 
       <nav className="mt-4 grid grid-cols-3 gap-2.5" aria-label={t("quick")}>
         <Link href="/table#room-service" className={QUICK}>
-          <span className={QUICK_ICON}>
+          <span className={cn(QUICK_ICON, "shade-royal")}>
             <UtensilsCrossed />
           </span>
           {t("roomService")}
         </Link>
         {calls.length ? (
           <WaiterCall options={calls} room className={cn(QUICK, "w-full")}>
-            <span className={QUICK_ICON}>
+            <span className={cn(QUICK_ICON, "shade-azure")}>
               <BellRing />
             </span>
             {t("reception")}
           </WaiterCall>
         ) : null}
         <Link href={`/r/${slug}/book`} className={QUICK}>
-          <span className={QUICK_ICON}>
+          <span className={cn(QUICK_ICON, "shade-periwinkle")}>
             <CalendarCheck />
           </span>
           {t("restaurant")}
@@ -215,8 +215,15 @@ type Access = "open" | "locked" | "none";
 
 const QUICK =
   "flex min-h-[92px] flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-3 text-center text-sm font-semibold shadow-[var(--shadow-soft)] transition active:scale-[0.98]";
-const QUICK_ICON =
-  "grid size-10 place-items-center rounded-full bg-[var(--sidebar)] text-[var(--brass)] [&_svg]:size-[18px]";
+const QUICK_ICON = "shade-fill grid size-10 place-items-center rounded-full [&_svg]:size-[18px]";
+
+/** Each part of the stay page in its own blue. */
+const SECTION_SHADE: Record<string, string> = {
+  wifi: "shade-azure",
+  spa: "shade-periwinkle",
+  minibar: "shade-cyan",
+  bill: "shade-royal",
+};
 
 function Section({
   icon,
@@ -237,7 +244,12 @@ function Section({
       className="scroll-mt-4 rounded-3xl border border-border bg-surface p-4 shadow-[var(--shadow-soft)] sm:p-5"
     >
       <h2 className="mb-3 flex items-center gap-2.5 text-[17px] font-bold">
-        <span className="grid size-9 place-items-center rounded-full bg-[var(--sidebar)] text-[var(--brass)] [&_svg]:size-[17px]">
+        <span
+          className={cn(
+            "shade-fill grid size-9 place-items-center rounded-full [&_svg]:size-[17px]",
+            SECTION_SHADE[id ?? ""] ?? "shade-sky",
+          )}
+        >
           {icon}
         </span>
         <span className="flex-1">{title}</span>

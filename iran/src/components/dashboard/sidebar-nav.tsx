@@ -114,6 +114,24 @@ const BY_SEGMENT: Record<string, keyof typeof TONES> = {
   audit: "rose",
 };
 const ORDER = Object.keys(TONES);
+/** Sidebar icons: a different blue for each item (sections start at different points). */
+const SHADE_CYCLE = [
+  "shade-sky",
+  "shade-azure",
+  "shade-cyan",
+  "shade-periwinkle",
+  "shade-royal",
+  "shade-indigo",
+];
+const NAV_SHADES = Array.from({ length: 60 }, (_, i) => SHADE_CYCLE[i % SHADE_CYCLE.length]!);
+const SECTION_OFFSET: Record<string, number> = {
+  reception: 1,
+  rooms: 2,
+  revenue: 3,
+  finance: 4,
+  restaurant: 5,
+  manage: 2,
+};
 export function toneOf(item: NavItem, index: number) {
   const seg = item.href.split("/").filter(Boolean).pop() ?? "";
   return TONES[BY_SEGMENT[seg] ?? ORDER[index % ORDER.length]!]!;
@@ -199,7 +217,7 @@ export function SidebarNav({ items, label }: { items: NavItem[]; label: string }
               </button>
             ) : null}
             <div id={id} hidden={!open} className="space-y-0.5">
-              {section.items.map((item) => {
+              {section.items.map((item, index) => {
                 const active = isActive(item);
                 const hasSub = !!item.children?.length;
                 const open = hasSub && active !== flipped.has(item.href);
@@ -233,11 +251,16 @@ export function SidebarNav({ items, label }: { items: NavItem[]; label: string }
                         aria-hidden="true"
                       />
                     ) : null}
-                    {/* One quiet icon colour: the active page alone stands out. */}
+                    {/* Each section's icons in their own blue; the active page in brass. */}
                     <span
                       className={cn(
                         "grid size-5 shrink-0 place-items-center transition-colors [&_svg]:size-[18px] [&_svg]:stroke-[1.75]",
-                        active ? "text-[var(--brass)]" : "text-sidebar-muted group-hover:text-sidebar-fg",
+                        active
+                          ? "text-[var(--brass)]"
+                          : cn(
+                              "shade-ink-dark",
+                              NAV_SHADES[(SECTION_OFFSET[section.key] ?? 0) + index] ?? "shade-sky",
+                            ),
                       )}
                       aria-hidden="true"
                     >

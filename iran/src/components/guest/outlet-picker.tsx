@@ -13,6 +13,9 @@ export type RoomOutlet = {
   hours: string | null;
 };
 
+/** Each restaurant's icon in its own blue. */
+const SHADES = ["shade-royal", "shade-cyan", "shade-periwinkle", "shade-azure", "shade-indigo"];
+
 const ICONS: Record<string, typeof UtensilsCrossed> = {
   restaurant: UtensilsCrossed,
   cafe: Coffee,
@@ -45,7 +48,7 @@ export function OutletPicker({
         <p className="text-xs text-fg-muted">{t("count", { n: outlets.length })}</p>
       </div>
       <div className="flex snap-x [scrollbar-width:none] gap-2.5 overflow-x-auto px-4 pb-1">
-        {outlets.map((o) => {
+        {outlets.map((o, i) => {
           const Icon = ICONS[o.kind] ?? UtensilsCrossed;
           const active = o.id === current;
           return (
@@ -66,7 +69,7 @@ export function OutletPicker({
                 <span
                   className={cn(
                     "grid size-10 place-items-center rounded-xl [&_svg]:size-5",
-                    active ? "bg-white/15 text-accent-fg" : "bg-brand-100 text-brand-700",
+                    active ? "bg-white/15 text-accent-fg" : cn("shade-soft", SHADES[i % SHADES.length]),
                   )}
                 >
                   <Icon aria-hidden="true" />

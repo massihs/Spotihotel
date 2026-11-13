@@ -87,6 +87,9 @@ const writeView = (v: "list" | "grid") => {
 
 type Filter = "all" | "popular" | `tag:${string}`;
 
+/** Categories take turns in these blues (banner, lattice, icon). */
+const SHADES = ["shade-royal", "shade-azure", "shade-cyan", "shade-periwinkle", "shade-indigo", "shade-sky"];
+
 export function MenuApp({
   menu,
   currency,
@@ -364,7 +367,7 @@ export function MenuApp({
                 ref={tabsRef}
                 className="no-scrollbar flex gap-2 overflow-x-auto px-4 pb-2 atelier:gap-6 atelier:px-5 atelier:pb-0"
               >
-                {sections.map((c) => (
+                {sections.map((c, ci) => (
                   <a
                     key={c.id}
                     href={`#c-${c.id}`}
@@ -383,7 +386,7 @@ export function MenuApp({
                       icon={c.icon}
                       className={cn(
                         "size-4 shrink-0 atelier:hidden nuit:hidden",
-                        active === c.id ? "text-[var(--brass)]" : "text-brand-500",
+                        active === c.id ? "text-[var(--brass)]" : cn("shade-ink", SHADES[ci % SHADES.length]),
                       )}
                     />
                     {c.name}
@@ -521,6 +524,7 @@ export function MenuApp({
                         description={c.description}
                         note={note}
                         framed={framed}
+                        shade={SHADES[ci % SHADES.length]!}
                       />
                     ) : (
                       <>
@@ -855,6 +859,7 @@ function CategoryBanner({
   description,
   note,
   framed,
+  shade,
 }: {
   id: string;
   name: string;
@@ -862,11 +867,14 @@ function CategoryBanner({
   description: string | null;
   note: string;
   framed: boolean;
+  /** The category's blue (they take turns). */
+  shade: string;
 }) {
   return (
     <div
       className={cn(
-        "relative isolate overflow-hidden bg-[linear-gradient(120deg,var(--brand-100),var(--brand-50)_65%)] px-4 py-3.5",
+        "shade-wash relative isolate overflow-hidden px-4 py-3.5",
+        shade,
         framed
           ? "sm:mx-4 sm:rounded-[1.4rem] sm:ring-1 sm:ring-brand-200/80 sm:ring-inset"
           : "mx-4 rounded-[1.4rem] ring-1 ring-brand-200/80 ring-inset",
@@ -874,10 +882,10 @@ function CategoryBanner({
     >
       <span
         aria-hidden="true"
-        className="texture-khatam texture-fade-corner [--tex-color:var(--brand-600)] [--tex-opacity:0.15] [--tex-size:46px]"
+        className="texture-khatam texture-fade-corner [--tex-color:var(--shade)] [--tex-opacity:0.18] [--tex-size:46px]"
       />
       <div className="relative flex items-center gap-3.5">
-        <span className="grid size-12 shrink-0 place-items-center rounded-full bg-surface text-brand-700 shadow-[var(--shadow-soft)] ring-1 ring-brand-200">
+        <span className="shade-ink grid size-12 shrink-0 place-items-center rounded-full bg-surface shadow-[var(--shadow-soft)] ring-1 ring-border">
           <CategoryIcon icon={icon} className="size-[1.3rem]" />
         </span>
         <div className="min-w-0 flex-1">

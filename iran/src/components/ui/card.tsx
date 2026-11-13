@@ -23,7 +23,7 @@ export function CardHeader({
   action?: ReactNode;
 }) {
   return (
-    <div className="flex flex-wrap items-start justify-between gap-4 rounded-t-[inherit] border-b border-border bg-[linear-gradient(to_bottom,var(--brand-50),color-mix(in_oklch,var(--brand-50)_35%,var(--surface)))] px-5 py-4">
+    <div className="shade-azure shade-wash flex flex-wrap items-start justify-between gap-4 rounded-t-[inherit] border-b border-border px-5 py-4">
       <div className="min-w-0">
         <h2 className="text-[15px] font-semibold text-fg">{title}</h2>
         {description ? <p className="mt-0.5 text-sm text-fg-muted">{description}</p> : null}
@@ -45,6 +45,12 @@ export const TONE_TILE = {
   fuchsia: "bg-tone-fuchsia/12 text-tone-fuchsia",
   indigo: "bg-tone-indigo/14 text-tone-indigo",
   lime: "bg-tone-lime/15 text-tone-lime",
+  navy: "shade-navy shade-fill",
+  royal: "shade-royal shade-fill",
+  azure: "shade-azure shade-fill",
+  cyan: "shade-cyan shade-fill",
+  periwinkle: "shade-periwinkle shade-fill",
+  steel: "shade-steel shade-fill",
 } as const;
 export type Tone = keyof typeof TONE_TILE;
 export function StatCard({

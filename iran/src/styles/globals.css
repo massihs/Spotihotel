@@ -90,11 +90,51 @@
   --tone-lime: oklch(0.66 0.07 calc(var(--brand-h) - 96));
   --tone-amber: oklch(0.72 0.1 80);
   --tone-orange: oklch(0.64 0.1 62);
+  /* Buttons and active elements: two blues, deep royal to azure (two hues of the brand). */
   --brand-gradient: linear-gradient(
     135deg,
-    oklch(var(--brand-l) var(--brand-c) var(--brand-h)),
-    oklch(calc(var(--brand-l) - 0.07) calc(var(--brand-c) * 1.05) calc(var(--brand-h) - 16))
+    oklch(calc(var(--brand-l) - 0.03) calc(var(--brand-c) * 1.25) calc(var(--brand-h) + 8)),
+    oklch(calc(var(--brand-l) + 0.07) calc(var(--brand-c) * 1.6) calc(var(--brand-h) - 24))
   );
+  /*
+   * Shades: a family of colours around the brand's hue (for the default navy: navy, indigo, royal,
+   * azure, sky, cyan, periwinkle, steel), so screens are not one single blue. Each keeps enough
+   * chroma to read as a colour even when the brand itself is greyish.
+   */
+  --shade-navy: oklch(0.33 max(var(--brand-c), 0.08) var(--brand-h));
+  --shade-indigo: oklch(0.43 max(calc(var(--brand-c) * 1.4), 0.13) calc(var(--brand-h) + 18));
+  --shade-royal: oklch(0.48 max(calc(var(--brand-c) * 1.6), 0.15) calc(var(--brand-h) + 4));
+  --shade-azure: oklch(0.55 max(calc(var(--brand-c) * 1.5), 0.14) calc(var(--brand-h) - 20));
+  --shade-sky: oklch(0.62 max(calc(var(--brand-c) * 1.2), 0.12) calc(var(--brand-h) - 32));
+  --shade-cyan: oklch(0.56 max(calc(var(--brand-c) * 1.1), 0.1) calc(var(--brand-h) - 52));
+  --shade-periwinkle: oklch(0.56 max(calc(var(--brand-c) * 1.3), 0.12) calc(var(--brand-h) + 32));
+  --shade-steel: oklch(0.5 max(calc(var(--brand-c) * 0.55), 0.04) calc(var(--brand-h) - 8));
+}
+
+/* Night mode: the same shades, lighter, to read on dark panels. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]),
+  :root:not([data-theme="light"]) [data-brand] {
+    --shade-navy: oklch(0.58 max(var(--brand-c), 0.08) var(--brand-h));
+    --shade-indigo: oklch(0.66 max(calc(var(--brand-c) * 1.4), 0.13) calc(var(--brand-h) + 18));
+    --shade-royal: oklch(0.68 max(calc(var(--brand-c) * 1.6), 0.15) calc(var(--brand-h) + 4));
+    --shade-azure: oklch(0.72 max(calc(var(--brand-c) * 1.5), 0.13) calc(var(--brand-h) - 20));
+    --shade-sky: oklch(0.78 max(calc(var(--brand-c) * 1.2), 0.11) calc(var(--brand-h) - 32));
+    --shade-cyan: oklch(0.74 max(calc(var(--brand-c) * 1.1), 0.1) calc(var(--brand-h) - 52));
+    --shade-periwinkle: oklch(0.74 max(calc(var(--brand-c) * 1.3), 0.11) calc(var(--brand-h) + 32));
+    --shade-steel: oklch(0.7 max(calc(var(--brand-c) * 0.55), 0.04) calc(var(--brand-h) - 8));
+  }
+}
+:root[data-theme="dark"],
+:root[data-theme="dark"] [data-brand] {
+  --shade-navy: oklch(0.58 max(var(--brand-c), 0.08) var(--brand-h));
+  --shade-indigo: oklch(0.66 max(calc(var(--brand-c) * 1.4), 0.13) calc(var(--brand-h) + 18));
+  --shade-royal: oklch(0.68 max(calc(var(--brand-c) * 1.6), 0.15) calc(var(--brand-h) + 4));
+  --shade-azure: oklch(0.72 max(calc(var(--brand-c) * 1.5), 0.13) calc(var(--brand-h) - 20));
+  --shade-sky: oklch(0.78 max(calc(var(--brand-c) * 1.2), 0.11) calc(var(--brand-h) - 32));
+  --shade-cyan: oklch(0.74 max(calc(var(--brand-c) * 1.1), 0.1) calc(var(--brand-h) - 52));
+  --shade-periwinkle: oklch(0.74 max(calc(var(--brand-c) * 1.3), 0.11) calc(var(--brand-h) + 32));
+  --shade-steel: oklch(0.7 max(calc(var(--brand-c) * 0.55), 0.04) calc(var(--brand-h) - 8));
 }
 
 @media (prefers-color-scheme: dark) {
@@ -263,12 +303,17 @@
   --canvas:
     radial-gradient(
       1100px 420px at 100% -8%,
-      oklch(0.9 calc(var(--brand-c) * 0.7) var(--brand-h) / 0.55),
+      oklch(0.88 max(calc(var(--brand-c) * 0.9), 0.07) calc(var(--brand-h) - 22) / 0.55),
       transparent 62%
     ),
     radial-gradient(
-      900px 360px at 0% -12%,
-      oklch(0.92 calc(var(--brand-c) * 0.55) calc(var(--brand-h) - 24) / 0.4),
+      900px 380px at 0% -12%,
+      oklch(0.9 max(calc(var(--brand-c) * 0.8), 0.06) calc(var(--brand-h) + 30) / 0.45),
+      transparent 60%
+    ),
+    radial-gradient(
+      700px 300px at 55% -14%,
+      oklch(0.92 max(calc(var(--brand-c) * 0.7), 0.05) calc(var(--brand-h) - 50) / 0.3),
       transparent 60%
     );
 }
@@ -280,12 +325,23 @@
 }
 /* The sidebar: the hotel's colour, a little lighter at the top, deeper at the bottom. */
 [data-kind="hotel"] .sidebar-shade {
-  background: linear-gradient(
-    180deg,
-    oklch(0.27 calc(var(--brand-c) * 0.78) var(--brand-h)) 0%,
-    var(--sidebar) 38%,
-    oklch(0.17 calc(var(--brand-c) * 0.55) var(--brand-h)) 100%
-  );
+  background:
+    radial-gradient(
+      120% 40% at 100% 0%,
+      oklch(0.42 max(var(--brand-c), 0.1) calc(var(--brand-h) - 22) / 0.45),
+      transparent 70%
+    ),
+    radial-gradient(
+      100% 35% at 0% 100%,
+      oklch(0.36 max(var(--brand-c), 0.1) calc(var(--brand-h) + 28) / 0.4),
+      transparent 70%
+    ),
+    linear-gradient(
+      180deg,
+      oklch(0.28 max(calc(var(--brand-c) * 0.9), 0.07) calc(var(--brand-h) + 10)) 0%,
+      var(--sidebar) 40%,
+      oklch(0.17 max(calc(var(--brand-c) * 0.6), 0.05) calc(var(--brand-h) - 14)) 100%
+    );
 }
 /* The band at the top of a hotel's guest pages: the hotel's colour, deep, in day and night mode. */
 [data-kind="hotel"] .guest-band {
@@ -423,6 +479,14 @@
   --color-tone-fuchsia: var(--tone-fuchsia);
   --color-tone-indigo: var(--tone-indigo);
   --color-tone-lime: var(--tone-lime);
+  --color-shade-navy: var(--shade-navy);
+  --color-shade-indigo: var(--shade-indigo);
+  --color-shade-royal: var(--shade-royal);
+  --color-shade-azure: var(--shade-azure);
+  --color-shade-sky: var(--shade-sky);
+  --color-shade-cyan: var(--shade-cyan);
+  --color-shade-periwinkle: var(--shade-periwinkle);
+  --color-shade-steel: var(--shade-steel);
   --font-sans: var(--app-font);
   --font-mono: var(--font-mono-loaded), ui-monospace, monospace;
   --radius-card: 0.75rem;
@@ -991,5 +1055,93 @@ dialog[open]::backdrop {
     height: 1px;
     background: currentColor;
     opacity: 0.5;
+  }
+}
+
+/* ─── Shades of the brand (one colour family, several blues) ─────────────────
+ * `.shade-azure` (…) chooses the shade; `.shade-fill` paints a medallion in it (gradient, white
+ * ink), `.shade-soft` a tint with the shade as ink, `.shade-ink` only the ink, `.shade-ink-dark`
+ * a light ink for the dark sidebar. Colours go through custom properties (CSS optimizer).
+ */
+.shade-navy {
+  --shade: var(--shade-navy);
+}
+.shade-indigo {
+  --shade: var(--shade-indigo);
+}
+.shade-royal {
+  --shade: var(--shade-royal);
+}
+.shade-azure {
+  --shade: var(--shade-azure);
+}
+.shade-sky {
+  --shade: var(--shade-sky);
+}
+.shade-cyan {
+  --shade: var(--shade-cyan);
+}
+.shade-periwinkle {
+  --shade: var(--shade-periwinkle);
+}
+.shade-steel {
+  --shade: var(--shade-steel);
+}
+@layer components {
+  .shade-fill {
+    --shade-light: color-mix(in oklch, var(--shade, var(--accent)), white 30%);
+    --shade-glow: color-mix(in oklch, var(--shade, var(--accent)) 55%, transparent);
+    background-color: var(--shade, var(--accent));
+    background-image: linear-gradient(135deg, var(--shade-light), var(--shade, var(--accent)));
+    color: white;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.25),
+      0 6px 14px -8px var(--shade-glow);
+  }
+  .shade-soft {
+    --shade-tint: color-mix(in oklch, var(--shade, var(--accent)) 17%, var(--surface));
+    background-color: var(--shade-tint);
+    color: var(--shade, var(--accent));
+  }
+  .shade-ink {
+    color: var(--shade, var(--accent));
+  }
+  .shade-ink-dark {
+    --shade-light-ink: color-mix(in oklch, var(--shade, var(--accent)), white 22%);
+    color: var(--shade-light-ink);
+  }
+  /* A soft wash of the shade fading out (banners, headers). */
+  .shade-wash {
+    --shade-wash: linear-gradient(
+      120deg,
+      color-mix(in oklch, var(--shade, var(--accent)) 21%, var(--surface)),
+      color-mix(in oklch, var(--shade, var(--accent)) 4%, var(--surface)) 70%
+    );
+    background-image: var(--shade-wash);
+  }
+  /* Bars of a chart in the shade, lighter at the top. */
+  .shade-bar {
+    --shade-bar: linear-gradient(
+      to top,
+      var(--shade, var(--accent)),
+      color-mix(in oklch, var(--shade, var(--accent)), white 35%)
+    );
+    background-image: var(--shade-bar);
+  }
+  /* A table's header row, tinted. */
+  .shade-head {
+    --shade-head: color-mix(in oklch, var(--shade-azure) 8%, var(--surface));
+    background-color: var(--shade-head);
+  }
+  /* Page titles: navy into royal blue. */
+  .title-ink {
+    --title-ink: linear-gradient(90deg, var(--shade-navy), var(--shade-royal) 60%, var(--shade-azure));
+    background-image: var(--title-ink);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  [dir="rtl"] .title-ink {
+    --title-ink: linear-gradient(270deg, var(--shade-navy), var(--shade-royal) 60%, var(--shade-azure));
   }
 }

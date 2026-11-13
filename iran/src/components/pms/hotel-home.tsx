@@ -40,6 +40,18 @@ import { DEFAULT_LOCALE } from "@/i18n/config";
  * ADR and RevPAR, the day's movements, the rooms to clean, two weeks on the books, the day's
  * revenue and what is left to set up.
  */
+/** The quick tiles, each in its own blue. */
+const SHADES = [
+  "shade-royal",
+  "shade-azure",
+  "shade-cyan",
+  "shade-periwinkle",
+  "shade-indigo",
+  "shade-sky",
+  "shade-steel",
+  "shade-navy",
+];
+
 export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money: (c: number) => string }) {
   const [t, tDept, tSource, locale, home, setup] = await Promise.all([
     getTranslations("dashboard.home"),
@@ -244,7 +256,9 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
                   <div
                     className={cn(
                       "w-full rounded-md",
-                      i === 0 ? "bg-[var(--brass)] bg-[image:var(--brass-gradient)]" : "bg-white/25",
+                      i === 0
+                        ? "bg-[var(--brass)] bg-[image:var(--brass-gradient)]"
+                        : "shade-sky shade-bar opacity-80",
                     )}
                     style={{ height: `${Math.max(6, (d.occupancyPct / maxAhead) * 80)}%` }}
                     title={`${fmtDay(d.day, { day: "numeric", month: "short" })} · ${pct(d.occupancyPct)} · ${d.sold}/${d.rooms}`}
@@ -264,7 +278,7 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
               value={home.arrivals.length}
               hint={home.precheckins ? t("precheckins", { n: home.precheckins }) : undefined}
               icon={<LogIn />}
-              tone="sky"
+              tone="azure"
             />
           </StatLink>
           <StatLink href={`${base}/frontdesk`}>
@@ -272,7 +286,7 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
               label={t("departures")}
               value={home.departures.length}
               icon={<LogOut />}
-              tone="orange"
+              tone="periwinkle"
             />
           </StatLink>
           <StatLink href={`${base}/stays`}>
@@ -281,7 +295,7 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
               value={home.inHouse}
               hint={t("guestsN", { n: f.guests })}
               icon={<Users />}
-              tone="emerald"
+              tone="cyan"
             />
           </StatLink>
           <StatLink href={can(ctx, "tables.view") ? `${base}/rooms` : null}>
@@ -294,7 +308,7 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
                   : t("cleaning", { n: home.rooms.cleaning })
               }
               icon={<SprayCan />}
-              tone="amber"
+              tone="royal"
             />
           </StatLink>
         </div>
@@ -304,17 +318,16 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
       <nav aria-label={t("quickTitle")} className="mt-4 grid grid-cols-4 gap-2 sm:gap-3 lg:grid-cols-8">
         {quick
           .filter((q) => q.show)
-          .map(({ href, label, Icon }) => (
+          .map(({ href, label, Icon }, i) => (
             <Link
               key={href}
               href={href}
-              className="group flex flex-col items-center gap-2 rounded-2xl border border-border bg-surface px-1.5 py-3 text-center shadow-[var(--shadow-card)] transition-[border-color,transform] hover:-translate-y-0.5 hover:border-brand-300"
+              className={cn(
+                "group flex flex-col items-center gap-2 rounded-2xl border border-border bg-surface px-1.5 py-3 text-center shadow-[var(--shadow-card)] transition-[border-color,transform] hover:-translate-y-0.5 hover:border-brand-300",
+                SHADES[i % SHADES.length],
+              )}
             >
-              <span
-                className={cn(
-                  "grid size-11 place-items-center rounded-full bg-brand-50 text-brand-700 ring-1 ring-brand-200 transition-colors ring-inset group-hover:bg-accent group-hover:bg-[image:var(--brand-gradient)] group-hover:text-accent-fg group-hover:ring-transparent",
-                )}
-              >
+              <span className="shade-fill grid size-11 place-items-center rounded-full transition-transform group-hover:scale-105">
                 <Icon className="size-5" aria-hidden="true" />
               </span>
               <span className="line-clamp-2 text-xs leading-tight font-semibold sm:text-[13px]">{label}</span>

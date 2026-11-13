@@ -242,7 +242,7 @@ export function PageHeader({
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3 sm:gap-4 lg:mb-8">
       <div className="min-w-0">
         <span className="ornament mb-2.5 [--ornament-width:3.5rem] sm:mb-3" aria-hidden="true" />
-        <h1 className="text-[23px] leading-tight font-extrabold tracking-tight text-fg sm:text-[30px]">
+        <h1 className="title-ink text-[23px] leading-tight font-extrabold tracking-tight sm:text-[30px]">
           {title}
         </h1>
         {description ? (
