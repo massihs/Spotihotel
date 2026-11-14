@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { useMoney } from "@/components/ui/use-money";
 import { useRun } from "@/components/ui/sheet-kit";
 import { cn } from "@/lib/cn";
+import { minibarImage, spaImage } from "@/lib/guest-images";
 import {
   bookSpaAction,
   cancelSpaAction,
@@ -381,12 +382,15 @@ function Spa({
             }}
             aria-pressed={s.id === serviceId}
             className={cn(
-              "flex w-40 shrink-0 snap-start flex-col items-start gap-1 rounded-2xl p-3 text-start ring-1 transition",
+              "flex w-44 shrink-0 snap-start flex-col items-start gap-1 overflow-hidden rounded-2xl p-3 text-start ring-1 transition",
               s.id === serviceId
                 ? "bg-[var(--sidebar)] text-[var(--sidebar-fg)] ring-[var(--sidebar)]"
                 : "bg-surface-2 ring-border",
             )}
           >
+            {spaImage(s.kind) ? (
+              <Photo src={spaImage(s.kind)!} className="-mx-3 -mt-3 mb-1.5 h-24 w-[calc(100%+1.5rem)]" />
+            ) : null}
             <span className="line-clamp-2 text-sm leading-snug font-bold">{s.name}</span>
             <span className={cn("text-xs", s.id === serviceId ? "text-[var(--brass)]" : "text-fg-muted")}>
               {t("minutes", { n: s.durationMin })} | {s.priceCents ? money(s.priceCents) : t("included")}
@@ -500,6 +504,24 @@ function CancelSpa({ id }: { id: string }) {
   );
 }
 
+/** A decorative photo that disappears, with its room, if the file cannot be loaded. */
+function Photo({ src, className }: { src: string; className?: string }) {
+  const [failed, setFailed] = useState(false);
+  if (failed) return null;
+  return (
+    <span className={cn("relative block overflow-hidden", className)}>
+      <img
+        src={src}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        onError={() => setFailed(true)}
+        className="size-full object-cover"
+      />
+    </span>
+  );
+}
+
 const MINIBAR_SHADES = ["shade-cyan", "shade-azure", "shade-periwinkle", "shade-royal"];
 
 function Minibar({
@@ -543,11 +565,12 @@ function Minibar({
             <li
               key={i.id}
               className={cn(
-                "flex flex-col justify-between gap-2 rounded-2xl p-3 ring-1 transition",
+                "flex flex-col justify-between gap-2 overflow-hidden rounded-2xl p-3 ring-1 transition",
                 MINIBAR_SHADES[k % MINIBAR_SHADES.length],
                 n ? "shade-soft ring-transparent" : "bg-surface-2 ring-border",
               )}
             >
+              <Photo src={minibarImage(i.name)} className="-mx-3 -mt-3 mb-0.5 aspect-[4/3]" />
               <span className="line-clamp-2 text-sm leading-snug font-semibold">{i.name}</span>
               <span className="flex items-center justify-between gap-1">
                 <span className="text-xs text-fg-muted tabular-nums">{money(i.priceCents)}</span>
