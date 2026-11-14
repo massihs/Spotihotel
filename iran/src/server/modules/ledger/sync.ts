@@ -167,13 +167,21 @@ async function journalled(tx: DbOrTx, restaurantId: string, sourceType: string) 
 export async function syncLedger(
   db: Database,
   restaurant: { id: string; timezone: string; defaultLocale: string },
+  /** false: when another sync is running (night audit, the demo hotel's catch-up), skip instead
+   *  of waiting for it — a page then shows the books as they stand rather than hanging. */
+  opts: { wait?: boolean } = {},
 ) {
   const rid = restaurant.id;
   const tz = restaurant.timezone;
   await ensureChart(db, rid, restaurant.defaultLocale);
   return db.transaction(async (tx) => {
     // One sync at a time per hotel.
-    await tx.select().from(ledgerSettings).where(eq(ledgerSettings.restaurantId, rid)).for("update");
+    const [lock] = await tx
+      .select({ id: ledgerSettings.restaurantId })
+      .from(ledgerSettings)
+      .where(eq(ledgerSettings.restaurantId, rid))
+      .for("update", opts.wait === false ? { skipLocked: true } : {});
+    if (!lock && opts.wait === false) return 0;
     const acc = await systemAccounts(tx, rid);
     let posted = 0;
     posted += await syncFolioLines(tx, rid, acc, tz);

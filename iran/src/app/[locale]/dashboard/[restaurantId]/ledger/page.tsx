@@ -37,6 +37,7 @@ import { db } from "@/server/db/client";
 import { getMoney, getMoneyCompact } from "@/lib/money-server";
 import { localDay } from "@/lib/period";
 import { syncLedger } from "@/server/modules/ledger/sync";
+import { LinkPending } from "@/components/ui/link-pending";
 import {
   budgetsFor,
   ledgerState,
@@ -147,7 +148,8 @@ async function Ledger({ params, searchParams }: Props) {
   const to = typeof sp.to === "string" && isDay(sp.to) ? sp.to : today;
   const tab: Tab = (TABS as readonly string[]).includes(String(sp.tab)) ? (sp.tab as Tab) : "overview";
   // The books are brought up to date before any report is read.
-  await syncLedger(db, ctx.restaurant);
+  // Journal what is pending, unless a sync is already running (then the books as they stand).
+  await syncLedger(db, ctx.restaurant, { wait: false });
   const locale = await getLocale();
   const [t, money, big, accounts, state] = await Promise.all([
     getTranslations("ledger"),
@@ -1264,6 +1266,7 @@ async function Ledger({ params, searchParams }: Props) {
                       aria-hidden="true"
                     />
                     {t(`groups.${g.key}`)}
+                    <LinkPending />
                   </Link>
                 </li>
               );
@@ -1285,6 +1288,7 @@ async function Ledger({ params, searchParams }: Props) {
                 )}
               >
                 {t(`tabs.${k}`)}
+                <LinkPending className="ms-1.5" />
               </Link>
             ))}
           </div>

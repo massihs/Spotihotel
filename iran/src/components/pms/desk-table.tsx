@@ -7,6 +7,7 @@ import { PrintButton } from "@/components/ui/print-button";
 import { Link } from "@/i18n/navigation";
 import { DEFAULT_LOCALE } from "@/i18n/config";
 import { cn } from "@/lib/cn";
+import { LinkPending } from "@/components/ui/link-pending";
 import { getMoney } from "@/lib/money-server";
 import { calendarLocale } from "@/lib/jalali-calendar";
 import { EDITION } from "@/config/edition";
@@ -40,6 +41,7 @@ export async function DeskTabs({
           className="seg-item"
         >
           {t(`tabs.${x}`)}
+          <LinkPending />
         </Link>
       ))}
     </nav>
