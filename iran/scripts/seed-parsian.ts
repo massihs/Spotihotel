@@ -512,6 +512,12 @@ async function ensureParsianPhotos(ctx: RestaurantContext) {
       console.error(`  photo of ${p.name}:`, e instanceof Error ? e.message : e);
     }
   }
+  // The signature dish, with its photo, leads the guest menu (cover and "house picks").
+  for (const name of ["چلوکباب سلطانی", "باقالی‌پلو با ماهیچه", "فالوده شیرازی"])
+    await db
+      .update(products)
+      .set({ isFeatured: true })
+      .where(and(eq(products.restaurantId, rid), eq(products.name, name)));
   if (added) console.log(`✓ Parsian test hotel: ${added} dish photos added`);
 }
 
