@@ -5275,7 +5275,11 @@
     "unlockBill": "Your bill is private. Enter your last name to see it.",
     "less": "One less {name}",
     "more": "One more {name}",
-    "credit": "Your credit (prepaid)"
+    "credit": "Your credit (prepaid)",
+    "spaEmpty": "The hotel does not offer online spa booking yet: please call the front desk.",
+    "billNoStay": "No stay is registered for this room: the bill will be here after check-in.",
+    "minibarEmpty": "The minibar list has not been set up yet.",
+    "minibarCounted": "Your room's minibar prices. Housekeeping counts what you take and adds it to your bill."
   },
   "dateInput": {
     "pick": "Pick a date",

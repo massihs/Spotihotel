@@ -512,6 +512,7 @@ export function MenuApp({
                 >
                   <div
                     className={cn(
+                      SHADES[ci % SHADES.length],
                       framed &&
                         "mx-4 overflow-hidden rounded-[1.4rem] border border-border bg-surface shadow-[var(--shadow-card)] sm:mx-0 sm:overflow-visible sm:rounded-none sm:border-0 sm:bg-transparent sm:shadow-none",
                     )}
@@ -525,6 +526,7 @@ export function MenuApp({
                         note={note}
                         framed={framed}
                         shade={SHADES[ci % SHADES.length]!}
+                        cover={c.items.find((x) => x.images[0])?.images[0]?.md ?? null}
                       />
                     ) : (
                       <>
@@ -559,7 +561,7 @@ export function MenuApp({
                       <ul className="divide-y divide-border border-t border-border sm:mt-3 sm:grid sm:grid-cols-2 sm:gap-3 sm:divide-y-0 sm:border-t-0 sm:px-4 lg:grid-cols-3">
                         {c.items.map((p, pi) => (
                           <li key={p.id}>
-                            <MenuRow p={p} eager={ci === 0 && pi < 4} {...card} />
+                            <MenuRow p={p} eager={ci === 0 && pi < 4} hero={pi === 0} {...card} />
                           </li>
                         ))}
                       </ul>
@@ -860,6 +862,7 @@ function CategoryBanner({
   note,
   framed,
   shade,
+  cover,
 }: {
   id: string;
   name: string;
@@ -869,7 +872,46 @@ function CategoryBanner({
   framed: boolean;
   /** The category's blue (they take turns). */
   shade: string;
+  /** A photo of one of its dishes, behind the title. */
+  cover: string | null;
 }) {
+  if (cover)
+    return (
+      <div
+        className={cn(
+          "relative isolate overflow-hidden px-4 py-6",
+          shade,
+          framed ? "sm:mx-4 sm:rounded-[1.4rem]" : "mx-4 rounded-[1.4rem]",
+        )}
+      >
+        <img
+          src={cover}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 -z-10 size-full object-cover"
+        />
+        <span aria-hidden="true" className="shade-veil absolute inset-0 -z-10" />
+        <span
+          aria-hidden="true"
+          className="texture-khatam texture-fade-corner [--tex-color:white] [--tex-opacity:0.14] [--tex-size:46px]"
+        />
+        <div className="relative flex items-center gap-3.5 text-white">
+          <span className="grid size-12 shrink-0 place-items-center rounded-full bg-white/15 ring-1 ring-white/30 backdrop-blur">
+            <CategoryIcon icon={icon} className="size-[1.3rem]" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <h2 id={id} className="font-display text-[1.75rem] leading-tight drop-shadow">
+              {name}
+            </h2>
+            <p className="mt-0.5 text-xs font-medium text-white/85">{note}</p>
+          </div>
+        </div>
+        {description ? (
+          <p className="relative mt-2.5 text-sm leading-6 text-white/85">{description}</p>
+        ) : null}
+      </div>
+    );
   return (
     <div
       className={cn(
@@ -905,11 +947,76 @@ function CategoryBanner({
  * description, badges and price on the reading side; the photo, if there is one, on the other
  * with "+" on its corner, else a soft "+" next to the price.
  */
-function MenuRow({ p, eager, money, popular, cart, adding, quickAdd, open, t }: CardProps) {
+function MenuRow({
+  p,
+  eager,
+  money,
+  popular,
+  cart,
+  adding,
+  quickAdd,
+  open,
+  t,
+  hero = false,
+}: CardProps & {
+  /** The category's lead dish: its photo across the card, the text below. */
+  hero?: boolean;
+}) {
   const tags = p.tags.filter((x) => TAG_META[x]).slice(0, 3);
   const { latin, text } = splitDescription(p.description, p.name);
   const photo = !!p.images[0];
-  const add = (className?: string, tone?: "soft") =>
+  if (hero && photo)
+    return (
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => open(p.id)}
+        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && open(p.id)}
+        className={cn(
+          "flex h-full w-full cursor-pointer flex-col gap-3 px-4 pt-4 pb-4 text-start transition-colors active:bg-surface-2",
+          "sm:rounded-2xl sm:border sm:border-border sm:bg-surface sm:shadow-[var(--shadow-soft)]",
+          !p.isAvailable && "opacity-60",
+        )}
+      >
+        <div className="relative overflow-hidden rounded-2xl">
+          <ProductImage
+            product={p}
+            size="md"
+            className={cn("aspect-[16/9] w-full", !p.isAvailable && "grayscale")}
+            eager={eager}
+          />
+          <span aria-hidden="true" className="shade-veil-bottom absolute inset-x-0 bottom-0 h-1/2" />
+          <div className="absolute start-3 top-3 flex flex-col items-start gap-1">
+            {popular.has(p.id) ? <PopularBadge /> : null}
+          </div>
+          <InCartBadge n={cart.byProduct[p.id] ?? 0} className="absolute end-3 top-3" />
+          <p className="absolute inset-x-3 bottom-2.5 line-clamp-1 text-lg font-bold text-white drop-shadow">
+            {p.name}
+          </p>
+        </div>
+        {text ? <p className="line-clamp-2 text-[13.5px] leading-6 text-fg-muted">{text}</p> : null}
+        {tags.length ? (
+          <div className="flex flex-wrap items-center gap-1.5">
+            {tags.map((tag) => (
+              <TagChip key={tag} tag={tag} compact />
+            ))}
+          </div>
+        ) : null}
+        <div className="flex items-center justify-between gap-3">
+          <Price product={p} money={money} split />
+          {p.isAvailable ? (
+            <AddButton
+              label={t("guest.quickAdd", { name: p.name })}
+              busy={adding === p.id}
+              onClick={() => quickAdd(p)}
+              tone="shade"
+              className="size-10"
+            />
+          ) : null}
+        </div>
+      </div>
+    );
+  const add = (className?: string, tone?: "soft" | "shade") =>
     p.isAvailable ? (
       <AddButton
         label={t("guest.quickAdd", { name: p.name })}
@@ -956,7 +1063,7 @@ function MenuRow({ p, eager, money, popular, cart, adding, quickAdd, open, t }: 
         ) : null}
         <div className="mt-auto flex items-center justify-between gap-3 pt-2.5">
           <Price product={p} money={money} split />
-          {photo ? null : add("size-9", "soft")}
+          {photo ? null : add("size-9", "shade")}
         </div>
       </div>
       {photo ? (

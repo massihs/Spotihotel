@@ -48,6 +48,7 @@ async function Portal() {
           wifiPassword: data.settings.wifiPassword,
           guestInfo: data.settings.guestInfo,
           checkOutTime: data.settings.checkOutTime,
+          minibarSelfService: data.settings.minibarSelfService,
         }}
         services={data.services.map((s) => ({
           id: s.id,

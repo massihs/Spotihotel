@@ -20,7 +20,7 @@ import { RoomConcierge } from "@/components/guest/room-concierge";
 import { guestCallsOf } from "@/server/modules/team/sections";
 import { getPmsSettings } from "@/server/modules/pms/setup";
 import { inHouseStayOfRoom } from "@/server/modules/pms/stays";
-import { roomServiceOutlets } from "@/server/modules/outlets/service";
+import { outletCovers, roomServiceOutlets } from "@/server/modules/outlets/service";
 
 /** The guest cookie is per request: the page streams behind its own boundary (instant navigations). */
 export default function GuestMenuPage({ searchParams }: PageProps<"/[locale]/table">) {
@@ -68,7 +68,13 @@ async function GuestMenu({ searchParams }: Pick<PageProps<"/[locale]/table">, "s
   ]);
   // A hotel room orders from any restaurant or café open to room service (the one picked, else
   // the one its cart is from, else the first); a table of the hotel's café shows the café's menu.
-  const roomOutlets = guest.table.kind === "room" ? await roomServiceOutlets(db, guest.restaurant.id) : [];
+  const roomOutletRows = guest.table.kind === "room" ? await roomServiceOutlets(db, guest.restaurant.id) : [];
+  const covers = await outletCovers(
+    db,
+    guest.restaurant.id,
+    roomOutletRows.map((o) => o.id),
+  );
+  const roomOutlets = roomOutletRows.map((o) => ({ ...o, cover: covers.get(o.id) ?? null }));
   const viewing = roomOutlets.length
     ? (roomOutlets.find((o) => o.id === asked)?.id ?? cart.outlet?.id ?? roomOutlets[0]!.id)
     : null;

@@ -11,6 +11,8 @@ export type RoomOutlet = {
   kind: string;
   location: string | null;
   hours: string | null;
+  /** One of its dishes, at the top of its card. */
+  cover?: string | null;
 };
 
 /** Each restaurant's icon in its own blue. */
@@ -59,17 +61,32 @@ export function OutletPicker({
               replace
               aria-current={active ? "true" : undefined}
               className={cn(
-                "relative flex w-[11.5rem] shrink-0 snap-start flex-col gap-2 rounded-2xl p-3.5 text-start ring-1 transition active:scale-[0.98]",
+                "relative flex w-[12.5rem] shrink-0 snap-start flex-col gap-2 overflow-hidden rounded-2xl p-3.5 text-start ring-1 transition active:scale-[0.98]",
+                SHADES[i % SHADES.length],
                 active
                   ? "bg-accent bg-[image:var(--brand-gradient)] text-accent-fg shadow-[0_12px_26px_-14px_var(--accent)] ring-transparent"
                   : "bg-surface ring-border hover:ring-brand-300",
               )}
             >
-              <span className="flex items-center justify-between gap-2">
+              {o.cover ? (
+                <span className="relative -mx-3.5 -mt-3.5 mb-1 block h-24 overflow-hidden">
+                  <img
+                    src={o.cover}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="size-full object-cover"
+                  />
+                  <span aria-hidden="true" className="shade-veil-bottom absolute inset-0" />
+                </span>
+              ) : null}
+              <span className={cn("flex items-center justify-between gap-2", o.cover && "-mt-9")}>
                 <span
                   className={cn(
-                    "grid size-10 place-items-center rounded-xl [&_svg]:size-5",
-                    active ? "bg-white/15 text-accent-fg" : cn("shade-soft", SHADES[i % SHADES.length]),
+                    "relative grid size-10 place-items-center rounded-xl shadow-[var(--shadow-soft)] ring-2 ring-surface [&_svg]:size-5",
+                    active
+                      ? "bg-accent bg-[image:var(--brand-gradient)] text-accent-fg"
+                      : cn("shade-soft", SHADES[i % SHADES.length]),
                   )}
                 >
                   <Icon aria-hidden="true" />

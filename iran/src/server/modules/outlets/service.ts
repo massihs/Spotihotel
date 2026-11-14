@@ -9,6 +9,7 @@ import { isUuid } from "@/lib/ids";
 import { dayStart, localDay } from "@/lib/period";
 import { bulkCreateTables } from "@/server/modules/tables/service";
 import { menuTag } from "@/server/modules/menu/cache";
+import { productImageUrls } from "@/server/modules/menu/images";
 
 /** The kinds of points of sale a hotel runs (each has its icon and default table prefix). */
 export const OUTLET_KINDS = ["restaurant", "cafe", "bar", "lounge", "pool_bar", "pastry"] as const;
@@ -331,4 +332,30 @@ export async function roomServiceOutlets(db: DbOrTx, restaurantId: string) {
       ),
     )
     .orderBy(asc(outlets.sortOrder), asc(outlets.createdAt));
+}
+
+/**
+ * A photo for each restaurant's card in the guest menu: one of the dishes it serves (its own
+ * categories first), each outlet a different one when they share dishes.
+ */
+export async function outletCovers(db: DbOrTx, restaurantId: string, ids: string[]) {
+  const covers = new Map<string, string>();
+  if (!ids.length) return covers;
+  const rows = await db.execute<{ storage_key: string; outlet_ids: string[] | null }>(sql`
+    select distinct on (p.id) i.storage_key, c.outlet_ids, c.sort_order, p.sort_order as ps
+    from product_images i
+    join products p on p.id = i.product_id and p.deleted_at is null and p.is_available
+    join categories c on c.id = p.category_id and c.deleted_at is null
+    where i.restaurant_id = ${restaurantId}
+    order by p.id, i.sort_order
+  `);
+  const list = [...rows.rows];
+  ids.forEach((id, i) => {
+    const own = list.filter((r) => r.outlet_ids?.includes(id));
+    const shared = list.filter((r) => !r.outlet_ids?.length);
+    const pick = own.length ? own : shared;
+    const row = pick.length ? pick[(i * 3) % pick.length] : undefined;
+    if (row) covers.set(id, productImageUrls(row.storage_key).md);
+  });
+  return covers;
 }

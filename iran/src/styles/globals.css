@@ -1145,3 +1145,33 @@ dialog[open]::backdrop {
     --title-ink: linear-gradient(270deg, var(--shade-navy), var(--shade-royal) 60%, var(--shade-azure));
   }
 }
+
+@layer components {
+  /* A photo under a veil of the shade: dark at the reading side, clear on the other. */
+  .shade-veil {
+    --shade-veil: linear-gradient(
+      90deg,
+      color-mix(in oklch, var(--shade, var(--accent)) 25%, transparent),
+      color-mix(in oklch, var(--shade, var(--accent)) 70%, black 10%) 55%,
+      color-mix(in oklch, var(--shade, var(--accent)) 92%, black 25%)
+    );
+    background-image: var(--shade-veil);
+  }
+  [dir="ltr"] .shade-veil {
+    --shade-veil: linear-gradient(
+      270deg,
+      color-mix(in oklch, var(--shade, var(--accent)) 25%, transparent),
+      color-mix(in oklch, var(--shade, var(--accent)) 70%, black 10%) 55%,
+      color-mix(in oklch, var(--shade, var(--accent)) 92%, black 25%)
+    );
+  }
+  /* The bottom of a photo darkened in the shade, for a title over it. */
+  .shade-veil-bottom {
+    --shade-veil-b: linear-gradient(
+      to top,
+      color-mix(in oklch, var(--shade, var(--accent)) 80%, black 30%),
+      transparent
+    );
+    background-image: var(--shade-veil-b);
+  }
+}

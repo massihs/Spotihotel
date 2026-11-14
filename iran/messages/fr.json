@@ -5275,7 +5275,11 @@
     "unlockBill": "Votre note est confidentielle. Saisissez votre nom de famille pour la voir.",
     "less": "Un {name} de moins",
     "more": "Un {name} de plus",
-    "credit": "Votre crédit (acompte)"
+    "credit": "Votre crédit (acompte)",
+    "spaEmpty": "L'hôtel ne propose pas encore la réservation du spa en ligne : appelez la réception.",
+    "billNoStay": "Aucun séjour enregistré pour cette chambre : la note sera disponible après le check-in.",
+    "minibarEmpty": "La carte du minibar n'est pas encore renseignée.",
+    "minibarCounted": "Les prix du minibar de votre chambre. Le ménage relève ce que vous prenez et le porte sur votre note."
   },
   "dateInput": {
     "pick": "Choisir une date",

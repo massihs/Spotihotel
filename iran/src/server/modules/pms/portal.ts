@@ -83,7 +83,8 @@ export async function portalData(db: Database, guest: GuestContext, stayId: stri
     )
     .orderBy(asc(hotelServices.sortOrder), asc(hotelServices.name));
   // The minibar's list and prices are no secret: shown before the guest unlocks their bill.
-  const minibar = settings.minibarSelfService ? await listMinibar(db, rid, true) : [];
+  // Shown even when guests may not declare it themselves (housekeeping counts it then).
+  const minibar = await listMinibar(db, rid, true);
   if (!stayId) return { settings, services, minibar, folios: [], bookings: [] };
   const [folioIds, bookings] = await Promise.all([
     db

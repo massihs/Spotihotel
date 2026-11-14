@@ -228,8 +228,8 @@ export function AddButton({
   label: string;
   onClick: () => void;
   busy?: boolean;
-  /** "soft": a tinted "+" for a line of the menu (the solid one sits on photos). */
-  tone?: "soft";
+  /** "soft": a tinted "+" for a line of the menu; "shade": tinted with the category's blue. */
+  tone?: "soft" | "shade";
   className?: string;
 }) {
   return (
@@ -246,7 +246,9 @@ export function AddButton({
         "grid size-11 shrink-0 place-items-center rounded-full",
         tone === "soft"
           ? "bg-brand-50 text-brand-700 ring-1 ring-brand-200 ring-inset hover:bg-brand-100 [&_svg]:size-[1.15rem]"
-          : "bg-accent bg-[image:var(--brand-gradient)] text-accent-fg shadow-[0_8px_18px_-10px_var(--accent)]",
+          : tone === "shade"
+            ? "shade-fill [&_svg]:size-[1.15rem]"
+            : "bg-accent bg-[image:var(--brand-gradient)] text-accent-fg shadow-[0_8px_18px_-10px_var(--accent)]",
         "atelier:bg-transparent atelier:bg-none atelier:text-fg atelier:shadow-none atelier:ring-1 atelier:ring-fg nuit:shadow-none",
         "transition-transform active:scale-90 disabled:opacity-60",
         className,

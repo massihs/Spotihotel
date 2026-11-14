@@ -81,6 +81,8 @@ import { openRequest } from "@/server/modules/hotel/requests";
 import { saveServiceItem, saveServicesSettings } from "@/server/modules/hotel/services";
 import { saveInternetProfile } from "@/server/modules/hotel/internet";
 import { saveEquipment } from "@/server/modules/hotel/engineering";
+import { addProductImage } from "@/server/modules/menu/images";
+import { readFile } from "node:fs/promises";
 import { createOutlet, setOutletMenu } from "@/server/modules/outlets/service";
 import { syncLedger } from "@/server/modules/ledger/sync";
 import { localDay } from "@/lib/period";
@@ -476,6 +478,41 @@ async function ensureParsianServices(ctx: RestaurantContext) {
   for (const [name, category, location, intervalDays] of equipmentList)
     await saveEquipment(db, ctx, null, { name, category, location, intervalDays });
   console.log("✓ Parsian test hotel: service departments set up");
+}
+
+/**
+ * Photos of the dishes (freely licensed, see scripts/demo-assets/parsian/CREDITS.md), added to the
+ * dishes that have none: the guest menu, the till and the menu manager show real pictures.
+ */
+async function ensureParsianPhotos(ctx: RestaurantContext) {
+  const dir = new URL("./demo-assets/parsian/", `file://${process.cwd()}/scripts/`);
+  let manifest: Record<string, string>;
+  try {
+    manifest = JSON.parse(await readFile(new URL("manifest.json", dir), "utf8"));
+  } catch {
+    return;
+  }
+  const rid = ctx.restaurant.id;
+  const list = await db
+    .select({
+      id: products.id,
+      name: products.name,
+      n: sql<number>`(select count(*) from product_images i where i.product_id = ${products.id})::int`,
+    })
+    .from(products)
+    .where(and(eq(products.restaurantId, rid), isNull(products.deletedAt)));
+  let added = 0;
+  for (const p of list) {
+    const file = manifest[p.name];
+    if (!file || p.n > 0) continue;
+    try {
+      await addProductImage(db, ctx, p.id, await readFile(new URL(file, dir)));
+      added++;
+    } catch (e) {
+      console.error(`  photo of ${p.name}:`, e instanceof Error ? e.message : e);
+    }
+  }
+  if (added) console.log(`✓ Parsian test hotel: ${added} dish photos added`);
 }
 
 async function ensureParsianOutlets(ctx: RestaurantContext) {
@@ -1432,6 +1469,7 @@ export async function seedParsian(ownerEmail: string, days = 30, opts: { build?:
       const ctx = await loadRestaurantContext(db, { ...ownerUser, locale: ownerUser.locale }, existing.id);
       const added = await ensureParsianOutlets(ctx);
       await ensureParsianServices(ctx);
+      await ensureParsianPhotos(ctx);
       for (const [name, icon] of Object.entries(MENU_ICONS))
         await db
           .update(categories)
@@ -1786,6 +1824,7 @@ export async function seedParsian(ownerEmail: string, days = 30, opts: { build?:
   // The hotel's restaurants and cafés, with their tables and their part of the menu.
   await ensureParsianOutlets(ownerCtx);
   await ensureParsianServices(ownerCtx);
+  await ensureParsianPhotos(ownerCtx);
   restaurantTables = (await listTables(db, ownerCtx)).filter((p) => p.kind !== "room");
   const suppliers = [];
   for (const [name, phone] of [

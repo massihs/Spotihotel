@@ -86,6 +86,7 @@ export function StayPortal({
     wifiPassword: string | null;
     guestInfo: string | null;
     checkOutTime: string;
+    minibarSelfService: boolean;
   };
   services: Service[];
   minibar: { id: string; name: string; priceCents: number }[];
@@ -97,6 +98,24 @@ export function StayPortal({
   const day = useDay();
   // Charging the room (spa, minibar) and the bill: the guest's name first, asked where it is needed.
   const access: Access = !stay ? "none" : verified ? "open" : "locked";
+  // Arriving from a tile of the menu page (#minibar, #spa, #bill): bring that part into view
+  // (the browser cannot, the page being drawn after the navigation) and mark it a moment.
+  useEffect(() => {
+    const go = () => {
+      const id = decodeURIComponent(window.location.hash.slice(1));
+      const el = id ? document.getElementById(id) : null;
+      if (!el) return;
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      el.classList.add("ring-2", "ring-accent");
+      window.setTimeout(() => el.classList.remove("ring-2", "ring-accent"), 1800);
+    };
+    const t = window.setTimeout(go, 60);
+    window.addEventListener("hashchange", go);
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener("hashchange", go);
+    };
+  }, []);
   return (
     <div className="mx-auto max-w-xl px-4 pt-4 pb-28">
       <Link
@@ -196,9 +215,24 @@ export function StayPortal({
             bookings={bookings}
             access={access}
           />
-        ) : null}
-        {minibar.length ? <Minibar items={minibar} currency={currency} access={access} /> : null}
-        {stay ? <Bill folios={folios} currency={currency} access={access} /> : null}
+        ) : (
+          <Section id="spa" icon={<Flower2 />} title={t("spa")}>
+            <p className="text-sm leading-6 text-fg-muted">{t("spaEmpty")}</p>
+          </Section>
+        )}
+        <Minibar
+          items={minibar}
+          currency={currency}
+          access={access}
+          selfService={settings.minibarSelfService}
+        />
+        {stay ? (
+          <Bill folios={folios} currency={currency} access={access} />
+        ) : (
+          <Section id="bill" icon={<Receipt />} title={t("bill")}>
+            <p className="text-sm leading-6 text-fg-muted">{t("billNoStay")}</p>
+          </Section>
+        )}
 
         {settings.guestInfo ? (
           <Section icon={<Info />} title={t("info")}>
@@ -466,15 +500,21 @@ function CancelSpa({ id }: { id: string }) {
   );
 }
 
+const MINIBAR_SHADES = ["shade-cyan", "shade-azure", "shade-periwinkle", "shade-royal"];
+
 function Minibar({
   items,
   currency,
-  access,
+  access: rawAccess,
+  selfService,
 }: {
   items: { id: string; name: string; priceCents: number }[];
   currency: string;
   access: Access;
+  /** Guests may declare what they took; otherwise the list is for information. */
+  selfService: boolean;
 }) {
+  const access: Access = selfService ? rawAccess : "none";
   const t = useTranslations("portal");
   const money = useMoney(currency);
   const [qty, setQty] = useState<Record<string, number>>({});
@@ -493,16 +533,19 @@ function Minibar({
   };
   return (
     <Section id="minibar" icon={<Wine />} title={t("minibar")}>
-      <p className="mb-3 text-sm leading-6 text-fg-muted">{t("minibarHint")}</p>
+      <p className="mb-3 text-sm leading-6 text-fg-muted">
+        {!items.length ? t("minibarEmpty") : selfService ? t("minibarHint") : t("minibarCounted")}
+      </p>
       <ul className="grid grid-cols-2 gap-2">
-        {items.map((i) => {
+        {items.map((i, k) => {
           const n = qty[i.id] ?? 0;
           return (
             <li
               key={i.id}
               className={cn(
                 "flex flex-col justify-between gap-2 rounded-2xl p-3 ring-1 transition",
-                n ? "bg-accent-soft ring-accent/40" : "bg-surface-2 ring-border",
+                MINIBAR_SHADES[k % MINIBAR_SHADES.length],
+                n ? "shade-soft ring-transparent" : "bg-surface-2 ring-border",
               )}
             >
               <span className="line-clamp-2 text-sm leading-snug font-semibold">{i.name}</span>
@@ -525,7 +568,7 @@ function Minibar({
                     ) : null}
                     <button
                       type="button"
-                      className="grid size-8 place-items-center rounded-full bg-accent text-accent-fg"
+                      className="shade-fill grid size-8 place-items-center rounded-full"
                       onClick={() => step(i.id, 1)}
                       aria-label={t("more", { name: i.name })}
                     >
