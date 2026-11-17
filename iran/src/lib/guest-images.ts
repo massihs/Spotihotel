@@ -4,12 +4,15 @@
  * public/guest/CREDITS.md).
  */
 
-const SPA = new Set(["spa", "sauna", "pool", "massage", "hammam", "gym", "beauty"]);
+const SPA = new Set(["sauna", "pool", "hammam", "gym", "beauty"]);
 
 /** A photo for a wellness service of this kind, if there is one. */
 export function spaImage(kind: string): string | null {
   return SPA.has(kind) ? `/guest/spa/${kind}.jpg` : null;
 }
+
+/** Items with their own photo; the others (water, biscuits, malt drinks…) show the minibar. */
+const HAS_PHOTO = new Set(["juice", "soda", "nuts", "chocolate", "chips"]);
 
 /** Words that name each minibar item, in Persian, Arabic, English and French. */
 const MINIBAR: [file: string, words: string[]][] = [
@@ -31,5 +34,5 @@ export function minibarImage(name: string): string {
   for (const [file, words] of MINIBAR)
     for (const w of words)
       if (n.includes(w.toLowerCase()) && (!best || w.length > best.len)) best = { file, len: w.length };
-  return `/guest/minibar/${best?.file ?? "minibar"}.jpg`;
+  return `/guest/minibar/${best && HAS_PHOTO.has(best.file) ? best.file : "minibar"}.jpg`;
 }
