@@ -117,6 +117,16 @@ const thEnd = "px-3 py-2.5 text-end text-xs font-semibold text-fg-muted";
 const td = "px-3 py-2";
 const tdNum = "px-3 py-2 text-end tabular-nums";
 
+/** Departments take turns in the theme's blues (and a warm one), so the bars tell apart. */
+const DEPT_SHADES = [
+  "shade-royal",
+  "shade-cyan",
+  "shade-periwinkle",
+  "shade-azure",
+  "shade-indigo",
+  "shade-sky",
+];
+
 function Table({ children, min = 640 }: { children: React.ReactNode; min?: number }) {
   return (
     <div className="overflow-x-auto rounded-xl border border-border bg-surface shadow-[var(--shadow-soft)]">
@@ -255,8 +265,8 @@ async function Ledger({ params, searchParams }: Props) {
               {(() => {
                 const depts = pl.departments.filter((d) => d.revenue > 0 || d.expense > 0);
                 const max = Math.max(1, ...depts.map((d) => Math.max(d.revenue, d.expense)));
-                return depts.map((d) => (
-                  <li key={d.department}>
+                return depts.map((d, di) => (
+                  <li key={d.department} className={DEPT_SHADES[di % DEPT_SHADES.length]}>
                     <div className="flex items-baseline justify-between gap-3 text-sm">
                       <span className="font-semibold">
                         {t.has(`dept.${d.department}`) ? t(`dept.${d.department}`) : d.department}
@@ -269,14 +279,14 @@ async function Ledger({ params, searchParams }: Props) {
                     <div className="mt-1.5 space-y-1">
                       <div className="h-2 overflow-hidden rounded-full bg-brand-50">
                         <div
-                          className="h-full rounded-full bg-gradient-to-l from-brand-500 to-brand-700 rtl:bg-gradient-to-r"
+                          className="shade-bar h-full rounded-full [--shade-bar:linear-gradient(90deg,var(--shade),color-mix(in_oklch,var(--shade),white_30%))]"
                           style={{ width: `${(d.revenue / max) * 100}%` }}
                         />
                       </div>
                       {d.expense ? (
                         <div className="h-1.5 overflow-hidden rounded-full bg-brand-50">
                           <div
-                            className="h-full rounded-full bg-brand-300"
+                            className="h-full rounded-full bg-[color-mix(in_oklch,var(--shade)_35%,var(--surface))]"
                             style={{ width: `${(d.expense / max) * 100}%` }}
                           />
                         </div>

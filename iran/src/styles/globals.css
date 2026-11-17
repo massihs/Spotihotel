@@ -1175,3 +1175,109 @@ dialog[open]::backdrop {
     background-image: var(--shade-veil-b);
   }
 }
+
+/* ─── Section shades (dashboard) ─────────────────────────────────────────────
+ * <main data-shaded class="shade-…"> (components/dashboard/shaded-main.tsx): each part of the
+ * panel has its own blue; titles, tabs, card headers, tables and key figures take it up.
+ */
+[data-shaded] .section-glow {
+  --section-glow: radial-gradient(
+    60% 220px at 85% 0%,
+    color-mix(in oklch, var(--shade) 14%, transparent),
+    transparent 70%
+  );
+  pointer-events: none;
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 340px;
+  z-index: -1;
+  background-image: var(--section-glow);
+}
+[dir="rtl"] [data-shaded] .section-glow {
+  --section-glow: radial-gradient(
+    60% 220px at 15% 0%,
+    color-mix(in oklch, var(--shade) 14%, transparent),
+    transparent 70%
+  );
+}
+@layer components {
+  [data-shaded] .title-ink {
+    --title-ink: linear-gradient(90deg, var(--shade-navy), var(--shade) 75%);
+  }
+  [dir="rtl"] [data-shaded] .title-ink {
+    --title-ink: linear-gradient(270deg, var(--shade-navy), var(--shade) 75%);
+  }
+  /* Tabs: the current one inked and underlined in the section's blue. */
+  [data-shaded] .seg-item[aria-current="page"],
+  [data-shaded] .seg-item[aria-current="true"],
+  [data-shaded] .seg-item[aria-selected="true"] {
+    color: var(--shade);
+    box-shadow:
+      0 1px 2px var(--seg-raise-1),
+      0 4px 12px -6px var(--seg-raise-2),
+      inset 0 0 0 1px var(--border),
+      inset 0 -2.5px 0 var(--shade);
+  }
+  /* Card headers: a stripe of their blue on the reading side. */
+  .card-head::before {
+    content: "";
+    position: absolute;
+    inset-block: 0.85rem;
+    inset-inline-start: 0;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: var(--shade, var(--accent));
+  }
+  [dir="rtl"] .card-head::before {
+    border-radius: 3px 0 0 3px;
+  }
+  /* Tables: the header in the section's blue, every other row a breath of it. */
+  .shade-head {
+    --shade-head: color-mix(in oklch, var(--shade, var(--shade-azure)) 9%, var(--surface));
+  }
+  [data-shaded] table tbody tr:nth-child(even) {
+    --zebra: color-mix(in oklch, var(--shade) 3.5%, transparent);
+    background-color: var(--zebra);
+  }
+}
+/* Several key figures or cards side by side: each its own blue (the section's first). */
+:where(.grid > :nth-child(4n + 2)) :is(.stat-auto, .card-head) {
+  --shade: var(--shade-cyan);
+}
+:where(.grid > :nth-child(4n + 3)) :is(.stat-auto, .card-head) {
+  --shade: var(--shade-periwinkle);
+}
+:where(.grid > :nth-child(4n + 4)) :is(.stat-auto, .card-head) {
+  --shade: var(--shade-indigo);
+}
+.grid > .stat-auto:nth-child(4n + 2) {
+  --shade: var(--shade-cyan);
+}
+.grid > .stat-auto:nth-child(4n + 3) {
+  --shade: var(--shade-periwinkle);
+}
+.grid > .stat-auto:nth-child(4n + 4) {
+  --shade: var(--shade-indigo);
+}
+
+/* Guest pages: each tile and part of the stay page washed in its own blue, a line of it on top.
+   Unlayered on purpose: they must win over the cards' own background and border utilities. */
+.guest-tile {
+  --guest-tile: linear-gradient(
+    165deg,
+    color-mix(in oklch, var(--shade) 24%, var(--surface)),
+    color-mix(in oklch, var(--shade) 4%, var(--surface)) 75%
+  );
+  --guest-tile-border: color-mix(in oklch, var(--shade) 30%, var(--border));
+  background-image: var(--guest-tile);
+  border-color: var(--guest-tile-border);
+}
+.guest-section {
+  --guest-section: linear-gradient(
+    180deg,
+    color-mix(in oklch, var(--shade) 14%, var(--surface)),
+    var(--surface) 160px
+  );
+  background-image: var(--guest-section);
+  border-top: 4px solid var(--shade);
+}

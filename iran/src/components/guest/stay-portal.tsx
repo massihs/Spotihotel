@@ -161,22 +161,22 @@ export function StayPortal({
       </header>
 
       <nav className="mt-4 grid grid-cols-3 gap-2.5" aria-label={t("quick")}>
-        <Link href="/table#room-service" className={QUICK}>
-          <span className={cn(QUICK_ICON, "shade-royal")}>
+        <Link href="/table#room-service" className={cn(QUICK, "shade-royal guest-tile")}>
+          <span className={QUICK_ICON}>
             <UtensilsCrossed />
           </span>
           {t("roomService")}
         </Link>
         {calls.length ? (
-          <WaiterCall options={calls} room className={cn(QUICK, "w-full")}>
-            <span className={cn(QUICK_ICON, "shade-azure")}>
+          <WaiterCall options={calls} room className={cn(QUICK, "shade-azure guest-tile w-full")}>
+            <span className={QUICK_ICON}>
               <BellRing />
             </span>
             {t("reception")}
           </WaiterCall>
         ) : null}
-        <Link href={`/r/${slug}/book`} className={QUICK}>
-          <span className={cn(QUICK_ICON, "shade-periwinkle")}>
+        <Link href={`/r/${slug}/book`} className={cn(QUICK, "shade-periwinkle guest-tile")}>
+          <span className={QUICK_ICON}>
             <CalendarCheck />
           </span>
           {t("restaurant")}
@@ -276,15 +276,13 @@ function Section({
   return (
     <section
       id={id}
-      className="scroll-mt-4 rounded-3xl border border-border bg-surface p-4 shadow-[var(--shadow-soft)] sm:p-5"
+      className={cn(
+        "guest-section scroll-mt-4 rounded-3xl border border-border bg-surface p-4 shadow-[var(--shadow-soft)] sm:p-5",
+        SECTION_SHADE[id ?? ""] ?? "shade-sky",
+      )}
     >
       <h2 className="mb-3 flex items-center gap-2.5 text-[17px] font-bold">
-        <span
-          className={cn(
-            "shade-fill grid size-9 place-items-center rounded-full [&_svg]:size-[17px]",
-            SECTION_SHADE[id ?? ""] ?? "shade-sky",
-          )}
-        >
+        <span className="shade-fill grid size-9 place-items-center rounded-full [&_svg]:size-[17px]">
           {icon}
         </span>
         <span className="flex-1">{title}</span>

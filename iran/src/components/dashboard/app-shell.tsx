@@ -1,4 +1,5 @@
 import { LogOut } from "lucide-react";
+import { ShadedMain } from "./shaded-main";
 import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { logoutAction } from "@/app/[locale]/(auth)/actions";
@@ -208,12 +209,9 @@ export async function AppShell({
             </div>
           </div>
         </header>
-        <main
-          id="main"
-          className="relative mx-auto max-w-7xl px-4 pt-6 pb-28 sm:px-8 lg:pt-8 lg:pb-12 print:max-w-none print:p-0"
-        >
+        <ShadedMain className="relative isolate mx-auto max-w-7xl px-4 pt-6 pb-28 sm:px-8 lg:pt-8 lg:pb-12 print:max-w-none print:p-0">
           {children}
-        </main>
+        </ShadedMain>
       </div>
 
       <MobileTabBar

@@ -35,16 +35,16 @@ export function CardHeader({
 
 /** Colored icon tile classes (static for Tailwind). */
 export const TONE_TILE = {
-  violet: "bg-tone-violet/12 text-tone-violet",
-  sky: "bg-tone-sky/12 text-tone-sky",
-  amber: "bg-tone-amber/18 text-tone-amber",
-  rose: "bg-tone-rose/12 text-tone-rose",
-  teal: "bg-tone-teal/12 text-tone-teal",
-  orange: "bg-tone-orange/12 text-tone-orange",
-  emerald: "bg-tone-emerald/12 text-tone-emerald",
-  fuchsia: "bg-tone-fuchsia/12 text-tone-fuchsia",
-  indigo: "bg-tone-indigo/14 text-tone-indigo",
-  lime: "bg-tone-lime/15 text-tone-lime",
+  violet: "[--shade:var(--tone-violet)] shade-fill",
+  sky: "[--shade:var(--tone-sky)] shade-fill",
+  amber: "[--shade:var(--tone-amber)] shade-fill",
+  rose: "[--shade:var(--tone-rose)] shade-fill",
+  teal: "[--shade:var(--tone-teal)] shade-fill",
+  orange: "[--shade:var(--tone-orange)] shade-fill",
+  emerald: "[--shade:var(--tone-emerald)] shade-fill",
+  fuchsia: "[--shade:var(--tone-fuchsia)] shade-fill",
+  indigo: "[--shade:var(--tone-indigo)] shade-fill",
+  lime: "[--shade:var(--tone-lime)] shade-fill",
   navy: "shade-navy shade-fill",
   royal: "shade-royal shade-fill",
   azure: "shade-azure shade-fill",
@@ -76,7 +76,11 @@ export function StatCard({
       className={cn(
         "overflow-hidden p-5",
         // Plain figures: a breath of the hotel's colour from the corner, not a flat white tile.
-        !solid && "bg-[linear-gradient(155deg,var(--brand-100),var(--surface)_58%)]",
+        !solid && "shade-wash",
+        // No tone given: the card takes a blue of its own from its place in the grid (CSS);
+        // a blue tone colours the whole card, not only its icon.
+        !solid && !colored && "stat-auto",
+        colored && TONE_TILE[colored].split(" ")[0],
         tone === "ink" && "border-transparent bg-ink text-ink-fg shadow-none",
         tone === "accent" && "border-transparent bg-accent text-accent-fg shadow-none",
         tone === "gradient" && "border-transparent text-white shadow-accent",
@@ -89,7 +93,7 @@ export function StatCard({
           "texture-khatam texture-fade-corner [--tex-size:60px]",
           solid
             ? "[--tex-color:white] [--tex-opacity:0.12]"
-            : "[--tex-color:var(--brand-600)] [--tex-opacity:0.07]",
+            : "[--tex-color:var(--shade,var(--brand-600))] [--tex-opacity:0.09]",
         )}
         aria-hidden="true"
       />
@@ -99,7 +103,7 @@ export function StatCard({
           <span
             className={cn(
               "grid size-9 shrink-0 place-items-center rounded-lg [&_svg]:size-[18px]",
-              solid ? "bg-white/18" : colored ? TONE_TILE[colored] : "bg-accent-soft text-accent-text",
+              solid ? "bg-white/18" : colored ? TONE_TILE[colored] : "shade-fill",
             )}
             aria-hidden="true"
           >

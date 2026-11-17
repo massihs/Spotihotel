@@ -105,40 +105,40 @@ export function RoomConcierge({
         ) : null}
       </div>
       <div className="grid grid-cols-3 gap-2.5">
-        <a href="#room-service" className={TILE}>
-          <span className={cn(ICON, "shade-royal")}>
+        <a href="#room-service" className={cn(TILE, "shade-royal guest-tile")}>
+          <span className={ICON}>
             <UtensilsCrossed />
           </span>
           {t("roomService")}
         </a>
-        <Link href="/table/stay#minibar" className={TILE}>
-          <span className={cn(ICON, "shade-indigo")}>
+        <Link href="/table/stay#minibar" className={cn(TILE, "shade-indigo guest-tile")}>
+          <span className={ICON}>
             <Wine />
           </span>
           {t("minibar")}
         </Link>
-        <Link href="/table/stay#spa" className={TILE}>
-          <span className={cn(ICON, "shade-cyan")}>
+        <Link href="/table/stay#spa" className={cn(TILE, "shade-cyan guest-tile")}>
+          <span className={ICON}>
             <Flower2 />
           </span>
           {t("spa")}
         </Link>
         {calls.length ? (
-          <WaiterCall options={calls} room className={cn(TILE, "w-full")}>
-            <span className={cn(ICON, "shade-periwinkle")}>
+          <WaiterCall options={calls} room className={cn(TILE, "w-full", "shade-periwinkle guest-tile")}>
+            <span className={ICON}>
               <Sparkles />
             </span>
             {t("requests")}
           </WaiterCall>
         ) : null}
-        <Link href="/table/stay#bill" className={TILE}>
-          <span className={cn(ICON, "shade-azure")}>
+        <Link href="/table/stay#bill" className={cn(TILE, "shade-azure guest-tile")}>
+          <span className={ICON}>
             <Receipt />
           </span>
           {t("bill")}
         </Link>
-        <Link href="/table/stay" className={TILE}>
-          <span className={cn(ICON, "shade-navy")}>
+        <Link href="/table/stay" className={cn(TILE, "shade-navy guest-tile")}>
+          <span className={ICON}>
             <ConciergeBell />
           </span>
           {t("myStay")}
