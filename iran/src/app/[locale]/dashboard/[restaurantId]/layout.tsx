@@ -7,6 +7,7 @@ import { getTranslations } from "next-intl/server";
 import { AppShell, ShellSkeleton } from "@/components/dashboard/app-shell";
 import {
   BookOpenCheck,
+  Eye,
   ChartSpline,
   UsersRound,
   Building2,
@@ -97,6 +98,7 @@ const HOTEL_LAYOUT: [page: string, group: HotelGroup][] = [
   ["tables", "rooms"],
   ["forecast", "revenue"],
   ["hotel-reports", "revenue"],
+  ["owner", "revenue"],
   ["chain", "revenue"],
   ["outlets", "restaurant"],
   ["pos", "restaurant"],
@@ -268,6 +270,14 @@ async function RestaurantShell({
         href: `${base}/forecast`,
         label: t("nav.forecast"),
         icon: <ChartSpline />,
+        groupKey: "reception",
+        group: "",
+      },
+      {
+        show: hotel && can(ctx, "analytics.view"),
+        href: `${base}/owner`,
+        label: t("nav.owner"),
+        icon: <Eye />,
         groupKey: "reception",
         group: "",
       },

@@ -588,7 +588,8 @@
     "minibar": "Minibar",
     "internet": "Internet",
     "tv": "Télévision (IPTV)",
-    "engineering": "Technique"
+    "engineering": "Technique",
+    "owner": "Œil du propriétaire"
   },
   "dashboard": {
     "welcome": "Bonjour {name}",
@@ -6249,6 +6250,83 @@
       "dirtyStayoversDailyHint": "Après la clôture, les chambres occupées passent à « sale » pour le ménage du jour.",
       "inspectionRequired": "Check-in seulement en chambre contrôlée",
       "inspectionRequiredHint": "Une chambre « propre » doit être contrôlée avant le check-in."
+    }
+  },
+  "owner": {
+    "title": "Œil du propriétaire",
+    "subtitle": "Ce que les rapports ne montrent pas : chambres utilisées sans séjour enregistré, annulations, remises et écarts de caisse par employé, clients partis sans payer et journées scellées.",
+    "trust": "Indice de confiance",
+    "scoreAria": "Indice de confiance {score} sur 100",
+    "verdict": {
+      "good": "Tout est sain",
+      "watch": "Quelques points à vérifier",
+      "alert": "Alerte : signes de fuite de revenus"
+    },
+    "verdictHint": {
+      "good": "Aucun signe notable de fuite de revenus sur la période.",
+      "watch": "Passez en revue les points ci-dessous avec la réception et le ménage.",
+      "alert": "Plusieurs signaux à la fois : vérifiez chambres, caisse et écritures aujourd'hui."
+    },
+    "kpi": {
+      "ghost": "Chambres utilisées sans séjour",
+      "unpaid": "Partis sans payer",
+      "unpaidHint": "{n} client(s)",
+      "shortage": "Manques de caisse",
+      "seals": "Écritures",
+      "intact": "Intactes",
+      "broken": "{n} jour(s) modifié(s)"
+    },
+    "ghost": {
+      "title": "Chambres utilisées sans séjour",
+      "hint": "Jours où aucun client n'était enregistré dans la chambre, mais où le ménage l'a trouvée sale, ou d'où sont venus une demande, du linge ou une consommation du minibar.",
+      "noStay": "Aucun séjour enregistré ce jour-là",
+      "none": "Aucune chambre utilisée sans séjour.",
+      "kinds": {
+        "housekeeping": "Trouvée sale",
+        "request": "Demande via le QR",
+        "laundry": "Blanchisserie",
+        "minibar": "Minibar",
+        "damage": "Dommage"
+      }
+    },
+    "staff": {
+      "title": "Personnel et argent",
+      "hint": "Annulations d'écritures, remises, manques de caisse et annulations, par personne.",
+      "name": "Employé",
+      "voids": "Écritures annulées",
+      "discounts": "Remises",
+      "shortage": "Manque de caisse",
+      "cancellations": "Annulations",
+      "top": "Le plus élevé",
+      "none": "Aucune annulation, remise ni manque de caisse sur la période."
+    },
+    "unpaid": {
+      "title": "Partis sans payer",
+      "hint": "Clients sortis dont la note est restée ouverte.",
+      "none": "Tous les clients partis ont réglé."
+    },
+    "cheap": {
+      "title": "Nuits sous le tarif",
+      "hint": "Nuits facturées moins de 60 % du tarif de base du type de chambre.",
+      "none": "Aucune nuit vendue très en dessous du tarif."
+    },
+    "seals": {
+      "title": "Journées scellées",
+      "hint": "Chaque journée clôturée reçoit une empreinte ; si une écriture de ce jour change ou disparaît ensuite, elle passe au rouge.",
+      "lines": "{n} écritures",
+      "none": "Aucune journée clôturée pour l'instant.",
+      "brokenAlert": "Les écritures de ces journées ont changé après clôture : {days}",
+      "status": {
+        "sealed": "Scellée et intacte",
+        "new": "Scellée aujourd'hui",
+        "broken": "Modifiée après scellement"
+      }
+    },
+    "home": {
+      "title": "Œil du propriétaire",
+      "ghost": "{n} chambre(s) sans séjour",
+      "broken": "{n} jour(s) modifié(s)",
+      "ok": "Aucun signe de fuite"
     }
   }
 }

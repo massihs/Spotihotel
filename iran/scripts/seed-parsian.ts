@@ -553,6 +553,53 @@ async function ensureParsianPhotos(ctx: RestaurantContext) {
   if (removed) console.log(`✓ Parsian test hotel: ${removed} duplicate dish photos removed`);
 }
 
+/**
+ * Owner's eye demo: a few rooms found dirty by housekeeping on days no guest was registered in them,
+ * and a request sent from an empty room's QR (planted at most once a week, on recent days).
+ */
+async function ensureParsianOwnerSignals(ctx: RestaurantContext) {
+  const rid = ctx.restaurant.id;
+  const recent = await db.execute<{ n: number }>(sql`
+    select count(*)::int as n from audit_logs
+     where restaurant_id = ${rid} and metadata->>'demoSignal' = 'true' and created_at > now() - interval '7 days'`);
+  if (Number(recent.rows[0]?.n ?? 0) > 0) return;
+  const [staff] = await db
+    .select({ userId: restaurantMembers.userId })
+    .from(restaurantMembers)
+    .where(and(eq(restaurantMembers.restaurantId, rid), sql`${restaurantMembers.role} <> 'owner'`))
+    .limit(1);
+  if (!staff) return;
+  const today = localDay(new Date(), TZ);
+  let planted = 0;
+  for (const [back, hour] of [
+    [1, "10:40"],
+    [3, "11:15"],
+    [5, "09:50"],
+  ] as const) {
+    const day = addDays(today, -back);
+    const free = await db.execute<{ id: string; label: string }>(sql`
+      select d.id, d.label from dining_tables d
+       where d.restaurant_id = ${rid} and d.kind = 'room' and d.deleted_at is null and d.housekeeping <> 'out_of_order'
+         and not exists (select 1 from stays s where s.room_id = d.id and s.status <> 'cancelled'
+                          and s.arrival <= ${day} and s.departure >= ${day})
+       order by d.number desc nulls last limit 1 offset ${back}`);
+    const room = free.rows[0];
+    if (!room) continue;
+    await db.execute(sql`
+      insert into audit_logs (id, restaurant_id, actor_user_id, actor_type, action, entity_type, entity_id, metadata, created_at)
+      values (gen_random_uuid(), ${rid}, ${staff.userId}, 'user', 'room.housekeeping', 'dining_table', ${room.id},
+              ${JSON.stringify({ status: "dirty", room: room.label, demoSignal: true })}::jsonb,
+              (${day} || ' ' || ${hour})::timestamp at time zone ${TZ})`);
+    if (back === 3)
+      await db.execute(sql`
+        insert into service_requests (id, restaurant_id, table_id, place_label, kind, status, created_at)
+        values (gen_random_uuid(), ${rid}, ${room.id}, ${room.label}, 'towels', 'done',
+                (${day} || ' 22:05')::timestamp at time zone ${TZ})`);
+    planted++;
+  }
+  if (planted) console.log(`✓ Parsian test hotel: ${planted} owner's-eye signals`);
+}
+
 async function ensureParsianOutlets(ctx: RestaurantContext) {
   const rid = ctx.restaurant.id;
   const [{ n } = { n: 0 }] = await db
@@ -1508,6 +1555,7 @@ export async function seedParsian(ownerEmail: string, days = 30, opts: { build?:
       const added = await ensureParsianOutlets(ctx);
       await ensureParsianServices(ctx);
       await ensureParsianPhotos(ctx);
+      await ensureParsianOwnerSignals(ctx);
       for (const [name, icon] of Object.entries(MENU_ICONS))
         await db
           .update(categories)

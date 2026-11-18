@@ -59,6 +59,11 @@ export const pmsSettings = pgTable("pms_settings", {
   deskFloatCents: money().notNull().default(0),
   /** Settings of the service departments (laundry, damages, internet, TV, housekeeping, engineering). */
   services: jsonb().$type<Record<string, unknown>>().notNull().default({}),
+  /**
+   * The hotel's own features (rial shield, Ramadan, room-ready offer, tips, prayer times…), parsed by
+   * `features()` in modules/pms/features.ts.
+   */
+  extras: jsonb().$type<Record<string, unknown>>().notNull().default({}),
   nextBlockNumber: integer().notNull().default(1),
   nextStayNumber: integer().notNull().default(1001),
   nextFolioNumber: integer().notNull().default(1),
@@ -80,6 +85,12 @@ export const roomTypes = pgTable(
     maxOccupancy: integer().notNull().default(2),
     /** Best available rate per night for the base occupancy. */
     baseRateCents: money().notNull(),
+    /**
+     * Rial shield: the price set in a foreign currency or gold (code of pms_settings.currencies, amount
+     * ×100); the rial base rate follows its rate every day.
+     */
+    indexCurrency: varchar({ length: 8 }),
+    indexAmountCents: money(),
     /** Per extra adult above the base occupancy, per night. */
     extraAdultCents: money().notNull().default(0),
     amenities: jsonb().$type<string[]>().notNull().default([]),
@@ -270,6 +281,8 @@ export const stays = pgTable(
     promoCode: varchar({ length: 32 }),
     discountCents: money().notNull().default(0),
     notes: text(),
+    /** Guest told (SMS) that the room is ready, on an early arrival. */
+    readyNotifiedAt: tstz(),
     checkedInAt: tstz(),
     checkedOutAt: tstz(),
     cancelledAt: tstz(),
@@ -534,10 +547,16 @@ export const roomBlocks = pgTable(
     /** Group rate per room and night (null = the rate plan's price). */
     rateCents: money(),
     notes: text(),
+    /** A pilgrim caravan (its leader follows it on /caravan/{token}). */
+    caravan: boolean().notNull().default(false),
+    leaderToken: varchar({ length: 32 }),
+    /** The caravan's programme: one line per item ("06:30 Shuttle to the shrine"). */
+    schedule: text(),
     createdByUserId: uuid().references(() => users.id, { onDelete: "set null" }),
     ...timestamps,
   },
   (t) => [
+    uniqueIndex("room_blocks_leader_token_uq").on(t.leaderToken),
     uniqueIndex("room_blocks_number_uq").on(t.restaurantId, t.number),
     index("room_blocks_dates_idx").on(t.restaurantId, t.arrival, t.departure),
     check("room_blocks_dates_chk", sql`${t.departure} > ${t.arrival} and ${t.releaseDate} <= ${t.arrival}`),
@@ -747,4 +766,46 @@ export const deskShifts = pgTable(
       .on(t.restaurantId, t.userId)
       .where(sql`${t.closedAt} IS NULL`),
   ],
+);
+
+/**
+ * Owner's eye: a fingerprint of each closed business day's postings and audit trail. If a posting
+ * of a sealed day is changed or deleted later, the fingerprint no longer matches.
+ */
+export const integritySeals = pgTable(
+  "integrity_seals",
+  {
+    id: pk(),
+    restaurantId: uuid()
+      .notNull()
+      .references(() => restaurants.id, { onDelete: "cascade" }),
+    day: date({ mode: "string" }).notNull(),
+    hash: varchar({ length: 64 }).notNull(),
+    lines: integer().notNull(),
+    totalCents: money().notNull(),
+    ...timestamps,
+  },
+  (t) => [uniqueIndex("integrity_seals_day_uq").on(t.restaurantId, t.day)],
+);
+
+/** A tip left by a guest to a named member of staff, charged to the bill and paid out later. */
+export const staffTips = pgTable(
+  "staff_tips",
+  {
+    id: pk(),
+    restaurantId: uuid()
+      .notNull()
+      .references(() => restaurants.id, { onDelete: "cascade" }),
+    staffUserId: uuid()
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    stayId: uuid().references(() => stays.id, { onDelete: "set null" }),
+    folioLineId: uuid().references(() => folioLines.id, { onDelete: "set null" }),
+    amountCents: money().notNull(),
+    message: varchar({ length: 200 }),
+    paidOutAt: tstz(),
+    paidOutByUserId: uuid().references(() => users.id, { onDelete: "set null" }),
+    ...timestamps,
+  },
+  (t) => [index("staff_tips_restaurant_idx").on(t.restaurantId, t.createdAt)],
 );

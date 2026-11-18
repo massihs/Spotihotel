@@ -30,6 +30,7 @@ const SHADE_OF: Record<string, string> = {
   tables: "shade-cyan",
   forecast: "shade-periwinkle",
   "hotel-reports": "shade-periwinkle",
+  owner: "shade-periwinkle",
   chain: "shade-periwinkle",
   reports: "shade-periwinkle",
   ledger: "shade-indigo",

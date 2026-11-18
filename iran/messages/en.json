@@ -588,7 +588,8 @@
     "minibar": "Minibar",
     "internet": "Internet",
     "tv": "In-room TV",
-    "engineering": "Engineering"
+    "engineering": "Engineering",
+    "owner": "Owner's eye"
   },
   "dashboard": {
     "welcome": "Hello {name}",
@@ -6249,6 +6250,83 @@
       "dirtyStayoversDailyHint": "After the night audit, occupied rooms go dirty for the daily cleaning.",
       "inspectionRequired": "Check-in only into inspected rooms",
       "inspectionRequiredHint": "A clean room must be inspected before check-in."
+    }
+  },
+  "owner": {
+    "title": "Owner's eye",
+    "subtitle": "What the reports don't show: rooms used without a registered stay, voids, discounts and cash shortages per employee, guests gone without paying, and sealed days.",
+    "trust": "Trust score",
+    "scoreAria": "Trust score {score} out of 100",
+    "verdict": {
+      "good": "All clear",
+      "watch": "A few things to check",
+      "alert": "Alert: signs of revenue leakage"
+    },
+    "verdictHint": {
+      "good": "No notable sign of revenue leakage in this period.",
+      "watch": "Go through the items below with the front desk and housekeeping.",
+      "alert": "Several signals at once: check rooms, cash and records today."
+    },
+    "kpi": {
+      "ghost": "Rooms used without a stay",
+      "unpaid": "Left without paying",
+      "unpaidHint": "{n} guest(s)",
+      "shortage": "Cash shortages",
+      "seals": "Records",
+      "intact": "Intact",
+      "broken": "{n} day(s) changed"
+    },
+    "ghost": {
+      "title": "Rooms used without a stay",
+      "hint": "Days no guest was registered in the room, yet housekeeping found it dirty, or a request, laundry or minibar use came from it.",
+      "noStay": "No stay registered that day",
+      "none": "No room was used without a stay.",
+      "kinds": {
+        "housekeeping": "Found dirty",
+        "request": "Request from the room QR",
+        "laundry": "Laundry",
+        "minibar": "Minibar",
+        "damage": "Damage"
+      }
+    },
+    "staff": {
+      "title": "Staff and money",
+      "hint": "Voided postings, discounts, cash shortages and cancellations, per person.",
+      "name": "Employee",
+      "voids": "Voids",
+      "discounts": "Discounts",
+      "shortage": "Cash shortage",
+      "cancellations": "Cancellations",
+      "top": "Highest",
+      "none": "No voids, discounts or shortages in this period."
+    },
+    "unpaid": {
+      "title": "Left without paying",
+      "hint": "Guests checked out with their bill still open.",
+      "none": "Every departed guest has settled."
+    },
+    "cheap": {
+      "title": "Nights below the rate",
+      "hint": "Nights charged under 60% of the room type's base rate.",
+      "none": "No night sold far below the rate."
+    },
+    "seals": {
+      "title": "Sealed days",
+      "hint": "Each closed day gets a fingerprint; if a posting of that day changes or disappears later, it turns red.",
+      "lines": "{n} postings",
+      "none": "No day closed yet.",
+      "brokenAlert": "Records of these days changed after closing: {days}",
+      "status": {
+        "sealed": "Sealed and intact",
+        "new": "Sealed today",
+        "broken": "Changed after sealing"
+      }
+    },
+    "home": {
+      "title": "Owner's eye",
+      "ghost": "{n} room(s) without a stay",
+      "broken": "{n} day(s) changed",
+      "ok": "No sign of leakage"
     }
   }
 }
