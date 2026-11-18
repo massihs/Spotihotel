@@ -1,3 +1,4 @@
+import { applyRialShield } from "./shield";
 import { dirtyStayoversAfterAudit } from "@/server/modules/hotel/hk-extra";
 import { and, asc, desc, eq, inArray, isNull, lte, ne, sql } from "drizzle-orm";
 import type { Database, DbOrTx } from "@/server/db/client";
@@ -221,6 +222,8 @@ export async function runNightAudit(db: Database, ctx: RestaurantContext) {
   await syncLedger(db, ctx.restaurant);
   // Daily cleaning: the rooms slept in go back to dirty for the new day.
   await dirtyStayoversAfterAudit(db, ctx).catch((e) => console.error("stayovers to dirty", e));
+  // Rial shield: the rates set in a foreign currency follow it into the new day.
+  await applyRialShield(db, ctx).catch((e) => console.error("rial shield", e));
   return { ...result, ...keyFigures(result.roomsAvailable, result.roomsSold, result.roomRevenueCents) };
 }
 

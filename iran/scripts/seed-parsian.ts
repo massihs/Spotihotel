@@ -600,6 +600,41 @@ async function ensureParsianOwnerSignals(ctx: RestaurantContext) {
   if (planted) console.log(`✓ Parsian test hotel: ${planted} owner's-eye signals`);
 }
 
+/**
+ * Rial shield demo: dollar, euro and gold coin rates, the standard rooms priced in dollars and the
+ * royal suite in gold coins (set once; the hotel's own changes are kept).
+ */
+async function ensureParsianShield(ctx: RestaurantContext) {
+  const rid = ctx.restaurant.id;
+  const [settings] = await db.select().from(pmsSettings).where(eq(pmsSettings.restaurantId, rid));
+  if (!settings) return;
+  const have = new Set(settings.currencies.map((c) => c.code));
+  const add = [
+    { code: "USD", rateCents: 105_000_000 },
+    { code: "EUR", rateCents: 121_000_000 },
+    { code: "XAU", rateCents: 81_000_000_000 },
+  ].filter((c) => !have.has(c.code));
+  if (add.length)
+    await db
+      .update(pmsSettings)
+      .set({ currencies: [...settings.currencies, ...add] })
+      .where(eq(pmsSettings.restaurantId, rid));
+  const [indexed] = await db
+    .select({ n: count() })
+    .from(roomTypes)
+    .where(and(eq(roomTypes.restaurantId, rid), sql`${roomTypes.indexCurrency} is not null`));
+  if (Number(indexed?.n ?? 0) > 0) return;
+  for (const [code, currency, amount] of [
+    ["STD", "USD", 4_800],
+    ["PRS", "XAU", 30],
+  ] as const)
+    await db
+      .update(roomTypes)
+      .set({ indexCurrency: currency, indexAmountCents: amount })
+      .where(and(eq(roomTypes.restaurantId, rid), eq(roomTypes.code, code)));
+  console.log("✓ Parsian test hotel: rial shield set up");
+}
+
 async function ensureParsianOutlets(ctx: RestaurantContext) {
   const rid = ctx.restaurant.id;
   const [{ n } = { n: 0 }] = await db
@@ -1556,6 +1591,7 @@ export async function seedParsian(ownerEmail: string, days = 30, opts: { build?:
       await ensureParsianServices(ctx);
       await ensureParsianPhotos(ctx);
       await ensureParsianOwnerSignals(ctx);
+      await ensureParsianShield(ctx);
       for (const [name, icon] of Object.entries(MENU_ICONS))
         await db
           .update(categories)

@@ -589,7 +589,8 @@
     "internet": "Internet",
     "tv": "In-room TV",
     "engineering": "Engineering",
-    "owner": "Owner's eye"
+    "owner": "Owner's eye",
+    "shield": "Rial shield"
   },
   "dashboard": {
     "welcome": "Hello {name}",
@@ -6328,5 +6329,43 @@
       "broken": "{n} day(s) changed",
       "ok": "No sign of leakage"
     }
+  },
+  "shield": {
+    "title": "Rial shield",
+    "subtitle": "Price rooms in dollars, euros or gold coins: every day the rial price follows the rate you enter (capped daily change, rounded).",
+    "ratesTitle": "Currency and gold rates",
+    "ratesHint": "Value of one unit of each currency in the hotel's money. The cashier uses the same rates for foreign cash.",
+    "code": "Code",
+    "rateOf": "Value of 1 {code}",
+    "remove": "Remove",
+    "addCurrency": "Add a currency",
+    "codes": {
+      "USD": "US dollar",
+      "EUR": "Euro",
+      "AED": "UAE dirham",
+      "TRY": "Turkish lira",
+      "XAU": "Emami gold coin"
+    },
+    "typesTitle": "Indexed rates",
+    "typesHint": "Set each room type's price in a currency; its rial base rate moves toward it every day.",
+    "type": "Room type",
+    "indexedIn": "Indexed on",
+    "rialOnly": "Rials only",
+    "amountIn": "Price in {code}",
+    "today": "Today's rate",
+    "target": "Real value",
+    "inLine": "In line",
+    "maxPct": "Max daily change (%)",
+    "maxPctHint": "Avoids sudden price jumps; 0 = align at once.",
+    "round": "Round prices to",
+    "roundHint": "Prices are rounded to this amount.",
+    "save": "Save and apply",
+    "applyNow": "Align now",
+    "applied": "{n} rate(s) updated.",
+    "underTitle": "Underpriced bookings",
+    "underHint": "Future nights sold before the rial fell, now more than 15% below their real value.",
+    "underTotal": "{n} booking(s), {amount} below today's value in total.",
+    "underNone": "No future booking sold below its value.",
+    "nights": "{n} night(s)"
   }
 }

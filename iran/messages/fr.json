@@ -589,7 +589,8 @@
     "internet": "Internet",
     "tv": "Télévision (IPTV)",
     "engineering": "Technique",
-    "owner": "Œil du propriétaire"
+    "owner": "Œil du propriétaire",
+    "shield": "Bouclier rial"
   },
   "dashboard": {
     "welcome": "Bonjour {name}",
@@ -6328,5 +6329,43 @@
       "broken": "{n} jour(s) modifié(s)",
       "ok": "Aucun signe de fuite"
     }
+  },
+  "shield": {
+    "title": "Bouclier rial",
+    "subtitle": "Fixez les tarifs en dollars, euros ou pièces d'or : chaque jour, le prix en rials suit le cours que vous saisissez (variation quotidienne plafonnée, arrondi).",
+    "ratesTitle": "Cours des devises et de l'or",
+    "ratesHint": "Valeur d'une unité de chaque devise dans la monnaie de l'hôtel. La caisse utilise les mêmes cours pour les paiements en devises.",
+    "code": "Code",
+    "rateOf": "Valeur de 1 {code}",
+    "remove": "Retirer",
+    "addCurrency": "Ajouter une devise",
+    "codes": {
+      "USD": "Dollar US",
+      "EUR": "Euro",
+      "AED": "Dirham",
+      "TRY": "Livre turque",
+      "XAU": "Pièce d'or Emami"
+    },
+    "typesTitle": "Tarifs indexés",
+    "typesHint": "Pour chaque type de chambre, fixez le prix en devise ; le tarif de base en rials s'en rapproche chaque jour.",
+    "type": "Type de chambre",
+    "indexedIn": "Indexé sur",
+    "rialOnly": "Rials seulement",
+    "amountIn": "Prix en {code}",
+    "today": "Tarif du jour",
+    "target": "Valeur réelle",
+    "inLine": "À jour",
+    "maxPct": "Variation quotidienne max. (%)",
+    "maxPctHint": "Évite les sauts brusques de prix ; 0 = alignement immédiat.",
+    "round": "Arrondir les prix à",
+    "roundHint": "Les prix sont arrondis à ce montant.",
+    "save": "Enregistrer et appliquer",
+    "applyNow": "Aligner maintenant",
+    "applied": "{n} tarif(s) mis à jour.",
+    "underTitle": "Réservations sous-évaluées",
+    "underHint": "Nuits à venir vendues avant une baisse du rial, aujourd'hui à plus de 15 % sous leur valeur réelle.",
+    "underTotal": "{n} réservation(s), {amount} sous la valeur du jour au total.",
+    "underNone": "Aucune réservation à venir vendue sous sa valeur.",
+    "nights": "{n} nuit(s)"
   }
 }

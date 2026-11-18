@@ -31,6 +31,7 @@ const SHADE_OF: Record<string, string> = {
   forecast: "shade-periwinkle",
   "hotel-reports": "shade-periwinkle",
   owner: "shade-periwinkle",
+  shield: "shade-indigo",
   chain: "shade-periwinkle",
   reports: "shade-periwinkle",
   ledger: "shade-indigo",
