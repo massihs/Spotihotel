@@ -25,6 +25,7 @@ import { normalizeDigits } from "@/lib/money";
 import { isIranNationalCode } from "@/lib/iran-id";
 import { hotelBookAction, hotelOffersAction } from "@/app/[locale]/h/actions";
 import { FormError, Label, inputCls, useDay } from "./kit";
+import { Empty } from "@/components/ui/empty";
 
 type Offer = {
   ratePlanId: string | null;
@@ -254,7 +255,7 @@ export function OnlineBooking({
             <FormError error={tErr.has(searchError) ? tErr(searchError) : tErr("internal")} />
           ) : null}
           {results && !results.types.some((x) => x.offers.length) && !searching ? (
-            <p className="rounded-2xl bg-surface-2 p-6 text-center text-sm text-fg-muted">{t("noRooms")}</p>
+            <Empty icon={<BedDouble aria-hidden="true" />}>{t("noRooms")}</Empty>
           ) : null}
           <div className={cn("space-y-3 transition-opacity", searching && "opacity-60")}>
             {results?.types.map((rt) => (

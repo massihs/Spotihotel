@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, ClipboardCheck, Pencil, Plus, Trash2, Truck, X } from "lucide-react";
+import { AlertTriangle, ClipboardCheck, Package, Pencil, Plus, Trash2, Truck, X } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
 import { useMoney } from "@/components/ui/use-money";
@@ -17,6 +17,7 @@ import {
   setRecipeAction,
   updateStockItemAction,
 } from "@/app/[locale]/dashboard/[restaurantId]/inventory/actions";
+import { Empty } from "@/components/ui/empty";
 
 const UNITS = ["g", "kg", "ml", "l", "piece", "pack"] as const;
 type Unit = (typeof UNITS)[number];
@@ -74,9 +75,9 @@ export function StockTable({
         ) : null}
       </div>
       {items.length === 0 ? (
-        <p className="rounded-2xl border border-dashed border-border-strong px-6 py-12 text-center text-fg-muted">
+        <Empty size="lg" icon={<Package aria-hidden="true" />}>
           {t("noItems")}
-        </p>
+        </Empty>
       ) : (
         <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface">
           {items.map((i) => {

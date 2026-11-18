@@ -76,7 +76,7 @@ async function Chain({ params, searchParams }: Props) {
         </div>
         <div className="overflow-x-auto rounded-2xl border border-border bg-surface">
           <table className="w-full min-w-[900px] text-sm [&_tbody_tr]:border-t [&_tbody_tr]:border-border">
-            <thead className="bg-surface-2">
+            <thead className="shade-head">
               <tr>
                 <th className={th}>{t("hotel")}</th>
                 <th className={thEnd}>{t("businessDay")}</th>
@@ -159,7 +159,7 @@ async function Chain({ params, searchParams }: Props) {
         </form>
         <div className="overflow-x-auto rounded-2xl border border-border bg-surface">
           <table className="w-full min-w-[1000px] text-xs">
-            <thead className="bg-surface-2">
+            <thead className="shade-head">
               <tr>
                 <th className={th}>{t("hotel")}</th>
                 {nights.map((d) => (
@@ -305,7 +305,7 @@ async function Chain({ params, searchParams }: Props) {
         </div>
         <div className="overflow-x-auto rounded-2xl border border-border bg-surface">
           <table className="w-full min-w-[800px] text-sm [&_tbody_tr]:border-t [&_tbody_tr]:border-border">
-            <thead className="bg-surface-2">
+            <thead className="shade-head">
               <tr>
                 <th className={th}>{t("account")}</th>
                 {f.hotels.map((h) => (

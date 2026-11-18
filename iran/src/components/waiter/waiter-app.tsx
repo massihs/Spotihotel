@@ -4,6 +4,8 @@ import {
   ArrowRight,
   BellRing,
   ChefHat,
+  ConciergeBell,
+  LayoutGrid,
   Loader2,
   Minus,
   Plus,
@@ -23,6 +25,7 @@ import { useMoney } from "@/components/ui/use-money";
 import { cn } from "@/lib/cn";
 import type { PublicMenu, PublicProduct } from "@/server/modules/menu/public";
 import type { TableRound } from "@/server/modules/waiter/service";
+import { Empty } from "@/components/ui/empty";
 
 export type WaiterTable = {
   id: string;
@@ -260,16 +263,14 @@ export function WaiterApp({
               aria-pressed={filter === f}
               className={cn(
                 "h-10 shrink-0 rounded-full px-4 text-sm font-bold whitespace-nowrap",
-                filter === f ? "bg-fg text-bg" : "bg-surface text-fg-muted ring-1 ring-border",
+                filter === f ? "shade-fill" : "bg-surface text-fg-muted ring-1 ring-border",
               )}
             >
               {t(`filter${f[0]!.toUpperCase()}${f.slice(1)}` as "filterAll")}
             </button>
           ))}
         </div>
-        {tables.length === 0 ? (
-          <p className="rounded-2xl bg-surface-2 p-6 text-center text-fg-muted">{t("noTables")}</p>
-        ) : null}
+        {tables.length === 0 ? <Empty icon={<LayoutGrid aria-hidden="true" />}>{t("noTables")}</Empty> : null}
         {zones.map((z) => (
           <section key={z || "-"}>
             {z ? <h2 className="mb-2 text-sm font-bold text-fg-muted">{z}</h2> : null}
@@ -372,7 +373,7 @@ export function WaiterApp({
               aria-pressed={tab === k}
               className={cn(
                 "h-10 flex-1 rounded-xl text-sm font-bold",
-                tab === k ? "bg-fg text-bg" : "bg-surface text-fg-muted ring-1 ring-border",
+                tab === k ? "shade-fill" : "bg-surface text-fg-muted ring-1 ring-border",
               )}
             >
               {k === "menu" ? t("menuTab") : `${t("roundsTab")} (${tableRounds.length})`}
@@ -653,8 +654,7 @@ function Rounds({
   t: ReturnType<typeof useTranslations<"waiter">>;
 }) {
   const tStatus = useTranslations("orderStatus");
-  if (!rounds.length)
-    return <p className="rounded-2xl bg-surface-2 p-6 text-center text-fg-muted">{t("noRounds")}</p>;
+  if (!rounds.length) return <Empty icon={<ConciergeBell aria-hidden="true" />}>{t("noRounds")}</Empty>;
   return (
     <ol className="space-y-3">
       {[...rounds].reverse().map((r) => (

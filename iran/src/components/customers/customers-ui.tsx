@@ -21,6 +21,7 @@ import {
   setCreditLimitAction,
 } from "@/app/[locale]/dashboard/[restaurantId]/customers/actions";
 import { DateInput } from "@/components/ui/date-input";
+import { Empty } from "@/components/ui/empty";
 
 const pill = "inline-flex h-10 items-center gap-2 rounded-full px-4 text-sm font-semibold";
 const primary = cn(pill, "bg-accent text-accent-fg disabled:opacity-50");
@@ -256,9 +257,9 @@ export function CouponList({
       ) : null}
       {error ? <p className="mb-3 text-sm text-danger">{error}</p> : null}
       {coupons.length === 0 ? (
-        <p className="rounded-2xl border border-dashed border-border-strong px-6 py-12 text-center text-fg-muted">
+        <Empty size="lg" icon={<Ticket aria-hidden="true" />}>
           {t("noCoupons")}
-        </p>
+        </Empty>
       ) : (
         <ul className="grid gap-3 sm:grid-cols-2">
           {coupons.map((c) => {

@@ -1,5 +1,6 @@
 "use client";
 
+import { Flower2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
@@ -7,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useMoney } from "@/components/ui/use-money";
 import { useRun } from "@/components/ui/sheet-kit";
 import { cn } from "@/lib/cn";
+import { spaImage } from "@/lib/guest-images";
 import {
   bookServiceAction,
   cancelServiceBookingAction,
@@ -80,60 +82,80 @@ export function WellnessBoard({
           active.map((s) => {
             const list = bookings.filter((b) => b.serviceId === s.id);
             return (
-              <section key={s.id} className="rounded-2xl border border-border bg-surface p-4">
-                <h2 className="mb-2 flex flex-wrap items-baseline gap-2 font-semibold">
-                  {s.name}
-                  <span className="text-xs font-normal text-fg-muted">
-                    {tKind(s.kind)} | {t("duration", { n: s.durationMin })} ·{" "}
-                    {t("capacity", { n: s.capacity })} | {money(s.priceCents)}
-                  </span>
-                </h2>
-                {list.length ? (
-                  <ul className="divide-y divide-border">
-                    {list.map((b) => (
-                      <li
-                        key={b.id}
-                        className={cn(
-                          "flex flex-wrap items-center gap-3 py-2.5 text-sm",
-                          b.status === "cancelled" && "opacity-50",
-                        )}
-                      >
-                        <span className="w-14 font-bold tabular-nums">{time(b.startsAt)}</span>
-                        <span className="min-w-0 flex-1">
-                          <span className="font-semibold">{b.guestName}</span>
-                          {b.roomLabel ? (
-                            <span className="text-fg-muted"> | {t("room", { room: b.roomLabel })}</span>
-                          ) : null}
-                          <span className="text-fg-muted"> | {b.people} 👤</span>
-                          {b.staffName ? <span className="text-fg-muted"> | {b.staffName}</span> : null}
-                        </span>
-                        <StatusPill status={b.status} />
-                        {canManage && b.status === "booked" ? (
-                          <span className="flex gap-1">
-                            <RunButton run={() => serviceBookingStatusAction(restaurantId, b.id, "done")}>
-                              {t("done")}
-                            </RunButton>
-                            <RunButton
-                              variant="ghost"
-                              run={() => serviceBookingStatusAction(restaurantId, b.id, "no_show")}
-                            >
-                              {t("noShow")}
-                            </RunButton>
-                            <RunButton
-                              variant="ghost"
-                              confirm={t("cancelConfirm")}
-                              run={() => cancelServiceBookingAction(restaurantId, b.id)}
-                            >
-                              {t("cancel")}
-                            </RunButton>
-                          </span>
-                        ) : null}
-                      </li>
-                    ))}
-                  </ul>
+              <section
+                key={s.id}
+                className="flex gap-4 rounded-2xl border border-border bg-surface p-3.5 shadow-[var(--shadow-card)]"
+              >
+                {spaImage(s.kind) ? (
+                  <img
+                    src={spaImage(s.kind)!}
+                    alt=""
+                    loading="lazy"
+                    className="hidden size-24 shrink-0 rounded-xl object-cover ring-1 ring-border sm:block"
+                  />
                 ) : (
-                  <p className="text-sm text-fg-muted">{t("none")}</p>
+                  <span className="shade-soft hidden size-24 shrink-0 place-items-center rounded-xl sm:grid">
+                    <Flower2 className="size-7" aria-hidden="true" />
+                  </span>
                 )}
+                <div className="min-w-0 flex-1">
+                  <h2 className="mb-2 flex flex-wrap items-baseline gap-x-2 gap-y-1 font-semibold">
+                    {s.name}
+                    <span className="shade-soft rounded-full px-2 py-0.5 text-[11px] font-semibold">
+                      {tKind(s.kind)}
+                    </span>
+                    <span className="text-xs font-normal text-fg-muted">
+                      {t("duration", { n: s.durationMin })} · {t("capacity", { n: s.capacity })} |{" "}
+                      {money(s.priceCents)}
+                    </span>
+                  </h2>
+                  {list.length ? (
+                    <ul className="divide-y divide-border">
+                      {list.map((b) => (
+                        <li
+                          key={b.id}
+                          className={cn(
+                            "flex flex-wrap items-center gap-3 py-2.5 text-sm",
+                            b.status === "cancelled" && "opacity-50",
+                          )}
+                        >
+                          <span className="w-14 font-bold tabular-nums">{time(b.startsAt)}</span>
+                          <span className="min-w-0 flex-1">
+                            <span className="font-semibold">{b.guestName}</span>
+                            {b.roomLabel ? (
+                              <span className="text-fg-muted"> | {t("room", { room: b.roomLabel })}</span>
+                            ) : null}
+                            <span className="text-fg-muted"> | {b.people} 👤</span>
+                            {b.staffName ? <span className="text-fg-muted"> | {b.staffName}</span> : null}
+                          </span>
+                          <StatusPill status={b.status} />
+                          {canManage && b.status === "booked" ? (
+                            <span className="flex gap-1">
+                              <RunButton run={() => serviceBookingStatusAction(restaurantId, b.id, "done")}>
+                                {t("done")}
+                              </RunButton>
+                              <RunButton
+                                variant="ghost"
+                                run={() => serviceBookingStatusAction(restaurantId, b.id, "no_show")}
+                              >
+                                {t("noShow")}
+                              </RunButton>
+                              <RunButton
+                                variant="ghost"
+                                confirm={t("cancelConfirm")}
+                                run={() => cancelServiceBookingAction(restaurantId, b.id)}
+                              >
+                                {t("cancel")}
+                              </RunButton>
+                            </span>
+                          ) : null}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-fg-muted">{t("none")}</p>
+                  )}
+                </div>
               </section>
             );
           })

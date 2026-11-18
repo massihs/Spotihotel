@@ -326,7 +326,7 @@ async function HotelReports({ params, searchParams }: Props) {
               </p>
               <Card className="overflow-x-auto">
                 <table className="w-full min-w-[32rem] text-sm">
-                  <thead className="border-b border-border bg-surface-2 text-xs text-fg-muted">
+                  <thead className="shade-head border-b border-border text-xs text-fg-muted">
                     <tr>
                       <th className="px-4 py-2.5 text-start font-medium" />
                       {cols.map((c) => (
@@ -393,7 +393,7 @@ async function HotelReports({ params, searchParams }: Props) {
           return (
             <Card className="overflow-x-auto">
               <table className="w-full min-w-[44rem] text-sm">
-                <thead className="border-b border-border bg-surface-2 text-xs text-fg-muted">
+                <thead className="shade-head border-b border-border text-xs text-fg-muted">
                   <tr>
                     {(
                       [

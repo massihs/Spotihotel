@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { buttonClasses } from "@/components/ui/button";
 import { DateInput } from "@/components/ui/date-input";
 import { DEFAULT_LOCALE } from "@/i18n/config";
-import { FileDown } from "lucide-react";
+import { FileDown, Printer, ReceiptText } from "lucide-react";
 import { requireRestaurant } from "@/server/auth/current";
 import { db } from "@/server/db/client";
 import { listInvoices } from "@/server/modules/invoices/service";
@@ -63,7 +63,7 @@ async function Invoices({ params }: { params: Params }) {
       ) : (
         <Card className="overflow-x-auto">
           <table className="w-full min-w-[36rem] text-sm">
-            <thead className="border-b border-border text-xs text-fg-muted">
+            <thead className="shade-head border-b border-border text-xs text-fg-muted">
               <tr>
                 <th scope="col" className="px-4 py-3 text-start font-medium">
                   {t("invoice.number")}
@@ -85,8 +85,13 @@ async function Invoices({ params }: { params: Params }) {
             <tbody className="divide-y divide-border">
               {list.map((i) => (
                 <tr key={i.id}>
-                  <td className="px-4 py-3 font-medium" dir="ltr">
-                    <span className="block text-start">{i.number}</span>
+                  <td className="px-4 py-3" dir="ltr">
+                    <span className="flex items-center gap-2.5">
+                      <span className="shade-soft grid size-8 shrink-0 place-items-center rounded-lg">
+                        <ReceiptText className="size-4" aria-hidden="true" />
+                      </span>
+                      <span className="font-semibold tabular-nums">{i.number}</span>
+                    </span>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap" dir="ltr">
                     <span className="block text-start">
@@ -101,25 +106,28 @@ async function Invoices({ params }: { params: Params }) {
                       </span>
                     ) : null}
                   </td>
-                  <td className="px-4 py-3 text-end tabular-nums">
+                  <td className="px-4 py-3 text-end font-bold tabular-nums">
                     {formatMoney(i.totalCents, i.currency, locale)}
                   </td>
                   <td className="px-4 py-3 text-end whitespace-nowrap">
-                    <a
-                      href={`/invoice/${i.publicToken}`}
-                      target="_blank"
-                      rel="noopener"
-                      className="text-accent-text hover:underline"
-                    >
-                      {t("invoice.print")}
-                    </a>
-                    {" | "}
-                    <a
-                      href={`/api/v1/invoices/${i.publicToken}/pdf`}
-                      className="text-accent-text hover:underline"
-                    >
-                      PDF
-                    </a>
+                    <span className="inline-flex gap-1.5">
+                      <a
+                        href={`/invoice/${i.publicToken}`}
+                        target="_blank"
+                        rel="noopener"
+                        className={buttonClasses("secondary", "sm", "rounded-full")}
+                      >
+                        <Printer className="size-3.5" aria-hidden="true" />
+                        {t("invoice.print")}
+                      </a>
+                      <a
+                        href={`/api/v1/invoices/${i.publicToken}/pdf`}
+                        className={buttonClasses("secondary", "sm", "rounded-full")}
+                      >
+                        <FileDown className="size-3.5" aria-hidden="true" />
+                        PDF
+                      </a>
+                    </span>
                   </td>
                 </tr>
               ))}

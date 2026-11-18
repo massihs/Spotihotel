@@ -14,6 +14,7 @@ import {
   savePrinterAction,
   setCashierAcceptanceAction,
 } from "./actions";
+import { Empty } from "@/components/ui/empty";
 
 export type PrinterView = {
   id: string;
@@ -293,9 +294,9 @@ export function PrintersPanel({
           />
         ) : null}
         {data.printers.length === 0 && editing === null ? (
-          <p className="rounded-2xl border-2 border-dashed border-border px-4 py-6 text-center text-sm text-fg-muted">
+          <Empty size="sm" icon={<Printer aria-hidden="true" />}>
             {t("empty")}
-          </p>
+          </Empty>
         ) : null}
         <ul className="space-y-2">
           {data.printers.map((p) =>

@@ -15,6 +15,7 @@ import {
   SprayCan,
   Users,
 } from "lucide-react";
+import { Empty } from "@/components/ui/empty";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import {
@@ -110,18 +111,22 @@ export function RoomsBoard({
 
   if (!rooms.length)
     return (
-      <div className="rounded-3xl border border-dashed border-border-strong px-6 py-14 text-center">
-        <BedDouble className="mx-auto size-10 text-fg-subtle" aria-hidden="true" />
-        <p className="mt-3 font-bold">{t("emptyTitle")}</p>
-        <p className="mt-1 text-sm text-fg-muted">{t("emptyBody")}</p>
-        <Link
-          href={`/dashboard/${restaurantId}/tables`}
-          className="mt-4 inline-flex h-10 items-center gap-2 rounded-full bg-accent px-5 text-sm font-bold text-accent-fg"
-        >
-          <QrCode className="size-4" aria-hidden="true" />
-          {t("addRooms")}
-        </Link>
-      </div>
+      <Empty
+        size="lg"
+        icon={<BedDouble aria-hidden="true" />}
+        title={t("emptyTitle")}
+        action={
+          <Link
+            href={`/dashboard/${restaurantId}/tables`}
+            className="inline-flex h-10 items-center gap-2 rounded-full bg-accent px-5 text-sm font-bold text-accent-fg"
+          >
+            <QrCode className="size-4" aria-hidden="true" />
+            {t("addRooms")}
+          </Link>
+        }
+      >
+        {t("emptyBody")}
+      </Empty>
     );
 
   return (

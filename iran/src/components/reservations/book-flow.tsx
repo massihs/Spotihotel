@@ -215,7 +215,7 @@ export function BookFlow({
                     aria-pressed={party === n}
                     className={cn(
                       "grid size-11 place-items-center rounded-full text-base font-bold tabular-nums transition-colors",
-                      party === n ? "bg-fg text-bg" : "bg-surface-2 text-fg hover:bg-surface-3",
+                      party === n ? "shade-fill" : "bg-surface-2 text-fg hover:bg-surface-3",
                     )}
                   >
                     {n}
@@ -225,7 +225,7 @@ export function BookFlow({
                   <label
                     className={cn(
                       "relative flex h-11 items-center rounded-full px-4 text-sm font-bold",
-                      party > 8 ? "bg-fg text-bg" : "bg-surface-2 hover:bg-surface-3",
+                      party > 8 ? "shade-fill" : "bg-surface-2 hover:bg-surface-3",
                     )}
                   >
                     {party > 8 ? party : `${t("morePeople")} +`}

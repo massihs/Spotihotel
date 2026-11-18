@@ -123,7 +123,7 @@ async function NutritionDatabase({ params, searchParams }: Props) {
         </form>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[720px] text-sm">
-            <thead className="bg-surface-2/60 text-xs text-fg-muted">
+            <thead className="shade-head/60 text-xs text-fg-muted">
               <tr>
                 <th className="px-4 py-2 text-start font-semibold">{t("food")}</th>
                 <th className="px-2 py-2 text-end font-semibold">{tn("short.kcal")}</th>

@@ -11,6 +11,7 @@ import {
   setReservationStatusAction,
   updateReservationSettingsAction,
 } from "@/app/[locale]/dashboard/[restaurantId]/reservations/actions";
+import { Empty } from "@/components/ui/empty";
 
 export type ReservationRow = {
   id: string;
@@ -67,9 +68,9 @@ export function BookingList({
     new Intl.DateTimeFormat(locale, { timeZone, hour: "2-digit", minute: "2-digit" }).format(new Date(iso));
   if (!rows.length)
     return (
-      <p className="rounded-2xl border border-dashed border-border-strong px-6 py-12 text-center text-fg-muted">
+      <Empty size="lg" icon={<CalendarPlus aria-hidden="true" />}>
         {t("noBookings")}
-      </p>
+      </Empty>
     );
   const hourOf = (iso: string) =>
     Number(
@@ -241,8 +242,10 @@ export function QueueBoard({ rid, rows }: { rid: string; rows: ReservationRow[] 
             </li>
           ))}
           {!waiting.length ? (
-            <li className="rounded-2xl border border-dashed border-border-strong px-6 py-12 text-center text-fg-muted">
-              {t("queueEmpty")}
+            <li>
+              <Empty size="lg" icon={<Users aria-hidden="true" />}>
+                {t("queueEmpty")}
+              </Empty>
             </li>
           ) : null}
         </ul>

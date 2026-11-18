@@ -15,6 +15,7 @@ import {
 } from "@/app/[locale]/dashboard/[restaurantId]/housekeeping/actions";
 import { FormError, Label, SheetButton, inputCls, useDay } from "@/components/pms/kit";
 import { DateInput } from "@/components/ui/date-input";
+import { Empty } from "@/components/ui/empty";
 
 export type HkRoom = {
   id: string;
@@ -264,8 +265,7 @@ export function MyRooms({ restaurantId, rooms }: { restaurantId: string; rooms: 
   const { t, tHk } = useLabels();
   const run = useRun();
   const left = rooms.filter((r) => !["clean", "inspected"].includes(r.housekeeping)).length;
-  if (!rooms.length)
-    return <p className="rounded-2xl bg-surface-2 p-8 text-center text-sm text-fg-muted">{t("mineEmpty")}</p>;
+  if (!rooms.length) return <Empty icon={<Sparkles aria-hidden="true" />}>{t("mineEmpty")}</Empty>;
   return (
     <div className="mx-auto max-w-xl space-y-3">
       <p className="text-sm text-fg-muted">{t("mineLeft", { n: left, total: rooms.length })}</p>
@@ -472,7 +472,9 @@ export function MaintenanceBoard({
           })}
         </ul>
       ) : (
-        <p className="rounded-2xl bg-surface-2 p-8 text-center text-sm text-fg-muted">{t("noTickets")}</p>
+        <Empty size="lg" icon={<Wrench aria-hidden="true" />}>
+          {t("noTickets")}
+        </Empty>
       )}
     </div>
   );

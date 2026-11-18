@@ -1281,3 +1281,83 @@ dialog[open]::backdrop {
   background-image: var(--guest-section);
   border-top: 4px solid var(--shade);
 }
+
+/* ─── Form controls ──────────────────────────────────────────────────────────
+ * Drop-downs: the browser's arrow replaced by a chevron drawn in the text's colour, on the side the
+ * text ends; checkboxes and radios in the hotel's colour. Unlayered: they must win over each field's
+ * own padding utility for the room the chevron needs.
+ */
+select:not([multiple]):not([size]) {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-size:
+    5px 5px,
+    5px 5px;
+  background-repeat: no-repeat;
+  background-position:
+    calc(100% - 17px) 52%,
+    calc(100% - 12px) 52%;
+  padding-inline-end: 2.1rem;
+}
+[dir="rtl"] select:not([multiple]):not([size]) {
+  background-position:
+    12px 52%,
+    17px 52%;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--accent);
+}
+
+/* ─── Tables ─────────────────────────────────────────────────────────────────
+ * Rows light up in the section's blue under the pointer; the header row is tinted (shade-head).
+ */
+@layer components {
+  [data-shaded] table tbody tr {
+    transition: background-color 120ms;
+  }
+  [data-shaded] table tbody tr:hover {
+    --row-hover: color-mix(in oklch, var(--shade) 8%, transparent);
+    background-color: var(--row-hover);
+  }
+  [data-shaded] table thead th {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  /* Rows of a list that open something: the same blue light under the pointer. */
+  .row-hover {
+    transition: background-color 120ms;
+  }
+  .row-hover:hover {
+    --row-hover-bg: color-mix(in oklch, var(--shade, var(--accent)) 8%, transparent);
+    background-color: var(--row-hover-bg);
+  }
+}
+
+/* ─── Loading ────────────────────────────────────────────────────────────────
+ * Placeholders with a light sweeping across, instead of a blinking grey block.
+ */
+@keyframes shimmer {
+  to {
+    background-position-x: -200%;
+  }
+}
+.skeleton {
+  --skeleton: linear-gradient(
+    90deg,
+    var(--surface-2) 0%,
+    color-mix(in oklch, var(--surface-2), white 55%) 40%,
+    var(--surface-2) 80%
+  );
+  background-image: var(--skeleton);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}

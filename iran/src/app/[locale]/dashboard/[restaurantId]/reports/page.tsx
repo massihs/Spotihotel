@@ -81,7 +81,7 @@ async function Reports({ params, searchParams }: Pick<Props, "params" | "searchP
             href={presetHref(p)}
             className={cn(
               "shrink-0 rounded-full px-3 py-1.5 text-sm whitespace-nowrap",
-              period.preset === p ? "bg-fg text-bg" : "bg-surface text-fg-muted ring-1 ring-border",
+              period.preset === p ? "shade-fill" : "bg-surface text-fg-muted ring-1 ring-border",
             )}
           >
             {t(`presets.${p}`)}
@@ -200,7 +200,7 @@ async function Reports({ params, searchParams }: Pick<Props, "params" | "searchP
           </Card>
           <Card>
             <table className="w-full text-sm">
-              <thead className="bg-surface-2 text-xs text-fg-muted">
+              <thead className="shade-head text-xs text-fg-muted">
                 <tr>
                   <th className="px-4 py-2 text-start font-medium">{t("date")}</th>
                   <th className="px-4 py-2 text-end font-medium">{t("orders")}</th>
@@ -241,7 +241,7 @@ async function Reports({ params, searchParams }: Pick<Props, "params" | "searchP
           </Card>
           <Card className="overflow-x-auto">
             <table className="w-full min-w-[560px] text-sm">
-              <thead className="bg-surface-2 text-xs text-fg-muted">
+              <thead className="shade-head text-xs text-fg-muted">
                 <tr>
                   <th className="px-4 py-2 text-start font-medium">{t("product")}</th>
                   <th className="px-4 py-2 text-end font-medium">{t("qty")}</th>

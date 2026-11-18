@@ -8,6 +8,7 @@ import { db } from "@/server/db/client";
 import { getMoney } from "@/lib/money-server";
 import { can } from "@/server/tenancy";
 import { categoriesWithOutlets, listOutlets } from "@/server/modules/outlets/service";
+import { Empty } from "@/components/ui/empty";
 
 type Props = PageProps<"/[locale]/dashboard/[restaurantId]/outlets">;
 
@@ -79,13 +80,9 @@ async function Outlets({ params }: Pick<Props, "params">) {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-brand-200 bg-surface px-6 py-14 text-center">
-          <span className="grid size-12 place-items-center rounded-2xl bg-brand-100 text-brand-700">
-            <Store className="size-6" aria-hidden="true" />
-          </span>
-          <p className="font-semibold">{t("emptyTitle")}</p>
-          <p className="max-w-md text-sm text-fg-muted">{t("emptyBody")}</p>
-        </div>
+        <Empty size="lg" icon={<Store aria-hidden="true" />} title={t("emptyTitle")}>
+          {t("emptyBody")}
+        </Empty>
       )}
     </>
   );

@@ -347,7 +347,7 @@ export function BookingSheet({
                   className={cn(
                     "min-h-14 rounded-xl px-2 py-2 text-sm font-semibold ring-1 transition-colors",
                     table === o.id
-                      ? "bg-fg text-bg ring-fg"
+                      ? "shade-fill ring-transparent"
                       : "bg-surface ring-border hover:ring-border-strong",
                   )}
                 >

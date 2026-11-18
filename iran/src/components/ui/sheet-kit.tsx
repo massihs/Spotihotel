@@ -30,22 +30,37 @@ export function Sheet({
       aria-modal="true"
       aria-label={title}
     >
-      <button type="button" aria-label="×" className="absolute inset-0 bg-black/30" onClick={onClose} />
+      <button
+        type="button"
+        aria-label="×"
+        className="animate-fade-in absolute inset-0 bg-[oklch(0.18_0.04_262/0.45)] backdrop-blur-[3px]"
+        onClick={onClose}
+      />
       <div
-        className={`animate-sheet-up relative max-h-[92dvh] w-full overflow-y-auto rounded-t-3xl bg-surface p-5 sm:rounded-3xl ${wide ? "sm:max-w-3xl sm:p-6" : "sm:max-w-lg"}`}
+        className={`animate-sheet-up relative max-h-[92dvh] w-full overflow-y-auto rounded-t-3xl bg-surface shadow-[var(--shadow-float)] ring-1 ring-border sm:rounded-3xl ${wide ? "sm:max-w-3xl" : "sm:max-w-lg"}`}
       >
-        <div className="mb-4 flex items-center justify-between">
-          <p className="text-lg font-bold">{title}</p>
-          <button
-            type="button"
-            onClick={onClose}
-            className="grid size-9 place-items-center rounded-full bg-surface-2"
-            aria-label="×"
-          >
-            <X className="size-4" />
-          </button>
+        {/* The header: a band of the section's blue over the lattice, kept in view while scrolling. */}
+        <div className="shade-wash sticky top-0 isolate z-10 overflow-hidden border-b border-border bg-surface px-5 pt-4 pb-3.5 sm:px-6">
+          <span
+            aria-hidden="true"
+            className="texture-khatam texture-fade-corner [--tex-color:var(--shade,var(--accent))] [--tex-opacity:0.12] [--tex-size:44px]"
+          />
+          <div className="relative flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <span aria-hidden="true" className="ornament mb-1.5 [--ornament-width:2rem]" />
+              <p className="truncate text-lg font-bold">{title}</p>
+            </div>
+            <button
+              type="button"
+              onClick={onClose}
+              className="grid size-9 shrink-0 place-items-center rounded-full bg-surface/90 ring-1 ring-border transition-colors hover:bg-surface-2"
+              aria-label="×"
+            >
+              <X className="size-4" />
+            </button>
+          </div>
         </div>
-        {children}
+        <div className={wide ? "p-5 sm:p-6" : "p-5"}>{children}</div>
       </div>
     </div>
   );

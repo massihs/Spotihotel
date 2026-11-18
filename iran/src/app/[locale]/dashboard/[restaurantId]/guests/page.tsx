@@ -1,8 +1,11 @@
 import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
-import { Search, Star } from "lucide-react";
+import { ChevronLeft, Search, Star, UsersRound } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { buttonClasses } from "@/components/ui/button";
+import { Avatar } from "@/components/ui/avatar";
+import { Empty } from "@/components/pms/kit";
+import { cn } from "@/lib/cn";
 import { Link } from "@/i18n/navigation";
 import { requireRestaurant } from "@/server/auth/current";
 import { db } from "@/server/db/client";
@@ -42,38 +45,64 @@ async function Guests({ params, searchParams }: Props) {
         </label>
         <button className={buttonClasses("secondary", "lg")}>{t("find")}</button>
       </form>
-      <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface">
-        {list.map((g) => (
-          <li key={g.id}>
-            <Link
-              href={`/dashboard/${ctx.restaurant.id}/guests/${g.id}`}
-              className="flex items-center gap-3 px-4 py-3 hover:bg-surface-2"
-            >
-              <span className="min-w-0 flex-1">
-                <span className="font-semibold">
-                  {g.vip ? (
-                    <Star
-                      className="me-1 inline size-3.5 fill-[var(--brass)] text-[var(--brass)]"
-                      aria-label="VIP"
-                    />
-                  ) : null}
-                  {[g.lastName, g.firstName].filter(Boolean).join(" ")}
-                </span>
-                <span className="block text-sm text-fg-muted" dir="ltr">
-                  {[g.phone, g.email].filter(Boolean).join(" | ")}
-                </span>
-              </span>
-              {g.blacklisted ? (
-                <span className="rounded-full bg-danger-soft px-2 py-0.5 text-xs font-semibold text-danger">
-                  {t("blacklisted")}
-                </span>
-              ) : null}
-              <span className="text-sm text-fg-muted">{t("stays", { n: g.stays })}</span>
-            </Link>
-          </li>
-        ))}
-        {!list.length ? <li className="px-4 py-10 text-center text-fg-muted">{t("empty")}</li> : null}
-      </ul>
+      {list.length ? (
+        <ul className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
+          {list.map((g) => {
+            const name = [g.lastName, g.firstName].filter(Boolean).join(" ");
+            return (
+              <li key={g.id}>
+                <Link
+                  href={`/dashboard/${ctx.restaurant.id}/guests/${g.id}`}
+                  className={cn(
+                    "group flex h-full items-center gap-3 rounded-2xl border border-border bg-surface px-3.5 py-3 shadow-[var(--shadow-card)] transition-[border-color,transform] hover:-translate-y-0.5 hover:border-brand-300",
+                    g.blacklisted && "border-danger/40",
+                  )}
+                >
+                  <span className="relative">
+                    <Avatar name={name} />
+                    {g.vip ? (
+                      <span className="absolute -end-1 -bottom-1 grid size-5 place-items-center rounded-full bg-surface ring-2 ring-surface">
+                        <Star className="size-3.5 fill-[var(--brass)] text-[var(--brass)]" aria-label="VIP" />
+                      </span>
+                    ) : null}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate font-semibold">{name || "—"}</span>
+                    <span
+                      className="block truncate text-xs text-fg-muted"
+                      dir="ltr"
+                      style={{ textAlign: "start" }}
+                    >
+                      {[g.phone, g.email].filter(Boolean).join(" | ") || "—"}
+                    </span>
+                    <span className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[11px] font-semibold">
+                      <span className="shade-soft rounded-full px-2 py-0.5">
+                        {t("stays", { n: g.stays })}
+                      </span>
+                      {g.nationality && g.nationality !== "IR" ? (
+                        <span className="rounded-full bg-surface-2 px-2 py-0.5 text-fg-muted" dir="ltr">
+                          {g.nationality}
+                        </span>
+                      ) : null}
+                      {g.blacklisted ? (
+                        <span className="rounded-full bg-danger-soft px-2 py-0.5 text-danger">
+                          {t("blacklisted")}
+                        </span>
+                      ) : null}
+                    </span>
+                  </span>
+                  <ChevronLeft
+                    className="size-4 shrink-0 text-fg-subtle transition-transform group-hover:-translate-x-0.5 ltr:rotate-180"
+                    aria-hidden="true"
+                  />
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <Empty icon={<UsersRound aria-hidden="true" />}>{t("empty")}</Empty>
+      )}
     </>
   );
 }

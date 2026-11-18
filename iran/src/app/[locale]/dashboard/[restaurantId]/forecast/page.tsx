@@ -53,7 +53,7 @@ async function Forecast({ params }: Pick<Props, "params">) {
       <h2 className="mb-2 font-semibold">{title}</h2>
       <div className="overflow-x-auto rounded-2xl border border-border bg-surface">
         <table className="w-full min-w-[560px] text-sm [&_tbody_tr]:border-t [&_tbody_tr]:border-border">
-          <thead className="bg-surface-2">
+          <thead className="shade-head">
             <tr>
               <th className={th}>{t("channel")}</th>
               <th className={thEnd}>{t("bookings")}</th>
@@ -114,7 +114,7 @@ async function Forecast({ params }: Pick<Props, "params">) {
       </div>
       <div className="mb-6 overflow-x-auto rounded-2xl border border-border bg-surface">
         <table className="w-full min-w-[820px] text-sm [&_tbody_tr]:border-t [&_tbody_tr]:border-border">
-          <thead className="bg-surface-2">
+          <thead className="shade-head">
             <tr>
               <th className={th}>{t("night")}</th>
               <th className={thEnd}>{t("sold")}</th>

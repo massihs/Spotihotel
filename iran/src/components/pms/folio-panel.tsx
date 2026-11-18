@@ -143,7 +143,7 @@ export function FolioPanel({
           </header>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[620px] text-sm">
-              <thead className="bg-surface-2 text-xs text-fg-muted">
+              <thead className="shade-head text-xs text-fg-muted">
                 <tr>
                   <th className="px-4 py-2 text-start font-semibold">{t("date")}</th>
                   <th className="px-4 py-2 text-start font-semibold">{t("description")}</th>

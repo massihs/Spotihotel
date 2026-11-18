@@ -145,7 +145,7 @@ export function MenuImport({ restaurantId, currency }: { restaurantId: string; c
           </div>
           <div className="overflow-x-auto rounded-2xl border border-border">
             <table className="w-full text-sm">
-              <thead className="bg-surface-2 text-fg-muted">
+              <thead className="shade-head text-fg-muted">
                 <tr>
                   <th className="px-3 py-2 text-start font-medium">#</th>
                   <th className="px-3 py-2 text-start font-medium">{t("colCategory")}</th>

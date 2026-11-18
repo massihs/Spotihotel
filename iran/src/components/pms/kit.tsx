@@ -166,10 +166,5 @@ export function TableShell({ children, className }: { children: ReactNode; class
   );
 }
 
-export function Empty({ children }: { children: ReactNode }) {
-  return (
-    <p className="rounded-2xl border border-dashed border-border-strong px-4 py-8 text-center text-sm text-fg-muted">
-      {children}
-    </p>
-  );
-}
+/** Nothing to show yet: a medallion in the section's blue over the Persian lattice, and why. */
+export { Empty } from "@/components/ui/empty";

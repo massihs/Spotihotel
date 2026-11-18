@@ -129,9 +129,7 @@ async function Reservations({ params, searchParams }: Pick<Props, "params" | "se
                       aria-current={selected ? "date" : undefined}
                       className={cn(
                         "flex flex-col items-center gap-0.5 rounded-2xl px-2 py-2 transition-colors",
-                        selected
-                          ? "bg-fg text-bg shadow-[var(--shadow-float)]"
-                          : "bg-surface ring-1 ring-border hover:ring-border-strong",
+                        selected ? "shade-fill" : "bg-surface ring-1 ring-border hover:ring-border-strong",
                       )}
                     >
                       <span className={cn("text-[11px]", selected ? "opacity-80" : "text-fg-muted")}>

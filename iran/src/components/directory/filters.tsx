@@ -188,7 +188,7 @@ export function DirectoryFilters({
                 aria-pressed={current.r === String(r)}
                 className={cn(
                   "h-7 min-w-8 rounded-full px-2.5 text-xs font-bold tabular-nums",
-                  current.r === String(r) ? "bg-fg text-bg" : "text-fg-muted hover:text-fg",
+                  current.r === String(r) ? "shade-fill" : "text-fg-muted hover:text-fg",
                 )}
               >
                 {format.number(r)}
@@ -315,7 +315,7 @@ function Chip({ on, onClick, children }: { on: boolean; onClick: () => void; chi
       aria-pressed={on}
       className={cn(
         "inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full px-4 text-sm font-semibold whitespace-nowrap transition-colors",
-        on ? "bg-fg text-bg" : "bg-surface text-fg-muted ring-1 ring-border hover:text-fg",
+        on ? "shade-fill" : "bg-surface text-fg-muted ring-1 ring-border hover:text-fg",
       )}
     >
       {children}

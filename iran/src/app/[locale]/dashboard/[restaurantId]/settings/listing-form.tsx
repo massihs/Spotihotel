@@ -148,7 +148,7 @@ export function ListingForm({
                   key={c}
                   className={cn(
                     "inline-flex h-10 cursor-pointer items-center gap-1.5 rounded-full px-3.5 text-sm font-semibold transition-colors has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-[var(--ring)]",
-                    on ? "bg-fg text-bg" : "bg-surface-2 text-fg-muted hover:text-fg",
+                    on ? "shade-fill" : "bg-surface-2 text-fg-muted hover:text-fg",
                     !on && themes.length >= 5 && "pointer-events-none opacity-40",
                   )}
                 >

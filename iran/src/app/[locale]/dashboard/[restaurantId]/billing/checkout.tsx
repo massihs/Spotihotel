@@ -90,7 +90,9 @@ export function Checkout({
               aria-pressed={months === m}
               className={cn(
                 "rounded-full border px-4 py-2 text-sm font-semibold",
-                months === m ? "border-fg bg-fg text-bg" : "border-border bg-surface hover:border-fg-subtle",
+                months === m
+                  ? "shade-fill border-transparent"
+                  : "border-border bg-surface hover:border-fg-subtle",
               )}
             >
               {t("months", { count: m })}

@@ -2,7 +2,9 @@
 
 import {
   Armchair,
+  Briefcase,
   Cake,
+  CalendarClock,
   Check,
   Clock,
   Globe,
@@ -16,13 +18,12 @@ import {
   Save,
   Shapes,
   Sparkles,
-  Briefcase,
-  Users,
   UserPlus,
+  Users,
   Wand2,
+  X,
   ZoomIn,
   ZoomOut,
-  X,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -37,6 +38,7 @@ import { Sheet, useRun } from "@/components/ui/sheet-kit";
 import { cn } from "@/lib/cn";
 import { tableSize } from "@/lib/floor-plan";
 import { BookingSheet, clock, type SheetBooking } from "./booking-sheet";
+import { Empty } from "@/components/ui/empty";
 
 export type HostTable = {
   id: string;
@@ -601,9 +603,9 @@ export function HostView({
                 <span className="tabular-nums">{g.list.length}</span>
               </h3>
               {g.list.length === 0 ? (
-                <p className="rounded-2xl border border-dashed border-border-strong px-4 py-5 text-center text-sm text-fg-muted">
+                <Empty size="sm" icon={<CalendarClock aria-hidden="true" />}>
                   {th("noneUpcoming")}
-                </p>
+                </Empty>
               ) : (
                 <ul className="space-y-2">
                   {g.list.map((b) => (

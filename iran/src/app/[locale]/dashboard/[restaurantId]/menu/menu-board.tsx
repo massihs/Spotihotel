@@ -312,7 +312,7 @@ export function MenuBoard({
             className={cn(
               "flex min-w-36 shrink-0 items-center gap-3 rounded-2xl p-3 text-start transition-all sm:min-w-0",
               filter === f.key
-                ? "bg-fg text-bg shadow-[var(--shadow-float)]"
+                ? "shade-fill"
                 : "bg-surface shadow-[var(--shadow-soft)] ring-1 ring-border hover:ring-border-strong",
             )}
           >

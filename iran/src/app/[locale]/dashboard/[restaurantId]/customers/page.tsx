@@ -1,5 +1,6 @@
 import { Suspense } from "react";
-import { Search, Star, Users } from "lucide-react";
+import { Avatar } from "@/components/ui/avatar";
+import { Search, Star, UserCheck, Users, Wallet } from "lucide-react";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import {
@@ -8,7 +9,7 @@ import {
   LoyaltySettings,
   NewCustomerButton,
 } from "@/components/customers/customers-ui";
-import { Card } from "@/components/ui/card";
+import { Card, StatCard } from "@/components/ui/card";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/money";
@@ -25,6 +26,7 @@ import {
   type Audience,
 } from "@/server/modules/customers/service";
 import { can } from "@/server/tenancy";
+import { Empty } from "@/components/ui/empty";
 
 type Props = PageProps<"/[locale]/dashboard/[restaurantId]/customers">;
 const TABS = ["customers", "coupons", "campaigns", "loyalty"] as const;
@@ -136,18 +138,32 @@ async function CustomerTab({
   const base = `/dashboard/${rid}/customers`;
   return (
     <>
-      <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {[
-          [t("statTotal"), stats.total.toLocaleString("fa-IR")],
-          [t("statActive"), stats.active.toLocaleString("fa-IR")],
-          [t("statPoints"), stats.points.toLocaleString("fa-IR")],
-          [t("statSpent"), money(stats.spent)],
-        ].map(([k, v]) => (
-          <div key={k} className="rounded-2xl border border-border bg-surface px-4 py-3">
-            <p className="text-xs text-fg-muted">{k}</p>
-            <p className="text-lg font-bold tabular-nums">{v}</p>
-          </div>
-        ))}
+      <div className="mb-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <StatCard
+          compact
+          label={t("statTotal")}
+          value={stats.total.toLocaleString("fa-IR")}
+          icon={<Users className="size-5" aria-hidden="true" />}
+        />
+        <StatCard
+          compact
+          label={t("statActive")}
+          value={stats.active.toLocaleString("fa-IR")}
+          icon={<UserCheck className="size-5" aria-hidden="true" />}
+        />
+        <StatCard
+          compact
+          label={t("statPoints")}
+          value={stats.points.toLocaleString("fa-IR")}
+          icon={<Star className="size-5" aria-hidden="true" />}
+        />
+        <StatCard
+          compact
+          tone="gradient"
+          label={t("statSpent")}
+          value={money(stats.spent)}
+          icon={<Wallet className="size-5" aria-hidden="true" />}
+        />
       </div>
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <form action={base} className="relative min-w-56 flex-1">
@@ -166,7 +182,7 @@ async function CustomerTab({
             href={a === "all" ? base : `${base}?s=${a}`}
             className={cn(
               "rounded-full px-3 py-1.5 text-sm",
-              segment === a ? "bg-fg text-bg" : "bg-surface text-fg-muted ring-1 ring-border",
+              segment === a ? "shade-fill" : "bg-surface text-fg-muted ring-1 ring-border",
             )}
           >
             {t(`audiences.${a}`)}
@@ -174,18 +190,15 @@ async function CustomerTab({
         ))}
       </div>
       {rows.length === 0 ? (
-        <p className="rounded-2xl border border-dashed border-border-strong px-6 py-12 text-center text-fg-muted">
-          <Users className="mx-auto mb-2 size-8 text-fg-subtle" />
+        <Empty size="lg" icon={<Users aria-hidden="true" />}>
           {t("noCustomers")}
-        </p>
+        </Empty>
       ) : (
-        <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface">
+        <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface shadow-[var(--shadow-card)]">
           {rows.map((c) => (
             <li key={c.id}>
-              <Link href={`${base}/${c.id}`} className="flex items-center gap-3 px-4 py-3 hover:bg-surface-2">
-                <span className="grid size-10 shrink-0 place-items-center rounded-full bg-accent-soft font-bold text-accent">
-                  {(c.name ?? "#").slice(0, 1)}
-                </span>
+              <Link href={`${base}/${c.id}`} className="row-hover flex items-center gap-3 px-4 py-3">
+                <Avatar name={c.name ?? c.phone ?? "#"} />
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-semibold">{c.name ?? t("unnamed")}</p>
                   <p dir="ltr" className="text-start text-xs text-fg-muted tabular-nums">

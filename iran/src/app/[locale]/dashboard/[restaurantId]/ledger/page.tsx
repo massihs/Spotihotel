@@ -418,7 +418,7 @@ async function Ledger({ params, searchParams }: Props) {
         <section>
           <h2 className="mb-2 font-semibold">{t("byDepartment")}</h2>
           <Table>
-            <thead className="bg-surface-2">
+            <thead className="shade-head">
               <tr>
                 <th className={th}>{t("department")}</th>
                 <th className={thEnd}>{t("revenue")}</th>
@@ -448,7 +448,7 @@ async function Ledger({ params, searchParams }: Props) {
           <section>
             <h2 className="mb-2 font-semibold">{t("dailyReport")}</h2>
             <Table>
-              <thead className="bg-surface-2">
+              <thead className="shade-head">
                 <tr>
                   <th className={th}>{t("date")}</th>
                   <th className={thEnd}>{t("occupancy")}</th>
@@ -540,7 +540,7 @@ async function Ledger({ params, searchParams }: Props) {
         </form>
         {gl ? (
           <Table>
-            <thead className="bg-surface-2">
+            <thead className="shade-head">
               <tr>
                 <th className={th}>{t("date")}</th>
                 <th className={th}>{t("entry")}</th>
@@ -583,7 +583,7 @@ async function Ledger({ params, searchParams }: Props) {
     const tb = await trialBalance(db, ctx, from, to);
     body = (
       <Table min={760}>
-        <thead className="bg-surface-2">
+        <thead className="shade-head">
           <tr>
             <th className={th}>{t("account")}</th>
             <th className={thEnd}>{t("opening")}</th>
@@ -654,7 +654,7 @@ async function Ledger({ params, searchParams }: Props) {
     );
     body = (
       <Table min={720}>
-        <thead className="bg-surface-2">
+        <thead className="shade-head">
           <tr>
             <th className={th}>{t("account")}</th>
             <th className={thEnd}>{t("actual")}</th>
@@ -759,7 +759,7 @@ async function Ledger({ params, searchParams }: Props) {
     body = (
       <div className="space-y-6">
         <Table min={800}>
-          <thead className="bg-surface-2">
+          <thead className="shade-head">
             <tr>
               <th className={th}>{t("customer")}</th>
               <th className={thEnd}>{t("age.current")}</th>
@@ -841,7 +841,7 @@ async function Ledger({ params, searchParams }: Props) {
           <StatCard label={t("cheque.dueWeek")} value={reg.totals.dueThisWeek} tone="teal" />
         </div>
         <Table min={900}>
-          <thead className="bg-surface-2">
+          <thead className="shade-head">
             <tr>
               <th className={th}>{t("cheque.due")}</th>
               <th className={th}>{t("cheque.direction")}</th>
@@ -920,7 +920,7 @@ async function Ledger({ params, searchParams }: Props) {
           <p className="text-sm text-fg-muted">{t("payablesHint", { total: money(ap.total) })}</p>
         </div>
         <Table min={800}>
-          <thead className="bg-surface-2">
+          <thead className="shade-head">
             <tr>
               <th className={th}>{t("supplier")}</th>
               <th className={thEnd}>{t("invoiced")}</th>
@@ -989,7 +989,7 @@ async function Ledger({ params, searchParams }: Props) {
           <button className={buttonClasses("secondary", "md")}>{t("show")}</button>
         </form>
         <Table>
-          <thead className="bg-surface-2">
+          <thead className="shade-head">
             <tr>
               <th className={th}>{t("cashierName")}</th>
               {methods.map((m) => (
@@ -1032,7 +1032,7 @@ async function Ledger({ params, searchParams }: Props) {
     const seasons = [...new Set(rows.map((r) => `${r.month.slice(0, 4)}-${r.season}`))];
     body = (
       <Table>
-        <thead className="bg-surface-2">
+        <thead className="shade-head">
           <tr>
             <th className={th}>{t("month")}</th>
             <th className={thEnd}>{t("vatCollected")}</th>
@@ -1081,7 +1081,7 @@ async function Ledger({ params, searchParams }: Props) {
     body = (
       <div className="space-y-5">
         <Table>
-          <thead className="bg-surface-2">
+          <thead className="shade-head">
             <tr>
               <th className={th}>{t("account")}</th>
               <th className={thEnd}>{t("opening")}</th>
@@ -1135,7 +1135,7 @@ async function Ledger({ params, searchParams }: Props) {
           <p className="text-sm text-fg-muted">{t("chartHint")}</p>
         </div>
         <Table>
-          <thead className="bg-surface-2">
+          <thead className="shade-head">
             <tr>
               <th className={th}>{t("code")}</th>
               <th className={th}>{t("name")}</th>
@@ -1166,7 +1166,7 @@ async function Ledger({ params, searchParams }: Props) {
         <section>
           <h2 className="mb-2 font-semibold">{t("budgetsTitle", { year })}</h2>
           <Table min={1200}>
-            <thead className="bg-surface-2">
+            <thead className="shade-head">
               <tr>
                 <th className={th}>{t("account")}</th>
                 {months.map((m) => (

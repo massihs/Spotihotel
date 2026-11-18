@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Maximize2, Moon, Printer, Settings2, Sun } from "lucide-react";
+import { ChefHat, Maximize2, Moon, Printer, Settings2, Sun } from "lucide-react";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
@@ -12,6 +12,15 @@ import { AcceptAllButton } from "./accept-all-button";
 import { OrderCard, type OrderCardData } from "./order-card";
 
 const COLUMNS = ["received", "accepted", "preparing", "ready", "served"] as const;
+
+/** Each column of the board in its own blue (header, counter, empty state). */
+const SHADE: Record<(typeof COLUMNS)[number], string> = {
+  received: "shade-azure",
+  accepted: "shade-royal",
+  preparing: "shade-periwinkle",
+  ready: "shade-cyan",
+  served: "shade-steel",
+};
 
 const DOT: Record<(typeof COLUMNS)[number], string> = {
   received: "bg-accent",
@@ -145,7 +154,7 @@ export function KitchenBoard({
               aria-pressed={station === s.id}
               className={cn(
                 "inline-flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap",
-                station === s.id ? "bg-fg text-bg" : "bg-surface text-fg-muted ring-1 ring-border",
+                station === s.id ? "shade-fill" : "bg-surface text-fg-muted ring-1 ring-border",
               )}
             >
               {s.id !== "all" ? (
@@ -173,13 +182,14 @@ export function KitchenBoard({
               key={col}
               aria-labelledby={`col-${col}`}
               className={cn(
-                "flex min-h-0 snap-start flex-col rounded-2xl bg-surface-2/70 p-2",
-                col === "served" && "opacity-75",
+                "flex min-h-0 snap-start flex-col overflow-hidden rounded-2xl border border-border bg-surface-2/60 shadow-[var(--shadow-soft)]",
+                SHADE[col],
+                col === "served" && "opacity-80",
               )}
             >
               <h2
                 id={`col-${col}`}
-                className="flex items-center justify-between px-2.5 py-2 text-sm font-semibold"
+                className="shade-wash flex items-center justify-between border-t-[3px] border-b border-t-[var(--shade)] border-b-border px-3 py-2.5 text-sm font-semibold"
               >
                 <span className="flex items-center gap-2">
                   <span className={cn("size-2 rounded-full", DOT[col])} aria-hidden="true" />
@@ -196,14 +206,14 @@ export function KitchenBoard({
                   <span
                     className={cn(
                       "grid h-6 min-w-6 place-items-center rounded-full px-1.5 text-xs font-bold tabular-nums",
-                      list.length ? "bg-accent text-accent-fg" : "bg-surface text-fg-subtle",
+                      list.length ? "shade-fill" : "bg-surface text-fg-subtle",
                     )}
                   >
                     {list.length}
                   </span>
                 </span>
               </h2>
-              <ul className="min-h-0 flex-1 space-y-2 overflow-y-auto p-0.5">
+              <ul className="min-h-0 flex-1 space-y-2 overflow-y-auto p-2">
                 {list.map((o) => (
                   <li key={o.id} className="relative">
                     {o.channel && o.channel !== "dine_in" ? (
@@ -238,8 +248,15 @@ export function KitchenBoard({
                   </li>
                 ))}
                 {list.length === 0 ? (
-                  <li className="mx-1 rounded-2xl border-2 border-dashed border-border py-8 text-center text-sm text-fg-subtle">
-                    {t("empty")}
+                  <li className="relative isolate overflow-hidden rounded-2xl border border-dashed border-border-strong py-9 text-center text-sm text-fg-subtle">
+                    <span
+                      aria-hidden="true"
+                      className="texture-khatam texture-fade-b [--tex-color:var(--shade)] [--tex-opacity:0.08] [--tex-size:44px]"
+                    />
+                    <span className="shade-soft relative mx-auto mb-2 grid size-10 place-items-center rounded-xl">
+                      <ChefHat className="size-5" aria-hidden="true" />
+                    </span>
+                    <span className="relative">{t("empty")}</span>
                   </li>
                 ) : null}
               </ul>

@@ -667,7 +667,7 @@ export function RatesPanel({
       </form>
       <div className="overflow-x-auto rounded-2xl border border-border bg-surface">
         <table className="w-full min-w-[900px] text-xs">
-          <thead className="bg-surface-2">
+          <thead className="shade-head">
             <tr>
               <th className="px-3 py-2 text-start">{t("roomType")}</th>
               {nights.map((d) => (

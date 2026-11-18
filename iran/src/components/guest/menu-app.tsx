@@ -648,7 +648,7 @@ export function MenuApp({
                   }}
                   className={cn(
                     "flex h-12 items-center justify-center gap-2 rounded-2xl text-sm font-semibold",
-                    view === v ? "bg-fg text-bg" : "bg-surface-2 text-fg",
+                    view === v ? "shade-fill" : "bg-surface-2 text-fg",
                   )}
                 >
                   {v === "list" ? (

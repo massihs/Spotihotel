@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { Avatar } from "@/components/ui/avatar";
 import { getLocale, getTranslations } from "next-intl/server";
 import { CalendarPlus, Search } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/app-shell";
@@ -86,7 +87,7 @@ async function Stays({ params, searchParams }: Props) {
       </form>
       <div className="overflow-x-auto rounded-2xl border border-border bg-surface">
         <table className="w-full min-w-[720px] text-sm">
-          <thead className="bg-surface-2 text-xs text-fg-muted">
+          <thead className="shade-head text-xs text-fg-muted">
             <tr>
               {["number", "guest", "dates", "room", "status", "total", "balance"].map((h) => (
                 <th
@@ -100,25 +101,39 @@ async function Stays({ params, searchParams }: Props) {
           </thead>
           <tbody>
             {list.map((s) => (
-              <tr key={s.id} className="border-t border-border hover:bg-surface-2/60">
+              <tr key={s.id} className="border-t border-border">
                 <td className="px-4 py-2.5 font-mono text-xs">
                   <Link href={`${base}/stays/${s.id}`} className="hover:underline">
                     #{s.number}
                   </Link>
                 </td>
-                <td className="px-4 py-2.5 font-semibold">
-                  <Link href={`${base}/stays/${s.id}`} className="hover:underline">
-                    {[s.lastName, s.firstName].filter(Boolean).join(" ")}
-                  </Link>
-                  {s.accountName ? (
-                    <span className="block text-xs font-normal text-fg-muted">{s.accountName}</span>
-                  ) : null}
+                <td className="px-4 py-2">
+                  <span className="flex items-center gap-2.5">
+                    <Avatar name={[s.lastName, s.firstName].filter(Boolean).join(" ")} size="sm" />
+                    <span className="min-w-0">
+                      <Link href={`${base}/stays/${s.id}`} className="font-semibold hover:underline">
+                        {[s.lastName, s.firstName].filter(Boolean).join(" ")}
+                      </Link>
+                      {s.accountName ? (
+                        <span className="block text-xs font-normal text-fg-muted">{s.accountName}</span>
+                      ) : null}
+                    </span>
+                  </span>
                 </td>
                 <td className="px-4 py-2.5 whitespace-nowrap">
                   {day(s.arrival)} → {day(s.departure)}
                 </td>
                 <td className="px-4 py-2.5">
-                  {s.roomLabel ?? "—"} <span className="text-xs text-fg-muted">{s.typeCode}</span>
+                  {s.roomLabel ? (
+                    <span className="shade-soft inline-flex items-center gap-1.5 rounded-lg px-2 py-0.5 font-bold tabular-nums">
+                      {s.roomLabel}
+                      <span className="text-[10px] font-semibold opacity-75">{s.typeCode}</span>
+                    </span>
+                  ) : (
+                    <span className="text-fg-muted">
+                      — <span className="text-xs">{s.typeCode}</span>
+                    </span>
+                  )}
                 </td>
                 <td className="px-4 py-2.5">
                   <StatusText status={s.status} />

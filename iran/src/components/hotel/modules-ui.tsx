@@ -334,7 +334,7 @@ export function AccountsPanel({
       {accounts.length ? (
         <div className="overflow-x-auto rounded-2xl border border-border bg-surface">
           <table className="w-full min-w-[760px] text-sm">
-            <thead className="bg-surface-2 text-xs text-fg-muted">
+            <thead className="shade-head text-xs text-fg-muted">
               <tr>
                 {["username", "password", "room", "guest", "profile", "validUntil", "status", ""].map((k) => (
                   <th key={k} className="px-3 py-2.5 text-start font-semibold">
@@ -737,7 +737,7 @@ export function EquipmentPanel({
       ) : (
         <div className="overflow-x-auto rounded-2xl border border-border bg-surface">
           <table className="w-full min-w-[760px] text-sm">
-            <thead className="bg-surface-2 text-xs text-fg-muted">
+            <thead className="shade-head text-xs text-fg-muted">
               <tr>
                 {["name", "category", "location", "serial", "interval", "last", "next", ""].map((k) => (
                   <th key={k} className="px-3 py-2.5 text-start font-semibold">

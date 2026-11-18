@@ -5,6 +5,7 @@ import { useFormatter, useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { revokeDeviceAction } from "./actions";
+import { Empty } from "@/components/ui/empty";
 
 export type DeviceView = {
   id: string;
@@ -127,9 +128,9 @@ export function DesktopPanel({
             ))}
           </ul>
         ) : (
-          <p className="rounded-2xl border border-dashed border-border-strong px-4 py-6 text-center text-sm text-fg-muted">
+          <Empty size="sm" icon={<MonitorSmartphone aria-hidden="true" />}>
             {t("none")}
-          </p>
+          </Empty>
         )}
         {error ? <p className="mt-2 text-sm text-danger">{error}</p> : null}
       </div>

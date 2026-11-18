@@ -619,7 +619,7 @@ export function PosTerminal({
                 title={t(d === "photos" ? "densityPhotos" : "densityCompact")}
                 className={cn(
                   "grid size-9 place-items-center rounded-lg",
-                  density === d ? "bg-fg text-bg" : "text-fg-muted hover:text-fg",
+                  density === d ? "shade-fill" : "text-fg-muted hover:text-fg",
                 )}
               >
                 {d === "photos" ? (

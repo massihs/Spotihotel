@@ -221,7 +221,7 @@ export function OrderApp({
             onClick={() => setCat(c.id)}
             className={cn(
               "shrink-0 rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap",
-              cat === c.id ? "bg-fg text-bg" : "bg-surface text-fg-muted ring-1 ring-border",
+              cat === c.id ? "shade-fill" : "bg-surface text-fg-muted ring-1 ring-border",
             )}
           >
             {c.name}

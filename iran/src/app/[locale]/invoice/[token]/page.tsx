@@ -137,7 +137,7 @@ async function Invoice({ params }: PageProps<"/[locale]/invoice/[token]">) {
 
         <div className="mt-6 overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-surface-2 text-xs text-fg-muted">
+            <thead className="shade-head text-xs text-fg-muted">
               <tr>
                 <th className="hidden px-3 py-2 text-start font-medium sm:table-cell">{t("row")}</th>
                 <th className="px-3 py-2 text-start font-medium">{t("description")}</th>
