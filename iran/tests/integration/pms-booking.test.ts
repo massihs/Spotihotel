@@ -211,6 +211,8 @@ describe("guided check-in", () => {
     expect(ctx3.rooms.find((r) => r.number === 101)?.occupiedNow).toBe(true);
     const checked = await checkIn(db, h, walkIn.id, { allowDirty: true });
     expect(checked.roomId).not.toBe(room(101).id);
+    // The guest file counts the stay once the guest is in (a booking alone does not count).
+    expect((await searchGuests(db, h, "Sadeghi"))[0]?.stays).toBe(1);
   });
 });
 

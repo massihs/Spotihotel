@@ -146,7 +146,9 @@ export async function searchGuests(db: DbOrTx, ctx: RestaurantContext, q: string
       nationality: hotelGuests.nationality,
       vip: hotelGuests.vip,
       blacklisted: hotelGuests.blacklisted,
-      stays: sql<number>`(select count(*)::int from ${stays} s where s.guest_id = ${hotelGuests.id} and s.status in ('in_house','checked_out'))`,
+      // The outer column qualified by hand: in a one-table select Drizzle writes ${hotelGuests.id} as a
+      // bare "id", which inside the subquery would mean stays.id (and every count would be 0).
+      stays: sql<number>`(select count(*)::int from ${stays} s where s.guest_id = "hotel_guests"."id" and s.status in ('in_house','checked_out'))`,
     })
     .from(hotelGuests)
     .where(

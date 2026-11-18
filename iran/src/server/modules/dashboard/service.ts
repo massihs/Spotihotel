@@ -43,9 +43,9 @@ export async function getSetupOverview(db: DbOrTx, ctx: RestaurantContext) {
         address: restaurants.addressLine1,
         logo: restaurants.logoKey,
         orders:
-          sql<number>`(select count(*) from orders o where o.restaurant_id = ${restaurants.id})`.mapWith(
-            Number,
-          ),
+          // By parameter: in a one-table select ${restaurants.id} would be written as a bare "id",
+          // which inside the subquery means orders.id.
+          sql<number>`(select count(*) from orders o where o.restaurant_id = ${rid})`.mapWith(Number),
       })
       .from(restaurants)
       .where(eq(restaurants.id, rid)),

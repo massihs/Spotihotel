@@ -29,6 +29,7 @@ import {
   outlets,
   plans,
   pmsSettings,
+  productImages,
   products,
   ratePlans,
   restaurantMembers,
@@ -81,7 +82,7 @@ import { openRequest } from "@/server/modules/hotel/requests";
 import { saveServiceItem, saveServicesSettings } from "@/server/modules/hotel/services";
 import { saveInternetProfile } from "@/server/modules/hotel/internet";
 import { saveEquipment } from "@/server/modules/hotel/engineering";
-import { addProductImage } from "@/server/modules/menu/images";
+import { addProductImage, deleteProductImage } from "@/server/modules/menu/images";
 import { readFile } from "node:fs/promises";
 import { createOutlet, setOutletMenu } from "@/server/modules/outlets/service";
 import { syncLedger } from "@/server/modules/ledger/sync";
@@ -494,22 +495,52 @@ async function ensureParsianPhotos(ctx: RestaurantContext) {
   }
   const rid = ctx.restaurant.id;
   const list = await db
-    .select({
-      id: products.id,
-      name: products.name,
-      n: sql<number>`(select count(*) from product_images i where i.product_id = ${products.id})::int`,
-    })
+    .select({ id: products.id, name: products.name })
     .from(products)
     .where(and(eq(products.restaurantId, rid), isNull(products.deletedAt)));
+  // The dishes' photos, in their order. (Not a subquery in the select above: in a one-table select
+  // Drizzle writes ${products.id} as a bare "id", which inside the subquery meant product_images.id,
+  // so no dish ever seemed to have a photo and one was added again on every run, up to the limit.)
+  const images = await db
+    .select({
+      id: productImages.id,
+      productId: productImages.productId,
+      width: productImages.width,
+      height: productImages.height,
+      placeholder: productImages.placeholder,
+    })
+    .from(productImages)
+    .where(eq(productImages.restaurantId, rid))
+    .orderBy(asc(productImages.productId), asc(productImages.sortOrder));
+  const byProduct = new Map<string, typeof images>();
+  for (const i of images) byProduct.set(i.productId, [...(byProduct.get(i.productId) ?? []), i]);
   let added = 0;
+  let removed = 0;
   for (const p of list) {
     const file = manifest[p.name];
-    if (!file || p.n > 0) continue;
-    try {
-      await addProductImage(db, ctx, p.id, await readFile(new URL(file, dir)));
-      added++;
-    } catch (e) {
-      console.error(`  photo of ${p.name}:`, e instanceof Error ? e.message : e);
+    if (!file) continue;
+    const own = byProduct.get(p.id) ?? [];
+    const [first, ...rest] = own;
+    if (!first) {
+      try {
+        await addProductImage(db, ctx, p.id, await readFile(new URL(file, dir)));
+        added++;
+      } catch (e) {
+        console.error(`  photo of ${p.name}:`, e instanceof Error ? e.message : e);
+      }
+      continue;
+    }
+    // Copies of the same photo left by that bug (same size, same blur placeholder): keep the first.
+    if (!first.placeholder) continue;
+    for (const dup of rest) {
+      if (dup.width !== first.width || dup.height !== first.height || dup.placeholder !== first.placeholder)
+        continue;
+      try {
+        await deleteProductImage(db, ctx, dup.id);
+        removed++;
+      } catch (e) {
+        console.error(`  duplicate photo of ${p.name}:`, e instanceof Error ? e.message : e);
+      }
     }
   }
   // The signature dish, with its photo, leads the guest menu (cover and "house picks").
@@ -519,6 +550,7 @@ async function ensureParsianPhotos(ctx: RestaurantContext) {
       .set({ isFeatured: true })
       .where(and(eq(products.restaurantId, rid), eq(products.name, name)));
   if (added) console.log(`✓ Parsian test hotel: ${added} dish photos added`);
+  if (removed) console.log(`✓ Parsian test hotel: ${removed} duplicate dish photos removed`);
 }
 
 async function ensureParsianOutlets(ctx: RestaurantContext) {
