@@ -1,13 +1,14 @@
 "use client";
 
 import { BellRing, Check, Clock, Hand, Inbox, RotateCcw } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
+import { useState } from "react";
 import { moveRequestAction } from "@/app/[locale]/dashboard/[restaurantId]/requests/actions";
 import { CALL_ICON } from "@/components/guest/call-icons";
 import { useRun } from "@/components/ui/sheet-kit";
 import { cn } from "@/lib/cn";
 import { Empty } from "@/components/ui/empty";
+import { useNow } from "@/components/ui/use-now";
 
 export type RequestView = {
   id: string;
@@ -28,16 +29,6 @@ const COLUMNS = [
   { status: "done", tone: "bg-success-soft text-success", Icon: Check },
 ] as const;
 
-/** Minutes since a moment, refreshed every 30 s so waiting rooms stand out. */
-function useNow() {
-  const [now, setNow] = useState(() => Date.now());
-  useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 30_000);
-    return () => clearInterval(id);
-  }, []);
-  return now;
-}
-
 /**
  * The rooms' requests in three columns: new, someone on it, done today. One tap takes a request,
  * another marks it done; a request waiting over 10 minutes turns red.
@@ -57,7 +48,9 @@ export function RequestsBoard({
 }) {
   const t = useTranslations("hotel");
   const tk = useTranslations("guest.waiter.kinds");
+  // Refreshed every 30 s so waiting rooms stand out (unknown until the page is hydrated).
   const now = useNow();
+  const format = useFormatter();
   const { pending, error, run } = useRun();
   const [col, setCol] = useState<string>("open");
   const [kind, setKind] = useState<string | null>(null);
@@ -66,7 +59,7 @@ export function RequestsBoard({
   const visible = kind ? requests.filter((r) => r.kind === kind) : requests;
   const clock = (iso: string) =>
     new Intl.DateTimeFormat("en-GB", { timeZone, hour: "2-digit", minute: "2-digit" }).format(new Date(iso));
-  const ago = (iso: string) => Math.max(0, Math.floor((now - Date.parse(iso)) / 60_000));
+  const ago = (iso: string) => (now == null ? 0 : Math.max(0, Math.floor((now - Date.parse(iso)) / 60_000)));
 
   return (
     <div>
@@ -178,7 +171,9 @@ export function RequestsBoard({
                             >
                               <Clock className="size-3.5" aria-hidden="true" />
                               <span dir="ltr">{clock(r.createdAt)}</span>
-                              {r.status !== "done" ? <span>· {t("ago", { min: wait })}</span> : null}
+                              {r.status !== "done" && now != null ? (
+                                <span>· {format.relativeTime(Date.parse(r.createdAt), now)}</span>
+                              ) : null}
                               {r.status === "done" && r.doneAt ? (
                                 <span>
                                   | {t("doneAt")} <span dir="ltr">{clock(r.doneAt)}</span>

@@ -3,6 +3,8 @@ import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader } from "@/components/ui/card";
+import { Empty } from "@/components/ui/empty";
+import { Gem, ReceiptText } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { formatMoney } from "@/lib/money";
 import { requireRestaurant } from "@/server/auth/current";
@@ -52,25 +54,39 @@ async function Billing({ params, searchParams }: Props) {
         </p>
       ) : null}
       <div className="grid items-start gap-6 xl:max-w-5xl">
-        <Card className="p-5 sm:p-6">
-          <p className="text-sm text-fg-muted">{t("current")}</p>
-          <div className="mt-1 flex flex-wrap items-center gap-3">
-            <p className="text-2xl font-bold">{s.kind === "free" ? t("freePlan") : s.planName}</p>
-            {s.kind === "trial" ? <Badge tone="accent">{t("trialBadge")}</Badge> : null}
-            {s.kind === "expired" ? <Badge tone="danger">{t("expiredBadge")}</Badge> : null}
-            {s.kind === "paid" ? <Badge tone="success">{t("activeBadge")}</Badge> : null}
+        <Card
+          className="relative isolate overflow-hidden border-transparent p-5 text-white shadow-accent sm:p-6"
+          style={{ background: "var(--brand-gradient)" }}
+        >
+          <span
+            aria-hidden="true"
+            className="texture-khatam texture-fade-corner [--tex-color:white] [--tex-opacity:0.12] [--tex-size:64px]"
+          />
+          <div className="relative flex items-start gap-4">
+            <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-white/15 ring-1 ring-white/25">
+              <Gem className="size-6" aria-hidden="true" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm text-white/75">{t("current")}</p>
+              <div className="mt-1 flex flex-wrap items-center gap-3">
+                <p className="text-2xl font-bold">{s.kind === "free" ? t("freePlan") : s.planName}</p>
+                {s.kind === "trial" ? <Badge tone="accent">{t("trialBadge")}</Badge> : null}
+                {s.kind === "expired" ? <Badge tone="danger">{t("expiredBadge")}</Badge> : null}
+                {s.kind === "paid" ? <Badge tone="success">{t("activeBadge")}</Badge> : null}
+              </div>
+              <p className="mt-2 text-sm text-white/80">
+                {s.kind === "trial"
+                  ? t("trialUntil", { date: date(s.endsAt), days: s.daysLeft })
+                  : s.kind === "paid"
+                    ? s.endsAt
+                      ? t("paidUntil", { date: date(s.endsAt), days: s.daysLeft ?? 0 })
+                      : t("noEnd")
+                    : s.kind === "expired"
+                      ? t("expiredSince", { date: date(s.endedAt) })
+                      : t("freeBody")}
+              </p>
+            </div>
           </div>
-          <p className="mt-2 text-sm text-fg-muted">
-            {s.kind === "trial"
-              ? t("trialUntil", { date: date(s.endsAt), days: s.daysLeft })
-              : s.kind === "paid"
-                ? s.endsAt
-                  ? t("paidUntil", { date: date(s.endsAt), days: s.daysLeft ?? 0 })
-                  : t("noEnd")
-                : s.kind === "expired"
-                  ? t("expiredSince", { date: date(s.endedAt) })
-                  : t("freeBody")}
-          </p>
         </Card>
 
         <Card>
@@ -103,7 +119,11 @@ async function Billing({ params, searchParams }: Props) {
         <Card>
           <CardHeader title={t("history")} />
           {view.history.length === 0 ? (
-            <p className="px-5 py-5 text-sm text-fg-muted sm:px-6">{t("historyEmpty")}</p>
+            <div className="p-4 sm:p-5">
+              <Empty size="sm" icon={<ReceiptText aria-hidden="true" />}>
+                {t("historyEmpty")}
+              </Empty>
+            </div>
           ) : (
             <ul className="divide-y divide-border">
               {view.history.map((h) => (

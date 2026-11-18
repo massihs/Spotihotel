@@ -97,9 +97,9 @@ export function HousekeepingPlan({
     <div className="space-y-4">
       <ul className="grid grid-cols-3 gap-2 sm:grid-cols-6">
         {(["dirty", "cleaning", "clean", "inspected", "outOfOrder", "unassigned"] as const).map((k) => (
-          <li key={k} className="rounded-2xl border border-border bg-surface px-3 py-2.5">
-            <p className="text-xs text-fg-muted">{t(`counts.${k}`)}</p>
-            <p className="text-xl font-bold tabular-nums">{counts[k] ?? 0}</p>
+          <li key={k} className="kpi stat-auto px-3 pt-3 pb-2.5">
+            <p className="kpi-label">{t(`counts.${k}`)}</p>
+            <p className="kpi-value mt-0.5 text-xl font-bold tabular-nums">{counts[k] ?? 0}</p>
           </li>
         ))}
       </ul>

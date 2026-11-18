@@ -1260,6 +1260,43 @@ dialog[open]::backdrop {
   --shade: var(--shade-indigo);
 }
 
+/* A key figure in a small tile: a line of its blue on top, a breath of it in the corner. Several
+   side by side in a grid take turns in the blues (with .stat-auto). */
+@layer components {
+  .kpi {
+    --kpi-wash: linear-gradient(
+      155deg,
+      color-mix(in oklch, var(--shade, var(--accent)) 13%, var(--surface)),
+      var(--surface) 62%
+    );
+    --kpi-line: color-mix(in oklch, var(--shade, var(--accent)) 85%, transparent);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background-color: var(--surface);
+    background-image: var(--kpi-wash);
+    box-shadow: var(--shadow-card);
+  }
+  .kpi::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 3px;
+    background-color: var(--kpi-line);
+  }
+  .kpi-label {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: var(--fg-muted);
+  }
+  .kpi-value {
+    --kpi-ink: color-mix(in oklch, var(--shade, var(--accent)) 35%, var(--fg));
+    color: var(--kpi-ink);
+  }
+}
+
 /* Guest pages: each tile and part of the stay page washed in its own blue, a line of it on top.
    Unlayered on purpose: they must win over the cards' own background and border utilities. */
 .guest-tile {

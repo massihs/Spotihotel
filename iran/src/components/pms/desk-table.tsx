@@ -1,6 +1,7 @@
-import { FileDown } from "lucide-react";
+import { FileDown, TableProperties } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Card } from "@/components/ui/card";
+import { Empty } from "@/components/ui/empty";
 import { buttonClasses } from "@/components/ui/button";
 import { DateInput } from "@/components/ui/date-input";
 import { PrintButton } from "@/components/ui/print-button";
@@ -225,7 +226,11 @@ export async function DeskTable({
     return ns ? fmt("code", key, ns) : key;
   };
   if (!table.rows.length)
-    return <Card className="p-10 text-center text-sm text-fg-muted">{empty ?? t("empty")}</Card>;
+    return (
+      <Empty size="sm" icon={<TableProperties aria-hidden="true" />}>
+        {empty ?? t("empty")}
+      </Empty>
+    );
   const shown = table.rows.length > limit ? table.rows.slice(0, limit) : table.rows;
   return (
     <>

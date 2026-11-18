@@ -76,12 +76,9 @@ async function Engineering({ params, searchParams }: Props) {
         <DeskActions csv={await tableCsv(rep.tickets, cur)} />
         <dl className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {(["total", "open", "done", "urgent", "avgHours", "services"] as const).map((k) => (
-            <div
-              key={k}
-              className="rounded-2xl border border-border bg-surface p-4 shadow-[var(--shadow-card)]"
-            >
-              <dt className="text-xs text-fg-muted">{t(`report.${k}`)}</dt>
-              <dd className="mt-1 text-2xl font-bold tabular-nums">{s[k]}</dd>
+            <div key={k} className="kpi stat-auto p-4">
+              <dt className="kpi-label">{t(`report.${k}`)}</dt>
+              <dd className="kpi-value mt-1 text-2xl font-bold tabular-nums">{s[k]}</dd>
             </div>
           ))}
         </dl>

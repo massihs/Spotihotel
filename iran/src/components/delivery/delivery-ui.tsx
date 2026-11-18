@@ -17,6 +17,7 @@ import {
   setCourierActiveAction,
   settleCourierAction,
 } from "@/app/[locale]/dashboard/[restaurantId]/delivery/actions";
+import { Empty } from "@/components/ui/empty";
 
 export type DeliveryCard = {
   id: string;
@@ -86,7 +87,11 @@ export function DispatchBoard({
             </header>
             <ul className="space-y-2 p-2">
               {board[col].length === 0 ? (
-                <li className="py-8 text-center text-sm text-fg-subtle">{t("empty")}</li>
+                <li>
+                  <Empty size="sm" icon={<Bike aria-hidden="true" />}>
+                    {t("empty")}
+                  </Empty>
+                </li>
               ) : null}
               {board[col].map((o) => {
                 const elapsed =

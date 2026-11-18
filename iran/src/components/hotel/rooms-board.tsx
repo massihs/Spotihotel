@@ -244,11 +244,11 @@ function Summary({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-border bg-surface p-4 shadow-[var(--shadow-soft)]">
-      <p className="text-xs font-semibold text-fg-muted">{label}</p>
+    <div className="kpi stat-auto p-4">
+      <p className="kpi-label font-semibold">{label}</p>
       <p
         className={cn(
-          "mt-1 text-2xl font-bold tracking-tight tabular-nums",
+          "kpi-value mt-1 text-2xl font-bold tracking-tight tabular-nums",
           tone === "danger" && "text-danger",
           tone === "warning" && "text-warning",
         )}

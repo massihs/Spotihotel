@@ -17,6 +17,8 @@ import { localDay } from "@/lib/period";
 import { isDay } from "@/server/modules/pms/calc";
 import { chainAvailability, chainFinancials, chainOverview, chainSearch } from "@/server/modules/pms/chain";
 import { fiscalYearStart } from "@/server/modules/ledger/periods";
+import { Avatar } from "@/components/ui/avatar";
+import { Empty } from "@/components/ui/empty";
 
 const TABS = ["overview", "availability", "search", "finance"] as const;
 type Tab = (typeof TABS)[number];
@@ -237,13 +239,14 @@ async function Chain({ params, searchParams }: Props) {
           <button className={buttonClasses("secondary", "lg")}>{t("find")}</button>
         </form>
         {q ? (
-          <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface">
+          <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface shadow-[var(--shadow-card)]">
             {rows.map((r) => (
               <li key={r.id}>
                 <Link
                   href={`/dashboard/${r.restaurantId}/stays/${r.id}`}
-                  className="flex flex-wrap items-center gap-3 px-4 py-3 hover:bg-surface-2"
+                  className="row-hover flex flex-wrap items-center gap-3 px-4 py-3"
                 >
+                  <Avatar name={`${r.firstName ?? ""} ${r.lastName ?? ""}`} />
                   <span className="min-w-0 flex-1">
                     <span className="font-semibold">
                       {r.lastName} {r.firstName}
@@ -257,7 +260,13 @@ async function Chain({ params, searchParams }: Props) {
                 </Link>
               </li>
             ))}
-            {!rows.length ? <li className="px-4 py-8 text-center text-fg-muted">{t("noResults")}</li> : null}
+            {!rows.length ? (
+              <li className="p-4">
+                <Empty size="sm" icon={<Search aria-hidden="true" />}>
+                  {t("noResults")}
+                </Empty>
+              </li>
+            ) : null}
           </ul>
         ) : null}
       </div>

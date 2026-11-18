@@ -1,8 +1,9 @@
 import { Suspense } from "react";
 import { getFormatter, getTranslations } from "next-intl/server";
-import { Star } from "lucide-react";
+import { Frown, MessageSquareText, Percent, Star } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { Card, CardHeader, StatCard } from "@/components/ui/card";
+import { Empty } from "@/components/ui/empty";
 import { cn } from "@/lib/cn";
 import { requireRestaurant } from "@/server/auth/current";
 import { db } from "@/server/db/client";
@@ -36,26 +37,38 @@ async function FeedbackDashboard({ params }: Props) {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
           label={t("average")}
+          icon={<Star className="size-5" aria-hidden="true" />}
           value={
             overview.average != null
               ? t("stars", { count: format.number(overview.average, { maximumFractionDigits: 1 }) })
               : "—"
           }
         />
-        <StatCard label={t("answered")} value={format.number(overview.answered)} />
+        <StatCard
+          label={t("answered")}
+          value={format.number(overview.answered)}
+          icon={<MessageSquareText className="size-5" aria-hidden="true" />}
+        />
         <StatCard
           label={t("rate")}
+          icon={<Percent className="size-5" aria-hidden="true" />}
           value={
             overview.sent ? `${format.number(Math.round((overview.answered / overview.sent) * 100))} %` : "—"
           }
         />
-        <StatCard label={t("unhappy")} value={format.number(overview.unhappy)} />
+        <StatCard
+          label={t("unhappy")}
+          value={format.number(overview.unhappy)}
+          icon={<Frown className="size-5" aria-hidden="true" />}
+        />
       </div>
       <div className="mt-6 grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_26rem]">
         <Card>
           <CardHeader title={t("latest")} description={t("latestHint")} />
           {overview.list.length === 0 ? (
-            <p className="px-5 py-5 text-sm text-fg-muted sm:px-6">{t("empty")}</p>
+            <div className="p-4 sm:p-5">
+              <Empty icon={<MessageSquareText aria-hidden="true" />}>{t("empty")}</Empty>
+            </div>
           ) : (
             <ul className="divide-y divide-border">
               {overview.list.map((f) => (

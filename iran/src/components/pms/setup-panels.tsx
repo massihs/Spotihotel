@@ -1,5 +1,6 @@
 "use client";
 
+import { BedDouble, Building2, CalendarRange, Sparkles, Tags, Wine } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -38,9 +39,23 @@ const pct = (bps: number) => String(bps / 100);
 const toBps = (v: FormDataEntryValue | null) =>
   Math.round(Number(String(v ?? "0").replace(",", ".")) * 100) || 0;
 
-function Row({ children, actions }: { children: React.ReactNode; actions?: React.ReactNode }) {
+function Row({
+  children,
+  actions,
+  icon,
+}: {
+  children: React.ReactNode;
+  actions?: React.ReactNode;
+  /** A medallion in the section's blue at the start of the row. */
+  icon?: React.ReactNode;
+}) {
   return (
-    <li className="flex flex-wrap items-center gap-3 px-4 py-3">
+    <li className="row-hover flex flex-wrap items-center gap-3 px-4 py-3.5">
+      {icon ? (
+        <span className="shade-soft grid size-10 shrink-0 place-items-center rounded-xl [&_svg]:size-5">
+          {icon}
+        </span>
+      ) : null}
       <div className="min-w-0 flex-1">{children}</div>
       {actions ? <div className="flex flex-wrap gap-2">{actions}</div> : null}
     </li>
@@ -49,9 +64,18 @@ function Row({ children, actions }: { children: React.ReactNode; actions?: React
 
 function List({ children }: { children: React.ReactNode }) {
   return (
-    <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface">
+    <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface shadow-[var(--shadow-card)]">
       {children}
     </ul>
+  );
+}
+
+/** A short code (room type, rate plan) as a pill in the section's blue. */
+function Code({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="shade-soft me-2 inline-block rounded-md px-1.5 py-0.5 font-mono text-[11px] font-bold tracking-wide">
+      {children}
+    </span>
   );
 }
 
@@ -90,6 +114,7 @@ export function RoomTypesPanel({
         <List>
           {types.map((x) => (
             <Row
+              icon={<BedDouble aria-hidden="true" />}
               key={x.id}
               actions={
                 <>
@@ -109,7 +134,7 @@ export function RoomTypesPanel({
               }
             >
               <p className="font-semibold">
-                <span className="me-2 rounded bg-surface-2 px-1.5 py-0.5 font-mono text-xs">{x.code}</span>
+                <Code>{x.code}</Code>
                 {x.name}
               </p>
               <p className="text-sm text-fg-muted">
@@ -356,6 +381,7 @@ export function RatePlansPanel({
         <List>
           {plans.map((p) => (
             <Row
+              icon={<Tags aria-hidden="true" />}
               key={p.id}
               actions={
                 <>
@@ -375,7 +401,7 @@ export function RatePlansPanel({
               }
             >
               <p className={cn("font-semibold", !p.active && "text-fg-subtle")}>
-                <span className="me-2 rounded bg-surface-2 px-1.5 py-0.5 font-mono text-xs">{p.code}</span>
+                <Code>{p.code}</Code>
                 {p.name}{" "}
                 {p.isDefault ? (
                   <span className="ms-1 rounded-full bg-accent-soft px-2 py-0.5 text-xs text-accent-text">
@@ -747,6 +773,7 @@ export function ServicesPanel({
         <List>
           {services.map((s) => (
             <Row
+              icon={<Sparkles aria-hidden="true" />}
               key={s.id}
               actions={
                 <>
@@ -987,6 +1014,7 @@ export function MinibarPanel({
         <List>
           {items.map((i) => (
             <Row
+              icon={<Wine aria-hidden="true" />}
               key={i.id}
               actions={
                 <>
@@ -1169,6 +1197,7 @@ export function AccountsPanel({
         <List>
           {accounts.map((a) => (
             <Row
+              icon={<Building2 aria-hidden="true" />}
               key={a.id}
               actions={
                 canEdit ? (
@@ -1468,6 +1497,7 @@ export function PricingPanel({
         <List>
           {rules.map((rule) => (
             <Row
+              icon={<CalendarRange aria-hidden="true" />}
               key={rule.id}
               actions={
                 <>

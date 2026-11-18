@@ -53,13 +53,18 @@ export function StockTable({
   return (
     <>
       <div className="mb-4 flex flex-wrap items-center gap-3">
-        <div className="rounded-2xl border border-border bg-surface px-4 py-3">
-          <p className="text-xs text-fg-muted">{t("stockValue")}</p>
-          <p className="text-lg font-bold tabular-nums">{money(Math.round(value))}</p>
+        <div className="kpi px-4 pt-3.5 pb-3">
+          <p className="kpi-label">{t("stockValue")}</p>
+          <p className="kpi-value text-lg font-bold tabular-nums">{money(Math.round(value))}</p>
         </div>
-        <div className="rounded-2xl border border-border bg-surface px-4 py-3">
-          <p className="text-xs text-fg-muted">{t("lowCount")}</p>
-          <p className={cn("text-lg font-bold tabular-nums", items.some((i) => i.isLow) && "text-danger")}>
+        <div className="kpi shade-periwinkle px-4 pt-3.5 pb-3">
+          <p className="kpi-label">{t("lowCount")}</p>
+          <p
+            className={cn(
+              "kpi-value text-lg font-bold tabular-nums",
+              items.some((i) => i.isLow) && "text-danger",
+            )}
+          >
             {items.filter((i) => i.isLow && i.lowStockThreshold > 0).length}
           </p>
         </div>
@@ -79,21 +84,30 @@ export function StockTable({
           {t("noItems")}
         </Empty>
       ) : (
-        <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface">
+        <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface shadow-[var(--shadow-card)]">
           {items.map((i) => {
             const low = i.lowStockThreshold > 0 && i.isLow;
             const pct =
               i.lowStockThreshold > 0 ? Math.min(100, (i.quantity / (i.lowStockThreshold * 3)) * 100) : 100;
             return (
-              <li key={i.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
+              <li key={i.id} className="row-hover flex flex-wrap items-center gap-3 px-4 py-3">
+                <span
+                  className={cn(
+                    "grid size-10 shrink-0 place-items-center rounded-xl",
+                    low ? "bg-danger-soft text-danger" : "shade-soft",
+                  )}
+                >
+                  {low ? (
+                    <AlertTriangle className="size-5" aria-hidden="true" />
+                  ) : (
+                    <Package className="size-5" aria-hidden="true" />
+                  )}
+                </span>
                 <div className="min-w-0 flex-1">
-                  <p className="flex items-center gap-2 font-semibold">
-                    {low ? <AlertTriangle className="size-4 text-danger" aria-hidden="true" /> : null}
-                    {i.name}
-                  </p>
+                  <p className="font-semibold">{i.name}</p>
                   <div className="mt-1.5 h-1.5 w-40 max-w-full overflow-hidden rounded-full bg-surface-2">
                     <div
-                      className={cn("h-full rounded-full", low ? "bg-danger" : "bg-accent")}
+                      className={cn("h-full rounded-full", low ? "bg-danger" : "shade-bar")}
                       style={{ width: `${Math.max(4, pct)}%` }}
                     />
                   </div>

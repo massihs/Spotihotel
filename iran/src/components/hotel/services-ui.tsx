@@ -265,7 +265,12 @@ export function TicketForm({
             >
               {t("form.room")}
             </button>
-            <button type="button" className="seg-item" aria-current={walkIn ? "true" : undefined} onClick={() => setWalkIn(true)}>
+            <button
+              type="button"
+              className="seg-item"
+              aria-current={walkIn ? "true" : undefined}
+              onClick={() => setWalkIn(true)}
+            >
               {t("form.walkIn")}
             </button>
           </div>
@@ -576,9 +581,9 @@ export function CashTotals({
   return (
     <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
       {keys.map((k) => (
-        <div key={k} className={cn(card, "p-4")}>
-          <p className="text-xs text-fg-muted">{t(`settle.${k}`)}</p>
-          <p className="mt-1 text-lg font-bold tabular-nums">{money(by[k]!.cents)}</p>
+        <div key={k} className="kpi stat-auto p-4">
+          <p className="kpi-label">{t(`settle.${k}`)}</p>
+          <p className="kpi-value mt-1 text-lg font-bold tabular-nums">{money(by[k]!.cents)}</p>
           <p className="text-xs text-fg-subtle">{t("count", { n: by[k]!.count })}</p>
         </div>
       ))}

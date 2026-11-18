@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeftRight, Building2, Lock, Plus, Search, Trash2, Unlock } from "lucide-react";
+import { ArrowLeftRight, Banknote, Building2, Lock, Plus, Search, Trash2, Unlock } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -58,43 +58,50 @@ export function ShiftPanel({
 
   if (!shift)
     return (
-      <div className={card}>
-        <h2 className="flex items-center gap-2 text-lg font-bold">
-          <Unlock className="size-5 text-accent-text" aria-hidden="true" />
-          {t("openTitle")}
-        </h2>
-        <p className="mt-1 mb-4 text-sm text-fg-muted">{t("openHint")}</p>
-        {result ? (
-          <p
-            className={cn(
-              "mb-4 rounded-xl px-4 py-3 text-sm font-semibold",
-              result.differenceCents === 0 ? "bg-success-soft text-success" : "bg-warning-soft text-warning",
-            )}
+      <div className="grid overflow-hidden rounded-2xl border border-border bg-surface shadow-[var(--shadow-card)] md:grid-cols-[1.15fr_1fr]">
+        <div className="shade-wash relative isolate flex flex-col justify-center gap-3 p-6 sm:p-8">
+          <span
+            aria-hidden="true"
+            className="texture-khatam texture-fade-corner [--tex-color:var(--shade,var(--accent))] [--tex-opacity:0.1] [--tex-size:56px]"
+          />
+          <span className="shade-fill relative grid size-14 place-items-center rounded-2xl">
+            <Unlock className="size-7" aria-hidden="true" />
+          </span>
+          <h2 className="relative text-xl font-bold">{t("openTitle")}</h2>
+          <p className="relative max-w-md text-sm leading-6 text-fg-muted">{t("openHint")}</p>
+        </div>
+        <div className="flex flex-col justify-center gap-4 border-t border-border p-6 sm:p-8 md:border-s md:border-t-0">
+          {result ? (
+            <p
+              className={cn(
+                "rounded-xl px-4 py-3 text-sm font-semibold",
+                result.differenceCents === 0
+                  ? "bg-success-soft text-success"
+                  : "bg-warning-soft text-warning",
+              )}
+            >
+              {result.differenceCents === 0
+                ? t("closedExact")
+                : t("closedDiff", { amount: money(result.differenceCents) })}
+            </p>
+          ) : null}
+          <form
+            className="space-y-4"
+            action={(fd) =>
+              r.run(() => openShiftAction(rid, parseMoneyInput(String(fd.get("float") ?? ""), currency) ?? 0))
+            }
           >
-            {result.differenceCents === 0
-              ? t("closedExact")
-              : t("closedDiff", { amount: money(result.differenceCents) })}
-          </p>
-        ) : null}
-        <form
-          className="flex flex-wrap items-end gap-3"
-          action={(fd) =>
-            r.run(() => openShiftAction(rid, parseMoneyInput(String(fd.get("float") ?? ""), currency) ?? 0))
-          }
-        >
-          <div className="w-56">
             <MoneyField
               name="float"
               currency={currency}
               label={t("float")}
               defaultValue={asInput(defaultFloatCents)}
             />
-          </div>
-          <Button type="submit" disabled={r.pending}>
-            {t("open")}
-          </Button>
-        </form>
-        <div className="mt-2">
+            <Button type="submit" disabled={r.pending} className="w-full">
+              <Unlock className="size-4" aria-hidden="true" />
+              {t("open")}
+            </Button>
+          </form>
           <FormError error={r.error} />
         </div>
       </div>
@@ -104,10 +111,17 @@ export function ShiftPanel({
   return (
     <div className="grid gap-4 lg:grid-cols-[1fr_1.1fr]">
       <div className={card}>
-        <h2 className="text-lg font-bold">{t("currentTitle")}</h2>
-        <p className="mt-1 text-sm text-fg-muted">
-          {t("since", { time: opened.toLocaleString(), n: shift.count })}
-        </p>
+        <div className="flex items-start gap-3">
+          <span className="shade-fill grid size-11 shrink-0 place-items-center rounded-2xl">
+            <Banknote className="size-5" aria-hidden="true" />
+          </span>
+          <div className="min-w-0">
+            <h2 className="text-lg font-bold">{t("currentTitle")}</h2>
+            <p className="mt-0.5 text-sm text-fg-muted">
+              {t("since", { time: opened.toLocaleString(), n: shift.count })}
+            </p>
+          </div>
+        </div>
         <dl className="mt-4 divide-y divide-border text-sm">
           <div className="flex justify-between py-2">
             <dt className="text-fg-muted">{t("float")}</dt>
@@ -127,9 +141,9 @@ export function ShiftPanel({
               </dd>
             </div>
           ))}
-          <div className="flex justify-between py-2.5 text-base font-bold">
+          <div className="shade-soft mt-2 flex items-center justify-between rounded-xl border-0! px-4 py-3 text-base font-bold">
             <dt>{t("expectedCash")}</dt>
-            <dd className="tabular-nums">{money(shift.expectedCashCents)}</dd>
+            <dd className="text-lg tabular-nums">{money(shift.expectedCashCents)}</dd>
           </div>
         </dl>
       </div>

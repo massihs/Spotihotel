@@ -68,9 +68,9 @@ async function CustomerFile({ params }: Pick<Props, "params">) {
           [t("orders"), c.ordersCount.toLocaleString("fa-IR")],
           [t("lastVisit"), c.lastOrderAt ? format.dateTime(c.lastOrderAt, { dateStyle: "medium" }) : "—"],
         ].map(([k, v]) => (
-          <div key={k} className="rounded-2xl border border-border bg-surface px-4 py-3">
-            <p className="text-xs text-fg-muted">{k}</p>
-            <p className="text-lg font-bold tabular-nums">{v}</p>
+          <div key={k} className="kpi stat-auto px-4 pt-3.5 pb-3">
+            <p className="kpi-label">{k}</p>
+            <p className="kpi-value text-lg font-bold tabular-nums">{v}</p>
           </div>
         ))}
       </div>

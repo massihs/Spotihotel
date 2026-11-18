@@ -209,8 +209,10 @@ async function CustomerTab({
                   <p>{t("ordersCount", { count: c.ordersCount })}</p>
                   <p>{c.lastOrderAt ? date(c.lastOrderAt) : "—"}</p>
                 </div>
-                <div className="w-28 shrink-0 text-end">
-                  <p className="text-sm font-bold tabular-nums">{money(c.totalSpentCents)}</p>
+                <div className="shrink-0 text-end">
+                  <p className="text-sm font-bold whitespace-nowrap tabular-nums">
+                    {money(c.totalSpentCents)}
+                  </p>
                   <p className="inline-flex items-center gap-1 text-xs font-semibold text-warning">
                     <Star className="size-3 fill-current" />
                     {c.points.toLocaleString("fa-IR")}
