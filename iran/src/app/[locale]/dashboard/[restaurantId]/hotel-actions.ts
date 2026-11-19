@@ -2,6 +2,8 @@
 
 import { refresh } from "next/cache";
 import { db } from "@/server/db/client";
+import { caravanCheckIn, caravanSchema, setCaravan } from "@/server/modules/pms/caravan";
+import { saveFeatures, type Features } from "@/server/modules/pms/features";
 import { actionContext, runAction } from "@/server/actions";
 import {
   assignRoomType,
@@ -323,3 +325,16 @@ export const updateIdentityAction = async (rid: string, guestId: string, input: 
   runAction(async () =>
     updateGuestIdentity(db, await actionContext(rid, "frontdesk.manage"), guestId, input),
   );
+
+// Pilgrim caravans and the hotel's own features (Ramadan, tips, room-ready offer)
+export const caravanAction = async (rid: string, id: string, input: In<typeof caravanSchema>) =>
+  runAction(async () =>
+    done((await setCaravan(db, await actionContext(rid, "frontdesk.manage"), id, input)).id),
+  );
+export const caravanCheckInAction = async (rid: string, id: string) =>
+  runAction(async () => done(await caravanCheckIn(db, await actionContext(rid, "frontdesk.manage"), id)));
+export const featuresAction = async (rid: string, input: Partial<Features>) =>
+  runAction(async () => {
+    await actionContext(rid, "restaurant.manage");
+    return done(await saveFeatures(db, rid, input));
+  });

@@ -6477,5 +6477,47 @@
     "offer": "While your room is prepared: {pct}% off at {cafe}",
     "offerHint": "Show this page at the café (booking #{number}).",
     "cafe": "the hotel café"
+  },
+  "caravan": {
+    "title": "Pilgrim caravan",
+    "enable": "This group is a pilgrim caravan",
+    "enableHint": "A private page for the caravan leader, check-in at once and prayer times.",
+    "schedule": "Caravan programme",
+    "schedulePlaceholder": "06:30 Shuttle to the shrine\n13:00 Lunch at the restaurant\n20:00 Evening visit",
+    "save": "Save",
+    "leaderLink": "Caravan leader's link",
+    "copy": "Copy",
+    "copied": "Copied",
+    "checkInAll": "Check the whole caravan in",
+    "checkedIn": "{done} checked in; {waiting} waiting for their room.",
+    "features": {
+      "title": "Ramadan, tips and early arrivals",
+      "ramadan": "Ramadan",
+      "ramadanHint": "During these dates the guest page shows sahari and iftar and offers sahari in the room.",
+      "from": "From",
+      "to": "To",
+      "tips": "Digital tips to staff",
+      "tipsHint": "Guests tip the employee of their choice from their phone (on the bill).",
+      "offer": "Café discount for early arrivals",
+      "offerHint": "Shown on the booking page while the room is being prepared.",
+      "pct": "Discount %",
+      "save": "Save",
+      "saved": "Saved."
+    }
+  },
+  "caravanPage": {
+    "title": "Caravan {name}",
+    "pilgrims": "Pilgrims",
+    "rooms": "Rooms",
+    "inHouse": "Checked in",
+    "schedule": "Programme",
+    "list": "Pilgrims and rooms",
+    "status": {
+      "tentative": "Tentative",
+      "confirmed": "Expected",
+      "in_house": "In the hotel",
+      "checked_out": "Left"
+    },
+    "call": "Call the front desk"
   }
 }

@@ -35,6 +35,7 @@ import {
   restaurantMembers,
   restaurantSettings,
   restaurants,
+  roomBlocks,
   roomTypes,
   stays,
   stockItems,
@@ -71,7 +72,8 @@ import { chargeMinibar, saveMinibarItem } from "@/server/modules/pms/minibar";
 import { chargeRoomOrders } from "@/server/modules/pms/room-charges";
 import { addDays, nightsBetween, serviceSlots } from "@/server/modules/pms/calc";
 import { cancellationFee, savePricingRule } from "@/server/modules/pms/revenue";
-import { createBlock } from "@/server/modules/pms/blocks";
+import { createBlock, pickupRooming } from "@/server/modules/pms/blocks";
+import { setCaravan } from "@/server/modules/pms/caravan";
 import { autoAssignRooms } from "@/server/modules/pms/booking";
 import { runNightAudit } from "@/server/modules/pms/night-audit";
 import { createPosOrder } from "@/server/modules/pos/service";
@@ -675,6 +677,78 @@ async function ensureParsianGuestExtras(ctx: RestaurantContext) {
     });
   });
   console.log("✓ Parsian test hotel: dollar deposit on room 1001");
+}
+
+/**
+ * Caravan demo: an Iraqi pilgrim caravan arriving today for three nights (8 pilgrims in twin
+ * rooms), with its programme and the leader's page; created once.
+ */
+async function ensureParsianCaravan(ctx: RestaurantContext) {
+  const rid = ctx.restaurant.id;
+  const [exists] = await db
+    .select({ id: roomBlocks.id })
+    .from(roomBlocks)
+    .where(and(eq(roomBlocks.restaurantId, rid), eq(roomBlocks.caravan, true)))
+    .limit(1);
+  if (exists) return;
+  const types = await db
+    .select({ id: roomTypes.id })
+    .from(roomTypes)
+    .where(eq(roomTypes.restaurantId, rid))
+    .orderBy(asc(roomTypes.baseRateCents));
+  const { businessDate: today } = await getPmsSettings(db, rid, TZ);
+  // The first room type and day (from today) the full hotel can still hold the caravan.
+  let block: { id: string } | null = null;
+  let twin: { id: string } | null = null;
+  for (const back of [0, 1, 2, 3, 4, 5, 6])
+    for (const type of types) {
+      if (block) break;
+      const arrival = addDays(today, back);
+      block = await createBlock(db, ctx, {
+        name: "زائران کربلا — حملة النور",
+        contactName: "الحاج علي الموسوي",
+        contactPhone: "+9647701234567",
+        status: "definite",
+        arrival,
+        departure: addDays(arrival, 3),
+        releaseDate: today,
+        rooms: [{ roomTypeId: type.id, rooms: 4 }],
+      }).catch(() => null);
+      if (block) twin = type;
+    }
+  if (!block || !twin) return;
+  const typeId = (twin as { id: string }).id;
+  try {
+    await pickupRooming(
+      db,
+      ctx,
+      block.id,
+      [
+        ["الموسوي", "علي و زينب"],
+        ["الحسيني", "حسن و فاطمة"],
+        ["الجبوري", "محمد و مريم"],
+        ["العامري", "كاظم و نور"],
+      ].map(([lastName, firstName]) => ({
+        lastName: lastName!,
+        firstName: firstName!,
+        roomTypeId: typeId,
+        adults: 2,
+      })),
+    );
+    await setCaravan(db, ctx, block.id, {
+      caravan: true,
+      schedule: [
+        "05:00 نماز صبح و صبحانهٔ زودهنگام در رستوران",
+        "06:30 سرویس رفت به حرم مطهر (درب هتل)",
+        "12:30 ناهار در رستوران سنتی شهرزاد",
+        "16:00 سرویس رفت به حرم برای زیارت عصر",
+        "21:00 شام و استراحت",
+      ].join("\n"),
+    });
+    console.log("✓ Parsian test hotel: pilgrim caravan");
+  } catch (e) {
+    console.error("  caravan:", e instanceof Error ? e.message : e);
+  }
 }
 
 async function ensureParsianOutlets(ctx: RestaurantContext) {
@@ -1635,6 +1709,7 @@ export async function seedParsian(ownerEmail: string, days = 30, opts: { build?:
       await ensureParsianOwnerSignals(ctx);
       await ensureParsianShield(ctx);
       await ensureParsianGuestExtras(ctx);
+      await ensureParsianCaravan(ctx);
       for (const [name, icon] of Object.entries(MENU_ICONS))
         await db
           .update(categories)

@@ -16,7 +16,7 @@ afterEach(() => setSmsDriver(null));
 describe("room ready", () => {
   it("shows the room being prepared, then texts the arriving guest once when it is clean", async () => {
     const sent: { to: string; text: string }[] = [];
-    setSmsDriver({ send: async (to, text) => (sent.push({ to, text }), { ref: null }) });
+    setSmsDriver({ name: "test", send: async (to, text) => (sent.push({ to, text }), { ref: null }) });
     const { ctx } = await createOwnerWithRestaurant("Ready Hotel", { plan: "enterprise" });
     await db.update(restaurants).set({ kind: "hotel" }).where(eq(restaurants.id, ctx.restaurant.id));
     const h = { ...ctx, restaurant: { ...ctx.restaurant, kind: "hotel" as const } };

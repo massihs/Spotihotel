@@ -6477,5 +6477,47 @@
     "offer": "En attendant votre chambre : -{pct} % au {cafe}",
     "offerHint": "Montrez cette page au café (réservation #{number}).",
     "cafe": "café de l'hôtel"
+  },
+  "caravan": {
+    "title": "Caravane de pèlerins",
+    "enable": "Ce groupe est une caravane de pèlerins",
+    "enableHint": "Page privée pour le chef de caravane, check-in groupé et heures de prière.",
+    "schedule": "Programme de la caravane",
+    "schedulePlaceholder": "06:30 Navette vers le sanctuaire\n13:00 Déjeuner au restaurant\n20:00 Visite du soir",
+    "save": "Enregistrer",
+    "leaderLink": "Lien du chef de caravane",
+    "copy": "Copier",
+    "copied": "Copié",
+    "checkInAll": "Check-in de toute la caravane",
+    "checkedIn": "{done} pèlerin(s) enregistré(s) ; {waiting} attendent leur chambre.",
+    "features": {
+      "title": "Ramadan, pourboires et arrivées anticipées",
+      "ramadan": "Ramadan",
+      "ramadanHint": "Pendant cette période, la page client montre le sahari et l'iftar et propose le sahari en chambre.",
+      "from": "Du",
+      "to": "Au",
+      "tips": "Pourboires numériques au personnel",
+      "tipsHint": "Le client laisse un pourboire à l'employé de son choix depuis son téléphone (sur la note).",
+      "offer": "Remise au café pour les arrivées anticipées",
+      "offerHint": "Affichée sur la page de réservation tant que la chambre n'est pas prête.",
+      "pct": "Remise en %",
+      "save": "Enregistrer",
+      "saved": "Enregistré."
+    }
+  },
+  "caravanPage": {
+    "title": "Caravane {name}",
+    "pilgrims": "Pèlerins",
+    "rooms": "Chambres",
+    "inHouse": "Arrivés",
+    "schedule": "Programme",
+    "list": "Pèlerins et chambres",
+    "status": {
+      "tentative": "Option",
+      "confirmed": "Attendu",
+      "in_house": "À l'hôtel",
+      "checked_out": "Parti"
+    },
+    "call": "Appeler la réception"
   }
 }

@@ -2,6 +2,9 @@ import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { BlockStatusButtons, NewBlockButton, RoomingList } from "@/components/pms/blocks-ui";
+import { CaravanPanel, FeaturesForm } from "@/components/pms/caravan-ui";
+import { getFeatures } from "@/server/modules/pms/features";
+import { env } from "@/server/env";
 import { StatusText } from "@/components/pms/status-text";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
@@ -41,6 +44,7 @@ async function Blocks({ params, searchParams }: Props) {
     listAccounts(db, rid),
     getPmsSettings(db, rid, ctx.restaurant.timezone),
   ]);
+  const features = await getFeatures(db, rid);
   const day = (d: string) =>
     new Intl.DateTimeFormat(calendarLocale(locale, EDITION), {
       day: "numeric",
@@ -184,6 +188,25 @@ async function Blocks({ params, searchParams }: Props) {
                 types={typeList.filter((x) => detail.days.some((d) => d.roomTypeId === x.id))}
               />
             ) : null}
+            <CaravanPanel
+              rid={rid}
+              blockId={detail.block.id}
+              caravan={detail.block.caravan}
+              schedule={detail.block.schedule}
+              leaderUrl={
+                detail.block.leaderToken ? `${env().APP_URL}/caravan/${detail.block.leaderToken}` : null
+              }
+              canManage={manage}
+            />
+          </aside>
+        ) : can(ctx, "restaurant.manage") ? (
+          <aside>
+            <FeaturesForm
+              rid={rid}
+              ramadan={features.ramadan}
+              tipsEnabled={features.tips.enabled}
+              readyOffer={features.readyOffer}
+            />
           </aside>
         ) : null}
       </div>
