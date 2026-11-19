@@ -652,6 +652,9 @@ export function revenueOf(department: string): { key: SystemKey; dept: string } 
       return { key: "revenue_spa", dept: "spa" };
     case "city_tax":
       return { key: "city_tax_payable", dept: "rooms" };
+    // Tips left by guests are owed to the staff, not earned by the hotel.
+    case "tip":
+      return { key: "salaries_payable", dept: "admin" };
     default:
       return { key: "revenue_other", dept: "other" };
   }
