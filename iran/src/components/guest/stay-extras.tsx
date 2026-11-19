@@ -311,7 +311,8 @@ export function Concierge(props: ConciergeProps) {
   };
   const go = (href: string) => {
     setOpen(false);
-    if (href.startsWith("#")) window.location.hash = href;
+    if (href.startsWith("#")) window.history.replaceState(null, "", href);
+    if (href.startsWith("#")) window.dispatchEvent(new HashChangeEvent("hashchange"));
   };
 
   return (
