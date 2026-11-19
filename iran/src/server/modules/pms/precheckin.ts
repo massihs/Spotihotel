@@ -9,6 +9,7 @@ import { env } from "@/server/env";
 import { conflict, notFound, validation } from "@/server/errors";
 import { assertCan, type RestaurantContext } from "@/server/tenancy";
 import { guestFields, nationalCodeOk, nationalCodeRule } from "./guests";
+import { readinessOf } from "./ready";
 
 /**
  * Online pre-check-in: before arriving, the guest opens a private link (the booking's code),
@@ -37,7 +38,9 @@ export async function precheckinView(db: DbOrTx, code: string) {
     .where(eq(stays.code, code));
   if (!row) return null;
   const g = row.guest;
+  const ready = await readinessOf(db, row.stay, row.hotel.timezone);
   return {
+    ready,
     hotel: row.hotel,
     number: row.stay.number,
     status: row.stay.status,

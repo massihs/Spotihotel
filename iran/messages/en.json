@@ -6457,5 +6457,25 @@
     "room": "Room {room}",
     "paid": "paid",
     "none": "No tips yet."
+  },
+  "ready": {
+    "state": {
+      "assigning": "Choosing your room",
+      "cleaning": "Room {room} being prepared",
+      "ready": "Room {room} is ready!"
+    },
+    "hint": {
+      "assigning": "The best free room is being set aside for you.",
+      "cleaning": "Housekeeping is on it; you'll get a text the moment it's ready.",
+      "ready": "Come to the front desk for your key."
+    },
+    "step": {
+      "assigning": "Room",
+      "cleaning": "Cleaning",
+      "ready": "Ready"
+    },
+    "offer": "While your room is prepared: {pct}% off at {cafe}",
+    "offerHint": "Show this page at the café (booking #{number}).",
+    "cafe": "the hotel café"
   }
 }

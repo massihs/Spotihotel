@@ -6457,5 +6457,25 @@
     "room": "Chambre {room}",
     "paid": "remis",
     "none": "Aucun pourboire pour l'instant."
+  },
+  "ready": {
+    "state": {
+      "assigning": "Nous choisissons votre chambre",
+      "cleaning": "Chambre {room} en préparation",
+      "ready": "La chambre {room} est prête !"
+    },
+    "hint": {
+      "assigning": "La meilleure chambre libre vous est réservée.",
+      "cleaning": "Le ménage s'en occupe ; vous recevrez un SMS dès qu'elle sera prête.",
+      "ready": "Passez à la réception récupérer votre clé."
+    },
+    "step": {
+      "assigning": "Attribution",
+      "cleaning": "Ménage",
+      "ready": "Prête"
+    },
+    "offer": "En attendant votre chambre : -{pct} % au {cafe}",
+    "offerHint": "Montrez cette page au café (réservation #{number}).",
+    "cafe": "café de l'hôtel"
   }
 }

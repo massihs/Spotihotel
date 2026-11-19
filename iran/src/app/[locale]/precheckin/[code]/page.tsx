@@ -5,6 +5,7 @@ import { connection } from "next/server";
 import { db } from "@/server/db/client";
 import { precheckinView } from "@/server/modules/pms/precheckin";
 import { PrecheckinForm } from "@/components/guest/precheckin-form";
+import { ReadyCard } from "@/components/guest/ready-card";
 import { calendarLocale } from "@/lib/jalali-calendar";
 import { EDITION } from "@/config/edition";
 import { nightsBetween } from "@/server/modules/pms/calc";
@@ -52,6 +53,7 @@ async function Precheckin({ params }: Pick<Props, "params">) {
             {day(view.arrival)} → {day(view.departure)}
           </p>
         </header>
+        {view.ready ? <ReadyCard {...view.ready} number={view.number} /> : null}
         {view.open ? (
           <section className="rounded-3xl border border-border bg-surface p-5">
             <p className="mb-4 text-sm text-fg-muted">{t("intro")}</p>

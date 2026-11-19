@@ -1,3 +1,4 @@
+import { notifyRoomReady } from "@/server/modules/pms/ready";
 import { and, asc, eq, gte, inArray, isNull, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { Database, DbOrTx } from "@/server/db/client";
@@ -193,6 +194,9 @@ export async function setHousekeeping(
     });
     await emit(tx, { topic: topics.restaurant(ctx.restaurant.id), type: "notification.created" });
   });
+  // An early arrival waiting for this room hears it is ready.
+  if (status === "clean" || status === "inspected")
+    await notifyRoomReady(db, ctx.restaurant, tableId).catch((e) => console.error("room ready", e));
 }
 
 /**
