@@ -83,6 +83,7 @@ import { saveServiceItem, saveServicesSettings } from "@/server/modules/hotel/se
 import { saveInternetProfile } from "@/server/modules/hotel/internet";
 import { saveEquipment } from "@/server/modules/hotel/engineering";
 import { addProductImage, deleteProductImage } from "@/server/modules/menu/images";
+import { mainFolioOf, postLine } from "@/server/modules/pms/folios";
 import { readFile } from "node:fs/promises";
 import { createOutlet, setOutletMenu } from "@/server/modules/outlets/service";
 import { syncLedger } from "@/server/modules/ledger/sync";
@@ -633,6 +634,47 @@ async function ensureParsianShield(ctx: RestaurantContext) {
       .set({ indexCurrency: currency, indexAmountCents: amount })
       .where(and(eq(roomTypes.restaurantId, rid), eq(roomTypes.code, code)));
   console.log("✓ Parsian test hotel: rial shield set up");
+}
+
+/**
+ * Guest-page demo: the hotel's position (prayer times), and a dollar deposit on the stay of room
+ * 1001 (the traveller's wallet), once.
+ */
+async function ensureParsianGuestExtras(ctx: RestaurantContext) {
+  const rid = ctx.restaurant.id;
+  await db
+    .update(restaurants)
+    .set({ latitude: 35.7575, longitude: 51.4106 })
+    .where(and(eq(restaurants.id, rid), isNull(restaurants.latitude)));
+  const stay = await db.execute<{ id: string }>(sql`
+    select s.id from stays s join dining_tables d on d.id = s.room_id
+     where s.restaurant_id = ${rid} and s.status = 'in_house' and d.label = '1001' limit 1`);
+  const stayId = stay.rows[0]?.id;
+  if (!stayId) return;
+  const has = await db.execute<{ n: number }>(sql`
+    select count(*)::int as n from folio_lines l join folios f on f.id = l.folio_id
+     where f.stay_id = ${stayId} and l.currency is not null and l.voided_at is null`);
+  if (Number(has.rows[0]?.n ?? 0) > 0) return;
+  const [settings] = await db.select().from(pmsSettings).where(eq(pmsSettings.restaurantId, rid));
+  const rate = settings?.currencies.find((c) => c.code === "USD")?.rateCents;
+  if (!rate) return;
+  await db.transaction(async (tx) => {
+    const folio = await mainFolioOf(tx, rid, stayId);
+    await postLine(tx, rid, TZ, {
+      folioId: folio.id,
+      kind: "payment",
+      department: "payment",
+      description: "Cash USD",
+      unitCents: -300 * rate,
+      amountCents: -300 * rate,
+      method: "cash",
+      currency: "USD",
+      foreignCents: 30_000,
+      sourceType: "manual",
+      userId: null,
+    });
+  });
+  console.log("✓ Parsian test hotel: dollar deposit on room 1001");
 }
 
 async function ensureParsianOutlets(ctx: RestaurantContext) {
@@ -1592,6 +1634,7 @@ export async function seedParsian(ownerEmail: string, days = 30, opts: { build?:
       await ensureParsianPhotos(ctx);
       await ensureParsianOwnerSignals(ctx);
       await ensureParsianShield(ctx);
+      await ensureParsianGuestExtras(ctx);
       for (const [name, icon] of Object.entries(MENU_ICONS))
         await db
           .update(categories)

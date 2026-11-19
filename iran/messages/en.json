@@ -590,7 +590,8 @@
     "tv": "In-room TV",
     "engineering": "Engineering",
     "owner": "Owner's eye",
-    "shield": "Rial shield"
+    "shield": "Rial shield",
+    "tips": "Staff tips"
   },
   "dashboard": {
     "welcome": "Hello {name}",
@@ -4345,7 +4346,8 @@
       "transfer": "Transfer",
       "damage": "Damages",
       "internet": "Internet",
-      "tv": "TV"
+      "tv": "TV",
+      "tip": "Tip"
     },
     "method": {
       "cash": "Cash",
@@ -6367,5 +6369,93 @@
     "underTotal": "{n} booking(s), {amount} below today's value in total.",
     "underNone": "No future booking sold below its value.",
     "nights": "{n} night(s)"
+  },
+  "stayExtras": {
+    "wallet": {
+      "title": "Your currency wallet",
+      "hint": "Your {code} deposit at the desk; every purchase at the hotel (restaurant, spa, minibar) comes off it.",
+      "deposited": "Deposited",
+      "spent": "Spent",
+      "left": "Left",
+      "refund": "What is left is refunded in {code} at check-out (at the hotel's rate of the day)."
+    },
+    "prayer": {
+      "title": "Today's prayer times",
+      "fajr": "Fajr",
+      "sunrise": "Sunrise",
+      "dhuhr": "Dhuhr",
+      "maghrib": "Maghrib",
+      "isha": "Isha",
+      "sahari": "Sahari ends",
+      "iftar": "Iftar",
+      "orderSahari": "Order sahari to the room"
+    },
+    "tips": {
+      "title": "Thank the staff",
+      "hint": "Thank the person who served you: the tip goes straight to them.",
+      "yourRoom": "Your housekeeper",
+      "message": "Short note (optional)",
+      "send": "Send {amount}",
+      "onBill": "Added to the room bill.",
+      "thanks": "Thank you! Your tip goes to {name}."
+    },
+    "concierge": {
+      "open": "Assistant",
+      "title": "Hotel assistant",
+      "subtitle": "Type or say what you need",
+      "close": "Close",
+      "hello": "Hello! I'm the hotel assistant. Wi-Fi, check-out time, food, towels, cleaning… just ask.",
+      "placeholder": "E.g. what's the Wi-Fi password?",
+      "voice": "Speak",
+      "send": "Send",
+      "chips": {
+        "wifi": "Wi-Fi password",
+        "food": "Order food",
+        "clean": "Towels and cleaning",
+        "checkout": "Check-out time",
+        "spa": "Spa and pool"
+      },
+      "a": {
+        "wifi": "Network: {name}\nPassword: {password}",
+        "wifiNone": "The Wi-Fi isn't set up here; ask the front desk.",
+        "checkout": "Check-out is at {time}. For a later departure, ask the front desk.",
+        "food": "The menus of the hotel's restaurants and cafés are ready, delivered to your room.",
+        "spa": "Bookable: {list}. Book your slot here.",
+        "spaNone": "Nothing to book right now.",
+        "minibar": "Here is your room's minibar with its prices; declare what you took.",
+        "bill": "Your bill is up to date; you can see everything.",
+        "clean": "I'll send your request to the front desk.",
+        "tip": "You can thank the staff directly.",
+        "prayer": "Today's prayer times are on the page.",
+        "help": "I didn't get that; try one of the suggestions or ask the front desk."
+      },
+      "go": {
+        "wifi": "Show Wi-Fi",
+        "food": "Open the menu",
+        "spa": "Book the spa",
+        "minibar": "Minibar",
+        "bill": "My bill",
+        "tip": "Tip",
+        "prayer": "Prayer times",
+        "clean": "Send request"
+      }
+    }
+  },
+  "tipsAdmin": {
+    "title": "Staff tips",
+    "subtitle": "Tips guests left to each member of staff from their phone (on the room bill), and what is still to hand over.",
+    "total": "Total tips",
+    "unpaid": "To hand over",
+    "count": "Number of tips",
+    "byStaff": "Per employee",
+    "byStaffHint": "Once paid in cash or by transfer, press \"Paid\".",
+    "tipsCount": "{n} tip(s)",
+    "allPaid": "Paid",
+    "payOut": "Paid",
+    "payOutConfirm": "{amount} handed to this employee?",
+    "recent": "Latest tips",
+    "room": "Room {room}",
+    "paid": "paid",
+    "none": "No tips yet."
   }
 }

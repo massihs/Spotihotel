@@ -12,6 +12,7 @@ import { STAY_COOKIE, verifiedStay } from "@/server/modules/pms/portal-session";
 import { nameMatches, stayOfGuest } from "@/server/modules/pms/portal";
 import { bookServiceAsGuest, cancelServiceBooking, serviceDay } from "@/server/modules/pms/wellness";
 import { declareMinibar } from "@/server/modules/pms/minibar";
+import { leaveTip } from "@/server/modules/pms/tips";
 
 async function requireStay() {
   const v = await verifiedStay();
@@ -68,5 +69,15 @@ export async function declareMinibarAction(lines: { itemId: string; quantity: nu
     const total = await declareMinibar(db, guest.restaurant, stay.id, lines);
     refresh();
     return total;
+  });
+}
+
+/** A tip to a named member of staff, charged to the room. */
+export async function leaveTipAction(staffUserId: string, amountCents: number, message: string) {
+  return runAction(async () => {
+    const { guest, stay } = await requireStay();
+    const res = await leaveTip(db, guest.restaurant, stay.id, { staffUserId, amountCents, message });
+    refresh();
+    return res;
   });
 }

@@ -72,7 +72,10 @@ export function StayPortal({
   minibar,
   folios,
   bookings,
+  children,
 }: {
+  /** The stay page's own features (tips, prayer times, wallet…), after the bill. */
+  children?: React.ReactNode;
   hotelName: string;
   slug: string;
   room: string;
@@ -235,6 +238,8 @@ export function StayPortal({
           </Section>
         )}
 
+        {children}
+
         {settings.guestInfo ? (
           <Section icon={<Info />} title={t("info")}>
             <p className="text-sm leading-7 whitespace-pre-line text-fg-muted">{settings.guestInfo}</p>
@@ -255,12 +260,15 @@ const QUICK_ICON = "shade-fill grid size-10 place-items-center rounded-full [&_s
 /** Each part of the stay page in its own blue. */
 const SECTION_SHADE: Record<string, string> = {
   wifi: "shade-azure",
+  wallet: "shade-indigo",
+  prayer: "shade-navy",
+  tips: "shade-sky",
   spa: "shade-periwinkle",
   minibar: "shade-cyan",
   bill: "shade-royal",
 };
 
-function Section({
+export function Section({
   icon,
   title,
   aside,

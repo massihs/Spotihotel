@@ -590,7 +590,8 @@
     "tv": "Télévision (IPTV)",
     "engineering": "Technique",
     "owner": "Œil du propriétaire",
-    "shield": "Bouclier rial"
+    "shield": "Bouclier rial",
+    "tips": "Pourboires"
   },
   "dashboard": {
     "welcome": "Bonjour {name}",
@@ -4345,7 +4346,8 @@
       "transfer": "Transfert",
       "damage": "Dommages",
       "internet": "Internet",
-      "tv": "Télévision"
+      "tv": "Télévision",
+      "tip": "Pourboire"
     },
     "method": {
       "cash": "Espèces",
@@ -6367,5 +6369,93 @@
     "underTotal": "{n} réservation(s), {amount} sous la valeur du jour au total.",
     "underNone": "Aucune réservation à venir vendue sous sa valeur.",
     "nights": "{n} nuit(s)"
+  },
+  "stayExtras": {
+    "wallet": {
+      "title": "Votre porte-monnaie en devises",
+      "hint": "Votre dépôt en {code} à la réception ; chaque achat à l'hôtel (restaurant, spa, minibar) s'en déduit.",
+      "deposited": "Dépôt",
+      "spent": "Dépensé",
+      "left": "Reste",
+      "refund": "Le reste vous est rendu en {code} au départ (au cours du jour de l'hôtel)."
+    },
+    "prayer": {
+      "title": "Heures de prière du jour",
+      "fajr": "Aube",
+      "sunrise": "Lever",
+      "dhuhr": "Midi",
+      "maghrib": "Maghrib",
+      "isha": "Isha",
+      "sahari": "Fin du sahari",
+      "iftar": "Iftar",
+      "orderSahari": "Commander le sahari en chambre"
+    },
+    "tips": {
+      "title": "Remercier le personnel",
+      "hint": "Remerciez la personne qui vous a servi : le pourboire lui revient directement.",
+      "yourRoom": "Votre femme de chambre",
+      "message": "Petit mot (facultatif)",
+      "send": "Envoyer {amount}",
+      "onBill": "Ajouté à la note de la chambre.",
+      "thanks": "Merci ! Votre pourboire ira à {name}."
+    },
+    "concierge": {
+      "open": "Assistant",
+      "title": "Assistant de l'hôtel",
+      "subtitle": "Écrivez ou dites ce qu'il vous faut",
+      "close": "Fermer",
+      "hello": "Bonjour ! Je suis l'assistant de l'hôtel. Wi-Fi, heure de départ, repas, serviettes, ménage… demandez-moi.",
+      "placeholder": "Ex. : mot de passe du Wi-Fi ?",
+      "voice": "Parler",
+      "send": "Envoyer",
+      "chips": {
+        "wifi": "Mot de passe Wi-Fi",
+        "food": "Commander à manger",
+        "clean": "Serviettes et ménage",
+        "checkout": "Heure de départ",
+        "spa": "Spa et piscine"
+      },
+      "a": {
+        "wifi": "Réseau : {name}\nMot de passe : {password}",
+        "wifiNone": "Le Wi-Fi n'est pas renseigné ; demandez à la réception.",
+        "checkout": "Départ avant {time}. Pour partir plus tard, voyez avec la réception.",
+        "food": "Les cartes des restaurants et cafés de l'hôtel sont prêtes ; on vous livre en chambre.",
+        "spa": "À réserver : {list}. Réservez votre créneau ici.",
+        "spaNone": "Aucun soin à réserver pour l'instant.",
+        "minibar": "Voici le minibar de votre chambre et ses prix ; déclarez ce que vous avez pris.",
+        "bill": "Votre note est à jour, vous pouvez tout consulter.",
+        "clean": "J'envoie votre demande à la réception.",
+        "tip": "Vous pouvez remercier directement le personnel.",
+        "prayer": "Les heures de prière du jour sont sur la page.",
+        "help": "Je n'ai pas compris ; essayez une des suggestions ou demandez à la réception."
+      },
+      "go": {
+        "wifi": "Voir le Wi-Fi",
+        "food": "Ouvrir la carte",
+        "spa": "Réserver au spa",
+        "minibar": "Minibar",
+        "bill": "Ma note",
+        "tip": "Pourboire",
+        "prayer": "Heures de prière",
+        "clean": "Envoyer la demande"
+      }
+    }
+  },
+  "tipsAdmin": {
+    "title": "Pourboires du personnel",
+    "subtitle": "Les pourboires laissés par les clients depuis leur téléphone à chaque employé (sur la note de la chambre), et ce qu'il reste à leur remettre.",
+    "total": "Total des pourboires",
+    "unpaid": "À remettre",
+    "count": "Nombre de pourboires",
+    "byStaff": "Par employé",
+    "byStaffHint": "Après remise en espèces ou virement, cliquez sur « Remis ».",
+    "tipsCount": "{n} pourboire(s)",
+    "allPaid": "Remis",
+    "payOut": "Remis",
+    "payOutConfirm": "{amount} remis à cet employé ?",
+    "recent": "Derniers pourboires",
+    "room": "Chambre {room}",
+    "paid": "remis",
+    "none": "Aucun pourboire pour l'instant."
   }
 }
