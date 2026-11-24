@@ -44,7 +44,11 @@ export function OutletPicker({
   const t = useTranslations("guest.outlets");
   if (outlets.length < 2) return null;
   return (
-    <section id="room-service-outlets" aria-label={t("title")} className="mt-5 scroll-mt-4">
+    <section
+      id="room-service-outlets"
+      aria-label={t("title")}
+      className="mx-auto mt-5 max-w-3xl scroll-mt-4 lg:max-w-6xl"
+    >
       <div className="mb-2.5 flex items-baseline justify-between gap-3 px-4">
         <h2 className="text-[17px] font-bold">{t("title")}</h2>
         <p className="text-xs text-fg-muted">{t("count", { n: outlets.length })}</p>

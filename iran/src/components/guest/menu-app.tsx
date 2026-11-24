@@ -957,6 +957,7 @@ function MenuRow({
   quickAdd,
   open,
   t,
+  categoryIcon,
   hero = false,
 }: CardProps & {
   /** The category's lead dish: its photo across the card, the text below. */
@@ -982,7 +983,8 @@ function MenuRow({
           <ProductImage
             product={p}
             size="md"
-            className={cn("aspect-[16/9] w-full", !p.isAvailable && "grayscale")}
+            sizes="(min-width: 640px) 30vw, 50vw"
+            className={cn("aspect-[2/1] w-full", !p.isAvailable && "grayscale")}
             eager={eager}
           />
           <span aria-hidden="true" className="shade-veil-bottom absolute inset-x-0 bottom-0 h-1/2" />
@@ -1041,7 +1043,6 @@ function MenuRow({
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="flex items-start gap-2">
           <p className="line-clamp-2 min-w-0 flex-1 text-[16px] leading-snug font-bold">{p.name}</p>
-          {photo ? null : <InCartBadge n={cart.byProduct[p.id] ?? 0} className="shrink-0" />}
         </div>
         {latin ? (
           <p
@@ -1063,21 +1064,26 @@ function MenuRow({
         ) : null}
         <div className="mt-auto flex items-center justify-between gap-3 pt-2.5">
           <Price product={p} money={money} split />
-          {photo ? null : add("size-9", "shade")}
         </div>
       </div>
-      {photo ? (
-        <div className="relative shrink-0 self-start">
+      {/* The photo, or the category's pictogram: every line of the card lines up the same. */}
+      <div className="relative shrink-0 self-start">
+        {photo ? (
           <ProductImage
             product={p}
             size="sm"
             className={cn("size-[5.75rem] rounded-2xl ring-1 ring-black/5", !p.isAvailable && "grayscale")}
             eager={eager}
           />
-          <InCartBadge n={cart.byProduct[p.id] ?? 0} className="absolute -end-1.5 -top-1.5" />
-          {add("absolute -bottom-2 -start-2 size-9 ring-4 ring-surface")}
-        </div>
-      ) : null}
+        ) : (
+          <DishPlaceholder
+            icon={categoryIcon.get(p.id) ?? "utensils"}
+            className="size-[5.75rem] rounded-2xl ring-1 ring-border"
+          />
+        )}
+        <InCartBadge n={cart.byProduct[p.id] ?? 0} className="absolute -end-1.5 -top-1.5" />
+        {add("absolute -bottom-2 -start-2 size-9 ring-4 ring-surface")}
+      </div>
     </div>
   );
 }

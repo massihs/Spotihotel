@@ -86,6 +86,8 @@ async function GuestMenu({ searchParams }: Pick<PageProps<"/[locale]/table">, "s
   const playing = music ? await restaurantNowPlaying(db, guest.restaurant.id) : null;
   // A hotel room: the concierge (room, day of departure, services, Wi-Fi) comes before the menu.
   const room = guest.table.kind === "room";
+  // A hotel room in the default look: the room's card carries the hotel's name, over the cover.
+  const roomCard = room && menuThemeOf(guest.restaurant.menuTheme) === "doux";
   const [pms, inRoom, calls] = room
     ? await Promise.all([
         getPmsSettings(db, guest.restaurant.id, guest.restaurant.timezone),
@@ -123,9 +125,20 @@ async function GuestMenu({ searchParams }: Pick<PageProps<"/[locale]/table">, "s
             cartOutlet={cart.outlet}
             header={
               <>
-                <GuestHeader guest={guest} orderCount={orders.length} cover={cover} store={store} />
+                <GuestHeader
+                  guest={guest}
+                  orderCount={orders.length}
+                  cover={cover}
+                  store={store}
+                  identity={!roomCard}
+                />
                 {room && pms ? (
                   <RoomConcierge
+                    hotel={
+                      roomCard
+                        ? { name: guest.restaurant.name, logo: logoUrl(guest.restaurant.logoKey) }
+                        : undefined
+                    }
                     room={guest.table.label}
                     departure={inRoom?.departure ?? null}
                     checkOutTime={pms.checkOutTime}

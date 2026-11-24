@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  BellRing,
   Check,
   ConciergeBell,
   Copy,
@@ -17,10 +18,11 @@ import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 import { useDay } from "@/components/pms/kit";
 import { WaiterCall, type CallOption } from "./waiter-call";
+import { initialsOf } from "@/components/ui/place-initials";
 
 const TILE =
-  "flex min-h-[96px] flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-3 text-center text-[13.5px] leading-tight font-semibold shadow-[var(--shadow-soft)] transition active:scale-[0.97] hover:border-border-strong";
-const ICON = "shade-fill grid size-10 place-items-center rounded-full [&_svg]:size-[18px]";
+  "flex min-h-[84px] flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-surface px-2 py-2.5 text-center text-[13px] leading-tight font-semibold shadow-[var(--shadow-soft)] transition active:scale-[0.97] hover:border-border-strong";
+const ICON = "shade-fill grid size-9 place-items-center rounded-full [&_svg]:size-[17px]";
 
 /**
  * What a guest scanning the QR in their room needs first: the room and the day they leave, the
@@ -33,7 +35,10 @@ export function RoomConcierge({
   checkOutTime,
   wifi,
   calls,
+  hotel,
 }: {
+  /** The hotel's name and logo: the card then opens the page, over the cover photo. */
+  hotel?: { name: string; logo: string | null };
   room: string;
   departure: string | null;
   checkOutTime: string;
@@ -44,8 +49,11 @@ export function RoomConcierge({
   const day = useDay();
   const [showWifi, setShowWifi] = useState(false);
   return (
-    <section aria-label={t("title")} className="mx-4 mt-3 space-y-3">
-      <div className="sidebar-shade relative isolate overflow-hidden rounded-[26px] bg-[var(--sidebar)] p-5 text-[var(--sidebar-fg)] shadow-[var(--shadow-float)]">
+    <section
+      aria-label={t("title")}
+      className={cn("relative mx-auto max-w-3xl space-y-3 px-4 lg:max-w-6xl", hotel ? "-mt-20" : "mt-3")}
+    >
+      <div className="sidebar-shade relative isolate overflow-hidden rounded-[28px] bg-[var(--sidebar)] p-5 text-[var(--sidebar-fg)] shadow-[var(--shadow-float)]">
         <span
           aria-hidden="true"
           className="texture-khatam texture-fade-corner [--tex-color:var(--brass)] [--tex-opacity:0.16] [--tex-size:56px]"
@@ -55,6 +63,37 @@ export function RoomConcierge({
           aria-hidden="true"
           className="pointer-events-none absolute -end-14 -top-16 size-48 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--brass)_40%,transparent),transparent_70%)]"
         />
+        {hotel ? (
+          <div className="relative mb-4 flex items-center gap-3 border-b border-white/10 pb-4">
+            <span className="grid size-11 shrink-0 place-items-center overflow-hidden rounded-xl bg-white text-lg font-bold text-neutral-800 ring-2 ring-white/20">
+              {hotel.logo ? (
+                <img
+                  src={hotel.logo}
+                  alt=""
+                  width={44}
+                  height={44}
+                  className="size-full object-contain p-1"
+                />
+              ) : (
+                initialsOf(hotel.name)
+              )}
+            </span>
+            <div className="min-w-0 flex-1">
+              <h1 className="font-display line-clamp-2 text-[1.2rem] leading-tight">{hotel.name}</h1>
+              <p className="mt-0.5 text-xs text-[var(--brass)]">{t("welcome")}</p>
+            </div>
+            {calls.length ? (
+              <WaiterCall
+                options={calls}
+                room
+                className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-[image:var(--brass-gradient)] px-3.5 text-sm font-bold text-[color:var(--brass-ink)] shadow-[0_8px_18px_-10px_var(--brass)] transition active:scale-[0.97]"
+              >
+                <BellRing className="size-4" aria-hidden="true" />
+                {t("reception")}
+              </WaiterCall>
+            ) : null}
+          </div>
+        ) : null}
         <div className="relative flex items-end justify-between gap-3">
           <div className="min-w-0">
             <p className="text-xs font-semibold text-[var(--brass)] ltr:tracking-[0.18em] ltr:uppercase">
@@ -104,7 +143,7 @@ export function RoomConcierge({
           </div>
         ) : null}
       </div>
-      <div className="grid grid-cols-3 gap-2.5">
+      <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-6">
         <a href="#room-service" className={cn(TILE, "shade-royal guest-tile")}>
           <span className={ICON}>
             <UtensilsCrossed />

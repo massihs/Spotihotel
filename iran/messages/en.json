@@ -5493,7 +5493,9 @@
     "copy": "Copy",
     "copied": "Copied",
     "hide": "Hide",
-    "myStay": "My stay"
+    "myStay": "My stay",
+    "welcome": "Welcome to your room",
+    "reception": "Front desk"
   },
   "housekeeping": {
     "title": "Housekeeping & maintenance",

@@ -151,11 +151,14 @@ export function ProductImage({
   size,
   className,
   eager,
+  sizes,
 }: {
   product: PublicProduct;
   size: "sm" | "md" | "lg";
   className?: string;
   eager?: boolean;
+  /** Width the photo takes on screen (picks the lightest file sharp enough); by `size` otherwise. */
+  sizes?: string;
 }) {
   const img = product.images[0];
   if (!img) return <div className={cn("bg-surface-2", className)} />;
@@ -163,9 +166,10 @@ export function ProductImage({
     <img
       src={img[size]}
       srcSet={`${img.sm} 320w, ${img.md} 640w, ${img.lg} 1280w`}
-      sizes={size === "sm" ? "112px" : size === "md" ? "256px" : "100vw"}
+      sizes={sizes ?? (size === "sm" ? "92px" : size === "md" ? "256px" : "100vw")}
       alt=""
       loading={eager ? "eager" : "lazy"}
+      fetchPriority={eager ? "high" : undefined}
       decoding="async"
       className={cn("bg-surface-2 bg-cover object-cover", className)}
       style={img.placeholder ? { backgroundImage: `url(${img.placeholder})` } : undefined}

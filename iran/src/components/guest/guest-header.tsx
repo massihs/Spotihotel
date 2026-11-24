@@ -28,7 +28,10 @@ export async function GuestHeader({
   orderCount = 0,
   cover,
   store,
+  identity = true,
 }: {
+  /** false: the room's card (RoomConcierge) carries the hotel's name instead, over the cover. */
+  identity?: boolean;
   store?: Store;
   guest: GuestContext;
   orderCount?: number;
@@ -159,7 +162,12 @@ export async function GuestHeader({
 
   return (
     <header className="relative">
-      <div className="guest-band relative isolate h-32 overflow-hidden bg-gradient-to-br from-accent to-accent-hover sm:h-44">
+      <div
+        className={cn(
+          "guest-band relative isolate overflow-hidden bg-gradient-to-br from-accent to-accent-hover",
+          identity ? "h-32 sm:h-44" : "h-40 sm:h-52",
+        )}
+      >
         {cover ? null : (
           <>
             <span
@@ -187,19 +195,21 @@ export async function GuestHeader({
           {actions}
         </div>
       </div>
-      <div className="relative mx-auto -mt-10 max-w-3xl px-4 lg:max-w-6xl">
-        <div className="flex items-center gap-3 rounded-3xl border border-border bg-surface p-3 shadow-[var(--shadow-float)]">
-          {logoTile("size-14 rounded-2xl ring-1 ring-border")}
-          <div className="min-w-0 flex-1">
-            <h1 className="font-display line-clamp-2 text-[1.45rem] leading-[1.2]">{name}</h1>
-            <p className="mt-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[13px]">{guestLine}</p>
-          </div>
-          <div className="flex shrink-0 items-center gap-2">
-            {games}
-            {bell}
+      {identity ? (
+        <div className="relative mx-auto -mt-10 max-w-3xl px-4 lg:max-w-6xl">
+          <div className="flex items-center gap-3 rounded-3xl border border-border bg-surface p-3 shadow-[var(--shadow-float)]">
+            {logoTile("size-14 rounded-2xl ring-1 ring-border")}
+            <div className="min-w-0 flex-1">
+              <h1 className="font-display line-clamp-2 text-[1.45rem] leading-[1.2]">{name}</h1>
+              <p className="mt-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[13px]">{guestLine}</p>
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
+              {games}
+              {bell}
+            </div>
           </div>
         </div>
-      </div>
+      ) : null}
     </header>
   );
 }
