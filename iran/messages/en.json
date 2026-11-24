@@ -591,7 +591,12 @@
     "engineering": "Engineering",
     "owner": "Owner's eye",
     "shield": "Rial shield",
-    "tips": "Staff tips"
+    "tips": "Staff tips",
+    "filter": "Search the menu…",
+    "filterNone": "No page found",
+    "sectionCount": "{n} pages",
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all"
   },
   "dashboard": {
     "welcome": "Hello {name}",
@@ -6519,5 +6524,28 @@
       "checked_out": "Left"
     },
     "call": "Call the front desk"
+  },
+  "tabGroups": {
+    "cashier": {
+      "desk": "Cash desk",
+      "reports": "Reports",
+      "settings": "Settings"
+    },
+    "hotelReports": {
+      "management": "Management & sales",
+      "accounts": "Accounts & finance",
+      "guests": "Guests & bills"
+    },
+    "housekeeping": {
+      "today": "Today's plan",
+      "work": "Tasks & repairs",
+      "analysis": "Reports & settings"
+    },
+    "hotel": {
+      "rooms": "Rooms",
+      "prices": "Rates",
+      "services": "Services",
+      "admin": "Accounts & settings"
+    }
   }
 }

@@ -8,7 +8,8 @@ import { PrintButton } from "@/components/ui/print-button";
 import { Link } from "@/i18n/navigation";
 import { DEFAULT_LOCALE } from "@/i18n/config";
 import { cn } from "@/lib/cn";
-import { LinkPending } from "@/components/ui/link-pending";
+import { TabNav } from "@/components/ui/tab-nav";
+import { groupsFor, type TabGroupPage } from "@/lib/tab-groups";
 import { getMoney } from "@/lib/money-server";
 import { calendarLocale } from "@/lib/jalali-calendar";
 import { EDITION } from "@/config/edition";
@@ -19,33 +20,37 @@ import type { Cell, Table } from "@/server/modules/pms/desk-reports";
  * same CSV export for all of them.
  */
 
-/** Pills linking to the tabs of a page (`?tab=`), the current one filled. */
+/**
+ * The tabs of a page (`?tab=`), the current one filled; with `groups`, in two levels (categories,
+ * then the tabs of the open one).
+ */
 export async function DeskTabs({
   base,
   tabs,
   current,
   ns,
+  groups,
 }: {
   base: string;
   tabs: readonly string[];
   current: string;
   ns: string;
+  groups?: TabGroupPage;
 }) {
-  const t = await getTranslations(ns);
+  const [t, tg] = await Promise.all([getTranslations(ns), getTranslations("tabGroups")]);
   return (
-    <nav className="seg mb-5 print:hidden" aria-label={t("title")}>
-      {tabs.map((x) => (
-        <Link
-          key={x}
-          href={`${base}?tab=${x}`}
-          aria-current={x === current ? "page" : undefined}
-          className="seg-item"
-        >
-          {t(`tabs.${x}`)}
-          <LinkPending />
-        </Link>
-      ))}
-    </nav>
+    <TabNav
+      label={t("title")}
+      tabs={tabs}
+      current={current}
+      href={(x) => `${base}?tab=${x}`}
+      tabLabel={(x) => t(`tabs.${x}`)}
+      groups={
+        groups
+          ? groupsFor(groups, tabs).map((g) => ({ ...g, label: tg(`${groups}.${g.key}` as "cashier.desk") }))
+          : undefined
+      }
+    />
   );
 }
 

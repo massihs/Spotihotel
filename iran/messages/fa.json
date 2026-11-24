@@ -591,7 +591,12 @@
     "engineering": "فنی و مهندسی",
     "owner": "چشم مالک",
     "shield": "سپر ریال",
-    "tips": "انعام کارکنان"
+    "tips": "انعام کارکنان",
+    "filter": "جستجو در منو…",
+    "filterNone": "صفحه‌ای پیدا نشد",
+    "sectionCount": "{n} صفحه",
+    "expandAll": "باز کردن همه",
+    "collapseAll": "بستن همه"
   },
   "dashboard": {
     "welcome": "سلام {name}",
@@ -6519,5 +6524,28 @@
       "checked_out": "خارج شده"
     },
     "call": "تماس با پذیرش هتل"
+  },
+  "tabGroups": {
+    "cashier": {
+      "desk": "عملیات صندوق",
+      "reports": "گزارش‌ها",
+      "settings": "تنظیمات"
+    },
+    "hotelReports": {
+      "management": "مدیریت و فروش",
+      "accounts": "حساب‌ها و مالی",
+      "guests": "مهمانان و صورت‌حساب‌ها"
+    },
+    "housekeeping": {
+      "today": "برنامهٔ امروز",
+      "work": "کارها و تعمیرات",
+      "analysis": "گزارش و تنظیمات"
+    },
+    "hotel": {
+      "rooms": "اتاق‌ها",
+      "prices": "نرخ‌ها",
+      "services": "خدمات",
+      "admin": "حساب‌ها و تنظیمات"
+    }
   }
 }

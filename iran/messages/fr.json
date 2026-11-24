@@ -591,7 +591,12 @@
     "engineering": "Technique",
     "owner": "Œil du propriétaire",
     "shield": "Bouclier rial",
-    "tips": "Pourboires"
+    "tips": "Pourboires",
+    "filter": "Rechercher dans le menu…",
+    "filterNone": "Aucune page trouvée",
+    "sectionCount": "{n} pages",
+    "expandAll": "Tout déplier",
+    "collapseAll": "Tout replier"
   },
   "dashboard": {
     "welcome": "Bonjour {name}",
@@ -6519,5 +6524,28 @@
       "checked_out": "Parti"
     },
     "call": "Appeler la réception"
+  },
+  "tabGroups": {
+    "cashier": {
+      "desk": "Opérations de caisse",
+      "reports": "Rapports",
+      "settings": "Réglages"
+    },
+    "hotelReports": {
+      "management": "Direction et ventes",
+      "accounts": "Comptes et finances",
+      "guests": "Clients et notes"
+    },
+    "housekeeping": {
+      "today": "Programme du jour",
+      "work": "Tâches et entretien",
+      "analysis": "Rapports et réglages"
+    },
+    "hotel": {
+      "rooms": "Chambres",
+      "prices": "Tarifs",
+      "services": "Services",
+      "admin": "Comptes et réglages"
+    }
   }
 }

@@ -11,6 +11,9 @@ import { Link } from "@/i18n/navigation";
 import { CommandPalette, type SearchEntry } from "./command-palette";
 import { initialsOf } from "@/components/ui/place-initials";
 import { MobileTabBar, NavTrail, SidebarNav, type NavItem } from "./sidebar-nav";
+import { NAV_OPEN_COOKIE } from "./nav-cookie";
+import { SegScroll } from "./seg-scroll";
+import { cookies } from "next/headers";
 
 /** Shared chrome for the restaurant dashboard and the super-admin console. */
 export async function AppShell({
@@ -46,7 +49,11 @@ export async function AppShell({
   user: { fullName: string; email: string };
   children: ReactNode;
 }) {
-  const t = await getTranslations();
+  const [t, jar] = await Promise.all([getTranslations(), cookies()]);
+  // Menu sections the person left open on this device.
+  const navOpen = decodeURIComponent(jar.get(NAV_OPEN_COOKIE)?.value ?? "")
+    .split(",")
+    .filter(Boolean);
   const identity = (
     <div className="flex min-w-0 items-center gap-3">
       <span className="grid size-11 shrink-0 place-items-center overflow-hidden rounded-xl bg-white text-base font-bold text-accent-text ring-2 ring-accent/60">
@@ -133,6 +140,7 @@ export async function AppShell({
       className="min-h-dvh bg-bg lg:grid lg:grid-cols-[272px_1fr] print:block print:bg-white"
     >
       <NavProgress />
+      <SegScroll />
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:start-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-surface focus:px-3 focus:py-2"
@@ -164,8 +172,8 @@ export async function AppShell({
             {identity}
           </div>
           <div className="relative min-h-0 flex-1">
-            <div className="h-full [scrollbar-width:thin] overflow-y-auto px-3 pt-2 pb-8">
-              <SidebarNav items={nav} label={title} />
+            <div data-nav-scroll="" className="nav-scroll h-full overflow-y-auto px-3 pt-2 pb-8">
+              <SidebarNav items={nav} label={title} initialOpen={navOpen} />
               {footer ? <div className="mt-4 border-t border-border pt-4">{footer}</div> : null}
             </div>
             {/* Fades the list out above the account row instead of cutting a label in half. */}

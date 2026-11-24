@@ -181,7 +181,7 @@ async function Cashier({ params, searchParams }: Props) {
         description={t("cashier.subtitle")}
         actions={key ? <DeskActions csv={csv} /> : null}
       />
-      <DeskTabs base={base} tabs={TABS} current={tab} ns="deskReports.cashier" />
+      <DeskTabs base={base} tabs={TABS} current={tab} ns="deskReports.cashier" groups="cashier" />
       {body}
     </>
   );

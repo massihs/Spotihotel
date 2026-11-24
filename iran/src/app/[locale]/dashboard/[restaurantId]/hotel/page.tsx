@@ -1,3 +1,5 @@
+import { TabNav } from "@/components/ui/tab-nav";
+import { groupsFor } from "@/lib/tab-groups";
 import { Suspense } from "react";
 import { and, eq, isNull } from "drizzle-orm";
 import { getTranslations } from "next-intl/server";
@@ -56,7 +58,7 @@ async function HotelSetup({ params, searchParams }: Props) {
   const ctx = await requireRestaurant(restaurantId, "rates.manage");
   const rid = ctx.restaurant.id;
   const tab: Tab = (TABS as readonly string[]).includes(String(sp.tab)) ? (sp.tab as Tab) : "types";
-  const t = await getTranslations("pms.setup");
+  const [t, tg] = await Promise.all([getTranslations("pms.setup"), getTranslations("tabGroups")]);
   const currency = ctx.restaurant.currency;
   const settings = await getPmsSettings(db, rid, ctx.restaurant.timezone);
 
@@ -151,18 +153,14 @@ async function HotelSetup({ params, searchParams }: Props) {
   return (
     <>
       <PageHeader title={t("title")} description={t("subtitle")} />
-      <nav className="seg mb-5 print:hidden" aria-label={t("title")}>
-        {TABS.map((k) => (
-          <Link
-            key={k}
-            href={`/dashboard/${rid}/hotel?tab=${k}`}
-            aria-current={k === tab ? "page" : undefined}
-            className="seg-item"
-          >
-            {t(`tabs.${k}`)}
-          </Link>
-        ))}
-      </nav>
+      <TabNav
+        label={t("title")}
+        tabs={TABS}
+        current={tab}
+        href={(k) => `/dashboard/${rid}/hotel?tab=${k}`}
+        tabLabel={(k) => t(`tabs.${k}` as "tabs.types")}
+        groups={groupsFor("hotel", TABS).map((g) => ({ ...g, label: tg(`hotel.${g.key}` as "hotel.rooms") }))}
+      />
       {body}
     </>
   );

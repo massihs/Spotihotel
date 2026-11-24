@@ -168,7 +168,7 @@ async function Housekeeping({ params, searchParams }: Props) {
     <>
       <PageHeader title={t("title")} description={t("subtitle")} />
       <LiveRefresh types={["notification.created", "session.closed"]} />
-      <DeskTabs base={base} tabs={tabs} current={tab} ns="housekeeping" />
+      <DeskTabs base={base} tabs={tabs} current={tab} ns="housekeeping" groups="housekeeping" />
       {body}
     </>
   );

@@ -77,6 +77,7 @@ import { vapidPublicKey } from "@/server/modules/push/service";
 import { after } from "next/server";
 import { SubscriptionBanner } from "@/components/dashboard/subscription-banner";
 import { countOpenRequests } from "@/server/modules/hotel/requests";
+import { allTabs, groupsFor, type TabGroupPage } from "@/lib/tab-groups";
 
 /** Where each page sits in a hotel's menu, in this order (the rest keeps its own group). */
 const HOTEL_LAYOUT: [page: string, group: HotelGroup][] = [
@@ -177,6 +178,15 @@ async function RestaurantShell({
   const { restaurantId } = await params;
   const ctx = await requireRestaurant(restaurantId);
   const t = await getTranslations();
+  // Sub-pages of a page with categories of tabs: in the page's order, each under its category.
+  const grouped = (page: TabGroupPage, path: string, tabs: readonly string[], label: (k: string) => string) =>
+    groupsFor(page, tabs).flatMap((g) =>
+      g.tabs.map((k) => ({
+        href: `${path}?tab=${k}`,
+        label: label(k),
+        group: t(`tabGroups.${page}.${g.key}` as "tabGroups.cashier.desk"),
+      })),
+    );
   const base = `/dashboard/${ctx.restaurant.id}`;
 
   const hotel = ctx.restaurant.kind === "hotel";
@@ -308,27 +318,9 @@ async function RestaurantShell({
         icon: <FileBarChart />,
         groupKey: "reception",
         group: "",
-        children: (
-          [
-            "manager",
-            "comprehensive",
-            "occupancy",
-            "dailySales",
-            "charts",
-            "accounts",
-            "accountPerformance",
-            "plans",
-            "segments",
-            "bank",
-            "invoices",
-            "expected",
-            "individual",
-            "pax",
-            "openFolios",
-            "debtors",
-            "roomCharge",
-          ] as const
-        ).map((k) => ({ href: `${base}/hotel-reports?tab=${k}`, label: t(`hotelReports.tabs.${k}`) })),
+        children: grouped("hotelReports", `${base}/hotel-reports`, allTabs("hotelReports"), (k) =>
+          t(`hotelReports.tabs.${k}` as "hotelReports.tabs.manager"),
+        ),
       },
       {
         show: hotel && can(ctx, "frontdesk.view"),
@@ -371,23 +363,14 @@ async function RestaurantShell({
         icon: <SprayCan />,
         groupKey: "reception",
         group: "",
-        children: (can(ctx, "tables.manage")
-          ? ([
-              "base",
-              "plan",
-              "log",
-              "operations",
-              "rack",
-              "reports",
-              "settings",
-              "mine",
-              "maintenance",
-            ] as const)
-          : (["plan", "log", "rack", "mine", "maintenance"] as const)
-        ).map((k) => ({
-          href: `${base}/housekeeping?tab=${k}`,
-          label: t(`housekeeping.tabs.${k}`),
-        })),
+        children: grouped(
+          "housekeeping",
+          `${base}/housekeeping`,
+          can(ctx, "tables.manage")
+            ? ["base", "plan", "log", "operations", "rack", "reports", "settings", "mine", "maintenance"]
+            : ["plan", "log", "rack", "mine", "maintenance"],
+          (k) => t(`housekeeping.tabs.${k}` as "housekeeping.tabs.plan"),
+        ),
       },
       {
         show: hotel && can(ctx, "frontdesk.view"),
@@ -602,21 +585,9 @@ async function RestaurantShell({
         icon: <Landmark />,
         groupKey: "finance",
         group: g.finance,
-        children: (
-          [
-            "handover",
-            "currency",
-            "daily",
-            "transactions",
-            "move",
-            "transfer",
-            "pending",
-            "search",
-            "summary",
-            "handoverReport",
-            "settings",
-          ] as const
-        ).map((k) => ({ href: `${base}/cashier?tab=${k}`, label: t(`deskReports.cashier.tabs.${k}`) })),
+        children: grouped("cashier", `${base}/cashier`, allTabs("cashier"), (k) =>
+          t(`deskReports.cashier.tabs.${k}` as "deskReports.cashier.tabs.handover"),
+        ),
       },
       {
         show: can(ctx, "accounting.manage"),

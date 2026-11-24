@@ -591,7 +591,12 @@
     "engineering": "الهندسة والصيانة",
     "owner": "عين المالك",
     "shield": "درع الريال",
-    "tips": "إكراميات الموظفين"
+    "tips": "إكراميات الموظفين",
+    "filter": "ابحث في القائمة…",
+    "filterNone": "لم يتم العثور على صفحة",
+    "sectionCount": "{n} صفحات",
+    "expandAll": "فتح الكل",
+    "collapseAll": "طي الكل"
   },
   "dashboard": {
     "welcome": "مرحبًا {name}",
@@ -6519,5 +6524,28 @@
       "checked_out": "غادر"
     },
     "call": "اتصل بالاستقبال"
+  },
+  "tabGroups": {
+    "cashier": {
+      "desk": "عمليات الصندوق",
+      "reports": "التقارير",
+      "settings": "الإعدادات"
+    },
+    "hotelReports": {
+      "management": "الإدارة والمبيعات",
+      "accounts": "الحسابات والمالية",
+      "guests": "الضيوف والفواتير"
+    },
+    "housekeeping": {
+      "today": "برنامج اليوم",
+      "work": "المهام والصيانة",
+      "analysis": "التقارير والإعدادات"
+    },
+    "hotel": {
+      "rooms": "الغرف",
+      "prices": "الأسعار",
+      "services": "الخدمات",
+      "admin": "الحسابات والإعدادات"
+    }
   }
 }

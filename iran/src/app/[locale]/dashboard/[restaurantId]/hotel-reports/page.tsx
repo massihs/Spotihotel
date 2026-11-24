@@ -1,3 +1,5 @@
+import { TabNav } from "@/components/ui/tab-nav";
+import { groupsFor } from "@/lib/tab-groups";
 import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { FileDown } from "lucide-react";
@@ -6,7 +8,6 @@ import { Card } from "@/components/ui/card";
 import { buttonClasses } from "@/components/ui/button";
 import { DateInput } from "@/components/ui/date-input";
 import { PrintButton } from "@/components/ui/print-button";
-import { Link } from "@/i18n/navigation";
 import { DEFAULT_LOCALE } from "@/i18n/config";
 import { cn } from "@/lib/cn";
 import { getMoney } from "@/lib/money-server";
@@ -84,13 +85,14 @@ async function HotelReports({ params, searchParams }: Props) {
   const sp = await searchParams;
   const ctx = await requireRestaurant(restaurantId, "analytics.view");
   const tab = TABS.find((x) => x === sp.tab) ?? "manager";
-  const [t, tDept, tSource, tPay, locale, money] = await Promise.all([
+  const [t, tDept, tSource, tPay, locale, money, tg] = await Promise.all([
     getTranslations("hotelReports"),
     getTranslations("pms.dept"),
     getTranslations("pms.source"),
     getTranslations("pms.method"),
     getLocale(),
     getMoney(ctx.restaurant.currency),
+    getTranslations("tabGroups"),
   ]);
   const rid = ctx.restaurant.id;
   const today = localDay(new Date(), ctx.restaurant.timezone);
@@ -146,18 +148,17 @@ async function HotelReports({ params, searchParams }: Props) {
           )
         }
       />
-      <nav className="seg mb-5 print:hidden" aria-label={t("title")}>
-        {TABS.map((x) => (
-          <Link
-            key={x}
-            href={`${base}?tab=${x}`}
-            aria-current={x === tab ? "page" : undefined}
-            className="seg-item"
-          >
-            {t(`tabs.${x}`)}
-          </Link>
-        ))}
-      </nav>
+      <TabNav
+        label={t("title")}
+        tabs={TABS}
+        current={tab}
+        href={(x) => `${base}?tab=${x}`}
+        tabLabel={(x) => t(`tabs.${x}` as "tabs.manager")}
+        groups={groupsFor("hotelReports", TABS).map((g) => ({
+          ...g,
+          label: tg(`hotelReports.${g.key}` as "hotelReports.management"),
+        }))}
+      />
       {!legacy ? (
         <PeriodForm
           base={base}
