@@ -70,11 +70,17 @@ export function useRun() {
   const tErr = useTranslations("errorCodes");
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
-  const run = (fn: () => Promise<{ ok: boolean; error?: string } | null | undefined>, done?: () => void) =>
+  const run = (
+    fn: () => Promise<
+      { ok: boolean; error?: string; values?: Record<string, string | number> } | null | undefined
+    >,
+    done?: () => void,
+  ) =>
     start(async () => {
       setError(null);
       const res = await fn();
-      if (res && !res.ok) setError(res.error && tErr.has(res.error) ? tErr(res.error) : tErr("internal"));
+      if (res && !res.ok)
+        setError(res.error && tErr.has(res.error) ? tErr(res.error, res.values) : tErr("internal"));
       else done?.();
     });
   return { pending, error, run };

@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useLiveEvent } from "@/components/realtime/live";
 import { chime } from "@/components/dashboard/order-alerts";
+import { buzz } from "@/lib/buzz";
 
 const permission = () => ("Notification" in window ? Notification.permission : "unsupported");
 const subscribeNothing = () => () => {};
@@ -37,7 +38,7 @@ export function ReadyWatcher() {
     const number = String(data.number ?? "");
     setReady(number);
     if (audio.current) chime(audio.current);
-    navigator.vibrate?.([200, 100, 200, 100, 300]);
+    buzz([200, 100, 200, 100, 300]);
     if (document.hidden && "Notification" in window && Notification.permission === "granted")
       new Notification(t("readyTitle"), { body: t("readyBody", { number }), tag: `ready-${number}` });
   });

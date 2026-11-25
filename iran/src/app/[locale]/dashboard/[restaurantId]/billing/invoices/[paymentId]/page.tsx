@@ -8,6 +8,7 @@ import { formatMoney } from "@/lib/money";
 import { requireRestaurant } from "@/server/auth/current";
 import { db } from "@/server/db/client";
 import { getBillingInvoice } from "@/server/modules/billing/service";
+import { orNotFound } from "@/server/not-found";
 
 type Props = PageProps<"/[locale]/dashboard/[restaurantId]/billing/invoices/[paymentId]">;
 
@@ -22,13 +23,15 @@ export default function BillingInvoicePage(props: Props) {
 async function Invoice({ params }: Props) {
   const { restaurantId, paymentId } = await params;
   const ctx = await requireRestaurant(restaurantId, "restaurant.view");
-  const [t, th, format, locale, inv] = await Promise.all([
-    getTranslations("billing"),
-    getTranslations("landing"),
-    getFormatter(),
-    getLocale(),
-    getBillingInvoice(db, ctx, paymentId),
-  ]);
+  const [t, th, format, locale, inv] = await orNotFound(
+    Promise.all([
+      getTranslations("billing"),
+      getTranslations("landing"),
+      getFormatter(),
+      getLocale(),
+      getBillingInvoice(db, ctx, paymentId),
+    ]),
+  );
   const p = inv.pay;
   const date = (d: Date | null) =>
     d ? format.dateTime(d, { dateStyle: "long", timeZone: ctx.restaurant.timezone }) : "—";

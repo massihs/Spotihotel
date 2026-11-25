@@ -5,6 +5,7 @@ import { requireRestaurant } from "@/server/auth/current";
 import { db } from "@/server/db/client";
 import { getTicket } from "@/server/modules/kitchen/stations";
 import { formatMoney } from "@/lib/money";
+import { orNotFound } from "@/server/not-found";
 
 type Props = PageProps<"/[locale]/print/kitchen/[restaurantId]/[orderId]">;
 
@@ -26,11 +27,9 @@ async function Ticket({ params, searchParams }: Pick<Props, "params" | "searchPa
   const ctx = await requireRestaurant(restaurantId, "orders.view");
   const station = typeof sp.station === "string" ? sp.station : null;
   const till = sp.copy === "cashier";
-  const [t, format, ticket] = await Promise.all([
-    getTranslations("kitchen.ticket"),
-    getFormatter(),
-    getTicket(db, ctx, orderId, station),
-  ]);
+  const [t, format, ticket] = await orNotFound(
+    Promise.all([getTranslations("kitchen.ticket"), getFormatter(), getTicket(db, ctx, orderId, station)]),
+  );
   const { order: o, items } = ticket;
   return (
     <div className="mx-auto w-[72mm] bg-white p-2 font-sans text-[13px] leading-snug text-black">

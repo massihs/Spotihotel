@@ -81,6 +81,12 @@ describe("tomans (IRR display unit)", () => {
     expect(formatMoney(1990, "EUR", "en")).toBe("€19.90");
   });
 
+  it("never shows a negative zero (no credits yet, or a tiny negative rounded away)", () => {
+    expect(formatMoney(-0, "IRR", "fa")).toBe("۰ تومان");
+    expect(formatMoney(-400, "IRR", "fa")).toBe("۰ تومان");
+    expect(formatMoney(-0, "EUR", "en")).toBe("€0.00");
+  });
+
   it("parses typed tomans (Persian digits, separators) into minor units", () => {
     expect(parseMoneyInput("120000", "IRR")).toBe(120_000_000);
     expect(parseMoneyInput("۱۲۰٬۰۰۰", "IRR")).toBe(120_000_000);

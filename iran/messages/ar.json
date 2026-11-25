@@ -1119,7 +1119,8 @@
     "profile_not_found": "الملف غير موجود.",
     "unknown_package": "باقة غير معروفة.",
     "room_not_inspected": "لم يتم فحص الغرفة بعد.",
-    "unknown_kind": "قسم غير معروف."
+    "unknown_kind": "قسم غير معروف.",
+    "folio_due": "الفاتورة {folio}: يتبقى {amount} (تُسجَّل الليالي عند المغادرة). استلم هذا المبلغ أولاً."
   },
   "tables": {
     "title": "الطاولات ورموز QR",

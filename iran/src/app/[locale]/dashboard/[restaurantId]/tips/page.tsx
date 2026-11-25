@@ -60,7 +60,7 @@ async function Tips({ params, searchParams }: Props) {
         />
         <StatCard
           label={t("count")}
-          value={r.recent.length}
+          value={r.staff.reduce((n, x) => n + x.count, 0)}
           icon={<Heart className="size-5" aria-hidden="true" />}
         />
       </div>

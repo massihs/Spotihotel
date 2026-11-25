@@ -11,6 +11,7 @@ import { requireRestaurant } from "@/server/auth/current";
 import { db } from "@/server/db/client";
 import { getCustomer, listAccountEntries, loyaltyConfig } from "@/server/modules/customers/service";
 import { can } from "@/server/tenancy";
+import { orNotFound } from "@/server/not-found";
 
 type Props = PageProps<"/[locale]/dashboard/[restaurantId]/customers/[customerId]">;
 
@@ -25,14 +26,16 @@ export default function CustomerPage({ params }: Props) {
 async function CustomerFile({ params }: Pick<Props, "params">) {
   const { restaurantId, customerId } = await params;
   const ctx = await requireRestaurant(restaurantId, "customers.view");
-  const [t, tOrders, format, file, cfg, accountEntries] = await Promise.all([
-    getTranslations("customers"),
-    getTranslations("orderStatus"),
-    getFormatter(),
-    getCustomer(db, ctx, customerId),
-    loyaltyConfig(db, restaurantId),
-    listAccountEntries(db, ctx, customerId),
-  ]);
+  const [t, tOrders, format, file, cfg, accountEntries] = await orNotFound(
+    Promise.all([
+      getTranslations("customers"),
+      getTranslations("orderStatus"),
+      getFormatter(),
+      getCustomer(db, ctx, customerId),
+      loyaltyConfig(db, restaurantId),
+      listAccountEntries(db, ctx, customerId),
+    ]),
+  );
   const { customer: c } = file;
   const money = (v: number) => formatMoney(v, ctx.restaurant.currency, "fa");
   const base = `/dashboard/${ctx.restaurant.id}`;

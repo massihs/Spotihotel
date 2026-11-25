@@ -36,6 +36,7 @@ export function StayExtras({
   verified,
   tips,
   prayer,
+  timeZone,
   ramadan,
   wallet,
 }: {
@@ -43,13 +44,15 @@ export function StayExtras({
   verified: boolean;
   tips: TipsProps | null;
   prayer: PrayerTimes | null;
+  /** The hotel's time zone: prayer times are local to the hotel, not to the guest's phone. */
+  timeZone: string;
   ramadan: boolean;
   wallet: WalletProps | null;
 }) {
   return (
     <>
       {wallet ? <WalletCard wallet={wallet} /> : null}
-      {prayer ? <Prayer times={prayer} ramadan={ramadan} /> : null}
+      {prayer ? <Prayer times={prayer} ramadan={ramadan} timeZone={timeZone} /> : null}
       {tips && verified && tips.staff.length ? <Tips tips={tips} currency={currency} /> : null}
     </>
   );
@@ -93,21 +96,25 @@ function WalletCard({ wallet }: { wallet: WalletProps }) {
 
 const PRAYERS = ["fajr", "sunrise", "dhuhr", "maghrib", "isha"] as const;
 
-function Prayer({ times, ramadan }: { times: PrayerTimes; ramadan: boolean }) {
+function Prayer({ times, ramadan, timeZone }: { times: PrayerTimes; ramadan: boolean; timeZone: string }) {
   const t = useTranslations("stayExtras");
   const [now, setNow] = useState<string | null>(null);
   useEffect(() => {
-    const tick = () => {
-      const d = new Date();
-      setNow(`${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`);
-    };
+    // The hotel's clock (a foreign guest's phone may still be on their home time).
+    const clock = new Intl.DateTimeFormat("en-GB", {
+      timeZone,
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    });
+    const tick = () => setNow(clock.format(new Date()));
     const first = setTimeout(tick, 0);
     const id = setInterval(tick, 60_000);
     return () => {
       clearTimeout(first);
       clearInterval(id);
     };
-  }, []);
+  }, [timeZone]);
   const next = now ? PRAYERS.find((p) => times[p] > now) : null;
   return (
     <Section id="prayer" icon={<Moon />} title={t("prayer.title")}>

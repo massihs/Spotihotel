@@ -113,6 +113,13 @@ export async function leaveTip(
   });
 }
 
+/**
+ * A tip still stands while its charge does: once the front desk voids that folio line, the guest
+ * no longer pays it, so it leaves the report and is never handed over. Qualified by hand (the
+ * column renders unqualified in single-table statements).
+ */
+const standing = sql`not exists (select 1 from "folio_lines" fl where fl.id = "staff_tips"."folio_line_id" and fl.voided_at is not null)`;
+
 export type TipsReport = {
   staff: { userId: string; name: string; count: number; totalCents: number; unpaidCents: number }[];
   recent: {
@@ -138,6 +145,7 @@ export async function tipsReport(
     eq(staffTips.restaurantId, rid),
     gte(staffTips.createdAt, from),
     lte(staffTips.createdAt, to),
+    standing,
   );
   const [byStaff, recent] = await Promise.all([
     db
@@ -192,6 +200,7 @@ export async function payOutTips(db: DbOrTx, ctx: RestaurantContext, staffUserId
         eq(staffTips.restaurantId, rid),
         eq(staffTips.staffUserId, staffUserId),
         isNull(staffTips.paidOutAt),
+        standing,
       ),
     )
     .returning({ id: staffTips.id, amountCents: staffTips.amountCents });

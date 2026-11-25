@@ -36,6 +36,7 @@ import {
 } from "@/lib/backgammon";
 import { cn } from "@/lib/cn";
 import type { GameView } from "@/server/modules/games/service";
+import { buzz } from "@/lib/buzz";
 
 // Game art: fixed colours (a game table, the same in light and dark mode).
 const WOOD = "linear-gradient(145deg,#8a5a34 0%,#6b4226 45%,#4b2c18 100%)";
@@ -535,7 +536,7 @@ export function GameBoard({ initial, title }: { initial: GameView; title: string
     if (!s || s.turnNo === lastTurn.current) return;
     lastTurn.current = s.turnNo;
     if (view.status === "playing") play("dice");
-    if (serverTurn && "vibrate" in navigator) navigator.vibrate?.(50);
+    if (serverTurn) buzz(50);
   }, [s, serverTurn, view.status, play]);
 
   // Dice: two values (doubles shown four times), in the order the player chose.

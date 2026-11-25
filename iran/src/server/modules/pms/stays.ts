@@ -974,6 +974,8 @@ export async function checkOut(
         await transferToAccount(tx, ctx, f.id, s.accountId, `Folio ${f.number}`);
         balance = await folioBalance(tx, f.id);
       }
+      // Still owed (often tonight's room, posted only now): the desk is told how much to collect.
+      if (balance > 0) throw conflict("folio_due", { folio: f.number, balanceCents: balance });
       if (balance !== 0) throw conflict("folio_not_settled", { folio: f.number, balanceCents: balance });
     }
     await closeFolios(

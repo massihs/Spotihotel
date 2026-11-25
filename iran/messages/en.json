@@ -1119,7 +1119,8 @@
     "profile_not_found": "Profile not found.",
     "unknown_package": "Unknown package.",
     "room_not_inspected": "The room is not inspected yet.",
-    "unknown_kind": "Unknown department."
+    "unknown_kind": "Unknown department.",
+    "folio_due": "Bill {folio}: {amount} still due (room nights are posted at check-out). Take this payment first."
   },
   "tables": {
     "title": "Tables & QR codes",

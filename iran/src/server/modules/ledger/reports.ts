@@ -16,6 +16,7 @@ import { addDays, nightsBetween } from "@/server/modules/pms/calc";
 import { toJalali } from "@/lib/jalali-calendar";
 import { budgetsFor } from "./service";
 import { fiscalYearStart, monthKeyOf, monthsBetween, seasonOf } from "./periods";
+import { localDay } from "@/lib/period";
 
 /** Debit-nature accounts grow with debits; the others with credits. */
 const debitNature = (type: string) => type === "asset" || type === "expense";
@@ -530,8 +531,9 @@ export async function exportFec(db: DbOrTx, ctx: RestaurantContext, from: string
       amount(r.debit),
       amount(r.credit),
       r.reconciledAt ? "R" : "",
-      r.reconciledAt ? r.reconciledAt.toISOString().slice(0, 10).replace(/-/g, "") : "",
-      d(r.created.toISOString().slice(0, 10)),
+      r.reconciledAt ? d(localDay(r.reconciledAt, ctx.restaurant.timezone)) : "",
+      // The hotel's calendar day, not UTC (an entry made after midnight in Tehran is still today).
+      d(localDay(r.created, ctx.restaurant.timezone)),
       "",
       "",
     ].join("\t");

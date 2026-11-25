@@ -9,6 +9,7 @@ import { nightsBetween } from "@/server/modules/pms/calc";
 import { PrintButton } from "@/components/ui/print-button";
 import { calendarLocale, formatCalendarDate } from "@/lib/jalali-calendar";
 import { EDITION } from "@/config/edition";
+import { orNotFound } from "@/server/not-found";
 
 type Props = PageProps<"/[locale]/dashboard/[restaurantId]/stays/[stayId]/registration">;
 
@@ -27,7 +28,7 @@ export default function RegistrationCardPage({ params }: Props) {
 async function RegistrationCard({ params }: Pick<Props, "params">) {
   const { restaurantId, stayId } = await params;
   const ctx = await requireRestaurant(restaurantId, "frontdesk.view");
-  const card = await getStay(db, ctx, stayId);
+  const card = await orNotFound(getStay(db, ctx, stayId));
   const locale = await getLocale();
   const [t, [hotel]] = await Promise.all([
     getTranslations("pms.registration"),

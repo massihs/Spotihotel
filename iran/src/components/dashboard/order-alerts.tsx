@@ -8,6 +8,7 @@ import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "
 import { useLiveEvent } from "@/components/realtime/live";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
+import { buzz } from "@/lib/buzz";
 
 const STORAGE_KEY = "sf-order-alerts";
 const PREF_EVENT = "sf-order-alerts-change";
@@ -176,7 +177,7 @@ export function OrderAlerts({
     setTimeout(() => dismiss(alert.id), 8000);
     if (!enabled) return;
     if (audio.current) chime(audio.current);
-    navigator.vibrate?.([120, 60, 120]);
+    buzz([120, 60, 120]);
     if (document.hidden && "Notification" in window && Notification.permission === "granted") {
       new Notification(alert.title, {
         body: alert.body,

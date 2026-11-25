@@ -598,7 +598,7 @@ export async function folioView(db: DbOrTx, restaurantId: string, folioId: strin
     ...f,
     lines,
     chargesCents: charges,
-    creditsCents: -credits,
+    creditsCents: -credits || 0,
     balanceCents: charges + credits,
     taxes: [...tax.entries()].map(([rateBps, v]) => ({ rateBps, ...v })),
   };

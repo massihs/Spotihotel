@@ -13,7 +13,14 @@ import { assertCan, loadRestaurantContext, type RestaurantContext } from "@/serv
  */
 export type ActionResult<T = undefined> =
   | { ok: true; data?: T; at: number }
-  | { ok: false; error: string; fieldErrors?: Record<string, string>; at: number }
+  | {
+      ok: false;
+      error: string;
+      fieldErrors?: Record<string, string>;
+      /** Values for the error's message (e.g. the amount still due). */
+      values?: Record<string, string | number>;
+      at: number;
+    }
   | null;
 
 export function zodFieldErrors(error: z.ZodError): Record<string, string> {
@@ -38,10 +45,16 @@ export async function runAction<T>(fn: () => Promise<T>): Promise<ActionResult<T
     }
     if (isAppError(e)) {
       const field = typeof e.details?.field === "string" ? e.details.field : undefined;
+      const values = Object.fromEntries(
+        Object.entries(e.details ?? {}).filter(
+          ([k, v]) => k !== "field" && (typeof v === "string" || typeof v === "number"),
+        ),
+      ) as Record<string, string | number>;
       return {
         ok: false,
         error: e.message && /^[a-z_]+$/.test(e.message) ? e.message : e.code.toLowerCase(),
         fieldErrors: field ? { [field]: e.message } : undefined,
+        values: Object.keys(values).length ? values : undefined,
         at: Date.now(),
       };
     }

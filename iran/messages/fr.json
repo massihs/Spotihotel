@@ -1119,7 +1119,8 @@
     "profile_not_found": "Profil introuvable.",
     "unknown_package": "Bouquet inconnu.",
     "room_not_inspected": "La chambre n'est pas encore contrôlée.",
-    "unknown_kind": "Service inconnu."
+    "unknown_kind": "Service inconnu.",
+    "folio_due": "Note {folio} : {amount} reste dû (les nuitées sont portées au départ). Encaissez d'abord ce montant."
   },
   "tables": {
     "title": "Tables & QR codes",

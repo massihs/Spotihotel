@@ -96,11 +96,12 @@ export const unitLabel = (currency: string, locale: string) =>
 
 export function formatMoney(cents: Cents, currency: string, locale = "fa"): string {
   if (isToman(currency)) {
-    const tomans = Math.round(cents / 1000);
+    // `|| 0` turns -0 (no credits, or a tiny negative rounded away) into 0: never "−۰".
+    const tomans = Math.round(cents / 1000) || 0;
     const n = new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(tomans);
     return `${n} ${TOMAN_LABEL[lang(locale)] ?? TOMAN_LABEL.fa}`;
   }
-  return new Intl.NumberFormat(locale, { style: "currency", currency }).format(cents / 100);
+  return new Intl.NumberFormat(locale, { style: "currency", currency }).format(cents / 100 || 0);
 }
 
 /**

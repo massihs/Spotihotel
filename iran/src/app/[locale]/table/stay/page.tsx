@@ -132,6 +132,7 @@ async function Portal() {
           verified={!!v.stay}
           tips={features.tips.enabled ? { presets, staff } : null}
           prayer={prayer}
+          timeZone={guest.restaurant.timezone}
           ramadan={ramadan}
           wallet={v.stay ? wallet : null}
         />

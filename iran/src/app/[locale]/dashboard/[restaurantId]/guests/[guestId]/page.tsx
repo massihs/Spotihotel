@@ -11,6 +11,7 @@ import { getMoney } from "@/lib/money-server";
 import { getGuest } from "@/server/modules/pms/guests";
 import { calendarLocale } from "@/lib/jalali-calendar";
 import { EDITION } from "@/config/edition";
+import { orNotFound } from "@/server/not-found";
 
 type Props = PageProps<"/[locale]/dashboard/[restaurantId]/guests/[guestId]">;
 
@@ -26,11 +27,13 @@ async function Guest({ params }: Pick<Props, "params">) {
   const { restaurantId, guestId } = await params;
   const ctx = await requireRestaurant(restaurantId, "frontdesk.view");
   const locale = await getLocale();
-  const [t, money, g] = await Promise.all([
-    getTranslations("pms.guest"),
-    getMoney(ctx.restaurant.currency),
-    getGuest(db, ctx, guestId),
-  ]);
+  const [t, money, g] = await orNotFound(
+    Promise.all([
+      getTranslations("pms.guest"),
+      getMoney(ctx.restaurant.currency),
+      getGuest(db, ctx, guestId),
+    ]),
+  );
   const day = (d: string) =>
     new Intl.DateTimeFormat(calendarLocale(locale, EDITION), {
       day: "numeric",

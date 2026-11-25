@@ -1,6 +1,9 @@
 "use server";
 
 import { refresh } from "next/cache";
+import { getLocale } from "next-intl/server";
+import { isAppError } from "@/server/errors";
+import { formatMoney } from "@/lib/money";
 import { db } from "@/server/db/client";
 import { caravanCheckIn, caravanSchema, setCaravan } from "@/server/modules/pms/caravan";
 import { saveFeatures, type Features } from "@/server/modules/pms/features";
@@ -187,9 +190,17 @@ export const checkInAction = async (rid: string, id: string, roomId?: string | n
     return done((await checkIn(db, ctx, id, { roomId: roomId ?? null, allowDirty })).id);
   });
 export const checkOutAction = async (rid: string, id: string, toAccount = false) =>
-  runAction(async () =>
-    done((await checkOut(db, await actionContext(rid, "frontdesk.manage"), id, { toAccount })).id),
-  );
+  runAction(async () => {
+    const ctx = await actionContext(rid, "frontdesk.manage");
+    try {
+      return done((await checkOut(db, ctx, id, { toAccount })).id);
+    } catch (e) {
+      // The amount still due, written for the person at the desk.
+      if (isAppError(e) && e.message === "folio_due" && typeof e.details?.balanceCents === "number")
+        e.details.amount = formatMoney(e.details.balanceCents, ctx.restaurant.currency, await getLocale());
+      throw e;
+    }
+  });
 export const cancelStayAction = async (rid: string, id: string, reason: string, feeCents = 0) =>
   runAction(async () =>
     done(await cancelStay(db, await actionContext(rid, "frontdesk.manage"), id, { reason, feeCents })),

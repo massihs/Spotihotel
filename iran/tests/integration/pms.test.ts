@@ -202,8 +202,11 @@ describe("hotel PMS", () => {
         .from(stays)
         .where(and(eq(stays.restaurantId, h.restaurant.id), eq(stays.number, 1002)))
     )[0]!;
-    await expect(checkOut(db, h, second.id)).rejects.toMatchObject({ message: "folio_not_settled" });
     const f2 = (await getStay(db, h, second.id)).folios[0]!;
+    await expect(checkOut(db, h, second.id)).rejects.toMatchObject({
+      message: "folio_due",
+      details: { folio: f2.number, balanceCents: f2.balanceCents },
+    });
     await postPayment(db, h, f2.id, { amountCents: f2.balanceCents, method: "cash" });
     await checkOut(db, h, second.id);
     const [dirty] = await db.select().from(diningTables).where(eq(diningTables.id, second.roomId!));

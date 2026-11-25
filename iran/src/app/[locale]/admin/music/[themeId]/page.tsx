@@ -9,6 +9,7 @@ import { fmtDuration } from "@/lib/duration";
 import { requireSuperAdmin } from "@/server/auth/current";
 import { db } from "@/server/db/client";
 import { getThemeForAdmin } from "@/server/modules/music/service";
+import { orNotFound } from "@/server/not-found";
 
 export default function AdminThemePage({ params }: PageProps<"/[locale]/admin/music/[themeId]">) {
   return (
@@ -21,10 +22,9 @@ export default function AdminThemePage({ params }: PageProps<"/[locale]/admin/mu
 async function AdminTheme({ params }: Pick<PageProps<"/[locale]/admin/music/[themeId]">, "params">) {
   const admin = await requireSuperAdmin();
   const { themeId } = await params;
-  const [t, { theme, tracks }] = await Promise.all([
-    getTranslations("music.admin"),
-    getThemeForAdmin(db, admin, themeId),
-  ]);
+  const [t, { theme, tracks }] = await orNotFound(
+    Promise.all([getTranslations("music.admin"), getThemeForAdmin(db, admin, themeId)]),
+  );
   const total = tracks.filter((x) => x.isActive).reduce((s, x) => s + x.durationSec, 0);
 
   return (

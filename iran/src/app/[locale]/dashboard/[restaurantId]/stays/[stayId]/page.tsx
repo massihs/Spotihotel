@@ -22,6 +22,7 @@ import { StatusText } from "@/components/pms/status-text";
 import { calendarLocale } from "@/lib/jalali-calendar";
 import { EDITION } from "@/config/edition";
 import { stayInvoices } from "@/server/modules/pms/invoicing";
+import { orNotFound } from "@/server/not-found";
 
 type Props = PageProps<"/[locale]/dashboard/[restaurantId]/stays/[stayId]">;
 
@@ -39,7 +40,7 @@ async function Stay({ params, searchParams }: Pick<Props, "params" | "searchPara
   const autoCheckIn = (await searchParams).checkin === "1";
   const ctx = await requireRestaurant(restaurantId, "frontdesk.view");
   const rid = ctx.restaurant.id;
-  const card = await getStay(db, ctx, stayId);
+  const card = await orNotFound(getStay(db, ctx, stayId));
   const locale = await getLocale();
   const [t, tSrc, money, settings, types, plans, accounts, minibar, spa, rooms, busy] = await Promise.all([
     getTranslations("pms.card"),
