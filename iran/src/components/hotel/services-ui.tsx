@@ -583,7 +583,7 @@ export function CashTotals({
       {keys.map((k) => (
         <div key={k} className="kpi stat-auto p-4">
           <p className="kpi-label">{t(`settle.${k}`)}</p>
-          <p className="kpi-value mt-1 text-lg font-bold tabular-nums">{money(by[k]!.cents)}</p>
+          <p className="kpi-value mt-1 text-xl font-extrabold tabular-nums">{money(by[k]!.cents)}</p>
           <p className="text-xs text-fg-subtle">{t("count", { n: by[k]!.count })}</p>
         </div>
       ))}

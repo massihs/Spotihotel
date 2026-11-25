@@ -506,7 +506,11 @@ async function Overview({ params }: { params: PageProps<"/[locale]/dashboard/[re
         {/* Live orders, oldest first: what the team should look at next */}
         {can(ctx, "orders.view") ? (
           <Card className="flex flex-col">
-            <CardHeader title={t("liveOrders")} action={seeAll(`${base}/orders`)} />
+            <CardHeader
+              title={t("liveOrders")}
+              count={live.active.length}
+              action={seeAll(`${base}/orders`)}
+            />
             {live.active.length ? (
               <ul className="divide-y divide-border">
                 {live.active.map((o) => {
@@ -572,7 +576,11 @@ async function Overview({ params }: { params: PageProps<"/[locale]/dashboard/[re
 
         {showReservations ? (
           <Card className="flex flex-col">
-            <CardHeader title={t("nextBookings")} action={seeAll(`${base}/reservations`)} />
+            <CardHeader
+              title={t("nextBookings")}
+              count={live.bookings.length}
+              action={seeAll(`${base}/reservations`)}
+            />
             {live.bookings.length ? (
               <ul className="divide-y divide-border">
                 {live.bookings.map((b) => (

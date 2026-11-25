@@ -151,7 +151,7 @@ async function Owner({ params, searchParams }: Props) {
 
       {/* Rooms used without a stay */}
       <Card className="mt-6">
-        <CardHeader title={t("ghost.title")} description={t("ghost.hint")} />
+        <CardHeader title={t("ghost.title")} count={w.ghostRooms.length} description={t("ghost.hint")} />
         <div className="p-4 sm:p-5">
           {w.ghostRooms.length ? (
             <ul className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">

@@ -12,6 +12,7 @@ import { CommandPalette, type SearchEntry } from "./command-palette";
 import { initialsOf } from "@/components/ui/place-initials";
 import { MobileTabBar, NavTrail, SidebarNav, type NavItem } from "./sidebar-nav";
 import { NAV_OPEN_COOKIE } from "./nav-cookie";
+import { PageIcon } from "./page-icon";
 import { SegScroll } from "./seg-scroll";
 import { cookies } from "next/headers";
 
@@ -235,34 +236,54 @@ export async function AppShell({
   );
 }
 
+/**
+ * The top of every page: a band of the section's blue (the khatam lattice, a glow), the section's
+ * icon, the title and what the page is for, the page's actions; `meta` adds chips above the title.
+ */
 export function PageHeader({
   title,
   description,
   actions,
+  meta,
+  icon,
 }: {
   title: ReactNode;
   description?: ReactNode;
   actions?: ReactNode;
+  meta?: ReactNode;
+  /** Replaces the section's icon (false: none). */
+  icon?: ReactNode | false;
 }) {
   return (
-    <div className="mb-5 flex flex-wrap items-end justify-between gap-3 sm:gap-4 lg:mb-8">
-      <div className="min-w-0">
-        <span className="ornament mb-2.5 [--ornament-width:3.5rem] sm:mb-3" aria-hidden="true" />
-        <h1 className="title-ink text-[23px] leading-tight font-extrabold tracking-tight sm:text-[30px]">
-          {title}
-        </h1>
-        {description ? (
-          <p className="mt-1 line-clamp-2 max-w-3xl text-[13px] leading-5 text-fg-muted sm:mt-1.5 sm:line-clamp-none sm:text-sm sm:leading-6">
-            {description}
-          </p>
+    <div className="page-hero relative isolate mb-5 overflow-hidden rounded-[1.6rem] border border-border bg-surface px-4 py-4 shadow-[var(--shadow-card)] sm:px-6 sm:py-5 lg:mb-7 print:mb-4 print:border-0 print:p-0 print:shadow-none">
+      <span
+        aria-hidden="true"
+        className="texture-khatam texture-fade-corner [--tex-color:var(--shade,var(--accent))] [--tex-opacity:0.1] [--tex-size:56px] print:hidden"
+      />
+      <span
+        aria-hidden="true"
+        className="home-hero-glow pointer-events-none absolute -end-28 -top-32 size-80 rounded-full print:hidden"
+      />
+      <div className="relative flex flex-wrap items-end justify-between gap-3 sm:gap-4">
+        <div className="flex min-w-0 items-start gap-3.5">
+          <span className="print:hidden">{icon === false ? null : (icon ?? <PageIcon />)}</span>
+          <div className="min-w-0">
+            {meta ? <div className="mb-2 flex flex-wrap items-center gap-2 text-[12.5px]">{meta}</div> : null}
+            <h1 className="title-ink text-[23px] leading-tight font-extrabold sm:text-[28px]">{title}</h1>
+            {description ? (
+              <p className="mt-1 line-clamp-2 max-w-3xl text-[13px] leading-5 text-fg-muted sm:mt-1.5 sm:line-clamp-none sm:text-sm sm:leading-6">
+                {description}
+              </p>
+            ) : null}
+          </div>
+        </div>
+        {/* Phones: one row of actions that scrolls, instead of a stack of pills above the content. */}
+        {actions ? (
+          <div className="flex items-center gap-2 max-sm:-mx-4 max-sm:w-[calc(100%+2rem)] max-sm:[scrollbar-width:none] max-sm:overflow-x-auto max-sm:px-4 sm:flex-wrap print:hidden max-sm:[&>*]:shrink-0">
+            {actions}
+          </div>
         ) : null}
       </div>
-      {/* Phones: one row of actions that scrolls, instead of a stack of pills above the content. */}
-      {actions ? (
-        <div className="flex items-center gap-2 max-sm:-mx-4 max-sm:w-[calc(100%+2rem)] max-sm:[scrollbar-width:none] max-sm:overflow-x-auto max-sm:px-4 sm:flex-wrap max-sm:[&>*]:shrink-0">
-          {actions}
-        </div>
-      ) : null}
     </div>
   );
 }

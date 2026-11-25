@@ -52,7 +52,12 @@ async function Tips({ params, searchParams }: Props) {
           value={money(total)}
           icon={<HandCoins className="size-5" />}
         />
-        <StatCard label={t("unpaid")} value={money(unpaid)} icon={<Wallet className="size-5" />} />
+        <StatCard
+          label={t("unpaid")}
+          value={money(unpaid)}
+          icon={<Wallet className="size-5" />}
+          progress={total ? (unpaid / total) * 100 : 0}
+        />
         <StatCard
           label={t("count")}
           value={r.recent.length}
@@ -61,7 +66,7 @@ async function Tips({ params, searchParams }: Props) {
       </div>
       <div className="mt-6 grid items-start gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
         <Card>
-          <CardHeader title={t("byStaff")} description={t("byStaffHint")} />
+          <CardHeader title={t("byStaff")} count={r.staff.length} description={t("byStaffHint")} />
           {r.staff.length ? (
             <ul className="divide-y divide-border">
               {r.staff.map((s) => (
@@ -95,7 +100,7 @@ async function Tips({ params, searchParams }: Props) {
           )}
         </Card>
         <Card>
-          <CardHeader title={t("recent")} />
+          <CardHeader title={t("recent")} count={r.recent.length} />
           {r.recent.length ? (
             <ul className="divide-y divide-border">
               {r.recent.map((x) => (

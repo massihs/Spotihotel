@@ -102,6 +102,7 @@ async function Forecast({ params }: Pick<Props, "params">) {
           value={`${fc.totals.occupancyPct}%`}
           icon={<Gauge />}
           tone="ink"
+          progress={fc.totals.occupancyPct}
         />
         <StatCard
           label={t("otbRevenue")}

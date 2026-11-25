@@ -46,7 +46,7 @@ async function Shield({ params }: Props) {
           canManage={can(ctx, "restaurant.manage")}
         />
         <Card>
-          <CardHeader title={t("underTitle")} description={t("underHint")} />
+          <CardHeader title={t("underTitle")} count={v.underpriced.length} description={t("underHint")} />
           {v.underpriced.length ? (
             <>
               <p className="mx-5 mt-4 flex items-start gap-2 rounded-xl bg-warning-soft px-4 py-3 text-sm font-semibold text-warning">

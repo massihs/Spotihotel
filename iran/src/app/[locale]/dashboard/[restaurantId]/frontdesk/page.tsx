@@ -101,6 +101,7 @@ async function FrontDesk({ params }: Pick<Props, "params">) {
           hint={t("roomsSold", { sold: f.sold, rooms: f.rooms })}
           icon={<Gauge />}
           tone="ink"
+          progress={f.occupancyPct}
         />
         <StatCard label={t("adr")} value={money(f.adrCents)} icon={<TrendingUp />} tone="indigo" />
         <StatCard label={t("revpar")} value={money(f.revparCents)} icon={<BedDouble />} tone="teal" />

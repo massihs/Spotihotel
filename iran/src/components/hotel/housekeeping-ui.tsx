@@ -99,7 +99,7 @@ export function HousekeepingPlan({
         {(["dirty", "cleaning", "clean", "inspected", "outOfOrder", "unassigned"] as const).map((k) => (
           <li key={k} className="kpi stat-auto px-3 pt-3 pb-2.5">
             <p className="kpi-label">{t(`counts.${k}`)}</p>
-            <p className="kpi-value mt-0.5 text-xl font-bold tabular-nums">{counts[k] ?? 0}</p>
+            <p className="kpi-value mt-0.5 text-2xl font-extrabold tabular-nums">{counts[k] ?? 0}</p>
           </li>
         ))}
       </ul>

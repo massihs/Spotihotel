@@ -248,7 +248,7 @@ function Summary({
       <p className="kpi-label font-semibold">{label}</p>
       <p
         className={cn(
-          "kpi-value mt-1 text-2xl font-bold tracking-tight tabular-nums",
+          "kpi-value mt-1 text-[1.75rem] leading-tight font-extrabold tabular-nums",
           tone === "danger" && "text-danger",
           tone === "warning" && "text-warning",
         )}

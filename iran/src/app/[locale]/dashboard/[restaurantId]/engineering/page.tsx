@@ -78,7 +78,7 @@ async function Engineering({ params, searchParams }: Props) {
           {(["total", "open", "done", "urgent", "avgHours", "services"] as const).map((k) => (
             <div key={k} className="kpi stat-auto p-4">
               <dt className="kpi-label">{t(`report.${k}`)}</dt>
-              <dd className="kpi-value mt-1 text-2xl font-bold tabular-nums">{s[k]}</dd>
+              <dd className="kpi-value mt-1 text-2xl font-extrabold tabular-nums">{s[k]}</dd>
             </div>
           ))}
         </dl>
