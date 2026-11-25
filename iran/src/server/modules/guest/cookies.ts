@@ -9,6 +9,13 @@ import { sign, unsign } from "@/server/auth/tokens";
  */
 export const GUEST_COOKIE = "sf_guest";
 export const SEAT_COOKIE = "sf_seat";
+/**
+ * sf_scan: when the QR code was last scanned (signed with the participant). Ordering is open for
+ * SCAN_WINDOW_MS after each scan; past that the guest scans the code again, so a link kept or
+ * shared after leaving the room or the table cannot order.
+ */
+export const SCAN_COOKIE = "sf_scan";
+export const SCAN_WINDOW_MS = 30 * 60 * 1000;
 
 const secret = () => {
   const s = process.env.APP_SECRET;
@@ -25,6 +32,7 @@ const base = {
 
 export const guestCookieOptions = { ...base, maxAge: 60 * 60 * 24 * 365 };
 export const seatCookieOptions = { ...base, maxAge: 60 * 60 * 12 };
+export const scanCookieOptions = { ...base, maxAge: SCAN_WINDOW_MS / 1000 };
 
 export const newGuestId = () => randomUUID();
 export const signValue = (v: string) => sign(v, secret());

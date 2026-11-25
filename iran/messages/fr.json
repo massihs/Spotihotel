@@ -1120,7 +1120,8 @@
     "unknown_package": "Bouquet inconnu.",
     "room_not_inspected": "La chambre n'est pas encore contrôlée.",
     "unknown_kind": "Service inconnu.",
-    "folio_due": "Note {folio} : {amount} reste dû (les nuitées sont portées au départ). Encaissez d'abord ce montant."
+    "folio_due": "Note {folio} : {amount} reste dû (les nuitées sont portées au départ). Encaissez d'abord ce montant.",
+    "scan_expired": "Le délai de 30 minutes pour commander est écoulé. Scannez à nouveau le QR code pour commander."
   },
   "tables": {
     "title": "Tables & QR codes",
@@ -6557,5 +6558,10 @@
       "services": "Services",
       "admin": "Comptes et réglages"
     }
+  },
+  "scanWindow": {
+    "left": "Encore {n, plural, one {# minute} other {# minutes}} pour commander",
+    "expired": "Scannez à nouveau le QR code pour commander",
+    "expiredHint": "Chaque scan permet de commander pendant 30 minutes. Le menu et la note restent consultables."
   }
 }

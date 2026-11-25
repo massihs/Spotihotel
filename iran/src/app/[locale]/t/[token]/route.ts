@@ -9,6 +9,8 @@ import {
   guestCookieOptions,
   newGuestId,
   readSigned,
+  SCAN_COOKIE,
+  scanCookieOptions,
   SEAT_COOKIE,
   seatCookieOptions,
   signValue,
@@ -66,6 +68,11 @@ export async function GET(req: NextRequest, { params }: RouteContext<"/[locale]/
   const secure = site.https && guestCookieOptions.secure;
   res.cookies.set(GUEST_COOKIE, signValue(guestId), { ...guestCookieOptions, secure });
   res.cookies.set(SEAT_COOKIE, signValue(entry.participant.id), { ...seatCookieOptions, secure });
+  // Each scan opens a new 30-minute window to order.
+  res.cookies.set(SCAN_COOKIE, signValue(`${entry.participant.id}.${Date.now()}`), {
+    ...scanCookieOptions,
+    secure,
+  });
   res.headers.set("Referrer-Policy", "no-referrer");
   res.headers.set("Cache-Control", "no-store");
   return res;

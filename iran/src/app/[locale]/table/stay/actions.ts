@@ -6,7 +6,7 @@ import { db } from "@/server/db/client";
 import { runAction } from "@/server/actions";
 import { AppError } from "@/server/errors";
 import { enforceRateLimit } from "@/server/infra/rate-limit";
-import { requireGuest } from "@/server/modules/guest/current";
+import { requireFreshScan, requireGuest } from "@/server/modules/guest/current";
 import { signValue } from "@/server/modules/guest/cookies";
 import { STAY_COOKIE, verifiedStay } from "@/server/modules/pms/portal-session";
 import { nameMatches, stayOfGuest } from "@/server/modules/pms/portal";
@@ -19,6 +19,13 @@ async function requireStay() {
   if (!v.stay) throw new AppError("FORBIDDEN", "stay_not_verified");
   await enforceRateLimit("guestWrite", v.guest.guestId);
   return { guest: v.guest, stay: v.stay };
+}
+
+/** Booking or charging the room: only within 30 minutes of the last QR scan. */
+async function requireStayToOrder() {
+  const s = await requireStay();
+  await requireFreshScan(s.guest.participant.id);
+  return s;
 }
 
 /** The guest types their name once; the phone then sees the bill and can charge the room. */
@@ -49,7 +56,7 @@ export async function slotsAction(serviceId: string, day: string) {
 
 export async function bookSpaAction(serviceId: string, day: string, time: string, people: number) {
   return runAction(async () => {
-    const { guest, stay } = await requireStay();
+    const { guest, stay } = await requireStayToOrder();
     await bookServiceAsGuest(db, guest.restaurant, stay.id, { serviceId, day, time, people });
     refresh();
   });
@@ -65,7 +72,7 @@ export async function cancelSpaAction(bookingId: string) {
 
 export async function declareMinibarAction(lines: { itemId: string; quantity: number }[]) {
   return runAction(async () => {
-    const { guest, stay } = await requireStay();
+    const { guest, stay } = await requireStayToOrder();
     const total = await declareMinibar(db, guest.restaurant, stay.id, lines);
     refresh();
     return total;
@@ -75,7 +82,7 @@ export async function declareMinibarAction(lines: { itemId: string; quantity: nu
 /** A tip to a named member of staff, charged to the room. */
 export async function leaveTipAction(staffUserId: string, amountCents: number, message: string) {
   return runAction(async () => {
-    const { guest, stay } = await requireStay();
+    const { guest, stay } = await requireStayToOrder();
     const res = await leaveTip(db, guest.restaurant, stay.id, { staffUserId, amountCents, message });
     refresh();
     return res;

@@ -1120,7 +1120,8 @@
     "unknown_package": "Unknown package.",
     "room_not_inspected": "The room is not inspected yet.",
     "unknown_kind": "Unknown department.",
-    "folio_due": "Bill {folio}: {amount} still due (room nights are posted at check-out). Take this payment first."
+    "folio_due": "Bill {folio}: {amount} still due (room nights are posted at check-out). Take this payment first.",
+    "scan_expired": "Your 30-minute ordering window has ended. Scan the QR code again to order."
   },
   "tables": {
     "title": "Tables & QR codes",
@@ -6557,5 +6558,10 @@
       "services": "Services",
       "admin": "Accounts & settings"
     }
+  },
+  "scanWindow": {
+    "left": "{n, plural, one {# minute} other {# minutes}} left to order",
+    "expired": "Scan the QR code again to order",
+    "expiredHint": "Each scan lets you order for 30 minutes. You can still browse the menu and your bill."
   }
 }

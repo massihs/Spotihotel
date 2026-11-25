@@ -9,7 +9,7 @@ import { db } from "@/server/db/client";
 import { getCurrentDiner } from "@/server/auth/diner";
 import { runAction } from "@/server/actions";
 import { enforceRateLimit } from "@/server/infra/rate-limit";
-import { requireGuest } from "@/server/modules/guest/current";
+import { requireFreshScan, requireGuest } from "@/server/modules/guest/current";
 import { renameParticipant } from "@/server/modules/guest/sessions";
 import { placeOrder } from "@/server/modules/orders/service";
 import { autoChargeOrder } from "@/server/modules/pms/room-charges";
@@ -38,6 +38,13 @@ async function guest() {
   return g;
 }
 
+/** Ordering (cart, order, requests): only within 30 minutes of the last QR scan. */
+async function orderingGuest() {
+  const g = await guest();
+  await requireFreshScan(g.participant.id);
+  return g;
+}
+
 /** Returns the new cart summary so the menu's cart bar updates without a reload. */
 /** Count, total and units per product: what the menu needs to reflect the cart. */
 function cartSummary(cart: Awaited<ReturnType<typeof getCartView>>) {
@@ -48,7 +55,7 @@ function cartSummary(cart: Awaited<ReturnType<typeof getCartView>>) {
 
 export async function addToCartAction(input: AddItemInput) {
   return runAction(async () => {
-    const g = await guest();
+    const g = await orderingGuest();
     await addToCart(db, g, input);
     return cartSummary(await getCartView(db, g));
   });
@@ -99,7 +106,7 @@ export async function renameAction(_prev: unknown, fd: FormData) {
 /** Sends the cart to the kitchen. Prices are recomputed server-side inside placeOrder. */
 export async function placeOrderAction(note: string, phone = "", couponCode = "") {
   return runAction(async () => {
-    const g = await guest();
+    const g = await orderingGuest();
     const diner = await getCurrentDiner();
     const order = await placeOrder(db, g, { note, phone, couponCode }, { dinerId: diner?.id });
     // Hotel room: the order goes on the guest's bill when someone is checked in (setting).
@@ -180,7 +187,7 @@ export async function nowPlayingAction() {
 /** Calls a waiter / asks for the bill / water from the table. */
 export async function callWaiterAction(kind: string, note: string | null = null) {
   return runAction(async () => {
-    const g = await guest();
+    const g = await orderingGuest();
     await callWaiter(db, g, kind, new Date(), typeof note === "string" ? note : null);
   });
 }
