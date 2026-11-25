@@ -759,7 +759,14 @@
       "bookingPageHint": "Open the online booking page",
       "bookedToday": "Bookings taken today",
       "noBookingsToday": "None yet",
-      "checkIn": "Check in"
+      "checkIn": "Check in",
+      "attention": "Needs attention",
+      "allClear": "All clear: nothing is waiting.",
+      "settledN": "{n} settled",
+      "readyRooms": "{n} rooms ready",
+      "dayOpen": "Business day open",
+      "auditPending": "Night audit not run",
+      "heroLine": "Tonight: {pct} occupancy, {arrivals} arrivals and {departures} departures planned."
     }
   },
   "roles": {

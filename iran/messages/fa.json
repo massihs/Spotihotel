@@ -759,7 +759,14 @@
       "bookingPageHint": "باز کردن صفحه رزرو آنلاین",
       "bookedToday": "رزروهای ثبت‌شده امروز",
       "noBookingsToday": "هنوز رزروی ثبت نشده",
-      "checkIn": "پذیرش"
+      "checkIn": "پذیرش",
+      "attention": "نیاز به رسیدگی",
+      "allClear": "همه‌چیز مرتب است؛ کاری در انتظار نیست.",
+      "settledN": "{n} تسویه‌شده",
+      "readyRooms": "{n} اتاق آماده",
+      "dayOpen": "روز کاری باز",
+      "auditPending": "بستن روز انجام نشده",
+      "heroLine": "امشب {pct} اشغال، {arrivals} ورودی و {departures} خروجی در برنامه است."
     }
   },
   "roles": {

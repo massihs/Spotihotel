@@ -759,7 +759,14 @@
       "bookingPageHint": "فتح صفحة الحجز عبر الإنترنت",
       "bookedToday": "الحجوزات المسجلة اليوم",
       "noBookingsToday": "لا شيء حتى الآن",
-      "checkIn": "تسجيل الوصول"
+      "checkIn": "تسجيل الوصول",
+      "attention": "بحاجة إلى متابعة",
+      "allClear": "كل شيء على ما يرام: لا شيء بانتظارك.",
+      "settledN": "{n} مسدّدة",
+      "readyRooms": "{n} غرفة جاهزة",
+      "dayOpen": "يوم العمل مفتوح",
+      "auditPending": "لم يُغلق اليوم بعد",
+      "heroLine": "الليلة: إشغال {pct}، و{arrivals} وصول و{departures} مغادرة مخطط لها."
     }
   },
   "roles": {

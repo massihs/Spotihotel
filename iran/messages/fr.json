@@ -759,7 +759,14 @@
       "bookingPageHint": "Ouvrir la page de réservation en ligne",
       "bookedToday": "Réservations prises aujourd'hui",
       "noBookingsToday": "Aucune pour l'instant",
-      "checkIn": "Check-in"
+      "checkIn": "Check-in",
+      "attention": "À traiter",
+      "allClear": "Tout est en ordre : rien n'attend.",
+      "settledN": "{n} soldé(s)",
+      "readyRooms": "{n} chambres prêtes",
+      "dayOpen": "Journée ouverte",
+      "auditPending": "Clôture de la journée à faire",
+      "heroLine": "Ce soir : {pct} d'occupation, {arrivals} arrivées et {departures} départs prévus."
     }
   },
   "roles": {

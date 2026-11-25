@@ -8,50 +8,32 @@ import { isLocale, localeDirection, LOCALES } from "@/i18n/config";
 import "@/styles/globals.css";
 
 // Fonts are self-hosted (no request to Google at build or run time: unreachable from Iran,
-// and avoids sending visitors' IPs to a third party). Inter for Latin, Vazirmatn for Persian/Arabic.
+// and avoids sending visitors' IPs to a third party). Inter for Latin, Estedad for Persian/Arabic.
 const sans = localFont({
   src: "../../../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2",
   weight: "100 900",
   variable: "--font-sans-loaded",
   display: "swap",
 });
+// Estedad: open, modern Persian letterforms with a large eye, clear in tables and dense lists.
 const persian = localFont({
-  src: "../../../node_modules/@fontsource-variable/vazirmatn/files/vazirmatn-arabic-wght-normal.woff2",
+  src: "../../../node_modules/@fontsource-variable/estedad/files/estedad-arabic-wght-normal.woff2",
   weight: "100 900",
   variable: "--font-fa-loaded",
   display: "swap",
-  // Font loader options must be literals: not preloaded (≈ 60 KB), fetched as soon as Persian/Arabic
+  // Font loader options must be literals: not preloaded (≈ 55 KB), fetched as soon as Persian/Arabic
   // text is rendered, with `swap` so text is never invisible.
   preload: false,
 });
-// Persian UI font with Persian digits (non-Latin subset, ≈ 22 KB per weight): any number on a Persian
-// page renders as ۰-۹ — prices, table labels, quantities, order numbers — whatever produced it.
+// The digits 0-9 drawn as ۰-۹ in Estedad (≈ 4 KB, all weights): on a Persian page any number —
+// prices, room numbers, quantities, order numbers — renders in Persian whatever produced it.
 const persianDigits = localFont({
-  src: [
-    {
-      path: "../../../node_modules/vazirmatn/misc/UI-Farsi-Digits-Non-Latin/fonts/webfonts/Vazirmatn-UI-FD-NL-Regular.woff2",
-      weight: "400",
-    },
-    {
-      path: "../../../node_modules/vazirmatn/misc/UI-Farsi-Digits-Non-Latin/fonts/webfonts/Vazirmatn-UI-FD-NL-Medium.woff2",
-      weight: "500",
-    },
-    {
-      path: "../../../node_modules/vazirmatn/misc/UI-Farsi-Digits-Non-Latin/fonts/webfonts/Vazirmatn-UI-FD-NL-SemiBold.woff2",
-      weight: "600",
-    },
-    {
-      path: "../../../node_modules/vazirmatn/misc/UI-Farsi-Digits-Non-Latin/fonts/webfonts/Vazirmatn-UI-FD-NL-Bold.woff2",
-      weight: "700",
-    },
-    {
-      path: "../../../node_modules/vazirmatn/misc/UI-Farsi-Digits-Non-Latin/fonts/webfonts/Vazirmatn-UI-FD-NL-ExtraBold.woff2",
-      weight: "800",
-    },
-  ],
+  src: "../../fonts/persian-digits.woff2",
+  weight: "100 900",
   variable: "--font-fa-digits",
   display: "swap",
   preload: false,
+  adjustFontFallback: false,
 });
 
 // Display faces of the guest menu themes (Atelier: Persian serif, Nuit: modern Kufi).

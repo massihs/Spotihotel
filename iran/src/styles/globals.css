@@ -496,7 +496,7 @@
   --shadow-accent-sm: 0 1px 2px oklch(var(--brand-l) var(--brand-c) var(--brand-h) / 0.3);
 }
 
-/* Persian: Vazirmatn "Farsi digits" first, so every number (prices, table labels, counts, codes)
+/* Persian: the Persian digits (cut from Estedad) first, so every number (prices, table labels, counts, codes)
    renders with Persian digits whatever its source; Latin letters fall through to Inter. */
 :root {
   --app-font:
@@ -1454,4 +1454,31 @@ input[type="radio"] {
   .tab-sub {
     animation: none;
   }
+}
+
+/* ─── Persian & Arabic typography ────────────────────────────────────────────
+ * Letter-spacing pulls the joined letters of a cursive script apart (or crushes them): none on
+ * Persian / Arabic text, Latin runs (the logo, codes, `.latin-digits`, LTR parts) keep theirs.
+ */
+:is(:lang(fa), :lang(ar))
+  :is(.tracking-tight, .tracking-tighter, .tracking-wide, .tracking-wider, .tracking-widest):not(
+    .latin-digits,
+    [dir="ltr"],
+    [dir="ltr"] *
+  ) {
+  letter-spacing: normal;
+}
+/* Persian headings: Estedad's heavy weights read best a little more open. */
+:lang(fa) :is(h1, h2, h3) {
+  line-height: 1.35;
+}
+
+/* Home: a soft glow of the section's blue behind the greeting. */
+.home-hero-glow {
+  --home-glow: radial-gradient(
+    circle,
+    color-mix(in oklch, var(--shade, var(--accent)) 22%, transparent),
+    transparent 70%
+  );
+  background-image: var(--home-glow);
 }
