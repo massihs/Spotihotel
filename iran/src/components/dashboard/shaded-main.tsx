@@ -33,6 +33,7 @@ const SHADE_OF: Record<string, string> = {
   owner: "shade-periwinkle",
   shield: "shade-indigo",
   tips: "shade-cyan",
+  support: "shade-azure",
   chain: "shade-periwinkle",
   reports: "shade-periwinkle",
   ledger: "shade-indigo",

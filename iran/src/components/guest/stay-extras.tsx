@@ -15,6 +15,7 @@ import type { PrayerTimes } from "@/lib/prayer-times";
 import { intentOf, type Intent } from "@/lib/concierge";
 import { Section } from "./stay-portal";
 import { WaiterCall, type CallOption } from "./waiter-call";
+import { openSupport } from "@/components/support/launcher";
 
 export type TipsProps = {
   presets: number[];
@@ -396,6 +397,17 @@ export function Concierge(props: ConciergeProps) {
             </div>
             <div className="border-t border-border p-3">
               <div className="-mx-1 mb-2 flex [scrollbar-width:none] gap-1.5 overflow-x-auto px-1">
+                {/* A person at the desk, in the live chat. */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    openSupport();
+                  }}
+                  className="shade-fill shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold"
+                >
+                  {t("chatDesk")}
+                </button>
                 {(["wifi", "food", "clean", "checkout", "spa"] as const).map((k) => (
                   <button
                     key={k}

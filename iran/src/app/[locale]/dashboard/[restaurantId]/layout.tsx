@@ -77,6 +77,8 @@ import { vapidPublicKey } from "@/server/modules/push/service";
 import { after } from "next/server";
 import { SubscriptionBanner } from "@/components/dashboard/subscription-banner";
 import { countOpenRequests } from "@/server/modules/hotel/requests";
+import { deskUnread } from "@/server/modules/support/service";
+import { StaffSupport } from "@/components/support/launcher";
 import { allTabs, groupsFor, type TabGroupPage } from "@/lib/tab-groups";
 
 /** Where each page sits in a hotel's menu, in this order (the rest keeps its own group). */
@@ -190,7 +192,7 @@ async function RestaurantShell({
   const base = `/dashboard/${ctx.restaurant.id}`;
 
   const hotel = ctx.restaurant.kind === "hotel";
-  const [{ unread }, newOrders, lowStock, undeliveredCount, disabled, notice, openRequests] =
+  const [{ unread }, newOrders, lowStock, undeliveredCount, disabled, notice, openRequests, guestChats] =
     await Promise.all([
       listNotifications(db, ctx, 1),
       countNewOrders(db, ctx),
@@ -199,6 +201,7 @@ async function RestaurantShell({
       getDisabledModules(db, ctx),
       can(ctx, "restaurant.manage") ? getSubscriptionNotice(db, ctx.restaurant.id) : null,
       hotel && can(ctx, "orders.view") ? countOpenRequests(db, ctx.restaurant.id) : 0,
+      deskUnread(db, ctx.restaurant.id),
     ]);
   // Satisfaction texts that are due go out after this page is sent (no cron needed).
   after(() => sendDueFeedback(db, ctx.restaurant.id).catch(() => 0));
@@ -656,6 +659,15 @@ async function RestaurantShell({
       },
       {
         show: can(ctx, "restaurant.view"),
+        href: `${base}/support`,
+        label: t("nav.support"),
+        icon: <Headset />,
+        badge: guestChats,
+        groupKey: "manage",
+        group: g.manage,
+      },
+      {
+        show: can(ctx, "restaurant.view"),
         href: `${base}/settings`,
         label: t("nav.settings"),
         icon: <Settings />,
@@ -778,6 +790,7 @@ async function RestaurantShell({
         {notice ? <SubscriptionBanner restaurantId={ctx.restaurant.id} notice={notice} /> : null}
         {children}
         {hotel ? <CheckInHost /> : null}
+        <StaffSupport restaurantId={ctx.restaurant.id} />
       </AppShell>
     </LiveProvider>
   );

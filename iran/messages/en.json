@@ -596,7 +596,9 @@
     "filterNone": "No page found",
     "sectionCount": "{n} pages",
     "expandAll": "Expand all",
-    "collapseAll": "Collapse all"
+    "collapseAll": "Collapse all",
+    "support": "Support",
+    "adminSupport": "Support"
   },
   "dashboard": {
     "welcome": "Hello {name}",
@@ -1121,7 +1123,9 @@
     "room_not_inspected": "The room is not inspected yet.",
     "unknown_kind": "Unknown department.",
     "folio_due": "Bill {folio}: {amount} still due (room nights are posted at check-out). Take this payment first.",
-    "scan_expired": "Your 30-minute ordering window has ended. Scan the QR code again to order."
+    "scan_expired": "Your 30-minute ordering window has ended. Scan the QR code again to order.",
+    "message_empty": "The message is empty.",
+    "title_required": "A title is required."
   },
   "tables": {
     "title": "Tables & QR codes",
@@ -2236,6 +2240,9 @@
         "prep_slow": "Slow kitchen: {minutes} min on average over the last hour (target {goal} min)",
         "rating_low": "Guest rating dropping: {rating}/5 over 7 days (target {goal})",
         "revenue_missed": "Today’s takings target missed"
+      },
+      "support": {
+        "guest": "Guest {label} is waiting for the front desk in the support chat"
       }
     }
   },
@@ -6454,7 +6461,8 @@
         "tip": "Tip",
         "prayer": "Prayer times",
         "clean": "Send request"
-      }
+      },
+      "chatDesk": "Chat with the desk"
     }
   },
   "tipsAdmin": {
@@ -6563,5 +6571,120 @@
     "left": "{n, plural, one {# minute} other {# minutes}} left to order",
     "expired": "Scan the QR code again to order",
     "expiredHint": "Each scan lets you order for 30 minutes. You can still browse the menu and your bill."
+  },
+  "support": {
+    "assistant": "Assistant",
+    "customer": "Guest",
+    "team": "Spotihotel team",
+    "desk": "Front desk",
+    "staffTitle": "Spotihotel support",
+    "guestTitle": "Chat with the front desk",
+    "staffWelcome": "Hi! Write your question or problem; if I don't know the answer, my colleagues in the Spotihotel team reply right here. You can send a screenshot too.",
+    "guestWelcome": "Hi! Ask anything; if I can't help, the hotel's front desk replies right here.",
+    "withAssistant": "The assistant is answering",
+    "withPerson": "{who} is answering",
+    "placeholder": "Write your message…",
+    "send": "Send",
+    "addPhoto": "Add a photo",
+    "removePhoto": "Remove the photo",
+    "photo": "Photo",
+    "close": "Close",
+    "openPage": "Open the page",
+    "helped": "That solved it",
+    "talkToHuman": "Talk to a person",
+    "closedNote": "This conversation is closed. It reopens if the guest writes again.",
+    "suggest": {
+      "audit": "The day won't close",
+      "printer": "The printer doesn't print",
+      "checkout": "I can't check a guest out",
+      "qr": "A guest cannot order",
+      "wifi": "What's the Wi-Fi password?",
+      "order": "How do I order?",
+      "towels": "I need more towels",
+      "bill": "See my bill"
+    },
+    "bot": {
+      "found": "This may help:",
+      "glad": "Glad that solved it! Write if you have another question."
+    },
+    "system": {
+      "handover_desk": "The conversation went to the hotel's front desk; they will reply shortly.",
+      "handover_team": "The conversation went to the Spotihotel team; we will reply shortly.",
+      "closed": "Conversation closed."
+    },
+    "checks": {
+      "printers_ok": "{n, plural, one {# active printer is} other {# active printers are}} set up.",
+      "printers_none": "No active printer is set up (Settings › Printers).",
+      "print_failed": "{n, plural, one {# print} other {# prints}} failed in the last 24 hours: check the printer's network connection.",
+      "print_stuck": "{n, plural, one {# print has} other {# prints have}} waited over 10 minutes: is the print agent running?",
+      "audit_late": "The business day has not been closed since {date} ({days, plural, one {# day} other {# days}}). Use “Close the day” on the front desk.",
+      "audit_ok": "The business day is up to date.",
+      "qr_disabled": "{n, plural, one {# QR code is} other {# QR codes are}} disabled.",
+      "qr_ok": "All QR codes are enabled.",
+      "wifi": "Wi-Fi: {name} | password: {password}",
+      "checkout_time": "Check-out time: {time}"
+    },
+    "pageTitle": "Support and guest chat",
+    "pageSubtitle": "Guests' messages the assistant could not answer wait for you here. Your own chat with the Spotihotel team is on the button at the bottom of the page.",
+    "writeTeam": "Write to the Spotihotel team",
+    "guestsInbox": "Guest conversations",
+    "hotelsInbox": "Hotel conversations",
+    "adminTitle": "Support",
+    "adminSubtitle": "Hotels' and restaurants' conversations with the team, with each account's file beside them; and the articles the assistant answers with.",
+    "filter": {
+      "active": "Active",
+      "all": "All"
+    },
+    "inboxEmpty": "No conversations.",
+    "pick": "Pick a conversation.",
+    "loading": "Loading…",
+    "back": "Back",
+    "resolve": "Resolved",
+    "place": "Room/table {place}",
+    "status": {
+      "bot": "With the assistant",
+      "open": "Waiting for a reply",
+      "closed": "Closed"
+    },
+    "account": {
+      "hotel": "Account",
+      "requester": "Written by",
+      "members": "Staff",
+      "places": "Rooms & tables",
+      "businessDate": "Business day",
+      "checks": "Automatic checks",
+      "open": "Open this account's dashboard",
+      "kind": {
+        "hotel": "Hotel",
+        "restaurant": "Restaurant"
+      },
+      "status": {
+        "active": "Active",
+        "suspended": "Suspended"
+      }
+    },
+    "articles": {
+      "title": "Help articles (the assistant's knowledge)",
+      "hint": "The assistant answers with these articles. Add the keywords people actually write, in any language.",
+      "audience": {
+        "staff": "Hotels",
+        "guest": "Guests"
+      },
+      "audienceLabel": "For",
+      "add": "New article",
+      "edit": "Edit",
+      "delete": "Delete",
+      "confirmDelete": "Delete this article?",
+      "stats": "shown {shown} | helped {helped}",
+      "slug": "Identifier (latin)",
+      "href": "Related page",
+      "titleField": "Title",
+      "bodyField": "Answer text",
+      "keywords": "Keywords",
+      "keywordsHint": "Separated by commas; in any language (Persian, English, French, Arabic).",
+      "published": "Published",
+      "save": "Save",
+      "cancel": "Cancel"
+    }
   }
 }

@@ -596,7 +596,9 @@
     "filterNone": "Aucune page trouvée",
     "sectionCount": "{n} pages",
     "expandAll": "Tout déplier",
-    "collapseAll": "Tout replier"
+    "collapseAll": "Tout replier",
+    "support": "Support",
+    "adminSupport": "Support"
   },
   "dashboard": {
     "welcome": "Bonjour {name}",
@@ -1121,7 +1123,9 @@
     "room_not_inspected": "La chambre n'est pas encore contrôlée.",
     "unknown_kind": "Service inconnu.",
     "folio_due": "Note {folio} : {amount} reste dû (les nuitées sont portées au départ). Encaissez d'abord ce montant.",
-    "scan_expired": "Le délai de 30 minutes pour commander est écoulé. Scannez à nouveau le QR code pour commander."
+    "scan_expired": "Le délai de 30 minutes pour commander est écoulé. Scannez à nouveau le QR code pour commander.",
+    "message_empty": "Le message est vide.",
+    "title_required": "Un titre est requis."
   },
   "tables": {
     "title": "Tables & QR codes",
@@ -2236,6 +2240,9 @@
         "prep_slow": "Cuisine lente : {minutes} min en moyenne sur la dernière heure (objectif {goal} min)",
         "rating_low": "Note des clients en baisse : {rating}/5 sur 7 jours (objectif {goal})",
         "revenue_missed": "Objectif du jour non atteint"
+      },
+      "support": {
+        "guest": "Le client {label} attend la réception dans le chat de support"
       }
     }
   },
@@ -6454,7 +6461,8 @@
         "tip": "Pourboire",
         "prayer": "Heures de prière",
         "clean": "Envoyer la demande"
-      }
+      },
+      "chatDesk": "Écrire à la réception"
     }
   },
   "tipsAdmin": {
@@ -6563,5 +6571,120 @@
     "left": "Encore {n, plural, one {# minute} other {# minutes}} pour commander",
     "expired": "Scannez à nouveau le QR code pour commander",
     "expiredHint": "Chaque scan permet de commander pendant 30 minutes. Le menu et la note restent consultables."
+  },
+  "support": {
+    "assistant": "Assistant",
+    "customer": "Client",
+    "team": "Équipe Spotihotel",
+    "desk": "Réception",
+    "staffTitle": "Support Spotihotel",
+    "guestTitle": "Écrire à la réception",
+    "staffWelcome": "Bonjour ! Écrivez votre question ou votre problème ; si je n'ai pas la réponse, mes collègues de l'équipe Spotihotel répondent ici. Vous pouvez aussi envoyer une capture d'écran.",
+    "guestWelcome": "Bonjour ! Posez votre question ; si je ne peux pas vous aider, la réception de l'hôtel répond ici.",
+    "withAssistant": "L'assistant répond",
+    "withPerson": "{who} répond",
+    "placeholder": "Écrivez votre message…",
+    "send": "Envoyer",
+    "addPhoto": "Ajouter une photo",
+    "removePhoto": "Retirer la photo",
+    "photo": "Photo",
+    "close": "Fermer",
+    "openPage": "Ouvrir la page",
+    "helped": "Ça m'a aidé",
+    "talkToHuman": "Parler à quelqu'un",
+    "closedNote": "Cette conversation est close. Elle se rouvre si le client écrit à nouveau.",
+    "suggest": {
+      "audit": "La journée ne se clôture pas",
+      "printer": "L'imprimante n'imprime pas",
+      "checkout": "Je n'arrive pas à faire un départ",
+      "qr": "Un client ne peut pas commander",
+      "wifi": "Quel est le mot de passe Wi-Fi ?",
+      "order": "Comment commander ?",
+      "towels": "Il me faut des serviettes",
+      "bill": "Voir ma note"
+    },
+    "bot": {
+      "found": "Ceci peut vous aider :",
+      "glad": "Content que ce soit réglé ! Écrivez si vous avez une autre question."
+    },
+    "system": {
+      "handover_desk": "La conversation est transmise à la réception ; elle vous répond très vite.",
+      "handover_team": "La conversation est transmise à l'équipe Spotihotel ; nous répondons très vite.",
+      "closed": "Conversation close."
+    },
+    "checks": {
+      "printers_ok": "{n, plural, one {# imprimante active} other {# imprimantes actives}} configurée(s).",
+      "printers_none": "Aucune imprimante active configurée (Paramètres › Imprimantes).",
+      "print_failed": "{n, plural, one {# impression a échoué} other {# impressions ont échoué}} ces dernières 24 h : vérifiez la connexion réseau de l'imprimante.",
+      "print_stuck": "{n, plural, one {# impression attend} other {# impressions attendent}} depuis plus de 10 minutes : l'agent d'impression est-il allumé ?",
+      "audit_late": "La journée n'est pas clôturée depuis le {date} ({days, plural, one {# jour} other {# jours}}). Utilisez « Clôturer la journée » sur la Réception.",
+      "audit_ok": "La journée d'exploitation est à jour.",
+      "qr_disabled": "{n, plural, one {# QR code est désactivé} other {# QR codes sont désactivés}}.",
+      "qr_ok": "Tous les QR codes sont actifs.",
+      "wifi": "Wi-Fi : {name} | mot de passe : {password}",
+      "checkout_time": "Heure de départ : {time}"
+    },
+    "pageTitle": "Support et chat clients",
+    "pageSubtitle": "Les messages des clients auxquels l'assistant n'a pas su répondre vous attendent ici. Votre chat avec l'équipe Spotihotel est sur le bouton en bas de page.",
+    "writeTeam": "Écrire à l'équipe Spotihotel",
+    "guestsInbox": "Conversations clients",
+    "hotelsInbox": "Conversations des hôtels",
+    "adminTitle": "Support",
+    "adminSubtitle": "Les conversations des hôtels et restaurants avec l'équipe, avec la fiche de chaque compte à côté ; et les articles avec lesquels l'assistant répond.",
+    "filter": {
+      "active": "Actives",
+      "all": "Toutes"
+    },
+    "inboxEmpty": "Aucune conversation.",
+    "pick": "Choisissez une conversation.",
+    "loading": "Chargement…",
+    "back": "Retour",
+    "resolve": "Résolu",
+    "place": "Chambre/table {place}",
+    "status": {
+      "bot": "Avec l'assistant",
+      "open": "En attente de réponse",
+      "closed": "Close"
+    },
+    "account": {
+      "hotel": "Compte",
+      "requester": "Écrit par",
+      "members": "Employés",
+      "places": "Chambres et tables",
+      "businessDate": "Journée d'exploitation",
+      "checks": "Vérifications automatiques",
+      "open": "Ouvrir le tableau de bord du compte",
+      "kind": {
+        "hotel": "Hôtel",
+        "restaurant": "Restaurant"
+      },
+      "status": {
+        "active": "Actif",
+        "suspended": "Suspendu"
+      }
+    },
+    "articles": {
+      "title": "Articles d'aide (les connaissances de l'assistant)",
+      "hint": "L'assistant répond avec ces articles. Ajoutez les mots que les gens écrivent vraiment, dans toutes les langues.",
+      "audience": {
+        "staff": "Hôtels",
+        "guest": "Clients"
+      },
+      "audienceLabel": "Pour",
+      "add": "Nouvel article",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "confirmDelete": "Supprimer cet article ?",
+      "stats": "affiché {shown} | utile {helped}",
+      "slug": "Identifiant (latin)",
+      "href": "Page liée",
+      "titleField": "Titre",
+      "bodyField": "Texte de la réponse",
+      "keywords": "Mots-clés",
+      "keywordsHint": "Séparés par des virgules ; dans toutes les langues (persan, anglais, français, arabe).",
+      "published": "Publié",
+      "save": "Enregistrer",
+      "cancel": "Annuler"
+    }
   }
 }

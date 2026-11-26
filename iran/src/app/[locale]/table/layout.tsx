@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Suspense, type ReactNode } from "react";
 import { GuestSkeleton } from "@/components/guest/states";
 import { ScanWindow } from "@/components/guest/scan-window";
+import { GuestSupport } from "@/components/support/launcher";
 import { getGuest, scanWindowEnd } from "@/server/modules/guest/current";
 
 // Guest pages are private to the table: never indexed, never leaking the URL in referrers.
@@ -33,5 +34,10 @@ export default function GuestLayout({ children }: { children: ReactNode }) {
 async function OrderingWindow() {
   const guest = await getGuest();
   if (!guest) return null;
-  return <ScanWindow end={await scanWindowEnd(guest.participant.id)} />;
+  return (
+    <>
+      <ScanWindow end={await scanWindowEnd(guest.participant.id)} />
+      <GuestSupport />
+    </>
+  );
 }

@@ -3,7 +3,9 @@ import { getTranslations } from "next-intl/server";
 import { AppShell, ShellSkeleton } from "@/components/dashboard/app-shell";
 import { IconChart, IconStore, IconUsers } from "@/components/ui/icons";
 import { requireSuperAdmin } from "@/server/auth/current";
-import { Bug, CreditCard, Eye, LayoutGrid, Music } from "lucide-react";
+import { Bug, CreditCard, Eye, Headset, LayoutGrid, Music } from "lucide-react";
+import { db } from "@/server/db/client";
+import { platformUnread } from "@/server/modules/support/service";
 import { Link } from "@/i18n/navigation";
 
 export default function AdminLayout({ children }: LayoutProps<"/[locale]/admin">) {
@@ -16,7 +18,7 @@ export default function AdminLayout({ children }: LayoutProps<"/[locale]/admin">
 
 async function AdminShell({ children }: { children: React.ReactNode }) {
   const user = await requireSuperAdmin();
-  const t = await getTranslations("nav");
+  const [t, supportUnread] = await Promise.all([getTranslations("nav"), platformUnread(db)]);
   return (
     <AppShell
       title={t("admin")}
@@ -31,6 +33,7 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
         { href: "/admin/plans", label: t("adminPlans"), icon: <CreditCard />, primary: true },
         { href: "/admin/audience", label: t("adminAudience"), icon: <Eye />, primary: true },
         { href: "/admin/errors", label: t("adminErrors"), icon: <Bug />, primary: true },
+        { href: "/admin/support", label: t("adminSupport"), icon: <Headset />, badge: supportUnread },
       ]}
       footer={
         <Link

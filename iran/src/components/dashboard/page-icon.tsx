@@ -63,6 +63,7 @@ const ICON_OF: Record<string, LucideIcon> = {
   blocks: UsersRound,
   forecast: ChartSpline,
   tips: HandCoins,
+  support: Headset,
   shield: Coins,
   owner: Eye,
   "hotel-reports": FileBarChart,
