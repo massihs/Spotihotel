@@ -1,6 +1,6 @@
 "use client";
 
-import { BellRing, ConciergeBell, X } from "lucide-react";
+import { BellRing, ConciergeBell, X } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useLiveEvent } from "@/components/realtime/live";

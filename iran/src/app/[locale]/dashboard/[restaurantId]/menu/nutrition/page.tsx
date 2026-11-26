@@ -1,4 +1,4 @@
-import { CheckCircle2, Database, PenLine, Search, TriangleAlert } from "lucide-react";
+import { CheckCircle2, Database, PenLine, Search, TriangleAlert } from "@/components/icons";
 import { Suspense } from "react";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";

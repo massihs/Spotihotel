@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useRef, useState, useTransition } from "react";
-import { Download, FileSpreadsheet } from "lucide-react";
+import { Download, FileSpreadsheet } from "@/components/icons";
 import { Button, buttonClasses } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";

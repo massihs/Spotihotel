@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy, KeyRound, MoonStar, UsersRound } from "lucide-react";
+import { Copy, KeyRound, MoonStar, UsersRound } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -38,7 +38,7 @@ export function CaravanPanel({
   return (
     <section className="space-y-3 rounded-2xl border border-border bg-surface p-4 shadow-[var(--shadow-card)]">
       <h3 className="flex items-center gap-2 font-bold">
-        <span className="shade-fill grid size-9 place-items-center rounded-xl">
+        <span className="shade-fill k-cut grid size-9 place-items-center">
           <UsersRound className="size-[1.1rem]" aria-hidden="true" />
         </span>
         {t("title")}
@@ -158,7 +158,7 @@ export function FeaturesForm({
       }
     >
       <h3 className="flex items-center gap-2 font-bold">
-        <span className="shade-fill grid size-9 place-items-center rounded-xl">
+        <span className="shade-fill k-cut grid size-9 place-items-center">
           <MoonStar className="size-[1.1rem]" aria-hidden="true" />
         </span>
         {t("title")}

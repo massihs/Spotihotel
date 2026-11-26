@@ -1,4 +1,4 @@
-import { Shield } from "lucide-react";
+import { Shield } from "@/components/icons";
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";

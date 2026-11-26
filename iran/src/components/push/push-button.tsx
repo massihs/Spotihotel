@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useEffect, useState, useTransition } from "react";
-import { Bell, BellOff } from "lucide-react";
+import { Bell, BellOff } from "@/components/icons";
 import { cn } from "@/lib/cn";
 import {
   subscribeGuestPushAction,

@@ -14,7 +14,7 @@ import {
   TrendingUp,
   UsersRound,
   Wallet,
-} from "lucide-react";
+} from "@/components/icons";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { Card, CardHeader, StatCard } from "@/components/ui/card";
 import { buttonClasses } from "@/components/ui/button";

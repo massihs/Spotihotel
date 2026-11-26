@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { BedDouble } from "lucide-react";
+import { BedDouble } from "@/components/icons";
 import { formatMoney } from "@/lib/money";
 import { getFormatter, getTranslations, getLocale } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";

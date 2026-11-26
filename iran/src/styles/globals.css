@@ -489,7 +489,14 @@
   --color-shade-steel: var(--shade-steel);
   --font-sans: var(--app-font);
   --font-mono: var(--font-mono-loaded), ui-monospace, monospace;
-  --radius-card: 0.75rem;
+  --radius-card: 0.375rem;
+  /* Kâshi: tiles have sharp edges. The whole radius scale is tightened (cards, panels, fields);
+     buttons, chips and icon tiles get cut corners (.k-cut). */
+  --radius-md: 0.25rem;
+  --radius-lg: 0.3125rem;
+  --radius-xl: 0.375rem;
+  --radius-2xl: 0.5rem;
+  --radius-3xl: 0.625rem;
   --shadow-soft: 0 1px 2px hsl(var(--shadow-color) / 0.05), 0 2px 8px -4px hsl(var(--shadow-color) / 0.06);
   --shadow-float: 0 22px 50px -14px hsl(var(--shadow-color) / 0.3);
   --shadow-accent: 0 10px 24px -10px oklch(var(--brand-l) var(--brand-c) var(--brand-h) / 0.65);
@@ -991,7 +998,7 @@ dialog[open]::backdrop {
     padding: 0.3rem;
     overflow-x: auto;
     scrollbar-width: none;
-    border-radius: 999px;
+    border-radius: 0.375rem;
     background: var(--surface-2);
     box-shadow: inset 0 0 0 1px var(--border);
   }
@@ -1002,7 +1009,7 @@ dialog[open]::backdrop {
     gap: 0.4rem;
     height: 2.25rem;
     padding: 0 1rem;
-    border-radius: 999px;
+    border-radius: 0;
     font-size: 0.875rem;
     font-weight: 600;
     white-space: nowrap;
@@ -1277,7 +1284,7 @@ dialog[open]::backdrop {
     position: relative;
     overflow: hidden;
     border: 1px solid var(--border);
-    border-radius: 1rem;
+    border-radius: 0.375rem;
     background-color: var(--surface);
     background-image: var(--kpi-wash);
     box-shadow: var(--shadow-card);
@@ -1481,4 +1488,100 @@ input[type="radio"] {
     transparent 70%
   );
   background-image: var(--home-glow);
+}
+
+/* ── Kâshi: the shapes of Persian tilework ─────────────────────────────────────────────────
+ * Cut corners (an octagonal tile) instead of rounded ones, for buttons, chips and icon tiles.
+ * `--ch` is the cut; `.k-oct` on a square makes a regular octagon. Unlayered: beats utilities.
+ */
+.k-cut {
+  --ch: 8px;
+  border-radius: 0 !important;
+  clip-path: polygon(
+    var(--ch) 0,
+    calc(100% - var(--ch)) 0,
+    100% var(--ch),
+    100% calc(100% - var(--ch)),
+    calc(100% - var(--ch)) 100%,
+    var(--ch) 100%,
+    0 calc(100% - var(--ch)),
+    0 var(--ch)
+  );
+}
+.k-cut.k-sm {
+  --ch: 5px;
+}
+.k-cut.k-lg {
+  --ch: 11px;
+}
+.k-cut.k-oct {
+  --ch: 29.3%;
+}
+/* Outlined: a clipped border cannot follow the cut, so the outline is the element's own colour
+   and the fill a second tile 1px inside it. */
+.k-frame {
+  position: relative;
+  isolation: isolate;
+  background: var(--k-line, var(--border-strong)) !important;
+  box-shadow: none !important;
+}
+.k-frame::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  background: var(--k-fill, var(--surface));
+  clip-path: polygon(
+    calc(var(--ch) - 0.4px) 0,
+    calc(100% - var(--ch) + 0.4px) 0,
+    100% calc(var(--ch) - 0.4px),
+    100% calc(100% - var(--ch) + 0.4px),
+    calc(100% - var(--ch) + 0.4px) 100%,
+    calc(var(--ch) - 0.4px) 100%,
+    0 calc(100% - var(--ch) + 0.4px),
+    0 calc(var(--ch) - 0.4px)
+  );
+  transition: background-color 150ms;
+}
+.k-frame:hover::before {
+  background: var(--k-fill-hover, var(--surface-2));
+}
+/* Glaze: the fine gold line inside a solid tile. */
+.k-glaze {
+  position: relative;
+  isolation: isolate;
+}
+.k-glaze::before,
+.k-glaze::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  clip-path: inherit;
+}
+.k-glaze::before {
+  inset: 4px;
+  background: color-mix(in oklch, var(--brass) 60%, transparent);
+}
+.k-glaze::after {
+  inset: 5px;
+  background: inherit;
+}
+/* Icons still drawn by the library: Kâshi ends and corners. */
+.lucide:not(.kashi) {
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+/* Segmented tabs: each segment a small cut tile. */
+.seg-item {
+  clip-path: polygon(
+    5px 0,
+    calc(100% - 5px) 0,
+    100% 5px,
+    100% calc(100% - 5px),
+    calc(100% - 5px) 100%,
+    5px 100%,
+    0 calc(100% - 5px),
+    0 5px
+  );
 }

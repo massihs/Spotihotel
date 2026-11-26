@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
-import { Store } from "lucide-react";
+import { Store } from "@/components/icons";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { NewOutletButton, OutletCard, QuickAdd } from "@/components/outlets/outlets-ui";
 import { requireRestaurant } from "@/server/auth/current";

@@ -49,7 +49,7 @@ import {
   Wine,
   Wrench,
   type LucideIcon,
-} from "lucide-react";
+} from "@/components/icons";
 import { usePathname } from "next/navigation";
 
 /** The icon of each part of the panel, the same as in the sidebar. */
@@ -114,7 +114,7 @@ export function PageIcon() {
   if (!Icon) return null;
   return (
     <span
-      className="shade-fill grid size-11 shrink-0 place-items-center rounded-2xl sm:size-12 [&_svg]:size-5 sm:[&_svg]:size-[22px]"
+      className="shade-fill k-cut grid size-11 shrink-0 place-items-center sm:size-12 [&_svg]:size-5 sm:[&_svg]:size-[22px]"
       aria-hidden="true"
     >
       <Icon />

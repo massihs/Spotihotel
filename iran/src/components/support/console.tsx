@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState, useTransition, type ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { CheckCheck, CircleAlert, CircleCheck, Inbox, MessagesSquare } from "lucide-react";
+import { CheckCheck, CircleAlert, CircleCheck, Inbox, MessagesSquare } from "@/components/icons";
 import { cn } from "@/lib/cn";
 import { ChatThread, checkValues, type ChatMessage } from "./chat";
 
@@ -210,7 +210,7 @@ export function SupportConsole({
                       await Promise.all([refreshThread(), refreshInbox()]);
                     })
                   }
-                  className="inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-semibold text-fg-muted ring-1 ring-border hover:text-fg"
+                  className="inline-flex h-8 items-center gap-1.5 rounded-md px-3 text-xs font-semibold text-fg-muted ring-1 ring-border hover:text-fg"
                 >
                   <CheckCheck className="size-4" aria-hidden="true" />
                   {t("resolve")}

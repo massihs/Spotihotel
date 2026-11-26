@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCheck, Flame } from "lucide-react";
+import { CheckCheck, Flame } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { acceptAllOrdersAction } from "@/app/[locale]/dashboard/[restaurantId]/orders/actions";

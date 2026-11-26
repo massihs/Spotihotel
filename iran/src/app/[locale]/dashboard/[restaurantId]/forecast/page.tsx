@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { BedDouble, CalendarRange, Gauge, TrendingUp } from "lucide-react";
+import { BedDouble, CalendarRange, Gauge, TrendingUp } from "@/components/icons";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { StatCard } from "@/components/ui/card";
 import { cn } from "@/lib/cn";

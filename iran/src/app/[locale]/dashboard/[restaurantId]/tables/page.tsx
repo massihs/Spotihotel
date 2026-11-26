@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { Card } from "@/components/ui/card";
-import { BedDouble, ChevronDown, ExternalLink, Printer, QrCode } from "lucide-react";
+import { BedDouble, ChevronDown, ExternalLink, Printer, QrCode } from "@/components/icons";
 import { cn } from "@/lib/cn";
 import { buttonClasses } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
@@ -142,18 +142,18 @@ async function Tables({ params }: { params: Params }) {
                       </div>
                       <div className="flex flex-wrap gap-1.5 px-4 pb-4">
                         {table.openSessionId ? (
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-warning-soft px-2.5 py-1 text-xs font-bold">
+                          <span className="k-cut k-sm inline-flex items-center gap-1.5 bg-warning-soft px-2.5 py-1 text-xs font-bold">
                             <span className="size-1.5 rounded-full bg-warning" aria-hidden="true" />
                             {t("tables.occupied")} | {format.relativeTime(table.openSessionSince!)}
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-success-soft px-2.5 py-1 text-xs font-bold text-success">
+                          <span className="k-cut k-sm inline-flex items-center gap-1.5 bg-success-soft px-2.5 py-1 text-xs font-bold text-success">
                             <span className="size-1.5 rounded-full bg-success" aria-hidden="true" />
                             {t("tables.free")}
                           </span>
                         )}
                         {!table.qrEnabled ? (
-                          <span className="rounded-full bg-danger-soft px-2.5 py-1 text-xs font-bold text-danger">
+                          <span className="k-cut k-sm bg-danger-soft px-2.5 py-1 text-xs font-bold text-danger">
                             {t("tables.qrDisabled")}
                           </span>
                         ) : null}
@@ -165,7 +165,7 @@ async function Tables({ params }: { params: Params }) {
                           <span />
                         )}
                         <details name="table-actions" className="relative">
-                          <summary className="flex h-9 cursor-pointer list-none items-center gap-1.5 rounded-full bg-surface-2 px-3.5 text-sm font-bold hover:bg-surface-3 [&::-webkit-details-marker]:hidden">
+                          <summary className="k-cut flex h-9 cursor-pointer list-none items-center gap-1.5 bg-surface-2 px-3.5 text-sm font-bold hover:bg-surface-3 [&::-webkit-details-marker]:hidden">
                             <QrCode className="size-4" aria-hidden="true" />
                             QR
                             <ChevronDown className="size-3.5 opacity-60" aria-hidden="true" />

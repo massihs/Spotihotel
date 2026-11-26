@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { Ban, Check } from "lucide-react";
+import { Ban, Check } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
   blockGuestAction,

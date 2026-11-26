@@ -1,6 +1,6 @@
 "use client";
 
-import { Bot, HandCoins, Heart, Mic, Moon, Send, Sparkles, Sunrise, Wallet, X } from "lucide-react";
+import { Bot, HandCoins, Heart, Mic, Moon, Send, Sparkles, Sunrise, Wallet, X } from "@/components/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@/i18n/navigation";
@@ -348,7 +348,7 @@ export function Concierge(props: ConciergeProps) {
           />
           <div className="relative flex max-h-[85dvh] w-full max-w-xl flex-col overflow-hidden rounded-t-[28px] bg-surface shadow-[var(--shadow-float)]">
             <header className="shade-wash flex items-center gap-3 border-b border-border px-5 py-4">
-              <span className="shade-fill grid size-10 place-items-center rounded-full">
+              <span className="shade-fill k-cut k-oct grid size-10 place-items-center">
                 <Sparkles className="size-5" aria-hidden="true" />
               </span>
               <span className="min-w-0 flex-1">
@@ -373,7 +373,7 @@ export function Concierge(props: ConciergeProps) {
                     <button
                       type="button"
                       onClick={() => go(ACTION[m.intent!]!.href)}
-                      className="ms-2 mt-1.5 rounded-full bg-accent-soft px-3 py-1.5 text-xs font-semibold text-accent-text"
+                      className="k-cut k-sm ms-2 mt-1.5 bg-accent-soft px-3 py-1.5 text-xs font-semibold text-accent-text"
                     >
                       {ACTION[m.intent!]!.href.startsWith("/") ? (
                         <Link href={ACTION[m.intent!]!.href}>{ACTION[m.intent!]!.label}</Link>
@@ -385,7 +385,7 @@ export function Concierge(props: ConciergeProps) {
                   {m.from === "bot" && m.intent === "clean" && props.calls.length ? (
                     <div className="ms-2 mt-1.5">
                       <WaiterCall options={props.calls} room>
-                        <span className="rounded-full bg-accent-soft px-3 py-1.5 text-xs font-semibold text-accent-text">
+                        <span className="k-cut k-sm bg-accent-soft px-3 py-1.5 text-xs font-semibold text-accent-text">
                           {t("go.clean")}
                         </span>
                       </WaiterCall>
@@ -404,7 +404,7 @@ export function Concierge(props: ConciergeProps) {
                     setOpen(false);
                     openSupport();
                   }}
-                  className="shade-fill shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold"
+                  className="shade-fill k-cut k-sm shrink-0 px-3 py-1.5 text-xs font-semibold"
                 >
                   {t("chatDesk")}
                 </button>
@@ -413,7 +413,7 @@ export function Concierge(props: ConciergeProps) {
                     key={k}
                     type="button"
                     onClick={() => ask(t(`chips.${k}`))}
-                    className="shrink-0 rounded-full bg-surface-2 px-3 py-1.5 text-xs font-semibold"
+                    className="k-cut k-sm shrink-0 bg-surface-2 px-3 py-1.5 text-xs font-semibold"
                   >
                     {t(`chips.${k}`)}
                   </button>
@@ -430,7 +430,7 @@ export function Concierge(props: ConciergeProps) {
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                   placeholder={t("placeholder")}
-                  className="h-11 min-w-0 flex-1 rounded-full border border-border-strong bg-surface px-4 text-sm"
+                  className="h-11 min-w-0 flex-1 rounded-md border border-border-strong bg-surface px-4 text-sm"
                 />
                 {canSpeak ? (
                   <button
@@ -447,7 +447,7 @@ export function Concierge(props: ConciergeProps) {
                 ) : null}
                 <button
                   type="submit"
-                  className="shade-fill grid size-11 shrink-0 place-items-center rounded-full"
+                  className="shade-fill k-cut k-oct grid size-11 shrink-0 place-items-center"
                   aria-label={t("send")}
                 >
                   <Send className="size-5 rtl:-scale-x-100" aria-hidden="true" />

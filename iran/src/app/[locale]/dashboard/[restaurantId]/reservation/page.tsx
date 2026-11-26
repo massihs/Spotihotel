@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
-import { Crown, Settings2, Users } from "lucide-react";
+import { Crown, Settings2, Users } from "@/components/icons";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { Card } from "@/components/ui/card";
 import { DeskActions, DeskTable, DeskTabs, PeriodForm } from "@/components/pms/desk-table";

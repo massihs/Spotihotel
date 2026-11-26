@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, Check, Clock, PlayCircle, Sparkles, Star, Users, Wrench } from "lucide-react";
+import { AlertTriangle, Check, Clock, PlayCircle, Sparkles, Star, Users, Wrench } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -87,7 +87,7 @@ export function HousekeepingPlan({
   };
   const chip = (active: boolean) =>
     cn(
-      "inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-semibold ring-1 transition",
+      "inline-flex h-8 items-center gap-1.5 rounded-md px-3 text-xs font-semibold ring-1 transition",
       active
         ? "bg-brand-700 text-white ring-brand-700"
         : "bg-surface text-fg-muted ring-border hover:bg-brand-50",

@@ -11,7 +11,7 @@ import {
   UtensilsCrossed,
   Wifi,
   Wine,
-} from "lucide-react";
+} from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
@@ -22,7 +22,7 @@ import { initialsOf } from "@/components/ui/place-initials";
 
 const TILE =
   "flex min-h-[84px] flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-surface px-2 py-2.5 text-center text-[13px] leading-tight font-semibold shadow-[var(--shadow-soft)] transition active:scale-[0.97] hover:border-border-strong";
-const ICON = "shade-fill grid size-9 place-items-center rounded-full [&_svg]:size-[17px]";
+const ICON = "shade-fill grid size-9 place-items-center k-cut k-oct [&_svg]:size-[17px]";
 
 /**
  * What a guest scanning the QR in their room needs first: the room and the day they leave, the
@@ -53,7 +53,7 @@ export function RoomConcierge({
       aria-label={t("title")}
       className={cn("relative mx-auto max-w-3xl space-y-3 px-4 lg:max-w-6xl", hotel ? "-mt-20" : "mt-3")}
     >
-      <div className="sidebar-shade relative isolate overflow-hidden rounded-[28px] bg-[var(--sidebar)] p-5 text-[var(--sidebar-fg)] shadow-[var(--shadow-float)]">
+      <div className="sidebar-shade relative isolate overflow-hidden rounded-2xl bg-[var(--sidebar)] p-5 text-[var(--sidebar-fg)] shadow-[var(--shadow-float)]">
         <span
           aria-hidden="true"
           className="texture-khatam texture-fade-corner [--tex-color:var(--brass)] [--tex-opacity:0.16] [--tex-size:56px]"
@@ -86,7 +86,7 @@ export function RoomConcierge({
               <WaiterCall
                 options={calls}
                 room
-                className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-[image:var(--brass-gradient)] px-3.5 text-sm font-bold text-[color:var(--brass-ink)] shadow-[0_8px_18px_-10px_var(--brass)] transition active:scale-[0.97]"
+                className="k-cut inline-flex h-10 shrink-0 items-center gap-1.5 bg-[image:var(--brass-gradient)] px-3.5 text-sm font-bold text-[color:var(--brass-ink)] shadow-[0_8px_18px_-10px_var(--brass)] transition active:scale-[0.97]"
               >
                 <BellRing className="size-4" aria-hidden="true" />
                 {t("reception")}
@@ -124,7 +124,7 @@ export function RoomConcierge({
                 {wifi.name}
               </span>
             </span>
-            <span className="rounded-full bg-[var(--brass)] px-3 py-1 text-xs font-bold text-[var(--sidebar)]">
+            <span className="k-cut k-sm bg-[var(--brass)] px-3 py-1 text-xs font-bold text-[var(--sidebar)]">
               {showWifi ? t("hide") : t("password")}
             </span>
           </button>
@@ -219,7 +219,7 @@ export function CopyRow({
             })
             .catch(() => {})
         }
-        className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-surface-2 px-3 text-sm font-semibold ring-1 ring-border"
+        className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-md bg-surface-2 px-3 text-sm font-semibold ring-1 ring-border"
       >
         {copied ? (
           <Check className="size-4 text-success" aria-hidden="true" />

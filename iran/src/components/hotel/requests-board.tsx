@@ -1,6 +1,6 @@
 "use client";
 
-import { BellRing, Check, Clock, Hand, Inbox, RotateCcw } from "lucide-react";
+import { BellRing, Check, Clock, Hand, Inbox, RotateCcw } from "@/components/icons";
 import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
 import { moveRequestAction } from "@/app/[locale]/dashboard/[restaurantId]/requests/actions";
@@ -70,7 +70,7 @@ export function RequestsBoard({
             onClick={() => setKind(null)}
             aria-pressed={kind === null}
             className={cn(
-              "h-9 shrink-0 rounded-full px-4 text-sm font-semibold",
+              "k-cut h-9 shrink-0 px-4 text-sm font-semibold",
               kind === null ? "bg-ink text-ink-fg" : "bg-surface text-fg-muted ring-1 ring-border",
             )}
           >
@@ -86,7 +86,7 @@ export function RequestsBoard({
                 onClick={() => setKind(kind === k ? null : k)}
                 aria-pressed={kind === k}
                 className={cn(
-                  "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-sm font-semibold whitespace-nowrap",
+                  "k-cut inline-flex h-9 shrink-0 items-center gap-1.5 px-3.5 text-sm font-semibold whitespace-nowrap",
                   kind === k ? "bg-ink text-ink-fg" : "bg-surface text-fg-muted ring-1 ring-border",
                 )}
               >
@@ -131,7 +131,7 @@ export function RequestsBoard({
                   <Icon className="size-4" aria-hidden="true" />
                 </span>
                 {t(`status.${status}`)}
-                <span className="rounded-full bg-surface-2 px-2 py-0.5 text-xs tabular-nums">
+                <span className="k-cut k-sm bg-surface-2 px-2 py-0.5 text-xs tabular-nums">
                   {list.length}
                 </span>
               </h2>

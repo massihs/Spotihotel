@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink, LocateFixed, X } from "lucide-react";
+import { ExternalLink, LocateFixed, X } from "@/components/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { CUISINE_ICONS } from "@/components/directory/cuisine-icons";
@@ -147,7 +147,7 @@ export function ListingForm({
                 <label
                   key={c}
                   className={cn(
-                    "inline-flex h-10 cursor-pointer items-center gap-1.5 rounded-full px-3.5 text-sm font-semibold transition-colors has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-[var(--ring)]",
+                    "k-cut inline-flex h-10 cursor-pointer items-center gap-1.5 px-3.5 text-sm font-semibold transition-colors has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-[var(--ring)]",
                     on ? "shade-fill" : "bg-surface-2 text-fg-muted hover:text-fg",
                     !on && themes.length >= 5 && "pointer-events-none opacity-40",
                   )}
@@ -177,7 +177,7 @@ export function ListingForm({
               type="button"
               onClick={locate}
               disabled={locating}
-              className="inline-flex h-10 items-center gap-2 rounded-full bg-fg px-4 text-sm font-bold text-bg disabled:opacity-60"
+              className="k-cut inline-flex h-10 items-center gap-2 bg-fg px-4 text-sm font-bold text-bg disabled:opacity-60"
             >
               <LocateFixed className={cn("size-4", locating && "animate-pulse")} aria-hidden="true" />
               {locating ? t("directory.locating") : t("listing.useMyPosition")}
@@ -188,7 +188,7 @@ export function ListingForm({
                   href={`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=17/${lat}/${lng}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-10 items-center gap-1.5 rounded-full bg-surface-2 px-4 text-sm font-semibold"
+                  className="k-cut inline-flex h-10 items-center gap-1.5 bg-surface-2 px-4 text-sm font-semibold"
                 >
                   <ExternalLink className="size-4" aria-hidden="true" />
                   {t("listing.openMap")}
@@ -199,7 +199,7 @@ export function ListingForm({
                     setLat("");
                     setLng("");
                   }}
-                  className="inline-flex h-10 items-center gap-1.5 rounded-full px-3 text-sm font-semibold text-fg-muted hover:text-fg"
+                  className="k-cut inline-flex h-10 items-center gap-1.5 px-3 text-sm font-semibold text-fg-muted hover:text-fg"
                 >
                   <X className="size-4" aria-hidden="true" />
                   {t("listing.clearPosition")}

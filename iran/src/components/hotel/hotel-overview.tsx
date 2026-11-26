@@ -7,7 +7,7 @@ import {
   ReceiptText,
   SprayCan,
   Timer,
-} from "lucide-react";
+} from "@/components/icons";
 import { getTranslations } from "next-intl/server";
 import { Card, CardHeader, StatCard } from "@/components/ui/card";
 import { CALL_ICON } from "@/components/guest/call-icons";

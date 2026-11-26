@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleCheck } from "lucide-react";
+import { CircleCheck } from "@/components/icons";
 import { useEffect } from "react";
 import { cn } from "@/lib/cn";
 

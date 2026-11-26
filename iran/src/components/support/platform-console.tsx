@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink } from "@/components/icons";
 import { Link } from "@/i18n/navigation";
 import { CheckList, SupportConsole, type InboxItem } from "./console";
 import {

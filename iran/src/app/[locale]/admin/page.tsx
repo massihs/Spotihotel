@@ -8,7 +8,7 @@ import {
   TrendingDown,
   Users,
   Wallet,
-} from "lucide-react";
+} from "@/components/icons";
 import { edition } from "@/config/edition";
 import { formatMoney } from "@/lib/money";
 import { Suspense } from "react";

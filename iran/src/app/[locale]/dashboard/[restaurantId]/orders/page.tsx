@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { BellRing, ReceiptText, Search, Timer, Wallet } from "lucide-react";
+import { BellRing, ReceiptText, Search, Timer, Wallet } from "@/components/icons";
 import { formatMoney, normalizeDigits } from "@/lib/money";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { AcceptAllButton } from "@/components/dashboard/accept-all-button";
@@ -123,7 +123,7 @@ async function Orders({ params, searchParams }: Pick<Props, "params" | "searchPa
       <div className="mb-5 flex flex-wrap items-center gap-3">
         <form
           action={base}
-          className="flex h-10 min-w-0 flex-1 items-center gap-2 rounded-full bg-surface px-3 ring-1 ring-border focus-within:ring-2 focus-within:ring-[var(--ring)] sm:max-w-xs"
+          className="flex h-10 min-w-0 flex-1 items-center gap-2 rounded-md bg-surface px-3 ring-1 ring-border focus-within:ring-2 focus-within:ring-[var(--ring)] sm:max-w-xs"
         >
           {view !== "active" ? <input type="hidden" name="view" value={view} /> : null}
           {channel ? <input type="hidden" name="channel" value={channel} /> : null}
@@ -144,7 +144,7 @@ async function Orders({ params, searchParams }: Pick<Props, "params" | "searchPa
               href={href({ channel: c })}
               aria-current={channel === c ? "true" : undefined}
               className={cn(
-                "shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold whitespace-nowrap",
+                "k-cut k-sm shrink-0 px-3 py-1.5 text-xs font-semibold whitespace-nowrap",
                 channel === c ? "bg-surface text-fg shadow-sm" : "text-fg-muted hover:text-fg",
               )}
             >

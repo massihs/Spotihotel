@@ -1,4 +1,4 @@
-import { AlertTriangle, ArrowDownRight, Check, CheckCircle2, Info, Utensils } from "lucide-react";
+import { AlertTriangle, ArrowDownRight, Check, CheckCircle2, Info, Utensils } from "@/components/icons";
 import type { ReactNode } from "react";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";

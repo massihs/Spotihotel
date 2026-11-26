@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageSquareText, Minus, Plus, Send, Ticket, Trash2 } from "lucide-react";
+import { MessageSquareText, Minus, Plus, Send, Ticket, Trash2 } from "@/components/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { Sheet, field, num, useRun } from "@/components/ui/sheet-kit";
@@ -23,7 +23,7 @@ import {
 import { DateInput } from "@/components/ui/date-input";
 import { Empty } from "@/components/ui/empty";
 
-const pill = "inline-flex h-10 items-center gap-2 rounded-full px-4 text-sm font-semibold";
+const pill = "inline-flex h-10 items-center gap-2 k-cut px-4 text-sm font-semibold";
 const primary = cn(pill, "bg-accent text-accent-fg disabled:opacity-50");
 const ghost = cn(pill, "ring-1 ring-border");
 

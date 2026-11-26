@@ -46,7 +46,7 @@ export function StatusPill({ status, className }: { status: string; className?: 
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap",
+        "k-cut k-sm inline-flex items-center px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap",
         STATUS_TONE[status] ?? "bg-surface-2 text-fg",
         className,
       )}

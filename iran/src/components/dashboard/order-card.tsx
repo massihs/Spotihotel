@@ -5,7 +5,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { TimeAgo } from "@/components/ui/time-ago";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
-import { ArrowRight, Ban, Clock, MessageSquareText, Phone, Timer, X } from "lucide-react";
+import { ArrowRight, Ban, Clock, MessageSquareText, Phone, Timer, X } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CollectPaymentDialog } from "@/components/dashboard/payment-dialogs";
@@ -151,7 +151,7 @@ export function OrderCard({
       </span>
     ) : finishedAt && (o.status === "ready" || o.status === "served") ? (
       <span
-        className="inline-flex items-center gap-1 rounded-full bg-surface-2 px-2.5 py-1 text-xs font-bold whitespace-nowrap text-fg-muted tabular-nums"
+        className="k-cut k-sm inline-flex items-center gap-1 bg-surface-2 px-2.5 py-1 text-xs font-bold whitespace-nowrap text-fg-muted tabular-nums"
         title={t("kitchen.totalTime")}
       >
         <Timer className="size-3.5" aria-hidden="true" />
@@ -164,7 +164,7 @@ export function OrderCard({
   ) : urgency && minutes < 100 ? (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-bold whitespace-nowrap tabular-nums",
+        "k-cut k-sm inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold whitespace-nowrap tabular-nums",
         urgency === "late"
           ? "bg-danger text-white"
           : urgency === "warn"
@@ -232,7 +232,7 @@ export function OrderCard({
           {compact ? null : (
             <span
               className={cn(
-                "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold",
+                "k-cut k-sm inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold",
                 tone.chip,
               )}
             >
@@ -313,7 +313,7 @@ export function OrderCard({
           <p className="font-bold tabular-nums">{formatMoney(o.totalCents, o.currency, locale)}</p>
           <span
             className={cn(
-              "rounded-full px-2.5 py-0.5 text-xs font-bold",
+              "k-cut k-sm px-2.5 py-0.5 text-xs font-bold",
               paid ? "bg-success-soft text-success" : "bg-surface-2 text-fg-muted",
             )}
           >

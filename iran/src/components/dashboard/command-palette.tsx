@@ -1,6 +1,6 @@
 "use client";
 
-import { BedDouble, CornerDownLeft, LoaderCircle, Search, X } from "lucide-react";
+import { BedDouble, CornerDownLeft, LoaderCircle, Search, X } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { searchStaysAction } from "@/app/[locale]/dashboard/[restaurantId]/hotel-actions";

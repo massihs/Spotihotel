@@ -1,4 +1,4 @@
-import { UserRound } from "lucide-react";
+import { UserRound } from "@/components/icons";
 import { cn } from "@/lib/cn";
 
 /** People take turns in the theme's blues, always the same one for the same name. */

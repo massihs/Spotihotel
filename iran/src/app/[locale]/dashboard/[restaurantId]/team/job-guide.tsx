@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Sheet, field, useRun } from "@/components/ui/sheet-kit";
@@ -38,7 +38,7 @@ export function JobGuide({
         <button
           type="button"
           onClick={() => setEdit("new")}
-          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-accent px-4 text-sm font-semibold text-accent-fg"
+          className="k-cut inline-flex h-9 items-center gap-1.5 bg-accent px-4 text-sm font-semibold text-accent-fg"
         >
           <Plus className="size-4" aria-hidden="true" />
           {t("new")}
@@ -65,7 +65,7 @@ export function JobGuide({
               </span>
               <span className="mt-3 flex items-center justify-between gap-2 font-semibold">
                 <span className="truncate">{j.name}</span>
-                <span className="rounded-full bg-surface-2 px-2 py-0.5 text-xs font-bold text-fg-muted tabular-nums">
+                <span className="k-cut k-sm bg-surface-2 px-2 py-0.5 text-xs font-bold text-fg-muted tabular-nums">
                   {counts[j.id] ?? 0}
                 </span>
               </span>

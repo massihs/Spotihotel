@@ -18,7 +18,7 @@ import {
   Utensils,
   Wind,
   type LucideIcon,
-} from "lucide-react";
+} from "@/components/icons";
 
 /** Icons of the guest call bell's options (keys stored in the restaurant settings). */
 export const CALL_ICON: Record<string, LucideIcon> = {

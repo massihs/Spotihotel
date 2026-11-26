@@ -16,7 +16,7 @@ import {
   Users,
   UtensilsCrossed,
   type LucideIcon,
-} from "lucide-react";
+} from "@/components/icons";
 import type { Cuisine } from "@/lib/directory";
 
 export const CUISINE_ICONS: Record<Cuisine, LucideIcon> = {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Globe } from "lucide-react";
+import { Globe } from "@/components/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useTransition } from "react";
 import { LOCALE_LABELS, LOCALES, type AppLocale } from "@/i18n/config";

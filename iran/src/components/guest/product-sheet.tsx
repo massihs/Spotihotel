@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Flame, Plus, Scale, ShoppingBag, X } from "lucide-react";
+import { Check, Flame, Plus, Scale, ShoppingBag, X } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { addToCartAction } from "@/app/[locale]/table/actions";
@@ -120,7 +120,7 @@ export function ProductSheet({
       onClose={onClose}
       onClick={(e) => e.target === ref.current && ref.current?.close()}
       aria-labelledby="sheet-title"
-      className="animate-sheet-up m-0 mt-auto max-h-[94dvh] w-full max-w-none overflow-hidden rounded-t-[1.75rem] bg-surface p-0 text-fg backdrop:bg-black/60 sm:m-auto sm:max-w-lg sm:rounded-[1.75rem]"
+      className="animate-sheet-up m-0 mt-auto max-h-[94dvh] w-full max-w-none overflow-hidden rounded-t-[1.75rem] bg-surface p-0 text-fg backdrop:bg-black/60 sm:m-auto sm:max-w-lg sm:rounded-2xl"
     >
       <div className="flex max-h-[94dvh] flex-col">
         <div className="relative overflow-y-auto overscroll-contain">
@@ -186,13 +186,13 @@ export function ProductSheet({
                   <TagChip key={tag} tag={tag} />
                 ))}
                 {p.caloriesKcal ? (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-surface-2 px-3 py-1 text-xs font-medium">
+                  <span className="k-cut k-sm inline-flex items-center gap-1 bg-surface-2 px-3 py-1 text-xs font-medium">
                     <Flame className="size-3.5" aria-hidden="true" />
                     {t("guest.kcal", { n: p.caloriesKcal })}
                   </span>
                 ) : null}
                 {p.weightGrams ? (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-surface-2 px-3 py-1 text-xs font-medium">
+                  <span className="k-cut k-sm inline-flex items-center gap-1 bg-surface-2 px-3 py-1 text-xs font-medium">
                     <Scale className="size-3.5" aria-hidden="true" />
                     {t("guest.grams", { n: p.weightGrams })}
                   </span>
@@ -226,7 +226,7 @@ export function ProductSheet({
                   <p className="flex flex-wrap items-center gap-1.5">
                     <span className="font-semibold">{t("guest.allergens")}:</span>
                     {p.allergens.map((a) => (
-                      <span key={a} className="rounded-full bg-warning-soft px-2 py-0.5 text-xs font-medium">
+                      <span key={a} className="k-cut k-sm bg-warning-soft px-2 py-0.5 text-xs font-medium">
                         {t(`allergens.${a}`)}
                       </span>
                     ))}
@@ -252,7 +252,7 @@ export function ProductSheet({
                   </div>
                   <span
                     className={cn(
-                      "shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold",
+                      "k-cut k-sm shrink-0 px-2.5 py-1 text-xs font-semibold",
                       g.minSelect > 0
                         ? unmet
                           ? "bg-warning-soft text-fg"
@@ -382,7 +382,7 @@ export function ProductSheet({
               onClick={add}
               disabled={!priced.ok || pending}
               aria-busy={pending}
-              className="flex h-12 min-w-0 flex-1 items-center justify-between gap-2 rounded-full bg-accent px-5 font-bold text-accent-fg transition-transform active:scale-[0.98] disabled:opacity-40"
+              className="k-cut flex h-12 min-w-0 flex-1 items-center justify-between gap-2 bg-accent px-5 font-bold text-accent-fg transition-transform active:scale-[0.98] disabled:opacity-40"
             >
               {!p.isAvailable ? (
                 <span className="mx-auto">{t("guest.soldOut")}</span>

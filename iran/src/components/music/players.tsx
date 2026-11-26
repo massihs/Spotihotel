@@ -13,7 +13,7 @@ import {
   Volume1,
   Volume2,
   VolumeX,
-} from "lucide-react";
+} from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { reportPlaybackAction } from "@/app/[locale]/dashboard/[restaurantId]/music/actions";

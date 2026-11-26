@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
-import { Bike, Phone, ShoppingBag } from "lucide-react";
+import { Bike, Phone, ShoppingBag } from "@/components/icons";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { buttonClasses } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";

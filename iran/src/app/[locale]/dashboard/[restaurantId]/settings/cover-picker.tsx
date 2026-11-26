@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ImageUp, Images, Sparkles } from "lucide-react";
+import { Check, ImageUp, Images, Sparkles } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { ActionForm, FormFeedback, useActionForm } from "@/components/ui/form";
@@ -48,7 +48,7 @@ export function CoverPicker({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
         <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-2xl bg-gradient-to-br from-accent to-accent-hover ring-1 ring-border sm:w-72">
           {shown ? <img src={shown} alt="" className="absolute inset-0 size-full object-cover" /> : null}
-          <span className="absolute start-2 top-2 rounded-full bg-black/60 px-2.5 py-1 text-xs font-bold text-white">
+          <span className="k-cut k-sm absolute start-2 top-2 bg-black/60 px-2.5 py-1 text-xs font-bold text-white">
             {t(`coverMode.${preview ? "upload" : choices.mode}`)}
           </span>
           {pending || upload.pending ? <span className="absolute inset-0 animate-pulse bg-white/30" /> : null}
@@ -56,7 +56,7 @@ export function CoverPicker({
         {!disabled ? (
           <div className="flex flex-wrap gap-2 sm:flex-col sm:items-start">
             <ActionForm form={upload}>
-              <label className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-full bg-fg px-4 text-sm font-bold text-bg focus-within:ring-4 focus-within:ring-[var(--ring)]">
+              <label className="k-cut inline-flex h-10 cursor-pointer items-center gap-2 bg-fg px-4 text-sm font-bold text-bg focus-within:ring-4 focus-within:ring-[var(--ring)]">
                 <ImageUp className="size-4" aria-hidden="true" />
                 {t("coverUpload")}
                 <input
@@ -78,7 +78,7 @@ export function CoverPicker({
                 type="button"
                 onClick={() => setShowDishes((v) => !v)}
                 aria-expanded={showDishes}
-                className="inline-flex h-10 items-center gap-2 rounded-full bg-surface-2 px-4 text-sm font-bold hover:bg-surface-3"
+                className="k-cut inline-flex h-10 items-center gap-2 bg-surface-2 px-4 text-sm font-bold hover:bg-surface-3"
               >
                 <Images className="size-4" aria-hidden="true" />
                 {t("coverFromMenu")}
@@ -89,7 +89,7 @@ export function CoverPicker({
                 type="button"
                 onClick={() => choose(null)}
                 disabled={pending}
-                className="inline-flex h-10 items-center gap-2 rounded-full px-4 text-sm font-semibold text-fg-muted hover:text-fg"
+                className="k-cut inline-flex h-10 items-center gap-2 px-4 text-sm font-semibold text-fg-muted hover:text-fg"
               >
                 <Sparkles className="size-4" aria-hidden="true" />
                 {t("coverAuto")}

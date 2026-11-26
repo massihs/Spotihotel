@@ -1,6 +1,6 @@
 "use client";
 
-import { Crown, Dices, Play, Plus, Trophy, Users, X } from "lucide-react";
+import { Crown, Dices, Play, Plus, Trophy, Users, X } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { cancelGameAction, createGameAction, joinGameAction } from "@/app/[locale]/table/games/actions";
@@ -84,7 +84,7 @@ export function GamesLobby({
         <p className="text-sm font-semibold opacity-90">{t("backgammon")}</p>
         <h2 className="mt-1 text-2xl font-extrabold">{t("heroTitle")}</h2>
         <p className="mt-1 max-w-sm text-sm opacity-90">{t("heroBody")}</p>
-        <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold">
+        <p className="k-cut k-sm mt-3 inline-flex items-center gap-1.5 bg-white/15 px-3 py-1 text-xs font-semibold">
           <Trophy className="size-3.5" aria-hidden="true" />
           {t("myWins", { n: lobby.myWins })}
         </p>
@@ -150,7 +150,7 @@ export function GamesLobby({
               type="button"
               disabled={pending}
               onClick={() => go(() => cancelGameAction(myOpen.id))}
-              className="inline-flex h-9 items-center gap-1 rounded-full px-3 text-sm font-semibold text-fg-muted ring-1 ring-border"
+              className="inline-flex h-9 items-center gap-1 rounded-md px-3 text-sm font-semibold text-fg-muted ring-1 ring-border"
             >
               <X className="size-4" aria-hidden="true" />
               {t("cancel")}
@@ -219,7 +219,7 @@ export function GamesLobby({
                   type="button"
                   disabled={pending}
                   onClick={() => go(() => joinGameAction(c.id))}
-                  className="h-10 shrink-0 rounded-full bg-accent px-4 text-sm font-bold text-accent-fg disabled:opacity-60"
+                  className="k-cut h-10 shrink-0 bg-accent px-4 text-sm font-bold text-accent-fg disabled:opacity-60"
                 >
                   {t("join")}
                 </button>

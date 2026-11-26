@@ -16,7 +16,7 @@ import {
   Users,
   Wine,
   type LucideIcon,
-} from "lucide-react";
+} from "@/components/icons";
 import type { Job } from "@/lib/jobs";
 import type { TeamJobIcon } from "@/lib/team-jobs";
 

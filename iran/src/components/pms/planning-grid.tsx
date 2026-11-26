@@ -10,7 +10,7 @@ import {
   Search,
   Wand2,
   X,
-} from "lucide-react";
+} from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { Link, useRouter } from "@/i18n/navigation";
@@ -271,7 +271,7 @@ export function PlanningGrid({
 
   const chip = (active: boolean) =>
     cn(
-      "inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-semibold ring-1 transition",
+      "inline-flex h-8 items-center gap-1.5 rounded-md px-3 text-xs font-semibold ring-1 transition",
       active
         ? "bg-brand-700 text-white ring-brand-700"
         : "bg-surface text-fg-muted ring-border hover:bg-brand-50 hover:text-fg",
@@ -376,7 +376,7 @@ export function PlanningGrid({
                   type="button"
                   onClick={autoAssign}
                   disabled={assigning}
-                  className="inline-flex h-9 items-center gap-2 rounded-full bg-brand-700 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-800 disabled:opacity-60"
+                  className="k-cut inline-flex h-9 items-center gap-2 bg-brand-700 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-800 disabled:opacity-60"
                 >
                   {assigning ? (
                     <LoaderCircle className="size-4 animate-spin" aria-hidden="true" />

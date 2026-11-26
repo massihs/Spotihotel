@@ -212,7 +212,7 @@ export function LogoForm({
         {!disabled ? (
           <div className="flex flex-wrap gap-2">
             <ActionForm form={form}>
-              <label className="inline-flex h-10 cursor-pointer items-center rounded-full border border-border bg-surface px-4 text-sm font-medium focus-within:ring-4 focus-within:ring-[var(--ring)] hover:bg-surface-2">
+              <label className="inline-flex h-10 cursor-pointer items-center rounded-md border border-border bg-surface px-4 text-sm font-medium focus-within:ring-4 focus-within:ring-[var(--ring)] hover:bg-surface-2">
                 {t("settings.logoUpload")}
                 <input
                   type="file"
@@ -465,7 +465,7 @@ export function TaxRates({
               <span className="text-fg-muted tabular-nums">· {fmt(r.rateBps)}</span>
             </span>
             {r.isDefault ? (
-              <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-medium text-accent-text">
+              <span className="k-cut k-sm bg-accent-soft px-2.5 py-0.5 text-xs font-medium text-accent-text">
                 {t("settings.default")}
               </span>
             ) : null}

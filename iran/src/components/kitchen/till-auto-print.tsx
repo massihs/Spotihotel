@@ -1,6 +1,6 @@
 "use client";
 
-import { Printer } from "lucide-react";
+import { Printer } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useRef, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";

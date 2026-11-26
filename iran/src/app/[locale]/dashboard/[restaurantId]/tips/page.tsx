@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { HandCoins, Heart, Wallet } from "lucide-react";
+import { HandCoins, Heart, Wallet } from "@/components/icons";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { Card, CardHeader, StatCard } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
@@ -86,7 +86,7 @@ async function Tips({ params, searchParams }: Props) {
                       ) : null}
                     </>
                   ) : (
-                    <span className="rounded-full bg-success-soft px-2.5 py-1 text-xs font-semibold text-success">
+                    <span className="k-cut k-sm bg-success-soft px-2.5 py-1 text-xs font-semibold text-success">
                       {t("allPaid")}
                     </span>
                   )}

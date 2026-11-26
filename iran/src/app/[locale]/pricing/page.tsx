@@ -1,4 +1,4 @@
-import { Check, CreditCard, FileText, Smartphone } from "lucide-react";
+import { Check, CreditCard, FileText, Smartphone } from "@/components/icons";
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { Suspense } from "react";
@@ -102,7 +102,7 @@ async function Plans() {
               <div className="flex items-center justify-between gap-2">
                 <h2 className="text-xl font-bold">{p.name}</h2>
                 {hot ? (
-                  <span className="rounded-full bg-accent px-2.5 py-0.5 text-xs font-bold text-accent-fg">
+                  <span className="k-cut k-sm bg-accent px-2.5 py-0.5 text-xs font-bold text-accent-fg">
                     {t("popular")}
                   </span>
                 ) : null}

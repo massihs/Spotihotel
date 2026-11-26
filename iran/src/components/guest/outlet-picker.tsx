@@ -1,6 +1,6 @@
 "use client";
 
-import { Cake, Clock, Coffee, MapPin, Sofa, UtensilsCrossed, Waves, Wine } from "lucide-react";
+import { Cake, Clock, Coffee, MapPin, Sofa, UtensilsCrossed, Waves, Wine } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";

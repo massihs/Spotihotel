@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { Copy, ExternalLink } from "lucide-react";
+import { Copy, ExternalLink } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/form";
 import { updateOnlineSettingsAction } from "./online-actions";
@@ -85,7 +85,7 @@ export function OnlinePanel({
               href={url}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-sm font-semibold ring-1 ring-border"
+              className="inline-flex h-9 items-center gap-1.5 rounded-md px-3 text-sm font-semibold ring-1 ring-border"
             >
               <ExternalLink className="size-4" aria-hidden="true" />
               {t("open")}

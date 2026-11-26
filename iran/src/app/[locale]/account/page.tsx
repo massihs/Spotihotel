@@ -1,4 +1,14 @@
-import { Coffee, Cookie, Flame, Moon, Salad, Settings, Sparkles, Sun, UtensilsCrossed } from "lucide-react";
+import {
+  Coffee,
+  Cookie,
+  Flame,
+  Moon,
+  Salad,
+  Settings,
+  Sparkles,
+  Sun,
+  UtensilsCrossed,
+} from "@/components/icons";
 import { Suspense } from "react";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import {
@@ -388,7 +398,7 @@ async function Account({ searchParams }: Pick<Props, "searchParams">) {
                                   })}
                                 </span>
                               </p>
-                              <span className="shrink-0 rounded-full bg-accent-soft px-2.5 py-1 text-xs font-bold text-accent-text tabular-nums">
+                              <span className="k-cut k-sm shrink-0 bg-accent-soft px-2.5 py-1 text-xs font-bold text-accent-text tabular-nums">
                                 {tn("kcal", { n: n(m.total.kcal) })}
                               </span>
                             </div>
@@ -480,7 +490,7 @@ async function Account({ searchParams }: Pick<Props, "searchParams">) {
                 <p className="mx-auto mt-1 max-w-sm text-sm text-fg-muted">{t("noMealsHint")}</p>
                 <Link
                   href="/restaurants"
-                  className="mt-5 inline-flex h-10 items-center rounded-full bg-accent px-5 text-sm font-semibold text-accent-fg"
+                  className="k-cut mt-5 inline-flex h-10 items-center bg-accent px-5 text-sm font-semibold text-accent-fg"
                 >
                   {t("findRestaurant")}
                 </Link>

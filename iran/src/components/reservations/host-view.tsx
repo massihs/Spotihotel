@@ -24,7 +24,7 @@ import {
   X,
   ZoomIn,
   ZoomOut,
-} from "lucide-react";
+} from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -323,7 +323,7 @@ export function HostView({
                   type="button"
                   onClick={() => setZone(z)}
                   className={cn(
-                    "h-9 rounded-full px-4 text-sm font-semibold",
+                    "k-cut h-9 px-4 text-sm font-semibold",
                     zone === z ? "bg-ink text-ink-fg" : "bg-surface ring-1 ring-border",
                   )}
                 >
@@ -341,7 +341,7 @@ export function HostView({
                 <button
                   type="button"
                   onClick={tidy}
-                  className="inline-flex h-9 items-center gap-1.5 rounded-full bg-surface px-3.5 text-sm font-semibold ring-1 ring-border"
+                  className="inline-flex h-9 items-center gap-1.5 rounded-md bg-surface px-3.5 text-sm font-semibold ring-1 ring-border"
                 >
                   <Wand2 className="size-4" aria-hidden="true" />
                   {th("tidy")}
@@ -349,7 +349,7 @@ export function HostView({
                 <button
                   type="button"
                   onClick={() => (setEditing(false), setLayout({}), setSelected(null))}
-                  className="inline-flex h-9 items-center gap-1.5 rounded-full bg-surface px-3.5 text-sm font-semibold ring-1 ring-border"
+                  className="inline-flex h-9 items-center gap-1.5 rounded-md bg-surface px-3.5 text-sm font-semibold ring-1 ring-border"
                 >
                   <RotateCcw className="size-4" aria-hidden="true" />
                   {th("cancelEdit")}
@@ -358,7 +358,7 @@ export function HostView({
                   type="button"
                   disabled={pending}
                   onClick={saveLayout}
-                  className="inline-flex h-9 items-center gap-1.5 rounded-full bg-accent px-4 text-sm font-bold text-accent-fg disabled:opacity-50"
+                  className="k-cut inline-flex h-9 items-center gap-1.5 bg-accent px-4 text-sm font-bold text-accent-fg disabled:opacity-50"
                 >
                   <Save className="size-4" aria-hidden="true" />
                   {th("savePlan")}
@@ -368,7 +368,7 @@ export function HostView({
               <button
                 type="button"
                 onClick={() => (setEditing(true), setPick(null))}
-                className="inline-flex h-9 items-center gap-1.5 rounded-full bg-surface px-3.5 text-sm font-semibold ring-1 ring-border"
+                className="inline-flex h-9 items-center gap-1.5 rounded-md bg-surface px-3.5 text-sm font-semibold ring-1 ring-border"
               >
                 <LayoutGrid className="size-4" aria-hidden="true" />
                 {th("editPlan")}
@@ -399,7 +399,7 @@ export function HostView({
                 type="button"
                 onClick={() => setAt(null)}
                 className={cn(
-                  "shrink-0 rounded-full px-3 py-1 text-xs font-bold",
+                  "k-cut k-sm shrink-0 px-3 py-1 text-xs font-bold",
                   live ? "bg-success-soft text-success" : "bg-surface-2",
                 )}
               >
@@ -440,7 +440,7 @@ export function HostView({
               onClick={() => setZoom(!zoom)}
               aria-pressed={zoom}
               aria-label={zoom ? th("zoomFit") : th("zoomIn")}
-              className="sticky start-0 z-10 mb-2 inline-flex h-8 items-center gap-1.5 rounded-full bg-surface px-3 text-xs font-bold ring-1 ring-border sm:hidden"
+              className="sticky start-0 z-10 mb-2 inline-flex h-8 items-center gap-1.5 rounded-md bg-surface px-3 text-xs font-bold ring-1 ring-border sm:hidden"
             >
               {zoom ? (
                 <ZoomOut className="size-4" aria-hidden="true" />
@@ -564,7 +564,7 @@ export function HostView({
                   })
                 }
                 className={cn(
-                  "h-8 rounded-full px-3 text-xs font-bold",
+                  "k-cut k-sm h-8 px-3 text-xs font-bold",
                   pos(tableById.get(selected)!).shape === sh ? "bg-ink text-ink-fg" : "bg-surface-2",
                 )}
               >
@@ -759,7 +759,7 @@ function BookingRow({
               type="button"
               disabled={busy}
               onClick={() => onStatus("confirmed")}
-              className="inline-flex h-8 items-center gap-1 rounded-full bg-success px-3 text-xs font-bold text-white"
+              className="k-cut k-sm inline-flex h-8 items-center gap-1 bg-success px-3 text-xs font-bold text-white"
             >
               <Check className="size-3.5" aria-hidden="true" />
               {th("confirm")}
@@ -769,7 +769,7 @@ function BookingRow({
               type="button"
               disabled={busy}
               onClick={() => onStatus("completed")}
-              className="inline-flex h-8 items-center gap-1 rounded-full bg-ink px-3 text-xs font-bold text-ink-fg"
+              className="k-cut k-sm inline-flex h-8 items-center gap-1 bg-ink px-3 text-xs font-bold text-ink-fg"
             >
               {th("finish")}
             </button>
@@ -778,7 +778,7 @@ function BookingRow({
               type="button"
               disabled={busy}
               onClick={onSeat}
-              className="inline-flex h-8 items-center gap-1 rounded-full bg-accent px-3 text-xs font-bold text-accent-fg"
+              className="k-cut k-sm inline-flex h-8 items-center gap-1 bg-accent px-3 text-xs font-bold text-accent-fg"
             >
               <Armchair className="size-3.5" aria-hidden="true" />
               {th("seat")}
@@ -788,7 +788,7 @@ function BookingRow({
             <button
               type="button"
               onClick={onAssign}
-              className="inline-flex h-8 items-center gap-1 rounded-full bg-surface-2 px-3 text-xs font-bold"
+              className="k-cut k-sm inline-flex h-8 items-center gap-1 bg-surface-2 px-3 text-xs font-bold"
             >
               {table ? th("moveTable") : th("giveTable")}
             </button>
@@ -800,7 +800,7 @@ function BookingRow({
                   type="button"
                   disabled={busy}
                   onClick={() => onStatus("no_show")}
-                  className="inline-flex h-8 items-center rounded-full bg-danger-soft px-3 text-xs font-bold text-danger"
+                  className="k-cut k-sm inline-flex h-8 items-center bg-danger-soft px-3 text-xs font-bold text-danger"
                 >
                   {th("noShow")}
                 </button>
@@ -810,7 +810,7 @@ function BookingRow({
                   type="button"
                   disabled={busy}
                   onClick={() => window.confirm(th("cancelConfirm")) && onStatus("cancelled")}
-                  className="inline-flex h-8 items-center rounded-full bg-surface-2 px-3 text-xs font-bold text-danger"
+                  className="k-cut k-sm inline-flex h-8 items-center bg-surface-2 px-3 text-xs font-bold text-danger"
                 >
                   {th("cancel")}
                 </button>
@@ -874,7 +874,7 @@ function TablePanel({
             type="button"
             disabled={busy}
             onClick={() => onFinish(seated.id)}
-            className="h-9 rounded-full bg-ink px-4 text-sm font-bold text-ink-fg"
+            className="k-cut h-9 bg-ink px-4 text-sm font-bold text-ink-fg"
           >
             {th("free")}
           </button>
@@ -916,7 +916,7 @@ function TablePanel({
               type="button"
               disabled={busy}
               onClick={() => onWalkIn(size, name)}
-              className="h-10 rounded-full bg-accent px-4 text-sm font-bold text-accent-fg disabled:opacity-50"
+              className="k-cut h-10 bg-accent px-4 text-sm font-bold text-accent-fg disabled:opacity-50"
             >
               {th("seatNow")}
             </button>
@@ -939,7 +939,7 @@ function TablePanel({
                   type="button"
                   disabled={busy}
                   onClick={() => onSeat(b.id)}
-                  className="h-8 rounded-full bg-accent px-3 text-xs font-bold text-accent-fg"
+                  className="k-cut k-sm h-8 bg-accent px-3 text-xs font-bold text-accent-fg"
                 >
                   {th("seat")}
                 </button>

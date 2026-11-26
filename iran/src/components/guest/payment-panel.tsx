@@ -1,6 +1,6 @@
 "use client";
 
-import { Banknote, CreditCard, Wallet } from "lucide-react";
+import { Banknote, CreditCard, Wallet } from "@/components/icons";
 import { formatMoney } from "@/lib/money";
 import { useTranslations, useLocale } from "next-intl";
 import { useCallback, useState, useTransition } from "react";
@@ -155,7 +155,7 @@ export function PaymentPanel({
             {state.pending.redirectUrl ? (
               <a
                 href={state.pending.redirectUrl}
-                className="inline-flex h-9 items-center rounded-full bg-accent px-4 font-semibold text-accent-fg"
+                className="k-cut inline-flex h-9 items-center bg-accent px-4 font-semibold text-accent-fg"
               >
                 {t("pay.resume")}
               </a>

@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { CalendarCheck, ChevronLeft, ChevronRight, Hourglass, Users, UserX } from "lucide-react";
+import { CalendarCheck, ChevronLeft, ChevronRight, Hourglass, Users, UserX } from "@/components/icons";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { LiveRefresh } from "@/components/realtime/live";
@@ -95,7 +95,7 @@ async function Reservations({ params, searchParams }: Pick<Props, "params" | "se
           >
             {t(`tabs.${k}`)}
             {k === "queue" && waiting ? (
-              <span className="ms-2 inline-grid h-5 min-w-5 place-items-center rounded-full bg-danger px-1.5 text-xs font-bold text-white tabular-nums">
+              <span className="k-cut k-sm ms-2 inline-grid h-5 min-w-5 place-items-center bg-danger px-1.5 text-xs font-bold text-white tabular-nums">
                 {waiting}
               </span>
             ) : null}

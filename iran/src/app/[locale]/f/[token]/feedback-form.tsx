@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
-import { Star } from "lucide-react";
+import { Star } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { spinWheelAction, submitFeedbackAction } from "./actions";

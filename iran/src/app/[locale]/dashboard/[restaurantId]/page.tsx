@@ -19,7 +19,7 @@ import {
   TrendingUp,
   UtensilsCrossed,
   Wallet,
-} from "lucide-react";
+} from "@/components/icons";
 import { Suspense, type ReactNode } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";
@@ -337,7 +337,7 @@ async function Overview({ params }: { params: PageProps<"/[locale]/dashboard/[re
                     {money(today.revenueTodayCents)}
                   </p>
                   {delta !== null ? (
-                    <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white/18 px-2.5 py-1 text-xs font-semibold">
+                    <p className="k-cut k-sm mt-2 inline-flex items-center gap-1.5 bg-white/18 px-2.5 py-1 text-xs font-semibold">
                       {delta >= 0 ? (
                         <TrendingUp className="size-3.5" aria-hidden="true" />
                       ) : (
@@ -464,7 +464,7 @@ async function Overview({ params }: { params: PageProps<"/[locale]/dashboard/[re
             title={t("setupTitle")}
             description={t("setupSubtitle")}
             action={
-              <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-semibold text-accent-text tabular-nums">
+              <span className="k-cut k-sm bg-accent-soft px-2.5 py-0.5 text-xs font-semibold text-accent-text tabular-nums">
                 {doneCount}/{steps.length}
               </span>
             }
@@ -552,7 +552,7 @@ async function Overview({ params }: { params: PageProps<"/[locale]/dashboard/[re
                         </span>
                         <span
                           className={cn(
-                            "inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-xs font-bold tabular-nums",
+                            "k-cut k-sm inline-flex shrink-0 items-center gap-1 px-2 py-0.5 text-xs font-bold tabular-nums",
                             late
                               ? "bg-danger text-white"
                               : warn

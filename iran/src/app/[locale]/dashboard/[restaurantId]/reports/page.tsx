@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Download, TrendingDown, TrendingUp } from "lucide-react";
+import { Download, TrendingDown, TrendingUp } from "@/components/icons";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { CustomPeriod, DeleteExpense, NewExpenseButton } from "@/components/reports/reports-ui";
@@ -66,7 +66,7 @@ async function Reports({ params, searchParams }: Pick<Props, "params" | "searchP
           ) : (
             <a
               href={exportHref(tab === "overview" ? "pnl" : tab)}
-              className="inline-flex h-10 items-center gap-2 rounded-full px-4 text-sm font-semibold ring-1 ring-border"
+              className="inline-flex h-10 items-center gap-2 rounded-md px-4 text-sm font-semibold ring-1 ring-border"
             >
               <Download className="size-4" />
               {t("exportCsv")}
@@ -272,7 +272,7 @@ async function Reports({ params, searchParams }: Pick<Props, "params" | "searchP
                         {m != null ? (
                           <span
                             className={cn(
-                              "rounded-full px-2 py-0.5 text-xs font-semibold tabular-nums",
+                              "k-cut k-sm px-2 py-0.5 text-xs font-semibold tabular-nums",
                               m >= 0.6
                                 ? "bg-success-soft text-success"
                                 : m >= 0.4
@@ -332,7 +332,7 @@ async function Reports({ params, searchParams }: Pick<Props, "params" | "searchP
                       <li key={e.id} className="flex flex-wrap items-center gap-3 px-4 py-2.5 text-sm">
                         <span
                           className={cn(
-                            "shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold",
+                            "k-cut k-sm shrink-0 px-2.5 py-0.5 text-xs font-semibold",
                             /cancel|refund|deleted|removed/.test(e.action)
                               ? "bg-danger-soft text-danger"
                               : "bg-warning-soft text-warning",

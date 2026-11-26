@@ -1,4 +1,4 @@
-import { Clock, Radio, Sparkles } from "lucide-react";
+import { Clock, Radio, Sparkles } from "@/components/icons";
 import { Suspense } from "react";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";

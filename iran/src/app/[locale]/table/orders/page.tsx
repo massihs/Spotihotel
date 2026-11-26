@@ -8,7 +8,7 @@ import {
   Salad,
   Smartphone,
   Utensils,
-} from "lucide-react";
+} from "@/components/icons";
 import { Suspense } from "react";
 import { menuThemeOf } from "@/lib/menu-themes";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
@@ -106,7 +106,7 @@ async function GuestOrders({ searchParams }: Pick<PageProps<"/[locale]/table/ord
                 <p className="mt-5 text-lg font-bold">{t("guest.noOrders")}</p>
                 <Link
                   href="/table"
-                  className="mt-7 inline-flex h-12 items-center rounded-full bg-accent px-7 font-bold text-accent-fg"
+                  className="k-cut mt-7 inline-flex h-12 items-center bg-accent px-7 font-bold text-accent-fg"
                 >
                   {t("guest.backToMenu")}
                 </Link>
@@ -237,7 +237,7 @@ async function GuestOrders({ searchParams }: Pick<PageProps<"/[locale]/table/ord
                         <span className="flex items-center gap-2">
                           {t("guest.total")}
                           {o.paymentStatus !== "unpaid" && o.status !== "cancelled" ? (
-                            <span className="rounded-full bg-accent-soft px-2 py-0.5 text-xs font-semibold text-accent-text">
+                            <span className="k-cut k-sm bg-accent-soft px-2 py-0.5 text-xs font-semibold text-accent-text">
                               {t(`paymentStatus.${o.paymentStatus}`)}
                             </span>
                           ) : null}

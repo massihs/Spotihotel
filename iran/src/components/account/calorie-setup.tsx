@@ -1,6 +1,6 @@
 "use client";
 
-import { Activity as ActivityIcon, Flame, Scale, Target, User } from "lucide-react";
+import { Activity as ActivityIcon, Flame, Scale, Target, User } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useMemo, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";

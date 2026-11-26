@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { AppShell, ShellSkeleton } from "@/components/dashboard/app-shell";
 import { IconChart, IconStore, IconUsers } from "@/components/ui/icons";
 import { requireSuperAdmin } from "@/server/auth/current";
-import { Bug, CreditCard, Eye, Headset, LayoutGrid, Music } from "lucide-react";
+import { Bug, CreditCard, Eye, Headset, LayoutGrid, Music } from "@/components/icons";
 import { db } from "@/server/db/client";
 import { platformUnread } from "@/server/modules/support/service";
 import { Link } from "@/i18n/navigation";

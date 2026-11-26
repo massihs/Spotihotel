@@ -54,7 +54,7 @@ import {
   Wifi,
   Wine,
   Wrench,
-} from "lucide-react";
+} from "@/components/icons";
 import { getDisabledModules, logoUrl } from "@/server/modules/restaurants/settings";
 import type { ModuleKey } from "@/lib/modules";
 import type { NavItem } from "@/components/dashboard/sidebar-nav";

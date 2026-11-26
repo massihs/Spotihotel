@@ -20,7 +20,7 @@ import {
   Star,
   UtensilsCrossed,
   X,
-} from "lucide-react";
+} from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonClasses } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -863,7 +863,7 @@ function QuickToggles({ restaurantId, product: p, canManage, canFlag, onError }:
           render={(on) => (
             <span
               className={cn(
-                "inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-bold whitespace-nowrap",
+                "k-cut k-sm inline-flex h-8 items-center gap-1.5 px-3 text-xs font-bold whitespace-nowrap",
                 on ? "bg-success-soft text-success" : "bg-warning-soft text-warning",
               )}
             >
@@ -1050,7 +1050,7 @@ function BulkPriceBody({ restaurantId, currency, category, products, onDone }: B
               onClick={() => setRound(s)}
               aria-pressed={round === s}
               className={cn(
-                "h-9 rounded-full px-3 text-sm ring-1",
+                "h-9 rounded-md px-3 text-sm ring-1",
                 round === s ? "bg-fg font-semibold text-bg ring-fg" : "ring-border",
               )}
             >

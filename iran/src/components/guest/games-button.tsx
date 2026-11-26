@@ -1,6 +1,6 @@
 "use client";
 
-import { Dices } from "lucide-react";
+import { Dices } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import { gamesBadgeAction } from "@/app/[locale]/table/games/actions";

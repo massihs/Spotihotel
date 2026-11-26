@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Clock, ScanLine } from "lucide-react";
+import { Clock, ScanLine } from "@/components/icons";
 
 /**
  * The 30-minute ordering window opened by each QR scan: a reminder in the last 5 minutes, then a

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { Check, Phone } from "lucide-react";
+import { Check, Phone } from "@/components/icons";
 import { getLocale, getTranslations } from "next-intl/server";
 import { AutoRefresh } from "@/components/reservations/public-ui";
 import { PlaceHeader } from "@/components/reservations/place-header";

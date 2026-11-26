@@ -1,4 +1,4 @@
-import { BedDouble, Check, ConciergeBell, KeyRound } from "lucide-react";
+import { BedDouble, Check, ConciergeBell, KeyRound } from "@/components/icons";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Logo } from "@/components/ui/logo";

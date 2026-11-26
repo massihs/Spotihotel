@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { ExternalLink, RefreshCw } from "lucide-react";
+import { ExternalLink, RefreshCw } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/form";
 import { updateKioskAction } from "./online-actions";
@@ -50,7 +50,7 @@ export function KioskPanel({
               href={url}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex h-9 items-center gap-1.5 rounded-full bg-surface px-3 text-sm font-semibold ring-1 ring-border"
+              className="inline-flex h-9 items-center gap-1.5 rounded-md bg-surface px-3 text-sm font-semibold ring-1 ring-border"
             >
               <ExternalLink className="size-4" aria-hidden="true" />
               {t("open")}

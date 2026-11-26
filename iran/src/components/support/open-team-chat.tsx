@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Headset } from "lucide-react";
+import { Headset } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { openSupport } from "./launcher";
 

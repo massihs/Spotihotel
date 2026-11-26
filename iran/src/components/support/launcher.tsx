@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
-import { Headset, MessageCircle, X } from "lucide-react";
+import { Headset, MessageCircle, X } from "@/components/icons";
 import { cn } from "@/lib/cn";
 import { ChatThread, type ChatMessage } from "./chat";
 import {
@@ -104,13 +104,13 @@ function Launcher({
           aria-label={title}
           title={title}
           className={cn(
-            "fixed z-40 grid size-13 place-items-center rounded-full bg-brand-700 text-white shadow-[var(--shadow-card)] transition hover:scale-105 hover:bg-brand-800 print:hidden",
+            "k-cut k-oct fixed z-40 grid size-13 place-items-center bg-brand-700 text-white shadow-[var(--shadow-card)] transition hover:scale-105 hover:bg-brand-800 print:hidden",
             className,
           )}
         >
           {icon}
           {badge ? (
-            <span className="absolute -end-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-danger px-1 text-[11px] font-bold text-white tabular-nums">
+            <span className="k-cut k-sm absolute -end-1 -top-1 grid h-5 min-w-5 place-items-center bg-danger px-1 text-[11px] font-bold text-white tabular-nums">
               {badge}
             </span>
           ) : null}
@@ -122,7 +122,7 @@ function Launcher({
           className="fixed inset-x-0 bottom-0 z-50 flex h-[min(85dvh,640px)] flex-col overflow-hidden rounded-t-3xl border border-border bg-bg shadow-[var(--shadow-card)] sm:inset-x-auto sm:end-5 sm:bottom-5 sm:w-[400px] sm:rounded-3xl print:hidden"
         >
           <header className="flex items-center gap-3 bg-ink px-4 py-3 text-ink-fg">
-            <span className="grid size-9 place-items-center rounded-full bg-white/15" aria-hidden="true">
+            <span className="k-cut k-oct grid size-9 place-items-center bg-white/15" aria-hidden="true">
               {icon}
             </span>
             <div className="min-w-0 flex-1">
@@ -135,7 +135,7 @@ function Launcher({
               type="button"
               onClick={() => setOpen(false)}
               aria-label={t("close")}
-              className="grid size-9 place-items-center rounded-full hover:bg-white/15"
+              className="k-cut k-oct grid size-9 place-items-center hover:bg-white/15"
             >
               <X className="size-5" aria-hidden="true" />
             </button>

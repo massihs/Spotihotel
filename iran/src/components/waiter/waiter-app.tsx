@@ -15,7 +15,7 @@ import {
   Trash2,
   Users,
   X,
-} from "lucide-react";
+} from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState, useSyncExternalStore, useTransition } from "react";
 import { createPosOrderAction } from "@/app/[locale]/dashboard/[restaurantId]/pos/actions";
@@ -262,7 +262,7 @@ export function WaiterApp({
               onClick={() => setFilter(f)}
               aria-pressed={filter === f}
               className={cn(
-                "h-10 shrink-0 rounded-full px-4 text-sm font-bold whitespace-nowrap",
+                "k-cut h-10 shrink-0 px-4 text-sm font-bold whitespace-nowrap",
                 filter === f ? "shade-fill" : "bg-surface text-fg-muted ring-1 ring-border",
               )}
             >
@@ -350,7 +350,7 @@ export function WaiterApp({
           <button
             type="button"
             onClick={() => setTableId(null)}
-            className="inline-flex h-10 items-center gap-1.5 rounded-full bg-surface px-3 text-sm font-bold ring-1 ring-border"
+            className="inline-flex h-10 items-center gap-1.5 rounded-md bg-surface px-3 text-sm font-bold ring-1 ring-border"
           >
             <ArrowRight className="size-4 ltr:rotate-180" aria-hidden="true" />
             {t("back")}
@@ -635,7 +635,7 @@ function CatChip({ on, onClick, children }: { on: boolean; onClick: () => void; 
       onClick={onClick}
       aria-pressed={on}
       className={cn(
-        "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-sm font-semibold whitespace-nowrap",
+        "k-cut inline-flex h-9 shrink-0 items-center gap-1.5 px-3.5 text-sm font-semibold whitespace-nowrap",
         on ? "bg-accent text-accent-fg" : "bg-surface text-fg-muted ring-1 ring-border",
       )}
     >
@@ -664,7 +664,7 @@ function Rounds({
             <span className="font-black">#{r.number}</span>
             <span
               className={cn(
-                "rounded-full px-2.5 py-0.5 text-xs font-bold",
+                "k-cut k-sm px-2.5 py-0.5 text-xs font-bold",
                 r.status === "ready"
                   ? "bg-success-soft text-success"
                   : r.status === "served"

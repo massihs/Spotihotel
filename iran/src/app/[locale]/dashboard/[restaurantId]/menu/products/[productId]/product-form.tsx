@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/form";
 import { centsToInput, formatMoney, parseMoneyInput } from "@/lib/money";
 import { MoneyField } from "@/components/ui/money-field";
-import { ImageIcon, Star } from "lucide-react";
+import { ImageIcon, Star } from "@/components/icons";
 import { cn } from "@/lib/cn";
 import type { Nutrition } from "@/lib/nutrition";
 import { NutritionFields } from "./nutrition-fields";
@@ -337,7 +337,7 @@ export function ProductForm({
                     defaultChecked={values.tags.includes(tag)}
                     className="peer sr-only"
                   />
-                  <span className="inline-flex h-8 items-center rounded-full border border-border px-3 text-sm peer-checked:border-accent peer-checked:bg-accent-soft peer-checked:text-accent-text peer-focus-visible:ring-4 peer-focus-visible:ring-[var(--ring)]">
+                  <span className="inline-flex h-8 items-center rounded-md border border-border px-3 text-sm peer-checked:border-accent peer-checked:bg-accent-soft peer-checked:text-accent-text peer-focus-visible:ring-4 peer-focus-visible:ring-[var(--ring)]">
                     {t(`tags.${tag}`)}
                   </span>
                 </label>

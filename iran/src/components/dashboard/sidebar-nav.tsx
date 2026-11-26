@@ -17,7 +17,7 @@ import {
   TrendingUp,
   UtensilsCrossed,
   X,
-} from "lucide-react";
+} from "@/components/icons";
 import { useLinkStatus } from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -188,7 +188,7 @@ function Badge({ n, className }: { n?: number; className?: string }) {
   return (
     <span
       className={cn(
-        "grid h-5 min-w-5 place-items-center rounded-full bg-danger px-1.5 text-[11px] leading-none font-bold text-white tabular-nums",
+        "k-cut k-sm grid h-5 min-w-5 place-items-center bg-danger px-1.5 text-[11px] leading-none font-bold text-white tabular-nums",
         className,
       )}
     >
@@ -339,13 +339,13 @@ export function SidebarNav({
                   aria-expanded={open}
                   aria-controls={id}
                   className={cn(
-                    "group/h flex w-full items-center gap-2.5 rounded-xl px-2 py-1.5 text-start transition-colors duration-200",
+                    "group/h k-cut flex w-full items-center gap-2.5 px-2 py-1.5 text-start transition-colors duration-200",
                     hasActive ? "cursor-default" : "hover:bg-white/[0.045]",
                   )}
                 >
                   <span
                     className={cn(
-                      "grid size-7 shrink-0 place-items-center rounded-lg ring-1 transition-colors [&_svg]:size-[15px]",
+                      "grid size-7 shrink-0 place-items-center rounded-md ring-1 transition-colors [&_svg]:size-[15px]",
                       hasActive
                         ? "bg-[var(--brass)]/15 text-[var(--brass)] ring-[var(--brass)]/30"
                         : "bg-white/[0.05] text-sidebar-muted ring-white/[0.08] group-hover/h:text-sidebar-fg",
@@ -366,7 +366,7 @@ export function SidebarNav({
                     <Badge n={badge} />
                   ) : (
                     <span
-                      className="rounded-full bg-white/[0.06] px-1.5 py-0.5 text-[10.5px] text-sidebar-muted tabular-nums"
+                      className="k-cut k-sm bg-white/[0.06] px-1.5 py-0.5 text-[10.5px] text-sidebar-muted tabular-nums"
                       title={t("sectionCount", { n: section.items.length })}
                     >
                       {section.items.length}
@@ -413,7 +413,7 @@ export function SidebarNav({
                             }
                           }}
                           className={cn(
-                            "group relative flex h-9 items-center gap-3 rounded-lg px-2.5 text-[13.5px] font-medium transition-[background-color,color,transform] duration-150 active:scale-[0.985]",
+                            "group k-cut k-sm relative flex h-9 items-center gap-3 px-2.5 text-[13.5px] font-medium transition-[background-color,color,transform] duration-150 active:scale-[0.985]",
                             active
                               ? "bg-white/[0.09] text-sidebar-fg shadow-[inset_0_0_0_1px_rgb(255_255_255/0.08),0_6px_16px_-10px_rgb(0_0_0/0.5)]"
                               : "text-sidebar-muted hover:bg-white/[0.05] hover:text-sidebar-fg",
@@ -421,7 +421,7 @@ export function SidebarNav({
                         >
                           {active ? (
                             <span
-                              className="absolute inset-y-2 -start-[0.6rem] w-[3px] rounded-full bg-[var(--brass)] shadow-[0_0_10px_var(--brass)]"
+                              className="absolute inset-y-2 -start-[0.6rem] w-[3px] bg-[var(--brass)] shadow-[0_0_10px_var(--brass)]"
                               aria-hidden="true"
                             />
                           ) : null}
@@ -537,7 +537,7 @@ function SubNav({ item, query }: { item: NavItem; query: string }) {
             >
               <span
                 className={cn(
-                  "size-1.5 shrink-0 rounded-full transition-colors",
+                  "size-1.5 shrink-0 rotate-45 transition-colors",
                   active
                     ? "bg-[var(--brass)] shadow-[0_0_8px_var(--brass)]"
                     : "bg-sidebar-muted/40 group-hover/s:bg-sidebar-fg/70",
@@ -630,7 +630,7 @@ export function MobileTabBar({ items, sheet }: { items: NavItem[]; sheet: ReactN
               >
                 <span
                   className={cn(
-                    "relative grid h-7 w-12 place-items-center rounded-full transition-colors [&_svg]:size-5",
+                    "k-cut k-sm relative grid h-7 w-12 place-items-center transition-colors [&_svg]:size-5",
                     active && "bg-accent-soft",
                   )}
                   aria-hidden="true"
@@ -654,7 +654,7 @@ export function MobileTabBar({ items, sheet }: { items: NavItem[]; sheet: ReactN
           >
             <span
               className={cn(
-                "grid h-7 w-12 place-items-center rounded-full [&_svg]:size-5",
+                "k-cut k-sm grid h-7 w-12 place-items-center [&_svg]:size-5",
                 (open || moreActive) && "bg-accent-soft",
               )}
               aria-hidden="true"
@@ -730,13 +730,13 @@ export function MobileTabBar({ items, sheet }: { items: NavItem[]; sheet: ReactN
                           href={item.href}
                           aria-current={active ? "page" : undefined}
                           className={cn(
-                            "flex flex-col items-center gap-2 rounded-xl px-2 py-3.5 text-center text-xs font-medium",
+                            "k-cut flex flex-col items-center gap-2 px-2 py-3.5 text-center text-xs font-medium",
                             active ? "bg-accent-soft text-accent-text" : "bg-surface-2 text-fg-muted",
                           )}
                         >
                           <span
                             className={cn(
-                              "relative grid size-11 place-items-center rounded-2xl [&_svg]:size-5",
+                              "k-cut relative grid size-11 place-items-center [&_svg]:size-5",
                               active
                                 ? "bg-accent text-accent-fg"
                                 : "bg-surface text-fg-muted ring-1 ring-border",

@@ -80,7 +80,7 @@ import {
   Wine,
   Zap,
   type LucideIcon,
-} from "lucide-react";
+} from "@/components/icons";
 import { resolveCategoryIcon, type CategoryIconKey } from "@/lib/category-icons";
 
 /** Lucide component for each category icon key (see src/lib/category-icons.ts). */

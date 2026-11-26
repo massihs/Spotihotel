@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarRange, Plus, Trash2 } from "lucide-react";
+import { CalendarRange, Plus, Trash2 } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Sheet, field, useRun } from "@/components/ui/sheet-kit";
@@ -86,7 +86,7 @@ export function NewExpenseButton({ rid, currency, today }: { rid: string; curren
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex h-10 items-center gap-2 rounded-full bg-accent px-4 text-sm font-semibold text-accent-fg"
+        className="k-cut inline-flex h-10 items-center gap-2 bg-accent px-4 text-sm font-semibold text-accent-fg"
       >
         <Plus className="size-4" />
         {t("newExpense")}

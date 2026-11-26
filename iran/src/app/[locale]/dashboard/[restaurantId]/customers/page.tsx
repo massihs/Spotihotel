@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Avatar } from "@/components/ui/avatar";
-import { Search, Star, UserCheck, Users, Wallet } from "lucide-react";
+import { Search, Star, UserCheck, Users, Wallet } from "@/components/icons";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import {

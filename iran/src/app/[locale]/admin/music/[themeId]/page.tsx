@@ -1,4 +1,4 @@
-import { ChevronRight } from "lucide-react";
+import { ChevronRight } from "@/components/icons";
 import { coverUrl } from "@/server/modules/music/service";
 import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";

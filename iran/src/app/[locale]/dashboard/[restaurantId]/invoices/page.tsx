@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { buttonClasses } from "@/components/ui/button";
 import { DateInput } from "@/components/ui/date-input";
 import { DEFAULT_LOCALE } from "@/i18n/config";
-import { FileDown, Printer, ReceiptText } from "lucide-react";
+import { FileDown, Printer, ReceiptText } from "@/components/icons";
 import { requireRestaurant } from "@/server/auth/current";
 import { db } from "@/server/db/client";
 import { listInvoices } from "@/server/modules/invoices/service";
@@ -87,7 +87,7 @@ async function Invoices({ params }: { params: Params }) {
                 <tr key={i.id}>
                   <td className="px-4 py-3" dir="ltr">
                     <span className="flex items-center gap-2.5">
-                      <span className="shade-soft grid size-8 shrink-0 place-items-center rounded-lg">
+                      <span className="shade-soft k-cut k-sm grid size-8 shrink-0 place-items-center">
                         <ReceiptText className="size-4" aria-hidden="true" />
                       </span>
                       <span className="font-semibold tabular-nums">{i.number}</span>

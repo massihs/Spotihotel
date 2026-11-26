@@ -1,4 +1,4 @@
-import { Store } from "lucide-react";
+import { Store } from "@/components/icons";
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { Suspense } from "react";
@@ -241,7 +241,7 @@ async function Results({ searchParams }: Pick<Props, "searchParams">) {
                 <li key={c.key}>
                   <Link
                     href={directoryHref({ city: c.key })}
-                    className="inline-flex h-9 items-center gap-1.5 rounded-full bg-surface px-4 text-sm font-semibold ring-1 ring-border hover:ring-border-strong"
+                    className="inline-flex h-9 items-center gap-1.5 rounded-md bg-surface px-4 text-sm font-semibold ring-1 ring-border hover:ring-border-strong"
                   >
                     {c.label}
                     <span className="text-xs text-fg-subtle tabular-nums">{c.count}</span>

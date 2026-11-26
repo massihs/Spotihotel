@@ -14,7 +14,7 @@ import {
   Sun,
   Users,
   Zap,
-} from "lucide-react";
+} from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { usePref, writePref } from "@/components/ui/use-pref";
@@ -224,7 +224,7 @@ export function BookFlow({
                 {maxParty > 8 ? (
                   <label
                     className={cn(
-                      "relative flex h-11 items-center rounded-full px-4 text-sm font-bold",
+                      "k-cut relative flex h-11 items-center px-4 text-sm font-bold",
                       party > 8 ? "shade-fill" : "bg-surface-2 hover:bg-surface-3",
                     )}
                   >
@@ -387,7 +387,7 @@ export function BookFlow({
                     onClick={() => setOccasion(occasion === key ? null : key)}
                     aria-pressed={occasion === key}
                     className={cn(
-                      "inline-flex h-10 items-center gap-1.5 rounded-full px-3.5 text-sm font-semibold transition-colors",
+                      "k-cut inline-flex h-10 items-center gap-1.5 px-3.5 text-sm font-semibold transition-colors",
                       occasion === key
                         ? "bg-accent-soft text-accent-text ring-1 ring-accent/50"
                         : "bg-surface-2 text-fg-muted hover:text-fg",

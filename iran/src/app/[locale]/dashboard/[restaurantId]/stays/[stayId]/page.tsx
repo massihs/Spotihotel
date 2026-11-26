@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { and, eq, inArray, isNull } from "drizzle-orm";
 import { getLocale, getTranslations } from "next-intl/server";
-import { CalendarDays, Mail, Phone, Star, Users } from "lucide-react";
+import { CalendarDays, Mail, Phone, Star, Users } from "@/components/icons";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { LiveRefresh } from "@/components/realtime/live";
 import { StayActions } from "@/components/pms/stay-card";

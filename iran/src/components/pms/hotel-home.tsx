@@ -19,7 +19,7 @@ import {
   Check,
   Globe,
   Wand2,
-} from "lucide-react";
+} from "@/components/icons";
 import type { ReactNode } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { buttonClasses } from "@/components/ui/button";
@@ -171,7 +171,7 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
   return (
     <>
       {/* Greeting: the business day, its state, tonight in one sentence, the main actions. */}
-      <section className="home-hero relative isolate mb-5 overflow-hidden rounded-[1.75rem] border border-border bg-surface px-5 py-5 shadow-[var(--shadow-card)] sm:px-7 sm:py-6">
+      <section className="home-hero relative isolate mb-5 overflow-hidden rounded-2xl border border-border bg-surface px-5 py-5 shadow-[var(--shadow-card)] sm:px-7 sm:py-6">
         <span
           aria-hidden="true"
           className="texture-khatam texture-fade-corner [--tex-color:var(--shade,var(--accent))] [--tex-opacity:0.1] [--tex-size:58px]"
@@ -316,7 +316,7 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
             title={t("attention")}
             action={
               alerts.length ? (
-                <span className="grid h-6 min-w-6 place-items-center rounded-full bg-danger px-1.5 text-xs font-bold text-white tabular-nums">
+                <span className="k-cut k-sm grid h-6 min-w-6 place-items-center bg-danger px-1.5 text-xs font-bold text-white tabular-nums">
                   {alerts.length}
                 </span>
               ) : undefined
@@ -407,7 +407,7 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
                 SHADES[i % SHADES.length],
               )}
             >
-              <span className="shade-fill grid size-10 shrink-0 place-items-center rounded-xl transition-transform duration-200 group-hover:scale-105">
+              <span className="shade-fill k-cut grid size-10 shrink-0 place-items-center transition-transform duration-200 group-hover:scale-105">
                 <Icon className="size-[18px]" aria-hidden="true" />
               </span>
               <span className="min-w-0 flex-1 truncate text-[13.5px] font-semibold">{label}</span>
@@ -437,7 +437,7 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
               <li
                 key={b.source}
                 className={cn(
-                  "rounded-full px-2.5 py-1 text-xs font-semibold",
+                  "k-cut k-sm px-2.5 py-1 text-xs font-semibold",
                   b.source === "website" ? "bg-success-soft text-success" : "bg-surface-2 text-fg-muted",
                 )}
               >
@@ -466,7 +466,7 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
             title={t("setupTitle")}
             description={t("setupSubtitle")}
             action={
-              <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-semibold text-accent-text tabular-nums">
+              <span className="k-cut k-sm bg-accent-soft px-2.5 py-0.5 text-xs font-semibold text-accent-text tabular-nums">
                 {doneCount}/{steps.length}
               </span>
             }
@@ -588,7 +588,7 @@ export async function HotelHome({ ctx, money }: { ctx: RestaurantContext; money:
                     </span>
                     <span
                       className={cn(
-                        "shrink-0 rounded-full px-2 py-0.5 text-xs font-bold tabular-nums",
+                        "k-cut k-sm shrink-0 px-2 py-0.5 text-xs font-bold tabular-nums",
                         s.balanceCents > 0 ? "bg-danger-soft text-danger" : "bg-success-soft text-success",
                       )}
                     >
@@ -765,7 +765,7 @@ function KpiTile({
       <div className="flex items-start justify-between gap-2">
         <p className="kpi-label text-[13px] font-semibold">{label}</p>
         <span
-          className="shade-fill grid size-9 shrink-0 place-items-center rounded-xl [&_svg]:size-[18px]"
+          className="shade-fill k-cut grid size-9 shrink-0 place-items-center [&_svg]:size-[18px]"
           aria-hidden="true"
         >
           {icon}
@@ -820,7 +820,7 @@ function RoomBadge({ label, code }: { label: string | null; code: string }) {
 
 function CountChip({ n }: { n: number }) {
   return (
-    <span className="shade-soft grid h-6 min-w-6 place-items-center rounded-full px-2 text-xs font-bold tabular-nums">
+    <span className="shade-soft k-cut k-sm grid h-6 min-w-6 place-items-center px-2 text-xs font-bold tabular-nums">
       {n}
     </span>
   );

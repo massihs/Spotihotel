@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
-import { BedDouble, CalendarDays, Clock, Moon, Phone, UsersRound } from "lucide-react";
+import { BedDouble, CalendarDays, Clock, Moon, Phone, UsersRound } from "@/components/icons";
 import { db } from "@/server/db/client";
 import { caravanView } from "@/server/modules/pms/caravan";
 import { calendarLocale } from "@/lib/jalali-calendar";
@@ -44,7 +44,7 @@ async function Caravan({ params }: Pick<Props, "params">) {
   return (
     <div data-brand={v.hotel.brandColor} className="min-h-dvh bg-bg px-4 py-6">
       <div className="mx-auto max-w-xl space-y-4">
-        <header className="sidebar-shade relative isolate overflow-hidden rounded-[28px] bg-[var(--sidebar)] p-6 text-[var(--sidebar-fg)] shadow-[var(--shadow-float)]">
+        <header className="sidebar-shade relative isolate overflow-hidden rounded-2xl bg-[var(--sidebar)] p-6 text-[var(--sidebar-fg)] shadow-[var(--shadow-float)]">
           <span
             aria-hidden="true"
             className="texture-khatam texture-fade-corner [--tex-color:var(--brass)] [--tex-opacity:0.16] [--tex-size:56px]"

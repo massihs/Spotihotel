@@ -17,7 +17,7 @@ import {
   UtensilsCrossed,
   Users,
   XCircle,
-} from "lucide-react";
+} from "@/components/icons";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { AutoRefresh, CancelBooking } from "@/components/reservations/public-ui";
 import { PlaceHeader } from "@/components/reservations/place-header";
@@ -258,7 +258,7 @@ function StatusPill({ status, label }: { status: string; label: string }) {
   return (
     <span
       className={cn(
-        "inline-block rounded-full px-3 py-1 text-xs font-bold",
+        "k-cut k-sm inline-block px-3 py-1 text-xs font-bold",
         status === "cancelled" || status === "no_show"
           ? "bg-danger-soft text-danger"
           : status === "pending"

@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, Check, Layers, Plus, ShieldCheck, Trash2 } from "lucide-react";
+import { Bell, Check, Layers, Plus, ShieldCheck, Trash2 } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
@@ -59,7 +59,7 @@ export function SectionsPanel({
         <button
           type="button"
           onClick={() => setEdit("new")}
-          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-accent px-4 text-sm font-semibold text-accent-fg"
+          className="k-cut inline-flex h-9 items-center gap-1.5 bg-accent px-4 text-sm font-semibold text-accent-fg"
         >
           <Plus className="size-4" aria-hidden="true" />
           {t("new")}
@@ -219,7 +219,7 @@ function SectionSheet({
                     key={k}
                     type="button"
                     onClick={() => setPerms(new Set(list.filter((p) => assignable.includes(p))))}
-                    className="rounded-full bg-surface-2 px-3 py-1 text-xs font-semibold hover:bg-surface-3"
+                    className="k-cut k-sm bg-surface-2 px-3 py-1 text-xs font-semibold hover:bg-surface-3"
                   >
                     {t(`team.jobs.${k as "waiter"}.name`)}
                   </button>
@@ -355,10 +355,7 @@ export function MemberSections({
   return (
     <div className="flex flex-wrap items-center gap-1.5">
       {mine.map((s) => (
-        <span
-          key={s.id}
-          className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold", tone(s.color).soft)}
-        >
+        <span key={s.id} className={cn("k-cut k-sm px-2.5 py-0.5 text-xs font-semibold", tone(s.color).soft)}>
           {s.name}
         </span>
       ))}

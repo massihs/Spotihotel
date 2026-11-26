@@ -11,7 +11,7 @@ import {
   Wallet,
   Wrench,
   type LucideIcon,
-} from "lucide-react";
+} from "@/components/icons";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 import { LinkPending } from "@/components/ui/link-pending";
@@ -80,13 +80,13 @@ export function TabNav({
                   href={href(active ? current : g.tabs[0]!)}
                   aria-current={active ? "true" : undefined}
                   className={cn(
-                    "group flex h-11 items-center justify-center gap-2.5 rounded-xl px-4 text-sm font-semibold whitespace-nowrap transition-[background-color,color,box-shadow] duration-200",
+                    "group k-cut flex h-11 items-center justify-center gap-2.5 px-4 text-sm font-semibold whitespace-nowrap transition-[background-color,color,box-shadow] duration-200",
                     active ? "shade-fill" : "text-fg-muted hover:bg-[var(--tab-hover)] hover:text-fg",
                   )}
                 >
                   <span
                     className={cn(
-                      "grid size-7 shrink-0 place-items-center rounded-lg transition-colors",
+                      "k-cut k-sm grid size-7 shrink-0 place-items-center transition-colors",
                       active ? "bg-white/18" : "shade-soft",
                     )}
                   >
@@ -96,7 +96,7 @@ export function TabNav({
                   {g.tabs.length > 1 ? (
                     <span
                       className={cn(
-                        "grid h-5 min-w-5 place-items-center rounded-full px-1.5 text-[11px] tabular-nums",
+                        "k-cut k-sm grid h-5 min-w-5 place-items-center px-1.5 text-[11px] tabular-nums",
                         active ? "bg-white/20" : "bg-surface-2 text-fg-subtle",
                       )}
                     >
@@ -118,15 +118,13 @@ export function TabNav({
               href={href(x)}
               aria-current={x === current ? "page" : undefined}
               className={cn(
-                "inline-flex h-8 items-center gap-1.5 rounded-full px-3.5 text-[13px] font-semibold transition-[background-color,color,box-shadow] duration-150",
+                "k-cut k-sm inline-flex h-8 items-center gap-1.5 px-3.5 text-[13px] font-semibold transition-[background-color,color,box-shadow] duration-150",
                 x === current
-                  ? "shade-soft shadow-[inset_0_0_0_1.5px_var(--shade,var(--accent))]"
-                  : "text-fg-muted ring-1 ring-border ring-inset hover:bg-surface hover:text-fg",
+                  ? "shade-fill"
+                  : "k-frame text-fg-muted [--k-fill-hover:var(--surface)] [--k-fill:var(--bg)] [--k-line:var(--border)] hover:text-fg",
               )}
             >
-              {x === current ? (
-                <span className="size-1.5 rounded-full bg-[var(--shade,var(--accent))]" aria-hidden="true" />
-              ) : null}
+              {x === current ? <span className="size-1.5 rotate-45 bg-current" aria-hidden="true" /> : null}
               {tabLabel(x)}
               <LinkPending className="ms-0.5" />
             </Link>

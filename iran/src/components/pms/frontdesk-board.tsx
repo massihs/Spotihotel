@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckInButton } from "./check-in-wizard";
-import { BedDouble, LogIn, LogOut, MoonStar, Star } from "lucide-react";
+import { BedDouble, LogIn, LogOut, MoonStar, Star } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useMoney } from "@/components/ui/use-money";
@@ -90,7 +90,7 @@ export function FrontDeskBoard({
             </div>
             {s.status === "tentative" ? <StatusPill status="tentative" /> : null}
             {s.precheckinAt ? (
-              <span className="rounded-full bg-success-soft px-2 py-0.5 text-xs font-semibold text-success">
+              <span className="k-cut k-sm bg-success-soft px-2 py-0.5 text-xs font-semibold text-success">
                 ✓ {t("preregistered")}
               </span>
             ) : null}
@@ -129,7 +129,7 @@ export function FrontDeskBoard({
                 <div className="flex flex-wrap gap-2">
                   <Link
                     href={`${base}/stays/${s.id}`}
-                    className="inline-flex h-8 items-center rounded-full bg-accent px-3 text-sm font-semibold text-accent-fg"
+                    className="k-cut inline-flex h-8 items-center bg-accent px-3 text-sm font-semibold text-accent-fg"
                   >
                     {t("settle")}
                   </Link>
@@ -202,7 +202,7 @@ function Column({
           {icon}
         </span>
         {title}
-        <span className="ms-auto rounded-full bg-surface-2 px-2 py-0.5 text-xs font-bold tabular-nums">
+        <span className="k-cut k-sm ms-auto bg-surface-2 px-2 py-0.5 text-xs font-bold tabular-nums">
           {count}
         </span>
       </h2>

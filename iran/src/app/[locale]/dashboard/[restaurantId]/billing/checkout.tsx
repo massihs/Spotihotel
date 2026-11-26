@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
-import { Check } from "lucide-react";
+import { Check } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/money";

@@ -1,4 +1,4 @@
-import { Music, Radio } from "lucide-react";
+import { Music, Radio } from "@/components/icons";
 import { Suspense } from "react";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";
@@ -42,7 +42,7 @@ async function AdminMusic() {
             <Link
               href="/radio"
               target="_blank"
-              className="inline-flex h-10 items-center gap-2 rounded-full px-4 text-sm font-medium ring-1 ring-border hover:bg-surface-2"
+              className="inline-flex h-10 items-center gap-2 rounded-md px-4 text-sm font-medium ring-1 ring-border hover:bg-surface-2"
             >
               <Radio className="size-4" aria-hidden="true" />
               {t("admin.openRadio")}

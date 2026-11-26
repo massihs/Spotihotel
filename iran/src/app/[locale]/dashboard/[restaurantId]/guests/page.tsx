@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
-import { ChevronLeft, Search, Star, UsersRound } from "lucide-react";
+import { ChevronLeft, Search, Star, UsersRound } from "@/components/icons";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { buttonClasses } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";

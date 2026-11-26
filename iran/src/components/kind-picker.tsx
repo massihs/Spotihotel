@@ -1,6 +1,6 @@
 "use client";
 
-import { BedDouble, Coffee, Store, UtensilsCrossed, type LucideIcon } from "lucide-react";
+import { BedDouble, Coffee, Store, UtensilsCrossed, type LucideIcon } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
 import { RESTAURANT_KINDS, type RestaurantKind } from "@/lib/restaurant-kind";

@@ -36,7 +36,7 @@ export function IconPicker({ name, defaultValue }: { name: string; defaultValue:
             aria-selected={group === g}
             onClick={() => setGroup(g)}
             className={cn(
-              "shrink-0 rounded-full px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-colors",
+              "k-cut k-sm shrink-0 px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-colors",
               group === g ? "bg-accent-soft text-accent-text" : "text-fg-muted hover:bg-surface-2",
             )}
           >

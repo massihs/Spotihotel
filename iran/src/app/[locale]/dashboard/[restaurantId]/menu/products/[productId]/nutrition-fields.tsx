@@ -1,6 +1,6 @@
 "use client";
 
-import { Database, Sparkles } from "lucide-react";
+import { Database, Sparkles } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useRef, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";

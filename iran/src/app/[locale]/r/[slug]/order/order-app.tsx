@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
-import { Bike, Minus, Plus, ShoppingBag, Store, UtensilsCrossed } from "lucide-react";
+import { Bike, Minus, Plus, ShoppingBag, Store, UtensilsCrossed } from "@/components/icons";
 import { DinerLogin } from "@/components/account/diner-login";
 import { ProductImage } from "@/components/guest/parts";
 import { ProductSheet } from "@/components/guest/product-sheet";

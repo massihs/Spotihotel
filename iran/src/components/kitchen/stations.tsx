@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Sheet, field, useRun } from "@/components/ui/sheet-kit";
@@ -153,7 +153,7 @@ export function StationManager({
             <button
               type="button"
               onClick={() => setEdit(null)}
-              className="h-11 rounded-full px-4 text-sm font-semibold ring-1 ring-border"
+              className="h-11 rounded-md px-4 text-sm font-semibold ring-1 ring-border"
             >
               {t("back")}
             </button>

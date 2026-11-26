@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy, KeyRound, MessageSquare, Pencil, Plus, Power, Trash2, Wrench } from "lucide-react";
+import { Copy, KeyRound, MessageSquare, Pencil, Plus, Power, Trash2, Wrench } from "@/components/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -373,7 +373,7 @@ export function AccountsPanel({
                   <td className="px-3 py-2">
                     <span
                       className={cn(
-                        "rounded-full px-2 py-0.5 text-xs font-bold",
+                        "k-cut k-sm px-2 py-0.5 text-xs font-bold",
                         a.status === "active" ? "bg-success-soft text-success" : "bg-surface-2 text-fg-muted",
                       )}
                     >
@@ -946,7 +946,7 @@ export function PreventiveList({ rid, list, today }: { rid: string; list: Equip[
               <p className="font-bold">{e.name}</p>
               <span
                 className={cn(
-                  "rounded-full px-2.5 py-0.5 text-xs font-bold",
+                  "k-cut k-sm px-2.5 py-0.5 text-xs font-bold",
                   overdue
                     ? "bg-danger-soft text-danger"
                     : isToday
@@ -1108,7 +1108,7 @@ export function Logbook({
             >
               <span
                 className={cn(
-                  "h-fit shrink-0 rounded-full px-2.5 py-0.5 text-xs font-bold",
+                  "k-cut k-sm h-fit shrink-0 px-2.5 py-0.5 text-xs font-bold",
                   x.category === "incident"
                     ? "bg-danger-soft text-danger"
                     : x.category === "lost_found"

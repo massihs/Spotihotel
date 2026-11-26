@@ -10,7 +10,7 @@ import {
   ShieldCheck,
   TrendingDown,
   UsersRound,
-} from "lucide-react";
+} from "@/components/icons";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { Card, CardHeader, StatCard } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";

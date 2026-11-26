@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeftRight, Banknote, Building2, Lock, Plus, Search, Trash2, Unlock } from "lucide-react";
+import { ArrowLeftRight, Banknote, Building2, Lock, Plus, Search, Trash2, Unlock } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -64,7 +64,7 @@ export function ShiftPanel({
             aria-hidden="true"
             className="texture-khatam texture-fade-corner [--tex-color:var(--shade,var(--accent))] [--tex-opacity:0.1] [--tex-size:56px]"
           />
-          <span className="shade-fill relative grid size-14 place-items-center rounded-2xl">
+          <span className="shade-fill k-cut relative grid size-14 place-items-center">
             <Unlock className="size-7" aria-hidden="true" />
           </span>
           <h2 className="relative text-xl font-bold">{t("openTitle")}</h2>
@@ -112,7 +112,7 @@ export function ShiftPanel({
     <div className="grid gap-4 lg:grid-cols-[1fr_1.1fr]">
       <div className={card}>
         <div className="flex items-start gap-3">
-          <span className="shade-fill grid size-11 shrink-0 place-items-center rounded-2xl">
+          <span className="shade-fill k-cut grid size-11 shrink-0 place-items-center">
             <Banknote className="size-5" aria-hidden="true" />
           </span>
           <div className="min-w-0">

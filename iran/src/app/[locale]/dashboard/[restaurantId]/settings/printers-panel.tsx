@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy, Download, Eye, Plus, Power, Printer, Trash2, Wifi, WifiOff, X } from "lucide-react";
+import { Copy, Download, Eye, Plus, Power, Printer, Trash2, Wifi, WifiOff, X } from "@/components/icons";
 import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
@@ -220,7 +220,7 @@ export function PrintersPanel({
               <a
                 href="/print-agent.mjs"
                 download
-                className="inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-sm font-medium ring-1 ring-border hover:bg-surface-2"
+                className="inline-flex h-9 items-center gap-1.5 rounded-md px-3 text-sm font-medium ring-1 ring-border hover:bg-surface-2"
               >
                 <Download className="size-4" aria-hidden="true" />
                 {t("download")}

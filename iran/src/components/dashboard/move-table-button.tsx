@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeftRight } from "lucide-react";
+import { ArrowLeftRight } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { moveTableAction } from "@/app/[locale]/dashboard/[restaurantId]/live-actions";
@@ -38,7 +38,7 @@ export function MoveTableButton({
             );
         });
       }}
-      className="h-8 rounded-full border border-border-strong bg-surface px-2 text-xs"
+      className="h-8 rounded-md border border-border-strong bg-surface px-2 text-xs"
       aria-label={t("floor.moveTo")}
     >
       <option value="">{t("floor.moveTo")}</option>
@@ -53,7 +53,7 @@ export function MoveTableButton({
       <button
         type="button"
         onClick={() => (setOpen(true), setMessage(null))}
-        className="inline-flex h-8 items-center gap-1 rounded-full px-3 text-xs font-semibold ring-1 ring-border hover:bg-surface-2"
+        className="inline-flex h-8 items-center gap-1 rounded-md px-3 text-xs font-semibold ring-1 ring-border hover:bg-surface-2"
       >
         <ArrowLeftRight className="size-3.5" aria-hidden="true" />
         {t("floor.move")}

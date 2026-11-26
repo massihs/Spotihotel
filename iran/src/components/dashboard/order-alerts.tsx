@@ -1,7 +1,7 @@
 "use client";
 
 import { TOOL_BUTTON } from "@/components/ui/tool-button";
-import { BellOff, BellRing, X } from "lucide-react";
+import { BellOff, BellRing, X } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";

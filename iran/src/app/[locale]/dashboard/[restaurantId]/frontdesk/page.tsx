@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { and, eq, isNull } from "drizzle-orm";
 import { getLocale, getTranslations } from "next-intl/server";
-import { BedDouble, CalendarPlus, FileDown, Gauge, Globe, TrendingUp, Users } from "lucide-react";
+import { BedDouble, CalendarPlus, FileDown, Gauge, Globe, TrendingUp, Users } from "@/components/icons";
 import { DEFAULT_LOCALE } from "@/i18n/config";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { StatCard } from "@/components/ui/card";

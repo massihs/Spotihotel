@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, CalendarPlus, Users } from "lucide-react";
+import { AlertTriangle, CalendarPlus, Users } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/cn";

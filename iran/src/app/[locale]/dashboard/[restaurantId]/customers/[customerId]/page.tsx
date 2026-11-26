@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { ArrowRight, Phone, Star } from "lucide-react";
+import { ArrowRight, Phone, Star } from "@/components/icons";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { CustomerEditor, HouseAccount } from "@/components/customers/customers-ui";

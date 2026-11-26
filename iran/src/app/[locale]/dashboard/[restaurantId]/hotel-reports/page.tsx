@@ -2,7 +2,7 @@ import { TabNav } from "@/components/ui/tab-nav";
 import { groupsFor } from "@/lib/tab-groups";
 import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { FileDown } from "lucide-react";
+import { FileDown } from "@/components/icons";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { Card } from "@/components/ui/card";
 import { buttonClasses } from "@/components/ui/button";

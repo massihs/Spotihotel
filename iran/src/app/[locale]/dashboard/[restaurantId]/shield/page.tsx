@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
-import { ShieldAlert, ShieldCheck } from "lucide-react";
+import { ShieldAlert, ShieldCheck } from "@/components/icons";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { Card, CardHeader } from "@/components/ui/card";
 import { Empty } from "@/components/ui/empty";

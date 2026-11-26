@@ -1,4 +1,4 @@
-import { Music } from "lucide-react";
+import { Music } from "@/components/icons";
 import { cn } from "@/lib/cn";
 
 /** Album / station artwork; a gradient tile in the station color when there is no image. */

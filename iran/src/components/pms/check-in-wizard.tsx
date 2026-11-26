@@ -13,7 +13,7 @@ import {
   Star,
   Wallet,
   Wifi,
-} from "lucide-react";
+} from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { Button, type ButtonSize, type ButtonVariant } from "@/components/ui/button";

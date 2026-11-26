@@ -1,4 +1,4 @@
-import { Clock, ReceiptText, UserRound } from "lucide-react";
+import { Clock, ReceiptText, UserRound } from "@/components/icons";
 import type { ReactNode } from "react";
 import type { OpenState } from "@/lib/opening";
 import { getTranslations } from "next-intl/server";
@@ -59,7 +59,7 @@ export async function GuestHeader({
       {orderCount > 0 ? (
         <Link
           href="/table/orders"
-          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-surface/95 px-3.5 text-sm font-semibold text-fg shadow-sm backdrop-blur atelier:shadow-none atelier:ring-1 atelier:ring-border"
+          className="inline-flex h-9 items-center gap-1.5 rounded-md bg-surface/95 px-3.5 text-sm font-semibold text-fg shadow-sm backdrop-blur atelier:shadow-none atelier:ring-1 atelier:ring-border"
         >
           <ReceiptText className="size-4 text-accent-text" aria-hidden="true" />
           {t("ordersLink", { count: orderCount })}

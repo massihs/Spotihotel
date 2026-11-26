@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy, Plus } from "lucide-react";
+import { Copy, Plus } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Sheet, field, useRun } from "@/components/ui/sheet-kit";
@@ -9,7 +9,7 @@ import { cn } from "@/lib/cn";
 import { copyMenuAction, createBranchAction } from "@/app/[locale]/dashboard/[restaurantId]/branches/actions";
 
 const primary =
-  "inline-flex h-10 items-center justify-center gap-2 rounded-full bg-accent px-4 text-sm font-semibold text-accent-fg disabled:opacity-50";
+  "inline-flex h-10 items-center justify-center gap-2 k-cut bg-accent px-4 text-sm font-semibold text-accent-fg disabled:opacity-50";
 
 function Check({
   checked,

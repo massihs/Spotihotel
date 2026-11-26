@@ -14,7 +14,7 @@ import {
   TrendingUp,
   WheatOff,
   type LucideIcon,
-} from "lucide-react";
+} from "@/components/icons";
 import { DishTile } from "@/components/ui/dish-tile";
 import { useTranslations } from "next-intl";
 import type { PricedOptionGroup } from "@/server/modules/pricing";
@@ -97,7 +97,7 @@ export function TagChip({ tag, compact, className }: { tag: string; compact?: bo
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold",
+        "k-cut k-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold",
         meta?.tone ?? "bg-surface-2 text-fg-muted",
         className,
       )}
@@ -130,7 +130,7 @@ export function InCartBadge({ n, className }: { n: number; className?: string })
   return (
     <span
       className={cn(
-        "animate-pop-in grid h-6 min-w-6 place-items-center rounded-full bg-brand-800 px-1.5 text-xs font-bold text-white tabular-nums shadow",
+        "animate-pop-in k-cut k-sm grid h-6 min-w-6 place-items-center bg-brand-800 px-1.5 text-xs font-bold text-white tabular-nums shadow",
         className,
       )}
       aria-label={t("inCart", { n })}

@@ -9,7 +9,7 @@ import {
   Sparkles,
   TrendingUp,
   X,
-} from "lucide-react";
+} from "@/components/icons";
 import { useLocale, useTranslations } from "next-intl";
 import {
   useCallback,
@@ -307,7 +307,7 @@ export function MenuApp({
           <p className="min-w-0 flex-1 truncate font-menu-display text-[17px] font-semibold">
             {outlet?.name ?? restaurantName}
           </p>
-          <span className="shrink-0 rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-semibold text-accent-text">
+          <span className="k-cut k-sm shrink-0 bg-accent-soft px-2.5 py-0.5 text-xs font-semibold text-accent-text">
             {t(room ? "guest.tableBadgeRoom" : "guest.tableBadge", { table: tableLabel })}
           </span>
         </div>
@@ -375,7 +375,7 @@ export function MenuApp({
                     aria-current={active === c.id ? "true" : undefined}
                     onClick={() => setActive(c.id)}
                     className={cn(
-                      "flex h-10 shrink-0 items-center gap-2 rounded-full px-4 text-sm font-semibold whitespace-nowrap transition-[background-color,color,box-shadow] duration-200",
+                      "k-cut flex h-10 shrink-0 items-center gap-2 px-4 text-sm font-semibold whitespace-nowrap transition-[background-color,color,box-shadow] duration-200",
                       "atelier:h-11 atelier:rounded-none atelier:border-b-2 atelier:px-0 atelier:text-[15px] atelier:font-medium atelier:shadow-none atelier:ring-0",
                       active === c.id
                         ? "bg-accent bg-[image:var(--brand-gradient)] text-accent-fg shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_8px_18px_-10px_var(--accent)] atelier:border-fg atelier:bg-transparent atelier:bg-none atelier:text-fg nuit:bg-accent nuit:text-accent-fg"
@@ -405,7 +405,7 @@ export function MenuApp({
             <button
               type="button"
               onClick={() => setFilter("all")}
-              className="inline-flex h-8 items-center gap-1.5 rounded-full bg-accent px-3 font-semibold text-accent-fg"
+              className="k-cut inline-flex h-8 items-center gap-1.5 bg-accent px-3 font-semibold text-accent-fg"
             >
               {filterLabel(filter)}
               <X className="size-3.5" aria-hidden="true" />
@@ -490,7 +490,7 @@ export function MenuApp({
                   setQuery("");
                   setFilter("all");
                 }}
-                className="mt-4 h-11 rounded-full bg-surface-2 px-5 text-sm font-semibold"
+                className="k-cut mt-4 h-11 bg-surface-2 px-5 text-sm font-semibold"
               >
                 {t("guest.showAll")}
               </button>
@@ -514,7 +514,7 @@ export function MenuApp({
                     className={cn(
                       SHADES[ci % SHADES.length],
                       framed &&
-                        "mx-4 overflow-hidden rounded-[1.4rem] border border-border bg-surface shadow-[var(--shadow-card)] sm:mx-0 sm:overflow-visible sm:rounded-none sm:border-0 sm:bg-transparent sm:shadow-none",
+                        "mx-4 overflow-hidden rounded-2xl border border-border bg-surface shadow-[var(--shadow-card)] sm:mx-0 sm:overflow-visible sm:rounded-none sm:border-0 sm:bg-transparent sm:shadow-none",
                     )}
                   >
                     {theme === "doux" ? (
@@ -624,7 +624,7 @@ export function MenuApp({
                       setFiltersOpen(false);
                     }}
                     className={cn(
-                      "inline-flex h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold transition-colors",
+                      "k-cut inline-flex h-11 items-center gap-2 px-4 text-sm font-semibold transition-colors",
                       on ? "bg-accent text-accent-fg" : "bg-surface-2 text-fg",
                     )}
                   >
@@ -881,7 +881,7 @@ function CategoryBanner({
         className={cn(
           "relative isolate overflow-hidden px-4 py-6",
           shade,
-          framed ? "sm:mx-4 sm:rounded-[1.4rem]" : "mx-4 rounded-[1.4rem]",
+          framed ? "sm:mx-4 sm:rounded-2xl" : "mx-4 rounded-2xl",
         )}
       >
         <img
@@ -918,8 +918,8 @@ function CategoryBanner({
         "shade-wash relative isolate overflow-hidden px-4 py-3.5",
         shade,
         framed
-          ? "sm:mx-4 sm:rounded-[1.4rem] sm:ring-1 sm:ring-brand-200/80 sm:ring-inset"
-          : "mx-4 rounded-[1.4rem] ring-1 ring-brand-200/80 ring-inset",
+          ? "sm:mx-4 sm:rounded-2xl sm:ring-1 sm:ring-brand-200/80 sm:ring-inset"
+          : "mx-4 rounded-2xl ring-1 ring-brand-200/80 ring-inset",
       )}
     >
       <span

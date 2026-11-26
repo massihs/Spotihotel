@@ -1,4 +1,4 @@
-import { LogIn, MonitorPlay } from "lucide-react";
+import { LogIn, MonitorPlay } from "@/components/icons";
 import { getTranslations } from "next-intl/server";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -46,7 +46,7 @@ export async function SiteHeader({
         <div className="ms-auto flex items-center gap-2">
           <Link
             href="/demo"
-            className="hidden h-9 items-center gap-1.5 rounded-full px-3 text-sm font-medium whitespace-nowrap text-fg-muted ring-1 ring-border hover:text-fg md:inline-flex"
+            className="hidden h-9 items-center gap-1.5 rounded-md px-3 text-sm font-medium whitespace-nowrap text-fg-muted ring-1 ring-border hover:text-fg md:inline-flex"
           >
             <MonitorPlay className="size-4" aria-hidden="true" />
             {t("ctaDemo")}
@@ -56,7 +56,7 @@ export async function SiteHeader({
           <Link
             href="/login"
             aria-label={t("ctaSecondary")}
-            className="inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-sm font-medium whitespace-nowrap text-fg-muted ring-1 ring-border hover:text-fg sm:ring-0"
+            className="inline-flex h-9 items-center gap-1.5 rounded-md px-3 text-sm font-medium whitespace-nowrap text-fg-muted ring-1 ring-border hover:text-fg sm:ring-0"
           >
             <LogIn className="size-4 sm:hidden" aria-hidden="true" />
             <span className="max-sm:sr-only">{t("ctaSecondary")}</span>

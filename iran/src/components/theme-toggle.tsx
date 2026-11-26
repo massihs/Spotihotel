@@ -1,6 +1,6 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useSyncExternalStore } from "react";
 import { cn } from "@/lib/cn";

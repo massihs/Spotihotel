@@ -12,7 +12,7 @@ import {
   Volume2,
   VolumeX,
   WifiOff,
-} from "lucide-react";
+} from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useTransition } from "react";
 import {
@@ -942,7 +942,7 @@ export function GameBoard({ initial, title }: { initial: GameView; title: string
         {/* Board */}
         <div dir="ltr" className="relative w-full select-none">
           <div
-            className="relative rounded-[18px] p-[7px] shadow-[0_18px_40px_rgba(0,0,0,.55)]"
+            className="relative rounded-2xl p-[7px] shadow-[0_18px_40px_rgba(0,0,0,.55)]"
             style={{ background: WOOD }}
           >
             <div

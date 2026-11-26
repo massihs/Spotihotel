@@ -15,7 +15,7 @@ import {
   UtensilsCrossed,
   Wifi,
   Wine,
-} from "lucide-react";
+} from "@/components/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Link } from "@/i18n/navigation";
@@ -124,13 +124,13 @@ export function StayPortal({
     <div className="mx-auto max-w-xl px-4 pt-4 pb-28">
       <Link
         href="/table"
-        className="mb-3 inline-flex h-9 items-center gap-1.5 rounded-full bg-surface px-3.5 text-sm font-semibold shadow-[var(--shadow-soft)] ring-1 ring-border"
+        className="mb-3 inline-flex h-9 items-center gap-1.5 rounded-md bg-surface px-3.5 text-sm font-semibold shadow-[var(--shadow-soft)] ring-1 ring-border"
       >
         <ArrowRight className="size-4 ltr:rotate-180" aria-hidden="true" />
         {t("backToMenu")}
       </Link>
 
-      <header className="sidebar-shade relative isolate overflow-hidden rounded-[28px] bg-[var(--sidebar)] px-6 pt-6 pb-5 text-[var(--sidebar-fg)] shadow-[var(--shadow-float)]">
+      <header className="sidebar-shade relative isolate overflow-hidden rounded-2xl bg-[var(--sidebar)] px-6 pt-6 pb-5 text-[var(--sidebar-fg)] shadow-[var(--shadow-float)]">
         <span
           aria-hidden="true"
           className="texture-khatam texture-fade-corner [--tex-color:var(--brass)] [--tex-opacity:0.16] [--tex-size:56px]"
@@ -255,7 +255,7 @@ type Access = "open" | "locked" | "none";
 
 const QUICK =
   "flex min-h-[92px] flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-3 text-center text-sm font-semibold shadow-[var(--shadow-soft)] transition active:scale-[0.98]";
-const QUICK_ICON = "shade-fill grid size-10 place-items-center rounded-full [&_svg]:size-[18px]";
+const QUICK_ICON = "shade-fill grid size-10 place-items-center k-cut k-oct [&_svg]:size-[18px]";
 
 /** Each part of the stay page in its own blue. */
 const SECTION_SHADE: Record<string, string> = {
@@ -290,7 +290,7 @@ export function Section({
       )}
     >
       <h2 className="mb-3 flex items-center gap-2.5 text-[17px] font-bold">
-        <span className="shade-fill grid size-9 place-items-center rounded-full [&_svg]:size-[17px]">
+        <span className="shade-fill k-cut k-oct grid size-9 place-items-center [&_svg]:size-[17px]">
           {icon}
         </span>
         <span className="flex-1">{title}</span>
@@ -597,7 +597,7 @@ function Minibar({
                     ) : null}
                     <button
                       type="button"
-                      className="shade-fill grid size-8 place-items-center rounded-full"
+                      className="shade-fill k-cut k-oct grid size-8 place-items-center"
                       onClick={() => step(i.id, 1)}
                       aria-label={t("more", { name: i.name })}
                     >

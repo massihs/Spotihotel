@@ -34,7 +34,7 @@ import {
   UtensilsCrossed,
   WifiOff,
   Wine,
-} from "lucide-react";
+} from "@/components/icons";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -144,7 +144,7 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
                 </Link>
                 <a
                   href={getPathname({ href: "/demo", locale })}
-                  className="inline-flex h-12 items-center rounded-full bg-white/10 px-7 font-semibold text-white ring-1 ring-white/20 transition hover:bg-white/15"
+                  className="inline-flex h-12 items-center rounded-md bg-white/10 px-7 font-semibold text-white ring-1 ring-white/20 transition hover:bg-white/15"
                 >
                   {t("ctaDemo")}
                 </a>
@@ -229,7 +229,7 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
                 {(["noApp", "zarinpal", "invoice"] as const).map((k) => (
                   <span
                     key={k}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold text-accent-text"
+                    className="k-cut k-sm inline-flex items-center gap-1.5 bg-accent-soft px-3 py-1 text-xs font-semibold text-accent-text"
                   >
                     <Check className="size-3.5" strokeWidth={3} aria-hidden="true" />
                     {t(`trust.${k}`)}
@@ -299,7 +299,7 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
 
         {/* ── Made for Iran ───────────────────────────────── */}
         <section className="px-4 py-14 sm:px-6 sm:py-24">
-          <div className="landing-hero relative isolate mx-auto max-w-6xl overflow-hidden rounded-[2rem] px-5 py-10 text-white sm:px-12 sm:py-14">
+          <div className="landing-hero relative isolate mx-auto max-w-6xl overflow-hidden rounded-2xl px-5 py-10 text-white sm:px-12 sm:py-14">
             <div aria-hidden="true" className="landing-grid pointer-events-none absolute inset-0 -z-10" />
             <span aria-hidden="true" className="texture-grain -z-10 [--grain-opacity:0.14]" />
             <SectionTitle eyebrow={t("iran.eyebrow")} title={t("iran.title")} dark />
@@ -453,7 +453,7 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
 
         {/* ── Final CTA ───────────────────────────────────── */}
         <section className="px-4 pb-14 sm:px-6 sm:pb-24">
-          <div className="landing-hero relative isolate mx-auto max-w-6xl overflow-hidden rounded-[2rem] px-6 py-12 text-center text-white sm:px-12 sm:py-16">
+          <div className="landing-hero relative isolate mx-auto max-w-6xl overflow-hidden rounded-2xl px-6 py-12 text-center text-white sm:px-12 sm:py-16">
             <div aria-hidden="true" className="landing-grid pointer-events-none absolute inset-0 -z-10" />
             <span aria-hidden="true" className="texture-grain -z-10 [--grain-opacity:0.14]" />
             <h2 className="font-display mx-auto max-w-2xl text-4xl leading-[1.25] text-balance sm:text-5xl">
@@ -466,7 +466,7 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
               </Link>
               <Link
                 href="/demo"
-                className="inline-flex h-12 items-center gap-2 rounded-full bg-white/10 px-7 font-semibold text-white ring-1 ring-white/20 hover:bg-white/15"
+                className="inline-flex h-12 items-center gap-2 rounded-md bg-white/10 px-7 font-semibold text-white ring-1 ring-white/20 hover:bg-white/15"
               >
                 <MonitorPlay className="size-4" aria-hidden="true" />
                 {t("ctaDemo")}
@@ -709,10 +709,10 @@ function PhoneMock({ t }: { t: T }) {
       <span className="absolute -start-[3px] top-36 h-12 w-[3px] rounded-s bg-[#3a3a3c]" />
       <span className="absolute -start-[3px] top-[13.5rem] h-12 w-[3px] rounded-s bg-[#3a3a3c]" />
       <span className="absolute -end-[3px] top-40 h-16 w-[3px] rounded-e bg-[#3a3a3c]" />
-      <div className="aspect-[9/19.5] rounded-[3rem] bg-gradient-to-b from-[#4a4a4f] via-[#2c2c2e] to-[#4a4a4f] p-[3px] shadow-[0_40px_90px_-25px_rgba(0,0,0,0.8)]">
-        <div className="h-full rounded-[2.85rem] bg-black p-[7px]">
+      <div className="aspect-[9/19.5] rounded-2xl bg-gradient-to-b from-[#4a4a4f] via-[#2c2c2e] to-[#4a4a4f] p-[3px] shadow-[0_40px_90px_-25px_rgba(0,0,0,0.8)]">
+        <div className="h-full rounded-2xl bg-black p-[7px]">
           <div
-            className="relative flex h-full flex-col overflow-hidden rounded-[2.4rem] bg-white text-[#141414]"
+            className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-white text-[#141414]"
             dir="rtl"
           >
             <div className="absolute top-2.5 left-1/2 z-10 h-[26px] w-[88px] -translate-x-1/2 rounded-full bg-black" />

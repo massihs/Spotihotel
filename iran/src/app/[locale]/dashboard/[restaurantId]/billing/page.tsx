@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/dashboard/app-shell";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader } from "@/components/ui/card";
 import { Empty } from "@/components/ui/empty";
-import { Gem, ReceiptText } from "lucide-react";
+import { Gem, ReceiptText } from "@/components/icons";
 import { Link } from "@/i18n/navigation";
 import { formatMoney } from "@/lib/money";
 import { requireRestaurant } from "@/server/auth/current";

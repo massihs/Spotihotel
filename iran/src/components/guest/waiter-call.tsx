@@ -1,6 +1,6 @@
 "use client";
 
-import { BellRing, Check, X } from "lucide-react";
+import { BellRing, Check, X } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { callWaiterAction } from "@/app/[locale]/table/actions";

@@ -1,5 +1,5 @@
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
-import { Target } from "lucide-react";
+import { Target } from "@/components/icons";
 import { Card, CardHeader } from "@/components/ui/card";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";

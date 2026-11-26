@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDays, CalendarRange, Check, Loader2, Music } from "lucide-react";
+import { CalendarDays, CalendarRange, Check, Loader2, Music } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { cn } from "@/lib/cn";

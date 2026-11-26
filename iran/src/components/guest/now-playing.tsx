@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, Music2 } from "lucide-react";
+import { ChevronDown, Music2 } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { nowPlayingAction } from "@/app/[locale]/table/actions";
@@ -127,7 +127,7 @@ export function NowPlaying({ initial, restaurantName }: { initial: Np | null; re
                 <Progress value={position} max={track.durationSec} label={t("nowPlaying")} />
                 <span className="w-9 text-end">{fmt(track.durationSec)}</span>
               </div>
-              <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs">
+              <p className="k-cut k-sm mt-3 inline-flex items-center gap-2 bg-white/10 px-3 py-1 text-xs">
                 <Equalizer on className="h-3 text-[#1ed760]" />
                 {np.theme.name}
               </p>

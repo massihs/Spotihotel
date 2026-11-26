@@ -1,6 +1,6 @@
 "use client";
 
-import { BellRing, Plus, Trash2 } from "lucide-react";
+import { BellRing, Plus, Trash2 } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
@@ -161,7 +161,7 @@ export function GuestCallsPanel({
           type="button"
           onClick={add}
           disabled={list.length >= 28}
-          className="inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-sm font-semibold ring-1 ring-border hover:bg-surface-2"
+          className="inline-flex h-10 items-center gap-1.5 rounded-md px-4 text-sm font-semibold ring-1 ring-border hover:bg-surface-2"
         >
           <Plus className="size-4" aria-hidden="true" />
           {t("add")}
@@ -175,7 +175,7 @@ export function GuestCallsPanel({
               () => setSaved(true),
             )
           }
-          className="h-10 rounded-full bg-accent px-5 text-sm font-semibold text-accent-fg disabled:opacity-50"
+          className="k-cut h-10 bg-accent px-5 text-sm font-semibold text-accent-fg disabled:opacity-50"
         >
           {tc("save")}
         </button>

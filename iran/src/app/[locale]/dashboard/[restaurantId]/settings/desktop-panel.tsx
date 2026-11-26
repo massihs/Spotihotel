@@ -1,6 +1,6 @@
 "use client";
 
-import { Apple, Download, Laptop, MonitorSmartphone, Trash2, WifiOff } from "lucide-react";
+import { Apple, Download, Laptop, MonitorSmartphone, Trash2, WifiOff } from "@/components/icons";
 import { useFormatter, useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
@@ -57,7 +57,7 @@ export function DesktopPanel({
         {downloads.windows ? (
           <a
             href={downloads.windows}
-            className="inline-flex h-11 items-center gap-2 rounded-full bg-fg px-5 text-sm font-semibold text-bg"
+            className="k-cut inline-flex h-11 items-center gap-2 bg-fg px-5 text-sm font-semibold text-bg"
           >
             <Download className="size-4" aria-hidden="true" />
             {t("windows")}
@@ -66,7 +66,7 @@ export function DesktopPanel({
         {downloads.mac ? (
           <a
             href={downloads.mac}
-            className="inline-flex h-11 items-center gap-2 rounded-full bg-surface-2 px-5 text-sm font-semibold ring-1 ring-border"
+            className="inline-flex h-11 items-center gap-2 rounded-md bg-surface-2 px-5 text-sm font-semibold ring-1 ring-border"
           >
             <Apple className="size-4" aria-hidden="true" />
             {t("mac")}

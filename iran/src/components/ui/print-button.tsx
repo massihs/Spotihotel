@@ -1,6 +1,6 @@
 "use client";
 
-import { Printer } from "lucide-react";
+import { Printer } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 
 /** Opens the browser's print dialog (the page's print styles hide the navigation). */

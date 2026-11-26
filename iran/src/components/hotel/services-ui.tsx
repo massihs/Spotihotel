@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Minus, Pencil, Plus, Trash2, X } from "lucide-react";
+import { Check, Minus, Pencil, Plus, Trash2, X } from "@/components/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -370,7 +370,7 @@ export function TicketForm({
                 aria-pressed={settle === s}
                 disabled={s === "room" && !room}
                 className={cn(
-                  "h-9 rounded-full px-3 text-sm font-semibold ring-1 disabled:opacity-40",
+                  "h-9 rounded-md px-3 text-sm font-semibold ring-1 disabled:opacity-40",
                   settle === s ? "bg-accent text-accent-fg ring-transparent" : "bg-surface ring-border",
                 )}
               >
@@ -469,7 +469,7 @@ export function TicketList({
               </div>
               <span
                 className={cn(
-                  "shrink-0 rounded-full px-2.5 py-0.5 text-xs font-bold",
+                  "k-cut k-sm shrink-0 px-2.5 py-0.5 text-xs font-bold",
                   cancelled
                     ? "bg-surface-3 text-fg-muted"
                     : x.status === "ready"
@@ -508,7 +508,7 @@ export function TicketList({
             <div className="flex flex-wrap items-center gap-1.5">
               <span
                 className={cn(
-                  "rounded-full px-2.5 py-0.5 text-xs font-semibold",
+                  "k-cut k-sm px-2.5 py-0.5 text-xs font-semibold",
                   x.settlement === "pending" ? "bg-warning-soft text-fg" : "bg-surface-2 text-fg-muted",
                 )}
               >

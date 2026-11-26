@@ -13,7 +13,7 @@ import {
   ThumbsUp,
   UserRound,
   X,
-} from "lucide-react";
+} from "@/components/icons";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 
@@ -300,7 +300,7 @@ function BotMessage({
           type="button"
           disabled={pending}
           onClick={() => start(async () => void (await offer("human")))}
-          className="mt-2.5 inline-flex h-8 items-center gap-1.5 rounded-full bg-brand-700 px-3 text-xs font-bold text-white hover:bg-brand-800 disabled:opacity-60"
+          className="k-cut k-sm mt-2.5 inline-flex h-8 items-center gap-1.5 bg-brand-700 px-3 text-xs font-bold text-white hover:bg-brand-800 disabled:opacity-60"
         >
           <UserRound className="size-3.5" aria-hidden="true" />
           {t("talkToHuman")}

@@ -1,4 +1,4 @@
-import { LogOut } from "lucide-react";
+import { LogOut } from "@/components/icons";
 import { ShadedMain } from "./shaded-main";
 import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
@@ -97,7 +97,7 @@ export async function AppShell({
         <form action={logoutAction}>
           <button
             type="submit"
-            className="inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-sm font-medium whitespace-nowrap text-fg-muted ring-1 ring-border hover:bg-surface-2 hover:text-fg"
+            className="inline-flex h-9 items-center gap-1.5 rounded-md px-3 text-sm font-medium whitespace-nowrap text-fg-muted ring-1 ring-border hover:bg-surface-2 hover:text-fg"
           >
             <LogOut className="size-4" aria-hidden="true" />
             {t("common.logout")}
@@ -255,7 +255,7 @@ export function PageHeader({
   icon?: ReactNode | false;
 }) {
   return (
-    <div className="page-hero relative isolate mb-5 overflow-hidden rounded-[1.6rem] border border-border bg-surface px-4 py-4 shadow-[var(--shadow-card)] sm:px-6 sm:py-5 lg:mb-7 print:mb-4 print:border-0 print:p-0 print:shadow-none">
+    <div className="page-hero relative isolate mb-5 overflow-hidden rounded-2xl border border-border bg-surface px-4 py-4 shadow-[var(--shadow-card)] sm:px-6 sm:py-5 lg:mb-7 print:mb-4 print:border-0 print:p-0 print:shadow-none">
       <span
         aria-hidden="true"
         className="texture-khatam texture-fade-corner [--tex-color:var(--shade,var(--accent))] [--tex-opacity:0.1] [--tex-size:56px] print:hidden"

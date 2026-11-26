@@ -5,7 +5,7 @@ export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-        "relative rounded-2xl border border-border bg-surface shadow-[var(--shadow-card)]",
+        "relative rounded-lg border border-border bg-surface shadow-[var(--shadow-card)]",
         className,
       )}
       {...props}
@@ -31,7 +31,7 @@ export function CardHeader({
         <h2 className="flex items-center gap-2 text-[15px] font-bold text-fg">
           {title}
           {count != null ? (
-            <span className="shade-soft grid h-6 min-w-6 place-items-center rounded-full px-2 text-xs font-bold tabular-nums">
+            <span className="shade-soft k-cut k-sm grid h-6 min-w-6 place-items-center px-2 text-xs font-bold tabular-nums">
               {count}
             </span>
           ) : null}
@@ -123,7 +123,7 @@ export function StatCard({
         {icon ? (
           <span
             className={cn(
-              "grid size-9 shrink-0 place-items-center rounded-xl [&_svg]:size-[18px]",
+              "k-cut k-sm grid size-9 shrink-0 place-items-center [&_svg]:size-[18px]",
               solid ? "bg-current/15" : colored ? TONE_TILE[colored] : "shade-fill",
             )}
             aria-hidden="true"

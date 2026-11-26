@@ -8,7 +8,7 @@ import {
   ShoppingBag,
   Star,
   Ticket,
-} from "lucide-react";
+} from "@/components/icons";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
@@ -182,7 +182,7 @@ async function Place({ params }: Pick<Props, "params">) {
                 href={mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-10 items-center gap-1.5 rounded-full bg-surface-2 px-4 text-sm font-bold hover:bg-surface-3"
+                className="k-cut inline-flex h-10 items-center gap-1.5 bg-surface-2 px-4 text-sm font-bold hover:bg-surface-3"
               >
                 <Navigation className="size-4" aria-hidden="true" />
                 {t("profile.directions")}
@@ -191,7 +191,7 @@ async function Place({ params }: Pick<Props, "params">) {
             {place.phone ? (
               <a
                 href={`tel:${place.phone.replace(/[^+0-9]/g, "")}`}
-                className="inline-flex h-10 items-center gap-1.5 rounded-full bg-surface-2 px-4 text-sm font-bold hover:bg-surface-3"
+                className="k-cut inline-flex h-10 items-center gap-1.5 bg-surface-2 px-4 text-sm font-bold hover:bg-surface-3"
                 dir="ltr"
               >
                 <Phone className="size-4" aria-hidden="true" />
@@ -257,7 +257,7 @@ async function Place({ params }: Pick<Props, "params">) {
           <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-4 pb-6 text-white sm:px-6">
             <Link
               href="/restaurants"
-              className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-black/35 px-3 py-1.5 text-xs font-semibold backdrop-blur hover:bg-black/50"
+              className="k-cut k-sm mb-4 inline-flex items-center gap-1.5 bg-black/35 px-3 py-1.5 text-xs font-semibold backdrop-blur hover:bg-black/50"
             >
               <ArrowRight className="size-3.5 ltr:rotate-180" aria-hidden="true" />
               {t("profile.back")}
@@ -308,7 +308,7 @@ async function Place({ params }: Pick<Props, "params">) {
                     <li key={c}>
                       <Link
                         href={`/restaurants?theme=${c}`}
-                        className="inline-flex h-9 items-center gap-1.5 rounded-full bg-surface px-3.5 text-sm font-semibold ring-1 ring-border hover:ring-border-strong"
+                        className="inline-flex h-9 items-center gap-1.5 rounded-md bg-surface px-3.5 text-sm font-semibold ring-1 ring-border hover:ring-border-strong"
                       >
                         <Icon className="size-4 text-accent-text" aria-hidden="true" />
                         {t(`cuisine.${c}`)}
@@ -317,7 +317,7 @@ async function Place({ params }: Pick<Props, "params">) {
                   );
                 })}
                 {place.priceLevel ? (
-                  <li className="inline-flex h-9 items-center rounded-full bg-surface px-3.5 text-sm ring-1 ring-border">
+                  <li className="inline-flex h-9 items-center rounded-md bg-surface px-3.5 text-sm ring-1 ring-border">
                     <PriceLevel level={place.priceLevel} label={t(`price.${place.priceLevel}`)} />
                   </li>
                 ) : null}
@@ -345,7 +345,7 @@ async function Place({ params }: Pick<Props, "params">) {
                     <a
                       key={c.id}
                       href={`#cat-${c.id}`}
-                      className="inline-flex h-9 shrink-0 items-center rounded-full bg-surface-2 px-4 text-sm font-semibold whitespace-nowrap hover:bg-surface-3"
+                      className="k-cut inline-flex h-9 shrink-0 items-center bg-surface-2 px-4 text-sm font-semibold whitespace-nowrap hover:bg-surface-3"
                     >
                       {c.name}
                     </a>

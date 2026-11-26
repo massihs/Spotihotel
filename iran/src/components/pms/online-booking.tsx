@@ -13,7 +13,7 @@ import {
   Plus,
   ShieldCheck,
   Users,
-} from "lucide-react";
+} from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
@@ -157,7 +157,7 @@ export function OnlineBooking({
             <p className="mt-1 text-fg-muted">{t("precheckinBody")}</p>
             <a
               href={booked.precheckin}
-              className="mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-full bg-brand-700 px-4 font-semibold text-white hover:bg-brand-800"
+              className="k-cut mt-3 inline-flex h-10 w-full items-center justify-center gap-2 bg-brand-700 px-4 font-semibold text-white hover:bg-brand-800"
             >
               <ShieldCheck className="size-4" aria-hidden="true" />
               {t("precheckinCta")}
@@ -283,7 +283,7 @@ export function OnlineBooking({
                           {rt.amenities.slice(0, 8).map((a) => (
                             <li
                               key={a}
-                              className="rounded-full bg-surface-2 px-2.5 py-0.5 text-xs text-fg-muted"
+                              className="k-cut k-sm bg-surface-2 px-2.5 py-0.5 text-xs text-fg-muted"
                             >
                               {a}
                             </li>
@@ -293,7 +293,7 @@ export function OnlineBooking({
                     </div>
                   </div>
                   {rt.offers.length && rt.left <= 3 ? (
-                    <span className="rounded-full bg-warning-soft px-2.5 py-1 text-xs font-semibold">
+                    <span className="k-cut k-sm bg-warning-soft px-2.5 py-1 text-xs font-semibold">
                       {t("lastRooms", { n: rt.left })}
                     </span>
                   ) : null}
@@ -535,7 +535,7 @@ function GuestStep({
               aria-checked={foreign === f}
               onClick={() => setForeign(f)}
               className={cn(
-                "h-9 rounded-full px-4 text-sm font-semibold ring-1 transition",
+                "h-9 rounded-md px-4 text-sm font-semibold ring-1 transition",
                 foreign === f
                   ? "bg-brand-700 text-white ring-brand-700"
                   : "bg-surface text-fg-muted ring-border hover:bg-brand-50",

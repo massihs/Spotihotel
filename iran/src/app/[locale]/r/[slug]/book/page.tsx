@@ -1,4 +1,4 @@
-import { ArrowRight, MapPin, Star } from "lucide-react";
+import { ArrowRight, MapPin, Star } from "@/components/icons";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";

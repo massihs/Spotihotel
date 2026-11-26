@@ -1,4 +1,4 @@
-import { QrCode } from "lucide-react";
+import { QrCode } from "@/components/icons";
 import { getTranslations } from "next-intl/server";
 
 export function GuestSkeleton() {

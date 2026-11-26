@@ -22,7 +22,7 @@ import {
   Trash2,
   UtensilsCrossed,
   X,
-} from "lucide-react";
+} from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { usePref, writePref } from "@/components/ui/use-pref";
@@ -460,7 +460,7 @@ export function PosTerminal({
                 type="button"
                 onClick={() => setUsePoints((u) => !u)}
                 className={cn(
-                  "shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold",
+                  "k-cut k-sm shrink-0 px-2.5 py-1 text-xs font-semibold",
                   usePoints ? "bg-warning text-white" : "bg-surface ring-1 ring-warning/40",
                 )}
               >
@@ -684,7 +684,7 @@ export function PosTerminal({
                     {money(forChannel(p, channel).priceCents)}
                   </span>
                   {inTicket ? (
-                    <span className="absolute end-2 top-2 grid h-6 min-w-6 place-items-center rounded-full bg-accent px-1.5 text-xs font-bold text-accent-fg tabular-nums">
+                    <span className="k-cut k-sm absolute end-2 top-2 grid h-6 min-w-6 place-items-center bg-accent px-1.5 text-xs font-bold text-accent-fg tabular-nums">
                       {inTicket}
                     </span>
                   ) : null}
@@ -705,7 +705,7 @@ export function PosTerminal({
                     <DishTile icon={catIcon.get(p.categoryId) ?? null} className="size-full" />
                   )}
                   {lines.some((l) => l.product.id === p.id) ? (
-                    <span className="absolute end-2 top-2 grid h-6 min-w-6 place-items-center rounded-full bg-accent px-1.5 text-xs font-bold text-accent-fg tabular-nums">
+                    <span className="k-cut k-sm absolute end-2 top-2 grid h-6 min-w-6 place-items-center bg-accent px-1.5 text-xs font-bold text-accent-fg tabular-nums">
                       {lines.filter((l) => l.product.id === p.id).reduce((s, l) => s + l.quantity, 0)}
                     </span>
                   ) : null}

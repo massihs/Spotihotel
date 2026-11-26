@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { AlertTriangle, ArrowLeft, LayoutGrid, ReceiptText, Store } from "lucide-react";
+import { AlertTriangle, ArrowLeft, LayoutGrid, ReceiptText, Store } from "@/components/icons";
 import { getLocale, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { ImportMenu, NewBranchButton } from "@/components/branches/branches-ui";
@@ -96,7 +96,7 @@ async function Branches({ params }: Pick<Props, "params">) {
                 {!r.isCurrent ? (
                   <Link
                     href={`/dashboard/${r.id}`}
-                    className="inline-flex h-8 shrink-0 items-center gap-1 rounded-full px-3 text-xs font-semibold ring-1 ring-border hover:bg-surface-2"
+                    className="inline-flex h-8 shrink-0 items-center gap-1 rounded-md px-3 text-xs font-semibold ring-1 ring-border hover:bg-surface-2"
                   >
                     {t("open")}
                     <ArrowLeft className="size-3.5 ltr:rotate-180" />

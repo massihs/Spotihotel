@@ -1,6 +1,6 @@
 "use client";
 
-import { Coins, Plus, RefreshCw, Trash2 } from "lucide-react";
+import { Coins, Plus, RefreshCw, Trash2 } from "@/components/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -79,7 +79,7 @@ export function ShieldForm({
     <form action={submit} className="space-y-6">
       <section className="rounded-2xl border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
         <h2 className="flex items-center gap-2 font-bold">
-          <span className="shade-fill grid size-9 place-items-center rounded-xl">
+          <span className="shade-fill k-cut grid size-9 place-items-center">
             <Coins className="size-[1.1rem]" aria-hidden="true" />
           </span>
           {t("ratesTitle")}

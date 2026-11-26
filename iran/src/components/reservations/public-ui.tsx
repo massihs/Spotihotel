@@ -1,6 +1,6 @@
 "use client";
 
-import { Minus, Plus, Ticket } from "lucide-react";
+import { Minus, Plus, Ticket } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "@/i18n/navigation";

@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { getLocale, getTranslations } from "next-intl/server";
-import { CalendarPlus, Search } from "lucide-react";
+import { CalendarPlus, Search } from "@/components/icons";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { buttonClasses } from "@/components/ui/button";
 import { StatusText } from "@/components/pms/status-text";

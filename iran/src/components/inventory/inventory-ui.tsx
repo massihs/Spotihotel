@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, ClipboardCheck, Package, Pencil, Plus, Trash2, Truck, X } from "lucide-react";
+import { AlertTriangle, ClipboardCheck, Package, Pencil, Plus, Trash2, Truck, X } from "@/components/icons";
 import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
 import { useMoney } from "@/components/ui/use-money";
@@ -72,7 +72,7 @@ export function StockTable({
           <button
             type="button"
             onClick={() => setEdit("new")}
-            className="ms-auto inline-flex h-10 items-center gap-2 rounded-full bg-accent px-4 text-sm font-semibold text-accent-fg"
+            className="k-cut ms-auto inline-flex h-10 items-center gap-2 bg-accent px-4 text-sm font-semibold text-accent-fg"
           >
             <Plus className="size-4" />
             {t("newItem")}
@@ -127,7 +127,7 @@ export function StockTable({
                     <button
                       type="button"
                       onClick={() => setAdjust({ item: i, kind: "count" })}
-                      className="inline-flex h-9 items-center gap-1 rounded-full px-3 text-sm ring-1 ring-border"
+                      className="inline-flex h-9 items-center gap-1 rounded-md px-3 text-sm ring-1 ring-border"
                       title={t("count")}
                     >
                       <ClipboardCheck className="size-4" />
@@ -136,7 +136,7 @@ export function StockTable({
                     <button
                       type="button"
                       onClick={() => setAdjust({ item: i, kind: "waste" })}
-                      className="inline-flex h-9 items-center gap-1 rounded-full px-3 text-sm ring-1 ring-border"
+                      className="inline-flex h-9 items-center gap-1 rounded-md px-3 text-sm ring-1 ring-border"
                       title={t("waste")}
                     >
                       <Trash2 className="size-4" />
@@ -389,7 +389,7 @@ export function PurchaseForm({
         type="button"
         onClick={() => setOpen(true)}
         disabled={!items.length}
-        className="inline-flex h-10 items-center gap-2 rounded-full bg-accent px-4 text-sm font-semibold text-accent-fg disabled:opacity-40"
+        className="k-cut inline-flex h-10 items-center gap-2 bg-accent px-4 text-sm font-semibold text-accent-fg disabled:opacity-40"
       >
         <Truck className="size-4" />
         {t("newPurchase")}
@@ -644,7 +644,7 @@ export function RecipeList({
                 {margin != null ? (
                   <span
                     className={cn(
-                      "rounded-full px-2.5 py-0.5 text-xs font-bold",
+                      "k-cut k-sm px-2.5 py-0.5 text-xs font-bold",
                       margin >= 60
                         ? "bg-success-soft text-success"
                         : margin >= 30

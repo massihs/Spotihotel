@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, ChefHat, ChevronDown, CupSoda, Monitor, Printer, Sparkles } from "lucide-react";
+import { AlertTriangle, ChefHat, ChevronDown, CupSoda, Monitor, Printer, Sparkles } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useOptimistic, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";

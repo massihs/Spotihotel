@@ -1,6 +1,6 @@
 "use client";
 
-import { Bike, Check, Clock, HandCoins, MapPin, Phone, Plus, Trash2, Wallet } from "lucide-react";
+import { Bike, Check, Clock, HandCoins, MapPin, Phone, Plus, Trash2, Wallet } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Sheet, field, num, useRun } from "@/components/ui/sheet-kit";
@@ -261,7 +261,7 @@ export function CourierSettlement({
                   return res;
                 })
               }
-              className="inline-flex h-9 items-center gap-1.5 rounded-full bg-accent px-3 text-sm font-semibold text-accent-fg disabled:opacity-40"
+              className="k-cut inline-flex h-9 items-center gap-1.5 bg-accent px-3 text-sm font-semibold text-accent-fg disabled:opacity-40"
             >
               <Wallet className="size-4" />
               {t("settle")}
@@ -314,7 +314,7 @@ export function DeliverySettings({
             <button
               type="button"
               onClick={() => setZoneEdit("new")}
-              className="inline-flex h-9 items-center gap-1.5 rounded-full bg-accent px-3 text-sm font-semibold text-accent-fg"
+              className="k-cut inline-flex h-9 items-center gap-1.5 bg-accent px-3 text-sm font-semibold text-accent-fg"
             >
               <Plus className="size-4" />
               {t("newZone")}
@@ -525,7 +525,7 @@ function ZoneForm({
               onClick={() =>
                 window.confirm(t("deleteZone")) && run(() => deleteZoneAction(rid, zone.id), onClose)
               }
-              className="inline-flex h-11 items-center gap-1.5 rounded-full px-4 text-sm font-semibold text-danger ring-1 ring-danger/30"
+              className="inline-flex h-11 items-center gap-1.5 rounded-md px-4 text-sm font-semibold text-danger ring-1 ring-danger/30"
             >
               <Trash2 className="size-4" />
             </button>

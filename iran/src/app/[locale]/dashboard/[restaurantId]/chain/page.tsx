@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { BedDouble, Building2, Gauge, LogIn, LogOut, Search, TrendingUp, Users } from "lucide-react";
+import { BedDouble, Building2, Gauge, LogIn, LogOut, Search, TrendingUp, Users } from "@/components/icons";
 import { PageHeader } from "@/components/dashboard/app-shell";
 import { StatCard } from "@/components/ui/card";
 import { buttonClasses } from "@/components/ui/button";

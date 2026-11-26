@@ -15,7 +15,7 @@ import {
   Scale,
   ShieldCheck,
   Store,
-} from "lucide-react";
+} from "@/components/icons";
 import type { ReactNode } from "react";
 import { Card, CardHeader } from "@/components/ui/card";
 import { requireRestaurant } from "@/server/auth/current";

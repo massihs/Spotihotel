@@ -1,4 +1,4 @@
-import { FileDown, TableProperties } from "lucide-react";
+import { FileDown, TableProperties } from "@/components/icons";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Card } from "@/components/ui/card";
 import { Empty } from "@/components/ui/empty";

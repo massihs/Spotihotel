@@ -1,6 +1,6 @@
 "use client";
 
-import { BedDouble, Building2, CalendarRange, Sparkles, Tags, Wine } from "lucide-react";
+import { BedDouble, Building2, CalendarRange, Sparkles, Tags, Wine } from "@/components/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -52,7 +52,7 @@ function Row({
   return (
     <li className="row-hover flex flex-wrap items-center gap-3 px-4 py-3.5">
       {icon ? (
-        <span className="shade-soft grid size-10 shrink-0 place-items-center rounded-xl [&_svg]:size-5">
+        <span className="shade-soft k-cut grid size-10 shrink-0 place-items-center [&_svg]:size-5">
           {icon}
         </span>
       ) : null}
@@ -404,7 +404,7 @@ export function RatePlansPanel({
                 <Code>{p.code}</Code>
                 {p.name}{" "}
                 {p.isDefault ? (
-                  <span className="ms-1 rounded-full bg-accent-soft px-2 py-0.5 text-xs text-accent-text">
+                  <span className="k-cut k-sm ms-1 bg-accent-soft px-2 py-0.5 text-xs text-accent-text">
                     {t("default")}
                   </span>
                 ) : null}

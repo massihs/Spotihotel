@@ -1,6 +1,6 @@
 "use client";
 
-import { Flower2 } from "lucide-react";
+import { Flower2 } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
@@ -94,7 +94,7 @@ export function WellnessBoard({
                     className="hidden size-24 shrink-0 rounded-xl object-cover ring-1 ring-border sm:block"
                   />
                 ) : (
-                  <span className="shade-soft hidden size-24 shrink-0 place-items-center rounded-xl sm:grid">
+                  <span className="shade-soft k-cut hidden size-24 shrink-0 place-items-center sm:grid">
                     <Flower2 className="size-7" aria-hidden="true" />
                   </span>
                 )}

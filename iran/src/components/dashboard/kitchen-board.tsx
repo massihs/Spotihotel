@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { ChefHat, Maximize2, Moon, Printer, Settings2, Sun } from "lucide-react";
+import { ChefHat, Maximize2, Moon, Printer, Settings2, Sun } from "@/components/icons";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
@@ -205,7 +205,7 @@ export function KitchenBoard({
                   ) : null}
                   <span
                     className={cn(
-                      "grid h-6 min-w-6 place-items-center rounded-full px-1.5 text-xs font-bold tabular-nums",
+                      "k-cut k-sm grid h-6 min-w-6 place-items-center px-1.5 text-xs font-bold tabular-nums",
                       list.length ? "shade-fill" : "bg-surface text-fg-subtle",
                     )}
                   >
@@ -253,7 +253,7 @@ export function KitchenBoard({
                       aria-hidden="true"
                       className="texture-khatam texture-fade-b [--tex-color:var(--shade)] [--tex-opacity:0.08] [--tex-size:44px]"
                     />
-                    <span className="shade-soft relative mx-auto mb-2 grid size-10 place-items-center rounded-xl">
+                    <span className="shade-soft k-cut relative mx-auto mb-2 grid size-10 place-items-center">
                       <ChefHat className="size-5" aria-hidden="true" />
                     </span>
                     <span className="relative">{t("empty")}</span>

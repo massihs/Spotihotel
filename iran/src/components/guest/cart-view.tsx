@@ -13,7 +13,7 @@ import {
   Ticket,
   UserRound,
   X,
-} from "lucide-react";
+} from "@/components/icons";
 import { useFormatter, useTranslations } from "next-intl";
 import { useActionState, useEffect, useOptimistic, useRef, useState, useTransition } from "react";
 import {
@@ -109,7 +109,7 @@ export function CartView({
           <p className="mt-1 text-fg-muted">{t("guest.cartEmptyBody")}</p>
           <Link
             href="/table"
-            className="mt-7 inline-flex h-12 items-center rounded-full bg-accent px-7 font-bold text-accent-fg"
+            className="k-cut mt-7 inline-flex h-12 items-center bg-accent px-7 font-bold text-accent-fg"
           >
             {t("guest.backToMenu")}
           </Link>
@@ -596,12 +596,9 @@ function CartLine({ line: l, money }: { line: CartLineView; money: (c: number) =
                 autoFocus
                 aria-label={t("note")}
                 placeholder={t("notePlaceholder")}
-                className="h-10 min-w-0 flex-1 rounded-full bg-surface-2 px-4 text-[16px] focus-visible:ring-2 focus-visible:ring-ink focus-visible:outline-none"
+                className="h-10 min-w-0 flex-1 rounded-md bg-surface-2 px-4 text-[16px] focus-visible:ring-2 focus-visible:ring-ink focus-visible:outline-none"
               />
-              <button
-                type="submit"
-                className="h-10 rounded-full bg-accent px-4 text-sm font-bold text-accent-fg"
-              >
+              <button type="submit" className="k-cut h-10 bg-accent px-4 text-sm font-bold text-accent-fg">
                 {t("save")}
               </button>
             </form>

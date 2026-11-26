@@ -1,6 +1,6 @@
 "use client";
 
-import { Ban, FileCheck2, Percent, Printer, Shuffle } from "lucide-react";
+import { Ban, FileCheck2, Percent, Printer, Shuffle } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
@@ -232,7 +232,7 @@ export function FolioPanel({
             <Link
               href={`/dashboard/${restaurantId}/stays/${stayId}/folio/${f.id}`}
               target="_blank"
-              className="ms-auto inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-sm font-semibold text-fg-muted ring-1 ring-border hover:bg-surface"
+              className="ms-auto inline-flex h-8 items-center gap-1.5 rounded-md px-3 text-sm font-semibold text-fg-muted ring-1 ring-border hover:bg-surface"
             >
               <Printer className="size-4" aria-hidden="true" />
               {t("print")}
@@ -684,7 +684,7 @@ function InvoiceButton({
           href={`/invoice/${issued.publicToken}`}
           target="_blank"
           rel="noopener"
-          className="inline-flex h-8 items-center gap-1.5 rounded-full bg-success-soft px-3 text-sm font-semibold text-success"
+          className="k-cut inline-flex h-8 items-center gap-1.5 bg-success-soft px-3 text-sm font-semibold text-success"
         >
           <FileCheck2 className="size-4" aria-hidden="true" />
           {t("invoiceIssued", { number: issued.number })}

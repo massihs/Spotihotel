@@ -1,6 +1,6 @@
 "use client";
 
-import { BedDouble, CheckCircle2, Coffee, Sparkles } from "lucide-react";
+import { BedDouble, CheckCircle2, Coffee, Sparkles } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";

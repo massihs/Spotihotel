@@ -1,6 +1,6 @@
 "use client";
 
-import { LoaderCircle } from "lucide-react";
+import { LoaderCircle } from "@/components/icons";
 import { useLinkStatus } from "next/link";
 import { cn } from "@/lib/cn";
 

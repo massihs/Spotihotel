@@ -1,4 +1,4 @@
-import { CalendarCheck, MapPin, Star, UtensilsCrossed } from "lucide-react";
+import { CalendarCheck, MapPin, Star, UtensilsCrossed } from "@/components/icons";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/config";
@@ -49,7 +49,7 @@ export async function RestaurantCard({
         <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent" />
         <OpenPill r={r} t={t} />
         {r.distanceKm != null ? (
-          <span className="absolute end-3 top-3 rounded-full bg-black/55 px-2.5 py-1 text-xs font-bold text-white tabular-nums backdrop-blur">
+          <span className="k-cut k-sm absolute end-3 top-3 bg-black/55 px-2.5 py-1 text-xs font-bold text-white tabular-nums backdrop-blur">
             {distanceLabel(r.distanceKm, t, format)}
           </span>
         ) : null}
@@ -97,7 +97,7 @@ export async function RestaurantCard({
               return (
                 <li
                   key={c}
-                  className="inline-flex items-center gap-1 rounded-full bg-surface-2 px-2.5 py-1 text-xs font-semibold"
+                  className="k-cut k-sm inline-flex items-center gap-1 bg-surface-2 px-2.5 py-1 text-xs font-semibold"
                 >
                   <Icon className="size-3.5 text-accent-text" aria-hidden="true" />
                   {t(`cuisine.${c}`)}
@@ -134,14 +134,14 @@ export async function RestaurantCard({
         <div className="relative z-10 mt-auto flex gap-2 pt-2">
           <Link
             href={`/r/${r.slug}`}
-            className="inline-flex h-10 flex-1 items-center justify-center rounded-full bg-surface-2 px-4 text-sm font-bold hover:bg-surface-3"
+            className="k-cut inline-flex h-10 flex-1 items-center justify-center bg-surface-2 px-4 text-sm font-bold hover:bg-surface-3"
           >
             {t("view")}
           </Link>
           {r.reservable ? (
             <Link
               href={bookHref}
-              className="inline-flex h-10 flex-1 items-center justify-center gap-1.5 rounded-full bg-accent px-4 text-sm font-bold text-accent-fg hover:bg-accent-hover"
+              className="k-cut inline-flex h-10 flex-1 items-center justify-center gap-1.5 bg-accent px-4 text-sm font-bold text-accent-fg hover:bg-accent-hover"
             >
               <CalendarCheck className="size-4" aria-hidden="true" />
               {t("book")}

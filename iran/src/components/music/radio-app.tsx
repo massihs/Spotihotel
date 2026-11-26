@@ -23,7 +23,7 @@ import {
   SkipForward,
   SquarePlay,
   X,
-} from "lucide-react";
+} from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { LanguageSwitcher } from "@/components/language-switcher";
@@ -484,7 +484,7 @@ function Chip({ on, onClick, children }: { on: boolean; onClick: () => void; chi
       onClick={onClick}
       aria-pressed={on}
       className={cn(
-        "h-8 shrink-0 rounded-full px-3 text-sm font-medium transition-colors",
+        "k-cut h-8 shrink-0 px-3 text-sm font-medium transition-colors",
         on ? "bg-white text-black" : "bg-white/10 text-white hover:bg-white/20",
       )}
     >
@@ -537,7 +537,7 @@ function TopBar({
         >
           <Home className={cn("size-6", view.kind === "home" && "fill-current")} aria-hidden="true" />
         </button>
-        <label className="group flex h-12 flex-1 items-center gap-3 rounded-full bg-[#1f1f1f] px-3 ring-white/80 transition-colors focus-within:ring-2 hover:bg-[#2a2a2a] hover:ring-1 hover:ring-white/20">
+        <label className="group flex h-12 flex-1 items-center gap-3 rounded-md bg-[#1f1f1f] px-3 ring-white/80 transition-colors focus-within:ring-2 hover:bg-[#2a2a2a] hover:ring-1 hover:ring-white/20">
           <Search
             className="size-6 shrink-0 text-[#b3b3b3] group-focus-within:text-white"
             aria-hidden="true"
@@ -570,7 +570,7 @@ function TopBar({
       <div className="flex items-center gap-2">
         <Link
           href="/"
-          className="hidden h-8 items-center rounded-full px-3 text-sm font-bold text-[#b3b3b3] hover:scale-105 hover:text-white xl:inline-flex"
+          className="k-cut hidden h-8 items-center px-3 text-sm font-bold text-[#b3b3b3] hover:scale-105 hover:text-white xl:inline-flex"
         >
           {t("forRestaurants")}
         </Link>
@@ -951,7 +951,7 @@ function SearchView({ ctx, query, setQuery }: { ctx: Ctx; query: string; setQuer
                     {top.name}
                   </p>
                   <p className="mt-1 text-sm text-[#b3b3b3]">
-                    <span className="me-2 rounded-full bg-black/40 px-3 py-1 text-xs font-bold text-white">
+                    <span className="k-cut k-sm me-2 bg-black/40 px-3 py-1 text-xs font-bold text-white">
                       {t("radioType")}
                     </span>
                     Spotihotel
@@ -1138,7 +1138,7 @@ function StationView({
             onClick={() => lib.toggleFollow(s.slug)}
             aria-pressed={followed}
             className={cn(
-              "h-8 rounded-full border px-4 text-sm font-bold transition-transform hover:scale-105",
+              "h-8 rounded-md border px-4 text-sm font-bold transition-transform hover:scale-105",
               followed ? "border-white text-white" : "border-white/50 text-white hover:border-white",
             )}
           >
@@ -1310,7 +1310,7 @@ function LikedView({ ctx }: { ctx: Ctx }) {
             <button
               type="button"
               onClick={() => ctx.go({ kind: "search" })}
-              className="mt-8 h-12 rounded-full bg-white px-8 font-bold text-black hover:scale-105"
+              className="k-cut mt-8 h-12 bg-white px-8 font-bold text-black hover:scale-105"
             >
               {t("browseAll")}
             </button>
@@ -1390,7 +1390,7 @@ function NowPanel({ ctx, s, live, close }: { ctx: Ctx; s: Station; live: Live | 
             <button
               type="button"
               onClick={() => ctx.lib.toggleFollow(s.slug)}
-              className="mt-4 h-8 rounded-full border border-white/50 px-4 text-sm font-bold hover:scale-105 hover:border-white"
+              className="mt-4 h-8 rounded-md border border-white/50 px-4 text-sm font-bold hover:scale-105 hover:border-white"
             >
               {ctx.lib.followed.includes(s.slug) ? t("following") : t("follow")}
             </button>

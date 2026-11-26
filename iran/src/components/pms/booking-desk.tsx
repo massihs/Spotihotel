@@ -16,7 +16,7 @@ import {
   Users,
   UserRound,
   X,
-} from "lucide-react";
+} from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "@/i18n/navigation";
