@@ -356,7 +356,7 @@ export function SidebarNav({
                   </span>
                   <span
                     className={cn(
-                      "min-w-0 flex-1 truncate text-[12.5px] font-bold tracking-wide transition-colors",
+                      "min-w-0 flex-1 truncate text-[15px] font-bold tracking-wide transition-colors",
                       hasActive ? "text-sidebar-fg" : "text-sidebar-muted group-hover/h:text-sidebar-fg",
                     )}
                   >
@@ -366,7 +366,7 @@ export function SidebarNav({
                     <Badge n={badge} />
                   ) : (
                     <span
-                      className="k-cut k-sm bg-white/[0.06] px-1.5 py-0.5 text-[10.5px] text-sidebar-muted tabular-nums"
+                      className="k-cut k-sm bg-white/[0.06] px-1.5 py-0.5 text-[12px] text-sidebar-muted tabular-nums"
                       title={t("sectionCount", { n: section.items.length })}
                     >
                       {section.items.length}
@@ -413,7 +413,7 @@ export function SidebarNav({
                             }
                           }}
                           className={cn(
-                            "group k-cut k-sm relative flex h-9 items-center gap-3 px-2.5 text-[13.5px] font-medium transition-[background-color,color,transform] duration-150 active:scale-[0.985]",
+                            "group k-cut k-sm relative flex h-10 items-center gap-3 px-2.5 text-[15px] font-medium transition-[background-color,color,transform] duration-150 active:scale-[0.985]",
                             active
                               ? "bg-white/[0.09] text-sidebar-fg shadow-[inset_0_0_0_1px_rgb(255_255_255/0.08),0_6px_16px_-10px_rgb(0_0_0/0.5)]"
                               : "text-sidebar-muted hover:bg-white/[0.05] hover:text-sidebar-fg",
@@ -520,7 +520,7 @@ function SubNav({ item, query }: { item: NavItem; query: string }) {
         return (
           <Fragment key={c.href}>
             {heading ? (
-              <p className="px-2 pt-2 pb-1 text-[10.5px] font-bold tracking-wide text-[var(--brass)]/80 first:pt-0.5">
+              <p className="px-2 pt-2 pb-1 text-[13px] font-bold tracking-wide text-[var(--brass)]/80 first:pt-0.5">
                 {heading}
               </p>
             ) : null}
@@ -529,7 +529,7 @@ function SubNav({ item, query }: { item: NavItem; query: string }) {
               data-nav-item=""
               aria-current={active ? "page" : undefined}
               className={cn(
-                "group/s relative flex h-8 items-center gap-2.5 rounded-md px-2 text-[12.5px] transition-colors duration-150",
+                "group/s relative flex h-9 items-center gap-2.5 rounded-md px-2 text-[14px] transition-colors duration-150",
                 active
                   ? "bg-white/[0.08] font-semibold text-sidebar-fg"
                   : "text-sidebar-muted hover:bg-white/[0.045] hover:text-sidebar-fg",
@@ -624,7 +624,7 @@ export function MobileTabBar({ items, sheet }: { items: NavItem[]; sheet: ReactN
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative flex h-16 flex-col items-center justify-center gap-1 text-[11px] font-medium",
+                  "relative flex h-16 flex-col items-center justify-center gap-1 text-[12px] font-medium",
                   active ? "text-accent-text" : "text-fg-subtle",
                 )}
               >
@@ -648,7 +648,7 @@ export function MobileTabBar({ items, sheet }: { items: NavItem[]; sheet: ReactN
             onClick={() => setOpen(true)}
             aria-expanded={open}
             className={cn(
-              "flex h-16 flex-col items-center justify-center gap-1 text-[11px] font-medium",
+              "flex h-16 flex-col items-center justify-center gap-1 text-[12px] font-medium",
               open || moreActive ? "text-accent-text" : "text-fg-subtle",
             )}
           >
@@ -708,7 +708,7 @@ export function MobileTabBar({ items, sheet }: { items: NavItem[]; sheet: ReactN
               ).map((section) => (
                 <div key={section.key || "top"}>
                   {section.label ? (
-                    <p className="mb-2 flex items-center gap-2 px-1 text-xs font-bold text-fg-muted">
+                    <p className="mb-2 flex items-center gap-2 px-1 text-sm font-bold text-fg-muted">
                       <span
                         className="shade-soft grid size-6 place-items-center rounded-md [&_svg]:size-3.5"
                         aria-hidden="true"
@@ -730,7 +730,7 @@ export function MobileTabBar({ items, sheet }: { items: NavItem[]; sheet: ReactN
                           href={item.href}
                           aria-current={active ? "page" : undefined}
                           className={cn(
-                            "k-cut flex flex-col items-center gap-2 px-2 py-3.5 text-center text-xs font-medium",
+                            "k-cut flex flex-col items-center gap-2 px-2 py-3.5 text-center text-[13px] font-medium",
                             active ? "bg-accent-soft text-accent-text" : "bg-surface-2 text-fg-muted",
                           )}
                         >

@@ -80,7 +80,7 @@ export function TabNav({
                   href={href(active ? current : g.tabs[0]!)}
                   aria-current={active ? "true" : undefined}
                   className={cn(
-                    "group k-cut flex h-11 items-center justify-center gap-2.5 px-4 text-sm font-semibold whitespace-nowrap transition-[background-color,color,box-shadow] duration-200",
+                    "group k-cut flex h-11 items-center justify-center gap-2.5 px-4 text-[15px] font-semibold whitespace-nowrap transition-[background-color,color,box-shadow] duration-200",
                     active ? "shade-fill" : "text-fg-muted hover:bg-[var(--tab-hover)] hover:text-fg",
                   )}
                 >
@@ -118,7 +118,7 @@ export function TabNav({
               href={href(x)}
               aria-current={x === current ? "page" : undefined}
               className={cn(
-                "k-cut k-sm inline-flex h-8 items-center gap-1.5 px-3.5 text-[13px] font-semibold transition-[background-color,color,box-shadow] duration-150",
+                "k-cut k-sm inline-flex h-9 items-center gap-1.5 px-3.5 text-[14px] font-semibold transition-[background-color,color,box-shadow] duration-150",
                 x === current
                   ? "shade-fill"
                   : "k-frame text-fg-muted [--k-fill-hover:var(--surface)] [--k-fill:var(--bg)] [--k-line:var(--border)] hover:text-fg",
