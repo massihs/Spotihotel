@@ -356,7 +356,7 @@ export function SidebarNav({
                   </span>
                   <span
                     className={cn(
-                      "min-w-0 flex-1 truncate text-[15px] font-bold tracking-wide transition-colors",
+                      "min-w-0 flex-1 truncate text-[15px] font-bold tracking-wide transition-colors lg:text-[17px]",
                       hasActive ? "text-sidebar-fg" : "text-sidebar-muted group-hover/h:text-sidebar-fg",
                     )}
                   >
@@ -366,7 +366,7 @@ export function SidebarNav({
                     <Badge n={badge} />
                   ) : (
                     <span
-                      className="k-cut k-sm bg-white/[0.06] px-1.5 py-0.5 text-[12px] text-sidebar-muted tabular-nums"
+                      className="k-cut k-sm bg-white/[0.06] px-1.5 py-0.5 text-[12px] text-sidebar-muted tabular-nums lg:text-[13px]"
                       title={t("sectionCount", { n: section.items.length })}
                     >
                       {section.items.length}
@@ -413,7 +413,7 @@ export function SidebarNav({
                             }
                           }}
                           className={cn(
-                            "group k-cut k-sm relative flex h-10 items-center gap-3 px-2.5 text-[15px] font-medium transition-[background-color,color,transform] duration-150 active:scale-[0.985]",
+                            "group k-cut k-sm relative flex h-10 items-center gap-3 px-2.5 text-[15px] font-medium transition-[background-color,color,transform] duration-150 active:scale-[0.985] lg:h-11 lg:text-[16.5px]",
                             active
                               ? "bg-white/[0.09] text-sidebar-fg shadow-[inset_0_0_0_1px_rgb(255_255_255/0.08),0_6px_16px_-10px_rgb(0_0_0/0.5)]"
                               : "text-sidebar-muted hover:bg-white/[0.05] hover:text-sidebar-fg",
@@ -520,7 +520,7 @@ function SubNav({ item, query }: { item: NavItem; query: string }) {
         return (
           <Fragment key={c.href}>
             {heading ? (
-              <p className="px-2 pt-2 pb-1 text-[13px] font-bold tracking-wide text-[var(--brass)]/80 first:pt-0.5">
+              <p className="px-2 pt-2 pb-1 text-[13px] font-bold tracking-wide text-[var(--brass)]/80 first:pt-0.5 lg:text-[14.5px]">
                 {heading}
               </p>
             ) : null}
@@ -529,7 +529,7 @@ function SubNav({ item, query }: { item: NavItem; query: string }) {
               data-nav-item=""
               aria-current={active ? "page" : undefined}
               className={cn(
-                "group/s relative flex h-9 items-center gap-2.5 rounded-md px-2 text-[14px] transition-colors duration-150",
+                "group/s relative flex h-9 items-center gap-2.5 rounded-md px-2 text-[14px] transition-colors duration-150 lg:h-10 lg:text-[16px]",
                 active
                   ? "bg-white/[0.08] font-semibold text-sidebar-fg"
                   : "text-sidebar-muted hover:bg-white/[0.045] hover:text-sidebar-fg",
